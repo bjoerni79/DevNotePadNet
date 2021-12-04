@@ -12,7 +12,7 @@
         </Menu>
 
         <ToolBar DockPanel.Dock="Bottom">
-            <Label>TODO</Label>
+            <Label>Basic Features</Label>
         </ToolBar>
 
         <TextBox></TextBox>
