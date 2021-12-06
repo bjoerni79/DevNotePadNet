@@ -5,17 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevNotePad"
         mc:Ignorable="d"
-        Title="Dev NotePad" Height="450" Width="800">
+        Title="Dev NotePad" Height="450" Width="800"
+        DataContext="{Binding Source={StaticResource bootstrap},Path=Main}">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="File"></MenuItem>
+            <MenuItem Header="File">
+                <MenuItem Header="New" Command="{Binding Path=New}"/>
+                <MenuItem Header="Open" Command="{Binding Path=Open}"/>
+                <MenuItem Header="Save" Command="{Binding Path=Save}"/>
+                <MenuItem Header="Save As" Command="{Binding Path=SaveAs}" />
+                <Separator/>
+                <MenuItem Header="Close"/>
+            </MenuItem>
         </Menu>
 
         <ToolBar DockPanel.Dock="Bottom">
             <Label>Basic Features</Label>
         </ToolBar>
 
-        <TextBox></TextBox>
+        <TextBox AcceptsReturn="True" AcceptsTab="True" Text="{Binding Path=Text,Mode=TwoWay}"></TextBox>
         
         
     </DockPanel>

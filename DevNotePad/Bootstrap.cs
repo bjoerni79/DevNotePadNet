@@ -1,4 +1,6 @@
 ﻿using DevNotePad.MVVM;
+using DevNotePad.ViewModel;
+using Generic.MVVM.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +12,24 @@ namespace DevNotePad
     public class Bootstrap
     {
         public const string BootstrapId = "bootstrap";
+        public const string EventControllerId = "eventcontrollerid";
 
         public Bootstrap()
         {
             FacadeFactory.InitFactory();
 
-            //TODO: Init Main ViewModel
+            Main = new MainViewModel();
         }
 
         public void Init()
         {
-            //TODO
+            //Init the EventController
+            var eventController = new EventController();
+
+            var facade = FacadeFactory.Create();
+            facade.AddUnique<EventController>(eventController, EventControllerId);
         }
+
+        public MainViewModel Main { get; set; }
     }
 }
