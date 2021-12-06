@@ -1,4 +1,7 @@
-﻿using Generic.MVVM;
+﻿using DevNotePad.MVVM;
+using DevNotePad.Service;
+using Generic.MVVM;
+using Generic.MVVM.IOC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DevNotePad.ViewModel
 {
-    public class MainViewModel : GenericViewModel
+    public class MainViewModel : AbstractViewModel
     {
         public MainViewModel()
         {
@@ -40,7 +43,20 @@ namespace DevNotePad.ViewModel
 
         private void OnOpen()
         {
+            var dialogService = GetDialogService();
+            var fileName = dialogService.ShowOpenFileNameDialog("Open New File", "*.txt", String.Empty);
 
+            if (fileName != null)
+            {
+                var ioService = GetIoService();
+                FileName = fileName;
+
+                var text = ioService.ReadTextFile(FileName);
+                Text = text;
+
+                RaisePropertyChange("Text");
+                RaisePropertyChange("FileName");
+            }
         }
 
         private void OnSave()
@@ -52,5 +68,7 @@ namespace DevNotePad.ViewModel
         {
 
         }
+
+
     }
 }

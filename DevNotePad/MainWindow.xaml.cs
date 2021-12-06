@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DevNotePad.MVVM;
+using DevNotePad.Service;
+using Generic.MVVM.Event;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +26,18 @@ namespace DevNotePad
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var facade = FacadeFactory.Create();
+            if (facade != null)
+            {
+                //var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+
+                IDialogService dialogService = new DialogService(this);
+                facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
+            }
         }
     }
 }

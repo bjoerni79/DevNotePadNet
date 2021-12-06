@@ -1,16 +1,20 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DevNotePad.Service
 {
     internal class DialogService : IDialogService
     {
-        internal DialogService()
+        private Window owner;
+
+        internal DialogService(Window owner)
         {
-            //TODO: Add the reference to the main window!
+            this.owner = owner;
         }
 
         public void ShowErrorDialog(Exception ex)
@@ -18,9 +22,17 @@ namespace DevNotePad.Service
             throw new NotImplementedException();
         }
 
-        public string ShowOpenFileNameDialog()
+        public string ShowOpenFileNameDialog(string title, string defaultExtension, string searchPattern)
         {
-            throw new NotImplementedException();
+            var openFileDialog = new OpenFileDialog();
+            var result = openFileDialog.ShowDialog(owner);
+
+            if (result.HasValue && result.Value)
+            {
+                return openFileDialog.FileName;
+            }
+
+            return null;
         }
 
         public string ShowSaveFileDialog()

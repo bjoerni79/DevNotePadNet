@@ -1,4 +1,5 @@
 ﻿using DevNotePad.MVVM;
+using DevNotePad.Service;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
 using System;
@@ -13,6 +14,8 @@ namespace DevNotePad
     {
         public const string BootstrapId = "bootstrap";
         public const string EventControllerId = "eventcontrollerid";
+        public const string DialogServiceId = "dialogserviceid";
+        public const string IoServiceId = "ioserviceid";
 
         public Bootstrap()
         {
@@ -23,11 +26,13 @@ namespace DevNotePad
 
         public void Init()
         {
-            //Init the EventController
+            //Init the eventController and services
             var eventController = new EventController();
+            IIoService ioService = new IoService();
 
             var facade = FacadeFactory.Create();
-            facade.AddUnique<EventController>(eventController, EventControllerId);
+            facade.AddUnique(eventController, EventControllerId);
+            facade.AddUnique(ioService, IoServiceId);
         }
 
         public MainViewModel Main { get; set; }

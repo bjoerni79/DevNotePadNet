@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:DevNotePad"
         mc:Ignorable="d"
         Title="Dev NotePad" Height="450" Width="800"
-        DataContext="{Binding Source={StaticResource bootstrap},Path=Main}">
+        DataContext="{Binding Source={StaticResource bootstrap},Path=Main}"
+        Loaded="Window_Loaded">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -19,11 +20,18 @@
             </MenuItem>
         </Menu>
 
-        <ToolBar DockPanel.Dock="Bottom">
-            <Label>Basic Features</Label>
+        <ToolBar DockPanel.Dock="Top">
+            <Label>Filename:</Label>
+            <Label Content="{Binding Path=FileName}"/>
         </ToolBar>
+        
+        <StatusBar DockPanel.Dock="Bottom">
+            <Label>Basic Features</Label>
+        </StatusBar>
+        
+        
 
-        <TextBox AcceptsReturn="True" AcceptsTab="True" Text="{Binding Path=Text,Mode=TwoWay}"></TextBox>
+        <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Text="{Binding Path=Text,Mode=TwoWay}"></TextBox>
         
         
     </DockPanel>
