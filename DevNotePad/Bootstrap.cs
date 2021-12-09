@@ -26,6 +26,12 @@ namespace DevNotePad
 
         public void Init()
         {
+            InitComponents();
+            LoadSettings();
+        }
+
+        private void InitComponents()
+        {
             //Init the eventController and services
             var eventController = new EventController();
             IIoService ioService = new IoService();
@@ -33,6 +39,11 @@ namespace DevNotePad
             var facade = FacadeFactory.Create();
             facade.AddUnique(eventController, EventControllerId);
             facade.AddUnique(ioService, IoServiceId);
+        }
+
+        private void LoadSettings()
+        {
+            //TODO: See class Settings
         }
 
         public MainViewModel Main { get; set; }

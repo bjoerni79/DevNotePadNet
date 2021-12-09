@@ -10,5 +10,7 @@ namespace DevNotePad.Service
     {
 
         string ReadTextFile(string filename);
+
+        void WriteTextFile(string filename, string text);
     }
 }

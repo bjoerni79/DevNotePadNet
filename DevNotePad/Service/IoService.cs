@@ -30,5 +30,23 @@ namespace DevNotePad.Service
 
             return File.ReadAllText(filename);
         }
+
+        public void WriteTextFile(string filename, string text)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("filename is null or empty", filename);
+            }
+
+            if (text == null)
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            using (var stream = File.CreateText(filename))
+            {
+                stream.Write(text);
+            }
+        }
     }
 }

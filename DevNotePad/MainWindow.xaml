@@ -18,12 +18,42 @@
                 <Separator/>
                 <MenuItem Header="Close"/>
             </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Cut"/>
+                <MenuItem Header="Copy"/>
+                <MenuItem Header="Paste"/>
+                <MenuItem Header="Duplicate"/>
+                <Separator/>
+                <MenuItem Header="Find"/>
+                <MenuItem Header="Find Next"/>
+                <MenuItem Header="Replace"/>
+                <MenuItem Header="Replace All"/>
+                <Separator/>
+                <MenuItem Header="Select All"/>
+
+            </MenuItem>
+            <MenuItem Header="Tools">
+                <MenuItem IsEnabled="False" Header="JSON Parser"/>
+                <MenuItem IsEnabled="False" Header="JSON Formatter"/>
+                <MenuItem IsEnabled="False" Header="XML Parser"/>
+                <MenuItem IsEnabled="False" Header="XML Formatter"/>
+                <MenuItem IsEnabled="False" Header="Hex String Parser"/>
+                <MenuItem IsEnabled="False" Header="Hex String Formatter"/>
+            </MenuItem>
+            <MenuItem Header="Layout">
+                <MenuItem IsEnabled="false" Header="Scrollbar always visible"></MenuItem>
+                
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About"/> 
+            </MenuItem>
         </Menu>
 
         <ToolBar DockPanel.Dock="Top">
             <Label>Filename:</Label>
             <Label Content="{Binding Path=FileName}"/>
         </ToolBar>
+
         
         <StatusBar DockPanel.Dock="Bottom">
             <Label>Basic Features</Label>
