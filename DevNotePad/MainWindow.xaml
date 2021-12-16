@@ -41,11 +41,12 @@
                 <MenuItem IsEnabled="False" Header="Hex String Formatter"/>
             </MenuItem>
             <MenuItem Header="Layout">
-                <MenuItem IsEnabled="false" Header="Scrollbar always visible"></MenuItem>
-                
+                <MenuItem IsChecked="{Binding Path=ScrollbarMode}" Command="{Binding Path=ToggleScrollbar}" Header="Scrollbar Visible"></MenuItem>
+                <MenuItem IsChecked="{Binding Path=LineWrapMode}" Command="{Binding Path=ToggleLineWrap}" Header="Text Wrap Enabled"></MenuItem>
+
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="About"/> 
+                <MenuItem Command="{Binding About}"  Header="About"/> 
             </MenuItem>
         </Menu>
 
@@ -61,7 +62,7 @@
         
         
 
-        <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Text="{Binding Path=Text,Mode=TwoWay}"></TextBox>
+        <TextBox x:Name="editor"  AcceptsReturn="True" AcceptsTab="True" Text="{Binding Path=Text,Mode=TwoWay}"></TextBox>
         
         
     </DockPanel>

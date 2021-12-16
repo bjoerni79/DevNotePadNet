@@ -1,5 +1,6 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Service;
+using DevNotePad.Shared;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
 using System;
@@ -16,6 +17,7 @@ namespace DevNotePad
         public const string EventControllerId = "eventcontrollerid";
         public const string DialogServiceId = "dialogserviceid";
         public const string IoServiceId = "ioserviceid";
+        public const string SettingsId = "settingsid";
 
         public Bootstrap()
         {
@@ -43,7 +45,12 @@ namespace DevNotePad
 
         private void LoadSettings()
         {
-            //TODO: See class Settings
+            //TODO: Load the settings, if found..
+            var settings = new Settings();
+
+            // Store it in the container
+            var facade = FacadeFactory.Create();
+            facade.AddUnique(settings, SettingsId);
         }
 
         public MainViewModel Main { get; set; }

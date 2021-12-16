@@ -16,11 +16,14 @@ namespace DevNotePad.Shared
         public static Settings GetDefault()
         {
             var settings = new Settings();
-            settings.ScrollbarAlwaysOn = true;
+            settings.ScrollbarAlwaysOn = false;
+            settings.LineWrap = false;
 
             return settings;
         }
 
         public bool ScrollbarAlwaysOn { get; set; }
+
+        public bool LineWrap { get; set; }
     }
 }
