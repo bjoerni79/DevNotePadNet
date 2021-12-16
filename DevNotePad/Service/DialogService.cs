@@ -19,7 +19,7 @@ namespace DevNotePad.Service
 
         public void ShowErrorDialog(Exception ex)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("Error" + ex.Message);
         }
 
         public string ShowOpenFileNameDialog(string title, string defaultExtension, string searchPattern)

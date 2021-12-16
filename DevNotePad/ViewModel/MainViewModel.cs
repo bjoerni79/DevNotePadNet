@@ -1,4 +1,5 @@
-﻿using DevNotePad.MVVM;
+﻿using DevNotePad.Feature;
+using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
 using Generic.MVVM;
@@ -28,6 +29,9 @@ namespace DevNotePad.ViewModel
             Save = new DefaultCommand(OnSave);
             SaveAs = new DefaultCommand(OnSaveAs);
 
+            //Tools
+            JsonFormatter = new DefaultCommand(OnJsonFormatter);
+
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
             ToggleScrollbar = new DefaultCommand(OnToggleScrollbar);
@@ -48,6 +52,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand ToggleScrollbar { get; set; }
         public IRefreshCommand ToggleLineWrap { get; set; }
+
+        public IRefreshCommand JsonFormatter { get; set; }
 
         public IRefreshCommand About { get; set; }
 
@@ -116,6 +122,20 @@ namespace DevNotePad.ViewModel
             settings.LineWrap = LineWrapMode;
             RaisePropertyChange("LineWrapMode");
             ApplySettings();
+        }
+
+        private void OnJsonFormatter()
+        {
+            var input = Text;
+            try
+            {
+                IJsonComponent jsonComponent = new JsonComponent();
+                var result = jsonComponent.Formatter(input);
+            }
+            catch (FeatureException featureException)
+            {
+                ShowError(featureException);
+            }
         }
 
         private void OnAbout()

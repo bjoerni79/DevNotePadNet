@@ -51,5 +51,11 @@ namespace DevNotePad.ViewModel
 
             return FacadeFactory.Create();
         }
+
+        protected void ShowError(Exception exception)
+        {
+            var dialogService = GetDialogService();
+            dialogService.ShowErrorDialog(exception);
+        }
     }
 }

@@ -34,7 +34,7 @@
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem IsEnabled="False" Header="JSON Parser"/>
-                <MenuItem IsEnabled="False" Header="JSON Formatter"/>
+                <MenuItem Header="JSON Formatter" Command="{Binding Path=JsonFormatter}" />
                 <MenuItem IsEnabled="False" Header="XML Parser"/>
                 <MenuItem IsEnabled="False" Header="XML Formatter"/>
                 <MenuItem IsEnabled="False" Header="Hex String Parser"/>
