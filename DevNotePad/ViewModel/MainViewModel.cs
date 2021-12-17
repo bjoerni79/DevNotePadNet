@@ -131,6 +131,9 @@ namespace DevNotePad.ViewModel
             {
                 IJsonComponent jsonComponent = new JsonComponent();
                 var result = jsonComponent.Formatter(input);
+
+                Text = result;
+                RaisePropertyChange("Text");
             }
             catch (FeatureException featureException)
             {

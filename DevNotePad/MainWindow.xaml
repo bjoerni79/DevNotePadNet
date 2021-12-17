@@ -62,7 +62,7 @@
         
         
 
-        <TextBox x:Name="editor"  AcceptsReturn="True" AcceptsTab="True" Text="{Binding Path=Text,Mode=TwoWay}"></TextBox>
+        <TextBox x:Name="editor"  AcceptsReturn="True" AcceptsTab="True" Text="{Binding Path=Text,Mode=TwoWay}" ></TextBox>
         
         
     </DockPanel>
