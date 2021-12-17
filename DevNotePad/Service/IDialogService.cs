@@ -8,9 +8,9 @@ namespace DevNotePad.Service
 {
     public interface IDialogService
     {
-        string ShowOpenFileNameDialog(string title, string defaultExtension, string searchPattern);
+        DialogReturnValue ShowOpenFileNameDialog(string title, string defaultExtension, string searchPattern);
 
-        string ShowSaveFileDialog();
+        DialogReturnValue ShowSaveFileDialog();
 
         void ShowErrorDialog(Exception ex);
 

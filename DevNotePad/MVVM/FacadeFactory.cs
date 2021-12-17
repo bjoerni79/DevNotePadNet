@@ -29,7 +29,7 @@ namespace DevNotePad.MVVM
 
         public static ContainerFacade Create()
         {
-            ContainerFacade facade = null;
+            ContainerFacade facade;
 
             var container = GetContainer();
 
@@ -42,9 +42,9 @@ namespace DevNotePad.MVVM
             return facade;
         }
 
-        private static IContainer GetContainer()
+        private static IContainer? GetContainer()
         {
-            IContainer container = null;
+            IContainer? container = null;
             foreach (var currentInstance in Application.Current.Resources.Values)
             {
                 if (currentInstance is IContainer)

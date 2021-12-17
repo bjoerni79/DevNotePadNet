@@ -22,27 +22,35 @@ namespace DevNotePad.Service
             MessageBox.Show("Error" + ex.Message);
         }
 
-        public string ShowOpenFileNameDialog(string title, string defaultExtension, string searchPattern)
+        public DialogReturnValue ShowOpenFileNameDialog(string title, string defaultExtension, string searchPattern)
         {
             var openFileDialog = new OpenFileDialog();
             var result = openFileDialog.ShowDialog(owner);
 
             if (result.HasValue && result.Value)
             {
-                return openFileDialog.FileName;
+                return new DialogReturnValue(true, openFileDialog.FileName);
             }
 
-            return null;
+            return new DialogReturnValue(false, String.Empty);
         }
 
-        public string ShowSaveFileDialog()
+        public DialogReturnValue ShowSaveFileDialog()
         {
-            throw new NotImplementedException();
+            var saveFileDialog = new SaveFileDialog();
+            var result = saveFileDialog.ShowDialog(owner);
+
+            if (result.HasValue && result.Value)
+            {
+                return new DialogReturnValue(true, saveFileDialog.FileName);
+            }
+
+            return new DialogReturnValue(false, String.Empty);
         }
 
         public void ShowWarningDialog(string warning, string caption)
         {
-            throw new NotImplementedException();
+            MessageBox.Show(warning, caption);
         }
     }
 }

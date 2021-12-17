@@ -75,12 +75,12 @@ namespace DevNotePad.ViewModel
         private void OnOpen()
         {
             var dialogService = GetDialogService();
-            var fileName = dialogService.ShowOpenFileNameDialog("Open New File", "*.txt", String.Empty);
+            var result = dialogService.ShowOpenFileNameDialog("Open New File", "*.txt", String.Empty);
 
-            if (fileName != null)
+            if (result.IsConfirmed)
             {
                 var ioService = GetIoService();
-                FileName = fileName;
+                FileName = result.File;
 
                 var text = ioService.ReadTextFile(FileName);
                 Text = text;
