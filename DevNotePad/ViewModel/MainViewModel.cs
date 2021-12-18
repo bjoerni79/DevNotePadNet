@@ -14,20 +14,20 @@ namespace DevNotePad.ViewModel
 {
     public class MainViewModel : AbstractViewModel, IMainViewModel
     {
-        private IMainViewUi Ui { get; set; }
+        private IMainViewUi? Ui { get; set; }
+
+        private bool isFilenameAvailable = false;
 
         public MainViewModel()
         {
             Ui = null;
-
-            Text = "123\n456";
-            FileName = "lala.txt";
 
             // File
             New = new DefaultCommand(OnNew);
             Open = new DefaultCommand(OnOpen);
             Save = new DefaultCommand(OnSave);
             SaveAs = new DefaultCommand(OnSaveAs);
+            Reload = new DefaultCommand(OnReload);
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
@@ -38,6 +38,7 @@ namespace DevNotePad.ViewModel
 
             // About
             About = new DefaultCommand(OnAbout);
+
         }
 
         #region Commands
@@ -50,6 +51,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand SaveAs { get; set; }
 
+        public IRefreshCommand Reload { get; set; }
+
         public IRefreshCommand ToggleScrollbar { get; set; }
         public IRefreshCommand ToggleLineWrap { get; set; }
 
@@ -59,9 +62,9 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
 
         public bool LineWrapMode { get; set; }
 
@@ -69,7 +72,14 @@ namespace DevNotePad.ViewModel
 
         private void OnNew()
         {
+            //TODO: Ask for confirmation not saved!
 
+            InternalNew();
+        }
+
+        private void OnReload()
+        {
+            //TODO
         }
 
         private void OnOpen()
@@ -79,25 +89,30 @@ namespace DevNotePad.ViewModel
 
             if (result.IsConfirmed)
             {
-                var ioService = GetIoService();
-                FileName = result.File;
-
-                var text = ioService.ReadTextFile(FileName);
-                Text = text;
-
-                RaisePropertyChange("Text");
-                RaisePropertyChange("FileName");
+                InternalLoad(result.File);
             }
         }
 
         private void OnSave()
         {
+            if (!isFilenameAvailable)
+            {
+                OnSaveAs();
+            }
 
+            // Just save it
+            InternalSave(FileName);
         }
 
         private void OnSaveAs()
         {
+            var dialogService = GetDialogService();
+            var result = dialogService.ShowSaveFileDialog();
 
+            if (result.IsConfirmed)
+            {
+                InternalSave(result.File);
+            }
         }
 
         private void OnToggleScrollbar()
@@ -154,6 +169,7 @@ namespace DevNotePad.ViewModel
         public void Init(IMainViewUi ui)
         {
             Ui = ui;
+            InternalNew();
         }
 
         public void ApplySettings()
@@ -172,9 +188,54 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
+        /// <summary>
+        /// Handles the internal save of the current Text and is called by Save and Save As
+        /// </summary>
+        /// <param name="filename">the filename</param>
+        private void InternalSave(string filename)
+        {
+            var ioService = GetIoService();
+            FileName = filename;
+            isFilenameAvailable = true;
+
+            var text = Ui.GetText(false);
+            ioService.WriteTextFile(filename, text);
+
+            RaisePropertyChange("FileName");
+        }
+
+        /// <summary>
+        /// Handles the internal load of files and is called by ICommand delegates
+        /// </summary>
+        /// <param name="filename">the filename</param>
+        private void InternalLoad(string filename)
+        {
+            var ioService = GetIoService();
+            FileName = filename;
+            isFilenameAvailable = true;
+
+            var text = ioService.ReadTextFile(FileName);
+            Ui.SetText(text);
+
+            RaisePropertyChange("Text");
+            RaisePropertyChange("FileName");
+        }
+
+        private void InternalNew()
+        {
+            FileName = "New";
+            isFilenameAvailable = false;
+
+            Text = String.Empty;
+            Ui.SetText(String.Empty);
+
+            RaisePropertyChange("Text");
+            RaisePropertyChange("FileName");
+        }
+
         private Settings GetSettings()
         {
-            Settings settings = null;
+            Settings? settings = null;
 
             var facade = FacadeFactory.Create();
             if (facade != null)
@@ -184,7 +245,7 @@ namespace DevNotePad.ViewModel
 
             if (settings == null)
             {
-                throw new ArgumentNullException("Settings object is not available in the IoC container!");
+                throw new ArgumentNullException("settings");
             }
 
             return settings;

@@ -15,6 +15,7 @@
                 <MenuItem Header="Open" Command="{Binding Path=Open}"/>
                 <MenuItem Header="Save" Command="{Binding Path=Save}"/>
                 <MenuItem Header="Save As" Command="{Binding Path=SaveAs}" />
+                <MenuItem Header="Reload" IsEnabled="false"/>
                 <Separator/>
                 <MenuItem Header="Close"/>
             </MenuItem>
@@ -62,7 +63,7 @@
         
         
 
-        <TextBox x:Name="editor"  AcceptsReturn="True" AcceptsTab="True" Text="{Binding Path=Text,Mode=TwoWay}" ></TextBox>
+        <TextBox x:Name="editor"  AcceptsReturn="True" AcceptsTab="True" ></TextBox>
         
         
     </DockPanel>

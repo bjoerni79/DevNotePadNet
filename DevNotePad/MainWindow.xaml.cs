@@ -29,6 +29,28 @@ namespace DevNotePad
             InitializeComponent();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var facade = FacadeFactory.Create();
+            if (facade != null)
+            {
+                //var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+
+                IDialogService dialogService = new DialogService(this);
+                facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
+            }
+
+            var vm = DataContext as IMainViewModel;
+            if (vm != null)
+            {
+                vm.Init(this);
+                vm.ApplySettings();
+            }
+        }
+
+        #region IMainViewUI
+
+
         public void SetScrollbars(bool enable)
         {
             var scrollbarMode = ScrollBarVisibility.Auto;
@@ -56,26 +78,31 @@ namespace DevNotePad
         {
             var aboutDialog = new About();
             aboutDialog.Owner = this;
+            aboutDialog.ShowInTaskbar = false;
+            aboutDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             aboutDialog.ShowDialog();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        public void SetText(string text)
         {
-            var facade = FacadeFactory.Create();
-            if (facade != null)
-            {
-                //var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
-
-                IDialogService dialogService = new DialogService(this);
-                facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
-            }
-
-            var vm = DataContext as IMainViewModel;
-            if (vm != null)
-            {
-                vm.Init(this);
-                vm.ApplySettings();
-            }
+            editor.Text = text;
         }
+
+        public string GetText(bool selected)
+        {
+            //if (selected)
+            //{
+            //    //...
+            //}
+
+            return editor.Text;
+        }
+
+        public bool IsTextSelected()
+        {
+            return false;
+        }
+
+        #endregion
     }
 }

@@ -12,5 +12,11 @@ namespace DevNotePad.ViewModel
         void SetWordWrap(bool enable);
 
         void ShowAbout();
+
+        string GetText(bool selected);
+
+        void SetText(string text);
+
+        bool IsTextSelected();
     }
 }
