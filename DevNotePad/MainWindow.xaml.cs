@@ -85,22 +85,39 @@ namespace DevNotePad
 
         public void SetText(string text)
         {
-            editor.Text = text;
+            SetText(text, false);
+        }
+
+        public void SetText(string text, bool selected)
+        {
+            if (selected)
+            {
+                editor.SelectedText = text;
+            }
+            else
+            {
+                editor.Text = text;
+            }
         }
 
         public string GetText(bool selected)
         {
-            //if (selected)
-            //{
-            //    //...
-            //}
+            if (selected)
+            {
+                var selectedText = editor.SelectedText;
+                return selectedText;
+            }
+            else
+            {
+                return editor.Text;
+            }
 
-            return editor.Text;
         }
 
         public bool IsTextSelected()
         {
-            return false;
+            var selectedText = editor.SelectedText;
+            return !string.IsNullOrWhiteSpace(selectedText);
         }
 
         #endregion

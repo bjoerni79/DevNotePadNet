@@ -141,14 +141,14 @@ namespace DevNotePad.ViewModel
 
         private void OnJsonFormatter()
         {
-            var input = Text;
+            var isTextSelected = Ui.IsTextSelected();
+            var input = Ui.GetText(isTextSelected);
             try
             {
                 IJsonComponent jsonComponent = new JsonComponent();
                 var result = jsonComponent.Formatter(input);
 
-                Text = result;
-                RaisePropertyChange("Text");
+                Ui.SetText(result,isTextSelected);
             }
             catch (FeatureException featureException)
             {

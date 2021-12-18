@@ -8,21 +8,28 @@
         Title="Dev NotePad" Height="450" Width="800"
         DataContext="{Binding Source={StaticResource bootstrap},Path=Main}"
         Loaded="Window_Loaded">
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding Path=New}"/>
+        <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding Path=Open}"/>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding Path=Save}"/>
+    </Window.InputBindings>
+    
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="New" Command="{Binding Path=New}"/>
-                <MenuItem Header="Open" Command="{Binding Path=Open}"/>
-                <MenuItem Header="Save" Command="{Binding Path=Save}"/>
+                <MenuItem Header="New" InputGestureText="Ctrl+N" Command="{Binding Path=New}"/>
+                <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding Path=Open}"/>
+                <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding Path=Save}"/>
                 <MenuItem Header="Save As" Command="{Binding Path=SaveAs}" />
                 <MenuItem Header="Reload" IsEnabled="false"/>
                 <Separator/>
                 <MenuItem Header="Close"/>
             </MenuItem>
             <MenuItem Header="Edit">
-                <MenuItem Header="Cut"/>
-                <MenuItem Header="Copy"/>
-                <MenuItem Header="Paste"/>
+                <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
+                <MenuItem Header="Copy" InputGestureText="Ctrl+C"/>
+                <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
                 <MenuItem Header="Duplicate"/>
                 <Separator/>
                 <MenuItem Header="Find"/>
@@ -34,12 +41,20 @@
 
             </MenuItem>
             <MenuItem Header="Tools">
-                <MenuItem IsEnabled="False" Header="JSON Parser"/>
-                <MenuItem Header="JSON Formatter" Command="{Binding Path=JsonFormatter}" />
-                <MenuItem IsEnabled="False" Header="XML Parser"/>
-                <MenuItem IsEnabled="False" Header="XML Formatter"/>
-                <MenuItem IsEnabled="False" Header="Hex String Parser"/>
-                <MenuItem IsEnabled="False" Header="Hex String Formatter"/>
+                <MenuItem IsEnabled="False" Header="Open Binary File" />
+                <MenuItem Header="JSON">
+                    <MenuItem IsEnabled="False" Header="Parse"/>
+                    <MenuItem Header="Format" Command="{Binding Path=JsonFormatter}" />
+                </MenuItem>
+                <MenuItem Header="XML">
+                    <MenuItem IsEnabled="False" Header="Parse"/>
+                    <MenuItem IsEnabled="False" Header="Format"/>
+                </MenuItem>
+                <MenuItem Header="Hex Coding">
+                    <MenuItem IsEnabled="False" Header="Parse Hex String"/>
+                    <MenuItem IsEnabled="False" Header="Format Hex String"/>
+                </MenuItem>
+
             </MenuItem>
             <MenuItem Header="Layout">
                 <MenuItem IsChecked="{Binding Path=ScrollbarMode}" Command="{Binding Path=ToggleScrollbar}" Header="Scrollbar Visible"></MenuItem>
@@ -61,10 +76,7 @@
             <Label>Basic Features</Label>
         </StatusBar>
         
-        
-
-        <TextBox x:Name="editor"  AcceptsReturn="True" AcceptsTab="True" ></TextBox>
-        
+        <TextBox x:Name="editor" AcceptsReturn="True" AcceptsTab="True" FontSize="12" ></TextBox>
         
     </DockPanel>
 </Window>
