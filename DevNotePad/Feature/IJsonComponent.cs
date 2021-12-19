@@ -10,6 +10,6 @@ namespace DevNotePad.Feature
     {
         string Formatter(string jsonText);
 
-        string ParserTest(string jsonText);
+        string Parse(string jsonText);
     }
 }

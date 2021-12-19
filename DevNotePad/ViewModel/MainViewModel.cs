@@ -180,12 +180,9 @@ namespace DevNotePad.ViewModel
                 try
                 {
                     IJsonComponent jsonComponent = new JsonComponent();
-                    var la = jsonComponent.ParserTest(input);
+                    var la = jsonComponent.Parse(input);
 
-                    var stringBuilder = new StringBuilder();
-                    stringBuilder.AppendLine(input);
-                    stringBuilder.AppendLine(la);
-
+                    Ui.AddToScratchPad(la);
                     //TODO: Append this to the scratch pad!
                     //Ui.SetText(stringBuilder.ToString(), isTextSelected);
                 }

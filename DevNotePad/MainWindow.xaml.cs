@@ -120,6 +120,15 @@ namespace DevNotePad
             return !string.IsNullOrWhiteSpace(selectedText);
         }
 
+        public void AddToScratchPad(string text)
+        {
+            var content = new StringBuilder();
+            content.Append(scratchPad.Text);
+            content.AppendFormat("\n###\n{0}\n", text);
+
+            scratchPad.Text = content.ToString();
+        }
+
         #endregion
     }
 }

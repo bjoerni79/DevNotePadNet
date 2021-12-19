@@ -43,7 +43,7 @@ namespace DevNotePad.Feature
             return result;
         }
 
-        public string ParserTest(string jsonText)
+        public string Parse(string jsonText)
         {
             // Read the JSON text
             JsonDocument document = Read(jsonText);
@@ -58,25 +58,95 @@ namespace DevNotePad.Feature
         private void DomParser(JsonElement element, StringBuilder builder)
         {
             var kind = element.ValueKind;
-
             if (kind == JsonValueKind.Array)
             {
-                builder.AppendFormat("Array with {0} items\n", element.GetArrayLength());
+                //
+                // Recursive scan of the array
+                //
 
-                //foreach (var childObject in element.EnumerateArray())
-                //{
-                //    builder.AppendFormat("- Array: {0}\n",childObject.);
-                //    DomParser(childObject, builder);
-                //}
+                var arrayLength = element.GetArrayLength();
+                if (arrayLength > 0)
+                {
+                    foreach (var childElement in element.EnumerateArray())
+                    {
+                        builder.AppendLine("Parse new Object");
+                        DomParser(childElement, builder);
+                    }
+                }
+                else
+                {
+                    builder.AppendLine("Empty Array declaration detected.");
+                }
             }
             else
             {
-                builder.AppendLine("Object");
+                //
+                //  Parse the object 
+                //
 
-                //foreach(var property in element.EnumerateObject())
-                //{
-                //    builder.AppendFormat("Value : {0} : {1}\n", property.Name, property.Value);
-                //}
+                foreach (var parameter in element.EnumerateObject())
+                {
+                    builder.AppendFormat("Name : {0}\n", parameter.Name);
+                    var parameterValue = parameter.Value;
+
+                    if (parameterValue.ValueKind == JsonValueKind.Array)
+                    {
+                        // Render as Array
+                        var arrayLength = parameterValue.GetArrayLength();
+                        if (arrayLength > 0)
+                        {
+                            foreach (var childElement in parameterValue.EnumerateArray())
+                            {
+                                builder.AppendLine("Parse new Object");
+                                DomParser(childElement, builder);
+                            }
+
+                        }
+                        else
+                        {
+                            builder.AppendLine("Empty Array declaration detected.");
+                        }
+                    }
+                    else
+                    {
+                        // Render as Object
+                        RenderValue(parameterValue, builder);
+                    }
+                }
+            }
+        }
+
+        private void RenderValue(JsonElement element, StringBuilder builder)
+        {
+            var kind = element.ValueKind;
+            if (kind == JsonValueKind.Object || kind == JsonValueKind.Array)
+            {
+                builder.AppendFormat("Object/ Array detected\n");
+            }
+
+            if (kind == JsonValueKind.Null)
+            {
+                builder.AppendFormat("Null detected\n");
+            }
+
+            if (kind == JsonValueKind.Number)
+            {
+                builder.AppendFormat("Value = {0}\n", element.GetInt32());
+            }
+
+            if (kind == JsonValueKind.String)
+            {
+                builder.AppendFormat("Value = {0}\n", element.GetString());
+            }
+
+            if (kind == JsonValueKind.True)
+            {
+                builder.AppendLine("Value is true");
+            }
+
+            if (kind == JsonValueKind.False)
+            {
+                builder.AppendLine("Value is false");
             }
         }
 
