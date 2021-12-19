@@ -18,10 +18,10 @@ namespace DevNotePad.ViewModel
 
         private bool isFilenameAvailable = false;
 
+        private string initialText;
+
         public MainViewModel()
         {
-            Ui = null;
-
             // File
             New = new DefaultCommand(OnNew);
             Open = new DefaultCommand(OnOpen);
@@ -31,6 +31,7 @@ namespace DevNotePad.ViewModel
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
+            JsonParser = new DefaultCommand(OnJsonParse);
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
@@ -39,6 +40,8 @@ namespace DevNotePad.ViewModel
             // About
             About = new DefaultCommand(OnAbout);
 
+            FileName = "Not Defined";
+            initialText = String.Empty;
         }
 
         #region Commands
@@ -58,13 +61,13 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand JsonFormatter { get; set; }
 
+        public IRefreshCommand JsonParser { get; set; }
+
         public IRefreshCommand About { get; set; }
 
         #endregion
 
-        public string? Text { get; set; }
-
-        public string? FileName { get; set; }
+        public string FileName { get; set; }
 
         public bool LineWrapMode { get; set; }
 
@@ -141,18 +144,55 @@ namespace DevNotePad.ViewModel
 
         private void OnJsonFormatter()
         {
-            var isTextSelected = Ui.IsTextSelected();
-            var input = Ui.GetText(isTextSelected);
-            try
+            if (Ui == null)
             {
-                IJsonComponent jsonComponent = new JsonComponent();
-                var result = jsonComponent.Formatter(input);
-
-                Ui.SetText(result,isTextSelected);
+                ShowError(new ApplicationException("Please init Ui first"));
             }
-            catch (FeatureException featureException)
+            else
             {
-                ShowError(featureException);
+                var isTextSelected = Ui.IsTextSelected();
+                var input = Ui.GetText(isTextSelected);
+                try
+                {
+                    IJsonComponent jsonComponent = new JsonComponent();
+                    var result = jsonComponent.Formatter(input);
+
+                    Ui.SetText(result, isTextSelected);
+                }
+                catch (FeatureException featureException)
+                {
+                    ShowError(featureException);
+                }
+            }
+        }
+
+        private void OnJsonParse()
+        {
+            if (Ui == null)
+            {
+                ShowError(new ApplicationException("Please init Ui first"));
+            }
+            else
+            {
+                var isTextSelected = Ui.IsTextSelected();
+                var input = Ui.GetText(isTextSelected);
+
+                try
+                {
+                    IJsonComponent jsonComponent = new JsonComponent();
+                    var la = jsonComponent.ParserTest(input);
+
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.AppendLine(input);
+                    stringBuilder.AppendLine(la);
+
+                    //TODO: Append this to the scratch pad!
+                    //Ui.SetText(stringBuilder.ToString(), isTextSelected);
+                }
+                catch (FeatureException featureException)
+                {
+                    ShowError(featureException);
+                }
             }
         }
 
@@ -198,8 +238,8 @@ namespace DevNotePad.ViewModel
             FileName = filename;
             isFilenameAvailable = true;
 
-            var text = Ui.GetText(false);
-            ioService.WriteTextFile(filename, text);
+            initialText = Ui!.GetText(false);
+            ioService.WriteTextFile(filename, initialText);
 
             RaisePropertyChange("FileName");
         }
@@ -214,8 +254,8 @@ namespace DevNotePad.ViewModel
             FileName = filename;
             isFilenameAvailable = true;
 
-            var text = ioService.ReadTextFile(FileName);
-            Ui.SetText(text);
+            initialText = ioService.ReadTextFile(FileName);
+            Ui!.SetText(initialText);
 
             RaisePropertyChange("Text");
             RaisePropertyChange("FileName");
@@ -225,9 +265,9 @@ namespace DevNotePad.ViewModel
         {
             FileName = "New";
             isFilenameAvailable = false;
+            initialText = String.Empty;
 
-            Text = String.Empty;
-            Ui.SetText(String.Empty);
+            Ui!.SetText(initialText);
 
             RaisePropertyChange("Text");
             RaisePropertyChange("FileName");

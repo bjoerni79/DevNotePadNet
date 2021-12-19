@@ -14,7 +14,7 @@
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding Path=Open}"/>
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding Path=Save}"/>
     </Window.InputBindings>
-    
+
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -43,7 +43,7 @@
             <MenuItem Header="Tools">
                 <MenuItem IsEnabled="False" Header="Open Binary File" />
                 <MenuItem Header="JSON">
-                    <MenuItem IsEnabled="False" Header="Parse"/>
+                    <MenuItem Header="Parse" Command="{Binding Path=JsonParser}"/>
                     <MenuItem Header="Format" Command="{Binding Path=JsonFormatter}" />
                 </MenuItem>
                 <MenuItem Header="XML">
@@ -66,17 +66,30 @@
             </MenuItem>
         </Menu>
 
-        <ToolBar DockPanel.Dock="Top">
+        <ToolBar DockPanel.Dock="Top" >
             <Label>Filename:</Label>
             <Label Content="{Binding Path=FileName}"/>
         </ToolBar>
 
         
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" >
             <Label>Basic Features</Label>
         </StatusBar>
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.3*"/>
+            </Grid.RowDefinitions>
+            
+            <TextBox Grid.Row="0" x:Name="editor" AcceptsReturn="True" AcceptsTab="True" FontSize="12" ></TextBox>
+            <Label Grid.Row="1" Content="Scratch Pad"></Label>
+            <TextBox Grid.Row="2"/>
+        </Grid>
         
-        <TextBox x:Name="editor" AcceptsReturn="True" AcceptsTab="True" FontSize="12" ></TextBox>
+
         
     </DockPanel>
 </Window>

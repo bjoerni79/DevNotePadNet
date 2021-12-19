@@ -9,5 +9,7 @@ namespace DevNotePad.Feature
     public interface IJsonComponent
     {
         string Formatter(string jsonText);
+
+        string ParserTest(string jsonText);
     }
 }
