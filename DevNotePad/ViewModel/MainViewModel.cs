@@ -6,6 +6,7 @@ using Generic.MVVM;
 using Generic.MVVM.IOC;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,8 @@ namespace DevNotePad.ViewModel
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
-            JsonParser = new DefaultCommand(OnJsonParse);
+            JsonToStringParser = new DefaultCommand(OnJsonToString);
+            JsonToTreeParser = new DefaultCommand(OnJsonToTree);
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
@@ -61,11 +63,15 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand JsonFormatter { get; set; }
 
-        public IRefreshCommand JsonParser { get; set; }
+        public IRefreshCommand JsonToStringParser { get; set; }
+
+        public IRefreshCommand JsonToTreeParser { get; set; }
 
         public IRefreshCommand About { get; set; }
 
         #endregion
+
+        public ObservableCollection<ItemNode>? Nodes { get; set; }
 
         public string FileName { get; set; }
 
@@ -166,7 +172,7 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        private void OnJsonParse()
+        private void OnJsonToString()
         {
             if (Ui == null)
             {
@@ -189,6 +195,33 @@ namespace DevNotePad.ViewModel
                 catch (FeatureException featureException)
                 {
                     ShowError(featureException,"JSON");
+                }
+            }
+        }
+
+        private void OnJsonToTree()
+        {
+            if (Ui == null)
+            {
+                ShowError(new ApplicationException("Please init Ui first"), "Application");
+            }
+            else
+            {
+                var isTextSelected = Ui.IsTextSelected();
+                var input = Ui.GetText(isTextSelected);
+
+                try
+                {
+                    IJsonComponent jsonComponent = new JsonComponent();
+                    var rootNode = jsonComponent.ParseToTree(input);
+
+                    Nodes = new ObservableCollection<ItemNode>();
+                    Nodes.Add(rootNode);
+                    RaisePropertyChange("Nodes");
+                }
+                catch (FeatureException featureException)
+                {
+                    ShowError(featureException, "JSON");
                 }
             }
         }

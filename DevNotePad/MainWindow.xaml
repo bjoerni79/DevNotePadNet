@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevNotePad"
+        xmlns:shared="clr-namespace:DevNotePad.Shared"
         mc:Ignorable="d"
         Title="Dev NotePad" Height="450" Width="800"
         DataContext="{Binding Source={StaticResource bootstrap},Path=Main}"
@@ -14,6 +15,22 @@
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding Path=Open}"/>
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding Path=Save}"/>
     </Window.InputBindings>
+
+    <Window.Resources>
+        <!-- Renders the tree -->
+        <HierarchicalDataTemplate x:Key="itemNodeTemplate" DataType="{x:Type shared:ItemNode}" ItemsSource="{Binding Path=Childs}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" FontWeight="DemiBold" Content="{Binding Path=Name}"/>
+                <Label Grid.Row="1" Content="{Binding Path=Description}"/>
+
+            </Grid>
+        </HierarchicalDataTemplate>
+    </Window.Resources>
 
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
@@ -43,11 +60,12 @@
             <MenuItem Header="Tools">
                 <MenuItem IsEnabled="False" Header="Open Binary File" />
                 <MenuItem Header="JSON">
-                    <MenuItem Header="Parse" Command="{Binding Path=JsonParser}"/>
+                    <MenuItem Header="Parse to String" Command="{Binding Path=JsonToStringParser}"/>
+                    <MenuItem Header="Parse to Tree" Command="{Binding Path=JsonToTreeParser}"/>
                     <MenuItem Header="Format" Command="{Binding Path=JsonFormatter}" />
                 </MenuItem>
                 <MenuItem Header="XML">
-                    <MenuItem IsEnabled="False" Header="Parse"/>
+                    <MenuItem IsEnabled="False" Header="Parse to String"/>
                     <MenuItem IsEnabled="False" Header="Format"/>
                 </MenuItem>
                 <MenuItem Header="Hex Coding">
@@ -78,10 +96,7 @@
 
         <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition />
-            </Grid.RowDefinitions>
+
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -90,17 +105,17 @@
 
             <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True" FontSize="12" ></TextBox>
 
-            <Grid Grid.Row="0" Grid.Column="1" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
 
-                <Label>Scratch Pad:</Label>
-                <Button Grid.Column="1">Clear</Button>
-            </Grid>
-                        
-            <TextBox x:Name="scratchPad" Grid.Row="1" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
+            <TabControl Grid.Row="0" Grid.Column="1">
+                <TabItem Header="ScratchPad">
+                    <TextBox x:Name="scratchPad" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
+                </TabItem>
+                <TabItem Header="Tree" >
+                    <TreeView x:Name="treeView" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
+                </TabItem>
+            </TabControl>
+            
+            
             
         </Grid>
         

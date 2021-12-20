@@ -52,16 +52,102 @@ namespace DevNotePad.Feature
             var builder = new StringBuilder();
             var root = document.RootElement;
 
-            DomParser(root, builder);
+            DomParserOld(root, builder);
             return builder.ToString();
         }
 
         public ItemNode ParseToTree(string jsonText)
         {
-            return new ItemNode();
+            //// Sample code for rendering tests
+            //var rootItem = new ItemNode() { Name = "root", Value = String.Empty };
+            //var child1 = new ItemNode() { Name = "foo", Value = "bar" };
+            //var child2 = new ItemNode() { Name = "Guybrush", Value = "Threepwood" };
+            //var pythons = new ItemNode { Name = "Pythons" };
+            //var eric = new ItemNode { Name = "Eric", Value = "Idle" };
+
+            //pythons.Childs.Add(eric);
+
+            //rootItem.Childs.Add(child1);
+            //rootItem.Childs.Add(child2);
+            //rootItem.Childs.Add(pythons);
+
+
+            // Read the JSON text
+            JsonDocument document = Read(jsonText);
+            var root = document.RootElement;
+            var rootNode = new ItemNode();
+
+            DomParser(root, rootNode);
+            return rootNode;
         }
 
-        private void DomParser(JsonElement element, StringBuilder builder)
+        private void DomParser (JsonElement element, ItemNode node)
+        {
+            var kind = element.ValueKind;
+            if (kind == JsonValueKind.Array)
+            {
+                node.Name = "Array";
+                node.Description = String.Empty;
+
+                // Iterate over the childs
+                foreach (var childElement in element.EnumerateArray())
+                {
+                    var childNode = new ItemNode();
+                    DomParser(childElement, childNode);
+
+                    node.Childs.Add(childNode);
+                }
+            }
+            else
+            {
+                // Object
+                node.Name = "Object";
+                node.Description = String.Empty;
+
+                foreach (var parameter in element.EnumerateObject())
+                {
+                    var childNode = new ItemNode();
+                    childNode.Name = parameter.Name;
+                    node.Childs.Add(childNode);
+
+                    // Next steps are depending on the parameter value
+                    var parameterValue = parameter.Value;
+
+                    // Next iteration ..
+                    if (parameterValue.ValueKind == JsonValueKind.Array)
+                    {
+                        // Value is a array
+                        childNode.Description = String.Empty;
+
+                        foreach (var parameterChildNode in parameterValue.EnumerateArray())
+                        {
+                            var parameterChild = new ItemNode();
+                            DomParser(parameterChildNode, parameterChild);
+
+                            childNode.Childs.Add(parameterChild);
+                        }
+                    }
+                    else if (parameterValue.ValueKind == JsonValueKind.Object)
+                    {
+                        // Value is another object
+                        var parameterChild = new ItemNode();
+                        DomParser(parameterValue, parameterChild);
+
+                        childNode.Childs.Add(parameterChild);
+                    }
+                    else
+                    {
+                        // String, Int, ....
+                        var stringBuilder = new StringBuilder();
+                        RenderValue(parameterValue, stringBuilder);
+
+                        childNode.Description = stringBuilder.ToString();
+                    }
+                }
+            }
+        }
+
+        private void DomParserOld(JsonElement element, StringBuilder builder)
         {
             var kind = element.ValueKind;
             if (kind == JsonValueKind.Array)
@@ -76,7 +162,7 @@ namespace DevNotePad.Feature
                     foreach (var childElement in element.EnumerateArray())
                     {
                         builder.AppendLine("## Parse new Object");
-                        DomParser(childElement, builder);
+                        DomParserOld(childElement, builder);
                     }
                 }
                 else
@@ -104,7 +190,7 @@ namespace DevNotePad.Feature
                             foreach (var childElement in parameterValue.EnumerateArray())
                             {
                                 builder.AppendLine("## Parse new Object");
-                                DomParser(childElement, builder);
+                                DomParserOld(childElement, builder);
                             }
 
                         }
