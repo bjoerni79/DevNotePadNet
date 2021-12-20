@@ -146,7 +146,7 @@ namespace DevNotePad.ViewModel
         {
             if (Ui == null)
             {
-                ShowError(new ApplicationException("Please init Ui first"));
+                ShowError(new ApplicationException("Please init Ui first"),"Application");
             }
             else
             {
@@ -161,7 +161,7 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException);
+                    ShowError(featureException,"JSON");
                 }
             }
         }
@@ -170,7 +170,7 @@ namespace DevNotePad.ViewModel
         {
             if (Ui == null)
             {
-                ShowError(new ApplicationException("Please init Ui first"));
+                ShowError(new ApplicationException("Please init Ui first"), "Application");
             }
             else
             {
@@ -180,7 +180,7 @@ namespace DevNotePad.ViewModel
                 try
                 {
                     IJsonComponent jsonComponent = new JsonComponent();
-                    var la = jsonComponent.Parse(input);
+                    var la = jsonComponent.ParseToString(input);
 
                     Ui.AddToScratchPad(la);
                     //TODO: Append this to the scratch pad!
@@ -188,7 +188,7 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException);
+                    ShowError(featureException,"JSON");
                 }
             }
         }

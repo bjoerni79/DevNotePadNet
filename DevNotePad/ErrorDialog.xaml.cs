@@ -22,6 +22,30 @@ namespace DevNotePad
         public ErrorDialog()
         {
             InitializeComponent();
+
+            Component = "Unknown";
+            Message = "Error 123";
+        }
+
+        public string Component { get; set; }
+
+        public string Message { get; set; }
+
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            messageLabel.Content = Message;
+            componentLabel.Content = Component;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

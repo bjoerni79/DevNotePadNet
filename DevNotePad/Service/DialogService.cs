@@ -17,9 +17,15 @@ namespace DevNotePad.Service
             this.owner = owner;
         }
 
-        public void ShowErrorDialog(Exception ex)
+        public void ShowErrorDialog(Exception ex, string component)
         {
-            MessageBox.Show("Error" + ex.Message);
+            //MessageBox.Show("Error" + ex.Message);
+            var errorDialog = new ErrorDialog();
+            errorDialog.Component = component;
+            errorDialog.Message = ex.Message;
+            errorDialog.Owner = owner;
+
+            errorDialog.ShowDialog();
         }
 
         public DialogReturnValue ShowOpenFileNameDialog(string title, string defaultExtension, string searchPattern)

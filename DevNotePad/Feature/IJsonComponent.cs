@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevNotePad.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace DevNotePad.Feature
     {
         string Formatter(string jsonText);
 
-        string Parse(string jsonText);
+        string ParseToString(string jsonText);
+
+        ItemNode ParseToTree(string jsonText);
     }
 }

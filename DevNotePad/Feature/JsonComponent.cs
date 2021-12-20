@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
+using DevNotePad.Shared;
 
 namespace DevNotePad.Feature
 {
@@ -43,7 +44,7 @@ namespace DevNotePad.Feature
             return result;
         }
 
-        public string Parse(string jsonText)
+        public string ParseToString(string jsonText)
         {
             // Read the JSON text
             JsonDocument document = Read(jsonText);
@@ -53,6 +54,11 @@ namespace DevNotePad.Feature
 
             DomParser(root, builder);
             return builder.ToString();
+        }
+
+        public ItemNode ParseToTree(string jsonText)
+        {
+            return new ItemNode();
         }
 
         private void DomParser(JsonElement element, StringBuilder builder)
@@ -69,13 +75,13 @@ namespace DevNotePad.Feature
                 {
                     foreach (var childElement in element.EnumerateArray())
                     {
-                        builder.AppendLine("Parse new Object");
+                        builder.AppendLine("## Parse new Object");
                         DomParser(childElement, builder);
                     }
                 }
                 else
                 {
-                    builder.AppendLine("Empty Array declaration detected.");
+                    builder.AppendLine("## Empty Array declaration detected.");
                 }
             }
             else
@@ -97,14 +103,14 @@ namespace DevNotePad.Feature
                         {
                             foreach (var childElement in parameterValue.EnumerateArray())
                             {
-                                builder.AppendLine("Parse new Object");
+                                builder.AppendLine("## Parse new Object");
                                 DomParser(childElement, builder);
                             }
 
                         }
                         else
                         {
-                            builder.AppendLine("Empty Array declaration detected.");
+                            builder.AppendLine("## Empty Array declaration detected.");
                         }
                     }
                     else
@@ -121,12 +127,12 @@ namespace DevNotePad.Feature
             var kind = element.ValueKind;
             if (kind == JsonValueKind.Object || kind == JsonValueKind.Array)
             {
-                builder.AppendFormat("Object/ Array detected\n");
+                builder.AppendFormat("## Object/ Array detected\n");
             }
 
             if (kind == JsonValueKind.Null)
             {
-                builder.AppendFormat("Null detected\n");
+                builder.AppendFormat("## Null detected\n");
             }
 
             if (kind == JsonValueKind.Number)
@@ -166,5 +172,7 @@ namespace DevNotePad.Feature
 
             return document;
         }
+
+
     }
 }

@@ -52,10 +52,10 @@ namespace DevNotePad.ViewModel
             return FacadeFactory.Create();
         }
 
-        protected void ShowError(Exception exception)
+        protected void ShowError(Exception exception, string component)
         {
             var dialogService = GetDialogService();
-            dialogService.ShowErrorDialog(exception);
+            dialogService.ShowErrorDialog(exception, component);
         }
     }
 }

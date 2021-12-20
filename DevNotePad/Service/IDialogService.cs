@@ -12,7 +12,7 @@ namespace DevNotePad.Service
 
         DialogReturnValue ShowSaveFileDialog();
 
-        void ShowErrorDialog(Exception ex);
+        void ShowErrorDialog(Exception ex, string component);
 
         void ShowWarningDialog(string warning, string caption);
     }
