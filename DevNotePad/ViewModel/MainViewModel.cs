@@ -123,9 +123,17 @@ namespace DevNotePad.ViewModel
 
         private void OnClose()
         {
+            bool continueWithClose = true;
+
             if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
             {
-                //TODO: Ask for saving after the notifier bug is fixed!
+                var dialogService = GetDialogService();
+                continueWithClose = dialogService.ShowConfirmationDialog("Some changes are pending. Do you want to close?", "Close");
+            }
+
+            if (continueWithClose)
+            {
+                Ui!.CloseByViewModel();
             }
         }
 
@@ -272,15 +280,19 @@ namespace DevNotePad.ViewModel
 
         public void NotifyContentChanged(int added, int offset, int removed)
         {
-            //TODO: This event fires every time. Add a filter logic for only triggering the changes by the user or formatter
+            int internalTextLength = initialText.Length;
+            var loadedEvent = offset == 0 && internalTextLength == added;
 
-            if (currentState == EditorState.New)
+            if (!loadedEvent)
             {
-                currentState = EditorState.ChangedNew;
-            }
-            else
-            {
-                currentState = EditorState.Changed;
+                if (currentState == EditorState.New)
+                {
+                    currentState = EditorState.ChangedNew;
+                }
+                else
+                {
+                    currentState = EditorState.Changed;
+                }
             }
         }
 

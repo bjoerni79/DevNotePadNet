@@ -27,7 +27,7 @@
 
         <TextBlock Margin="10" FontSize="14" x:Name="questionText" Grid.Row="0"/>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 15 0 15">
             <Button Name="okButton" Width="100" Height="25" IsDefault="True" Content="OK" Click="okButton_Click"  />
             <Button Name="cancelButton" Width="100" Height="25" IsCancel="True" Margin="30 0 0 0" Content="Cancel" Click="cancelButton_Click"    />
         </StackPanel>

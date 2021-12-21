@@ -15,6 +15,7 @@
         <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding Path=New}"/>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding Path=Open}"/>
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding Path=Save}"/>
+        <KeyBinding Modifiers="Ctrl" Key="R" Command="{Binding Path=Reload}"/>
     </Window.InputBindings>
 
     <Window.Resources>
@@ -40,9 +41,9 @@
                 <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding Path=Open}"/>
                 <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding Path=Save}"/>
                 <MenuItem Header="Save As" Command="{Binding Path=SaveAs}" />
-                <MenuItem Header="Reload" Command="{Binding Path=Reload}" />
+                <MenuItem Header="Reload" InputGestureText="Ctrl+R" Command="{Binding Path=Reload}" />
                 <Separator/>
-                <MenuItem Header="Close"/>
+                <MenuItem Header="Close" Command="{Binding Path=Close}"/>
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
@@ -106,7 +107,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True" FontSize="12" TextChanged="editor_TextChanged" ></TextBox>
+            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True" FontSize="14" TextChanged="editor_TextChanged" ></TextBox>
 
             <Expander Grid.Row="0" Grid.Column="1" ExpandDirection="Left" >
                 <TabControl Width="300">

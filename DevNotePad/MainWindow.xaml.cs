@@ -129,6 +129,11 @@ namespace DevNotePad
             scratchPad.Text = content.ToString();
         }
 
+        public void CloseByViewModel()
+        {
+            Close();
+        }
+
         #endregion
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -22,5 +22,7 @@ namespace DevNotePad.ViewModel
         bool IsTextSelected();
 
         void AddToScratchPad(string text);
+
+        void CloseByViewModel();
     }
 }
