@@ -17,9 +17,10 @@ namespace DevNotePad.ViewModel
     {
         private IMainViewUi? Ui { get; set; }
 
-        private bool isFilenameAvailable = false;
+        private EditorState currentState;
 
         private string initialText;
+        private DateTime latestTimeStamp;
 
         public MainViewModel()
         {
@@ -75,20 +76,20 @@ namespace DevNotePad.ViewModel
 
         public string FileName { get; set; }
 
+
+
         public bool LineWrapMode { get; set; }
 
         public bool ScrollbarMode { get; set; }
 
         private void OnNew()
         {
-            //TODO: Ask for confirmation not saved!
-
             InternalNew();
         }
 
         private void OnReload()
         {
-            //TODO
+            InternalReload();
         }
 
         private void OnOpen()
@@ -104,7 +105,7 @@ namespace DevNotePad.ViewModel
 
         private void OnSave()
         {
-            if (!isFilenameAvailable)
+            if (currentState == EditorState.Loaded || currentState == EditorState.Saved)
             {
                 OnSaveAs();
             }
@@ -256,6 +257,24 @@ namespace DevNotePad.ViewModel
             }
         }
 
+        public void NotifyContentChanged()
+        {
+            if (currentState == EditorState.New)
+            {
+                currentState = EditorState.ChangedNew;
+            }
+            else
+            {
+                currentState = EditorState.Changed;
+            }
+        }
+
+        public bool IsChanged()
+        {
+            var isChangeRequired = currentState == EditorState.Changed || currentState == EditorState.ChangedNew;
+            return isChangeRequired;
+        }
+
         #endregion
 
         /// <summary>
@@ -266,7 +285,8 @@ namespace DevNotePad.ViewModel
         {
             var ioService = GetIoService();
             FileName = filename;
-            isFilenameAvailable = true;
+            currentState = EditorState.Saved;
+            latestTimeStamp = DateTime.Now;
 
             initialText = Ui!.GetText(false);
             ioService.WriteTextFile(filename, initialText);
@@ -282,7 +302,10 @@ namespace DevNotePad.ViewModel
         {
             var ioService = GetIoService();
             FileName = filename;
-            isFilenameAvailable = true;
+            currentState = EditorState.Loaded;
+
+            //TODO: Store the timestamp of the file right now
+            latestTimeStamp = ioService.GetModificationTimeStamp(filename);
 
             initialText = ioService.ReadTextFile(FileName);
             Ui!.SetText(initialText);
@@ -291,16 +314,31 @@ namespace DevNotePad.ViewModel
             RaisePropertyChange("FileName");
         }
 
+        /// <summary>
+        /// Handles the creation of new files
+        /// </summary>
         private void InternalNew()
         {
+            //TODO: Ask for confirmation not saved!
+
             FileName = "New";
-            isFilenameAvailable = false;
+            currentState = EditorState.New;
             initialText = String.Empty;
+            latestTimeStamp = DateTime.Now;
 
             Ui!.SetText(initialText);
 
             RaisePropertyChange("Text");
             RaisePropertyChange("FileName");
+        }
+
+        private void InternalReload()
+        {
+            //TODO:  Saving first? Check the states...
+
+            //TODO: If state is new, there is nothing to reload...
+
+            //TODO: Any file changes?  What is the creation date? etc
         }
 
         private Settings GetSettings()

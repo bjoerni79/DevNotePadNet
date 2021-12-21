@@ -14,6 +14,24 @@ namespace DevNotePad.Service
 
         }
 
+        public DateTime GetModificationTimeStamp(string filename)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("filename is null or empty", filename);
+            }
+
+            // throw new FileNotFoundException("File cannot be found", filename);
+            var fileExists = File.Exists(filename);
+            if (!fileExists)
+            {
+                throw new FileNotFoundException("File cannot be found", filename);
+            }
+
+            var date = File.GetLastWriteTime(filename);
+            return date;
+        }
+
         public string ReadTextFile(string filename)
         {
             if (String.IsNullOrEmpty(filename))

@@ -20,9 +20,10 @@ namespace DevNotePad.Service
         public void ShowErrorDialog(Exception ex, string component)
         {
             //MessageBox.Show("Error" + ex.Message);
-            var errorDialog = new ErrorDialog();
+            var errorDialog = new OkDialog();
             errorDialog.Component = component;
             errorDialog.Message = ex.Message;
+            errorDialog.DialogTitle = "Error";
             errorDialog.Owner = owner;
 
             errorDialog.ShowDialog();
@@ -54,9 +55,17 @@ namespace DevNotePad.Service
             return new DialogReturnValue(false, String.Empty);
         }
 
-        public void ShowWarningDialog(string warning, string caption)
+        public void ShowWarningDialog(string warning, string component)
         {
-            MessageBox.Show(warning, caption);
+            //MessageBox.Show(warning, caption);
+
+            var errorDialog = new OkDialog();
+            errorDialog.Component = component;
+            errorDialog.Message = warning;
+            errorDialog.DialogTitle = "Warning";
+            errorDialog.Owner = owner;
+
+            errorDialog.ShowDialog();
         }
     }
 }

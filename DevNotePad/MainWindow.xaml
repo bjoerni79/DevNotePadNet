@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Title="Dev NotePad" Height="450" Width="800"
         DataContext="{Binding Source={StaticResource bootstrap},Path=Main}"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
 
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding Path=New}"/>
@@ -39,7 +40,7 @@
                 <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding Path=Open}"/>
                 <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding Path=Save}"/>
                 <MenuItem Header="Save As" Command="{Binding Path=SaveAs}" />
-                <MenuItem Header="Reload" IsEnabled="false"/>
+                <MenuItem Header="Reload" Command="{Binding Path=Reload}" />
                 <Separator/>
                 <MenuItem Header="Close"/>
             </MenuItem>
@@ -72,6 +73,10 @@
                     <MenuItem IsEnabled="False" Header="Parse Hex String"/>
                     <MenuItem IsEnabled="False" Header="Format Hex String"/>
                 </MenuItem>
+                <MenuItem Header="Base64">
+                    <MenuItem IsEnabled="False" Header="Decode"/>
+                    <MenuItem IsEnabled="False" Header="Encode"/>
+                </MenuItem>
 
             </MenuItem>
             <MenuItem Header="Layout">
@@ -96,24 +101,24 @@
 
         <Grid>
 
-
-
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True" FontSize="12" ></TextBox>
+            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True" FontSize="12" TextChanged="editor_TextChanged" ></TextBox>
 
+            <Expander Grid.Row="0" Grid.Column="1" ExpandDirection="Left" >
+                <TabControl Width="300">
+                    <TabItem Header="ScratchPad">
+                        <TextBox x:Name="scratchPad" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
+                    </TabItem>
+                    <TabItem Header="Tree" >
+                        <TreeView x:Name="treeView" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
+                    </TabItem>
+                </TabControl>
+            </Expander>
 
-            <TabControl Grid.Row="0" Grid.Column="1">
-                <TabItem Header="ScratchPad">
-                    <TextBox x:Name="scratchPad" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
-                </TabItem>
-                <TabItem Header="Tree" >
-                    <TreeView x:Name="treeView" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
-                </TabItem>
-            </TabControl>
             
             
             

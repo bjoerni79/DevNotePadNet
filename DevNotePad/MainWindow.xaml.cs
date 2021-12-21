@@ -40,7 +40,7 @@ namespace DevNotePad
                 facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
             }
 
-            var vm = DataContext as IMainViewModel;
+            var vm = GetViewModel();
             if (vm != null)
             {
                 vm.Init(this);
@@ -130,5 +130,41 @@ namespace DevNotePad
         }
 
         #endregion
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+             var vm = GetViewModel();
+            if (vm != null)
+            {
+                var needsSaving = vm.IsChanged();
+                if (needsSaving)
+                {
+                    var facade = FacadeFactory.Create();
+                    if (facade != null)
+                    {
+                        var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
+                        if (dialogService != null)
+                        {
+                            //TODO: Ask if the user wants to save first
+                        }
+                    }
+                }
+            }
+        }
+
+        private void editor_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                vm.NotifyContentChanged();
+            }
+        }
+
+        private IMainViewModel? GetViewModel()
+        {
+            var vm = DataContext as IMainViewModel;
+            return vm;
+        }
     }
 }

@@ -17,15 +17,17 @@ namespace DevNotePad
     /// <summary>
     /// Interaction logic for ErrorDialog.xaml
     /// </summary>
-    public partial class ErrorDialog : Window
+    public partial class OkDialog : Window
     {
-        public ErrorDialog()
+        public OkDialog()
         {
             InitializeComponent();
 
             Component = "Unknown";
             Message = "Error 123";
         }
+
+        public string DialogTitle { get; set; }
 
         public string Component { get; set; }
 
@@ -41,10 +43,12 @@ namespace DevNotePad
         {
             messageLabel.Content = Message;
             componentLabel.Content = Component;
+            Title = DialogTitle;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             Close();
         }
     }
