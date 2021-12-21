@@ -15,5 +15,7 @@ namespace DevNotePad.Service
         void ShowErrorDialog(Exception ex, string component);
 
         void ShowWarningDialog(string warning, string component);
+
+        bool ShowConfirmationDialog(string question, string component);
     }
 }

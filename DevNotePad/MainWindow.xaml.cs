@@ -157,7 +157,8 @@ namespace DevNotePad
             var vm = GetViewModel();
             if (vm != null)
             {
-                vm.NotifyContentChanged();
+                var textChange = e.Changes.First();
+                vm.NotifyContentChanged(textChange.AddedLength,textChange.Offset,textChange.RemovedLength);
             }
         }
 

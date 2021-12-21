@@ -17,6 +17,22 @@ namespace DevNotePad.Service
             this.owner = owner;
         }
 
+        public bool ShowConfirmationDialog(string question, string title)
+        {
+            var confirmDialog = new ConfirmDialog();
+            confirmDialog.Question = question;
+            confirmDialog.Title = title;
+            confirmDialog.Owner = owner;
+
+            var result = confirmDialog.ShowDialog();
+            if (result.HasValue)
+            {
+                return result.Value;
+            }
+
+            return false;
+        }
+
         public void ShowErrorDialog(Exception ex, string component)
         {
             //MessageBox.Show("Error" + ex.Message);

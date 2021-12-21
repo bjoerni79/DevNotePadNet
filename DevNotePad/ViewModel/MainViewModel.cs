@@ -30,6 +30,7 @@ namespace DevNotePad.ViewModel
             Save = new DefaultCommand(OnSave);
             SaveAs = new DefaultCommand(OnSaveAs);
             Reload = new DefaultCommand(OnReload);
+            Close = new DefaultCommand(OnClose);
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
@@ -59,6 +60,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand Reload { get; set; }
 
+        public IRefreshCommand Close { get; set; }
+
         public IRefreshCommand ToggleScrollbar { get; set; }
         public IRefreshCommand ToggleLineWrap { get; set; }
 
@@ -72,15 +75,8 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
-        public ObservableCollection<ItemNode>? Nodes { get; set; }
 
-        public string FileName { get; set; }
-
-
-
-        public bool LineWrapMode { get; set; }
-
-        public bool ScrollbarMode { get; set; }
+        #region Command Delegates
 
         private void OnNew()
         {
@@ -125,6 +121,14 @@ namespace DevNotePad.ViewModel
             }
         }
 
+        private void OnClose()
+        {
+            if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
+            {
+                //TODO: Ask for saving after the notifier bug is fixed!
+            }
+        }
+
         private void OnToggleScrollbar()
         {
             var settings = GetSettings();
@@ -153,7 +157,7 @@ namespace DevNotePad.ViewModel
         {
             if (Ui == null)
             {
-                ShowError(new ApplicationException("Please init Ui first"),"Application");
+                ShowError(new ApplicationException("Please init Ui first"), "Application");
             }
             else
             {
@@ -168,7 +172,7 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException,"JSON");
+                    ShowError(featureException, "JSON");
                 }
             }
         }
@@ -190,12 +194,10 @@ namespace DevNotePad.ViewModel
                     var la = jsonComponent.ParseToString(input);
 
                     Ui.AddToScratchPad(la);
-                    //TODO: Append this to the scratch pad!
-                    //Ui.SetText(stringBuilder.ToString(), isTextSelected);
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException,"JSON");
+                    ShowError(featureException, "JSON");
                 }
             }
         }
@@ -235,6 +237,17 @@ namespace DevNotePad.ViewModel
             }
         }
 
+        #endregion
+
+        public ObservableCollection<ItemNode>? Nodes { get; set; }
+
+        public string FileName { get; set; }
+
+        public bool LineWrapMode { get; set; }
+
+        public bool ScrollbarMode { get; set; }
+
+
         #region IMainViewModel
 
         public void Init(IMainViewUi ui)
@@ -257,8 +270,10 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        public void NotifyContentChanged()
+        public void NotifyContentChanged(int added, int offset, int removed)
         {
+            //TODO: This event fires every time. Add a filter logic for only triggering the changes by the user or formatter
+
             if (currentState == EditorState.New)
             {
                 currentState = EditorState.ChangedNew;
@@ -283,15 +298,23 @@ namespace DevNotePad.ViewModel
         /// <param name="filename">the filename</param>
         private void InternalSave(string filename)
         {
-            var ioService = GetIoService();
-            FileName = filename;
-            currentState = EditorState.Saved;
-            latestTimeStamp = DateTime.Now;
+            try
+            {
+                var ioService = GetIoService();
+                FileName = filename;
+                currentState = EditorState.Saved;
+                latestTimeStamp = DateTime.Now;
 
-            initialText = Ui!.GetText(false);
-            ioService.WriteTextFile(filename, initialText);
+                initialText = Ui!.GetText(false);
+                ioService.WriteTextFile(filename, initialText);
 
-            RaisePropertyChange("FileName");
+                RaisePropertyChange("FileName");
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex, "Save File");
+            }
+
         }
 
         /// <summary>
@@ -300,18 +323,26 @@ namespace DevNotePad.ViewModel
         /// <param name="filename">the filename</param>
         private void InternalLoad(string filename)
         {
-            var ioService = GetIoService();
-            FileName = filename;
-            currentState = EditorState.Loaded;
+            try
+            {
+                var ioService = GetIoService();
+                FileName = filename;
+                currentState = EditorState.Loaded;
 
-            //TODO: Store the timestamp of the file right now
-            latestTimeStamp = ioService.GetModificationTimeStamp(filename);
+                //TODO: Store the timestamp of the file right now
+                latestTimeStamp = ioService.GetModificationTimeStamp(filename);
 
-            initialText = ioService.ReadTextFile(FileName);
-            Ui!.SetText(initialText);
+                initialText = ioService.ReadTextFile(FileName);
+                Ui!.SetText(initialText);
 
-            RaisePropertyChange("Text");
-            RaisePropertyChange("FileName");
+                RaisePropertyChange("Text");
+                RaisePropertyChange("FileName");
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex, "Load File");
+            }
+
         }
 
         /// <summary>
@@ -319,26 +350,76 @@ namespace DevNotePad.ViewModel
         /// </summary>
         private void InternalNew()
         {
-            //TODO: Ask for confirmation not saved!
+            bool proceed = true;
 
-            FileName = "New";
-            currentState = EditorState.New;
-            initialText = String.Empty;
-            latestTimeStamp = DateTime.Now;
+            if (currentState == EditorState.ChangedNew || currentState == EditorState.Changed)
+            {
+                var dialogService = GetDialogService();
+                proceed = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to continue?","New");
+            }
 
-            Ui!.SetText(initialText);
+            if (proceed)
+            {
+                FileName = "New";
+                currentState = EditorState.New;
+                initialText = String.Empty;
+                latestTimeStamp = DateTime.Now;
 
-            RaisePropertyChange("Text");
-            RaisePropertyChange("FileName");
+                Ui!.SetText(initialText);
+
+                RaisePropertyChange("Text");
+                RaisePropertyChange("FileName");
+            }
         }
 
+        /// <summary>
+        /// Handles the reload of a file
+        /// </summary>
         private void InternalReload()
         {
-            //TODO:  Saving first? Check the states...
-
             //TODO: If state is new, there is nothing to reload...
+            if (currentState == EditorState.New)
+            {
+                // TODO: Notify via toolbar that none action is taken..
+            }
+            else
+            {
+                bool checkForReload = true;
 
-            //TODO: Any file changes?  What is the creation date? etc
+                //TODO:  Saving first? Check the states...
+                if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
+                {
+                    var dialogService = GetDialogService();
+                    checkForReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload");
+                }
+
+                if (checkForReload)
+                {
+                    try
+                    {
+                        //TODO: Any file changes?  What is the creation date? etc
+                        var io = GetIoService();
+                        var currentModifiedTimestamp = io.GetModificationTimeStamp(FileName);
+
+                        if (currentModifiedTimestamp > latestTimeStamp)
+                        {
+                            InternalLoad(FileName);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowError(ex, "Reload");
+                    }
+
+
+                }
+                else
+                {
+                    //TODO Notify that no reload is required
+                }
+
+            }
         }
 
         private Settings GetSettings()

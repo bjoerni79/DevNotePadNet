@@ -10,7 +10,7 @@ namespace DevNotePad.ViewModel
     {
         void Init(IMainViewUi ui);
 
-        void NotifyContentChanged();
+        void NotifyContentChanged(int added, int offset, int removed);
         void ApplySettings();
 
         bool IsChanged();

@@ -23,5 +23,37 @@ namespace DevNotePad
         {
             InitializeComponent();
         }
+
+        public string Question { get; set; }
+        public string DialogTitle { get; set; }
+
+
+
+        private void okButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
+        }
+
+        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(DialogTitle))
+            {
+                Title = DialogTitle;
+            }
+
+            questionText.Text = Question; 
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
     }
 }

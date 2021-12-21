@@ -14,9 +14,23 @@
         WindowStartupLocation="CenterOwner" 
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
+        FocusManager.FocusedElement="{Binding ElementName=questionText}"
         
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
         >
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Margin="10" FontSize="14" x:Name="questionText" Grid.Row="0"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Name="okButton" Width="100" Height="25" IsDefault="True" Content="OK" Click="okButton_Click"  />
+            <Button Name="cancelButton" Width="100" Height="25" IsCancel="True" Margin="30 0 0 0" Content="Cancel" Click="cancelButton_Click"    />
+        </StackPanel>
+
     </Grid>
 </Window>
