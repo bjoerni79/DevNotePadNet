@@ -97,7 +97,7 @@
 
         
         <StatusBar DockPanel.Dock="Bottom" >
-            <Label>Basic Features</Label>
+            <Label Name="notificationLabel">Basic Features</Label>
         </StatusBar>
 
         <Grid>

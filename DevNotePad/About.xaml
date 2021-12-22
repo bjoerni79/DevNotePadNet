@@ -13,19 +13,50 @@
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
         Closing="Window_Closing"
-        FocusManager.FocusedElement="{Binding ElementName=aboutText}"
+
         >
+
+    <Window.Resources>
+        <Style x:Key="title" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+        </Style>
+
+        <Style x:Key="release" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10 5 10 0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+        </Style>
+
+        <Style x:Key="about" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+    </Window.Resources>
+    
     <Grid>
+        
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <TextBlock Name="aboutText">
+        <TextBlock Style="{StaticResource title}" >
             DevNotePad
         </TextBlock>
+        <TextBlock Grid.Row="1" Style="{StaticResource release}">
+            Release : 0.1
+        </TextBlock>
 
-        <Button Width="100" Margin="0 10 0 10" Grid.Row="1" IsDefault="True" Click="Button_Click">
+        <TextBlock Grid.Row="2" Style="{StaticResource about}">
+            An editor for developers with the goal keeping the UI simple and clean. <LineBreak/> Please see project page https:/foo.bar for more details.
+        </TextBlock>
+
+        <Button Width="100" Margin="0 10 0 10" Grid.Row="3" IsDefault="True" Click="Button_Click">
             OK
         </Button>
         
