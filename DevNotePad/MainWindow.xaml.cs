@@ -152,6 +152,8 @@ namespace DevNotePad
                         if (dialogService != null)
                         {
                             //TODO: Ask if the user wants to save first
+                            var doClose= dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close");
+                            e.Cancel = !doClose;
                         }
                     }
                 }

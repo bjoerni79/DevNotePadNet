@@ -123,18 +123,7 @@ namespace DevNotePad.ViewModel
 
         private void OnClose()
         {
-            bool continueWithClose = true;
-
-            if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
-            {
-                var dialogService = GetDialogService();
-                continueWithClose = dialogService.ShowConfirmationDialog("Some changes are pending. Do you want to close?", "Close");
-            }
-
-            if (continueWithClose)
-            {
-                Ui!.CloseByViewModel();
-            }
+            Ui!.CloseByViewModel();
         }
 
         private void OnToggleScrollbar()
