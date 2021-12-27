@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:DevNotePad"
         xmlns:shared="clr-namespace:DevNotePad.Shared"
         mc:Ignorable="d"
-        Title="Dev NotePad" Height="450" Width="800"
+        Title="DevNotePad - New" Height="450" Width="800"
         DataContext="{Binding Source={StaticResource bootstrap},Path=Main}"
         Loaded="Window_Loaded"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        Name="mainWindow">
 
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding Path=New}"/>
@@ -86,16 +87,15 @@
 
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Command="{Binding About}"  Header="About"/> 
+                <MenuItem Command="{Binding About}"  Header="About"/>
             </MenuItem>
         </Menu>
 
-        <ToolBar DockPanel.Dock="Top" >
-            <Label>Filename:</Label>
-            <Label Content="{Binding Path=FileName}"/>
-        </ToolBar>
+        <!--<ToolBar DockPanel.Dock="Top" >
+            <Label>TODO:</Label>
+        </ToolBar>-->
 
-        
+
         <StatusBar DockPanel.Dock="Bottom" >
             <Label Name="notificationLabel">Basic Features</Label>
         </StatusBar>
@@ -103,27 +103,33 @@
         <Grid>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="213*"/>
+                <ColumnDefinition Width="451*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="133*" MinWidth="10"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True" FontSize="14" TextChanged="editor_TextChanged" ></TextBox>
+            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" AcceptsReturn="True" AcceptsTab="True" FontSize="14" TextChanged="editor_TextChanged" Grid.ColumnSpan="2" />
 
-            <Expander Grid.Row="0" Grid.Column="1" ExpandDirection="Left" >
-                <TabControl Width="300">
-                    <TabItem Header="ScratchPad">
-                        <TextBox x:Name="scratchPad" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
-                    </TabItem>
-                    <TabItem Header="Tree" >
-                        <TreeView x:Name="treeView" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
-                    </TabItem>
-                </TabControl>
-            </Expander>
 
-            
-            
-            
+            <GridSplitter Grid.Column="2"   HorizontalAlignment="Center"
+              Background="LightBlue" 
+              ShowsPreview="True"
+              Width="3"  />
+
+            <TabControl Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="3,0,0,0" >
+                <TabItem Header="ScratchPad">
+                    <TextBox x:Name="scratchPad" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
+                </TabItem>
+                <TabItem Header="Tree" >
+                    <TreeView x:Name="treeView" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
+                </TabItem>
+            </TabControl>
+
+
+
         </Grid>
-        
+
+
     </DockPanel>
 </Window>

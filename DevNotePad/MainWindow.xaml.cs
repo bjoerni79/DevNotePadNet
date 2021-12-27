@@ -115,6 +115,20 @@ namespace DevNotePad
 
         }
 
+        public void SetFilename(string filename)
+        {
+            var filenameDescriptor = filename;
+            var maxLength = 50;
+            if (filename.Length > maxLength)
+            {
+                var length = filename.Length;
+                filenameDescriptor = "..." + filename.Substring(length - maxLength, maxLength);
+            }
+
+            var newTitle = string.Format("DevNotePad - {0}", filenameDescriptor);
+            mainWindow.Title = newTitle;
+        }
+
         public bool IsTextSelected()
         {
             var selectedText = editor.SelectedText;
@@ -175,5 +189,7 @@ namespace DevNotePad
             var vm = DataContext as IMainViewModel;
             return vm;
         }
+
+
     }
 }

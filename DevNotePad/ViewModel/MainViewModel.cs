@@ -310,6 +310,7 @@ namespace DevNotePad.ViewModel
                 ioService.WriteTextFile(filename, initialText);
 
                 RaisePropertyChange("FileName");
+                Ui.SetFilename(FileName);
             }
             catch (Exception ex)
             {
@@ -338,6 +339,7 @@ namespace DevNotePad.ViewModel
 
                 RaisePropertyChange("Text");
                 RaisePropertyChange("FileName");
+                Ui.SetFilename(FileName);
             }
             catch (Exception ex)
             {
@@ -370,6 +372,7 @@ namespace DevNotePad.ViewModel
 
                 RaisePropertyChange("Text");
                 RaisePropertyChange("FileName");
+                Ui.SetFilename(FileName);
             }
         }
 

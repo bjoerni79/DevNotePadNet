@@ -17,6 +17,8 @@ namespace DevNotePad.ViewModel
 
         void SetText(string text);
 
+        void SetFilename(string filename);
+
         void SetText(string text, bool selected);
 
         bool IsTextSelected();
