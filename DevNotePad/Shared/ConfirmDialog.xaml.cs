@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace DevNotePad
+namespace DevNotePad.Shared
 {
     /// <summary>
     /// Interaction logic for ConfirmDialog.xaml
