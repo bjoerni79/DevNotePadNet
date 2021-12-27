@@ -144,6 +144,18 @@ namespace DevNotePad
             scratchPad.Text = content.ToString();
         }
 
+        public void FocusTree()
+        {
+            tabTreeView.Visibility = Visibility.Visible;
+            treeView.Focus();
+        }
+
+        public void FocusScratchPad()
+        {
+            tabScratchPad.Visibility = Visibility.Visible;
+            scratchPad.Focus();
+        }
+
         public void CloseByViewModel()
         {
             Close();

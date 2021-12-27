@@ -63,13 +63,14 @@
             <MenuItem Header="Tools">
                 <MenuItem IsEnabled="False" Header="Open Binary File" />
                 <MenuItem Header="JSON">
-                    <MenuItem Header="Parse to String" Command="{Binding Path=JsonToStringParser}"/>
-                    <MenuItem Header="Parse to Tree" Command="{Binding Path=JsonToTreeParser}"/>
+                    <MenuItem Header="To Text View" Command="{Binding Path=JsonToStringParser}"/>
+                    <MenuItem Header="To Tree View" Command="{Binding Path=JsonToTreeParser}"/>
                     <MenuItem Header="Format" Command="{Binding Path=JsonFormatter}" />
                 </MenuItem>
                 <MenuItem Header="XML">
-                    <MenuItem IsEnabled="False" Header="Parse to String"/>
-                    <MenuItem IsEnabled="False" Header="Format"/>
+                    <MenuItem Header="To Text View" Command="{Binding Path=XmlToStringParser}" />
+                    <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />
+                    <MenuItem Header="Format" Command="{Binding Path=XmlFormatter}"/>
                 </MenuItem>
                 <MenuItem Header="Hex Coding">
                     <MenuItem IsEnabled="False" Header="Parse Hex String"/>
@@ -118,10 +119,10 @@
               Width="3"  />
 
             <TabControl Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="3,0,0,0" >
-                <TabItem Header="ScratchPad">
+                <TabItem Name="tabScratchPad" Header="ScratchPad">
                     <TextBox x:Name="scratchPad" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
                 </TabItem>
-                <TabItem Header="Tree" >
+                <TabItem Name="tabTreeView" Header="Tree" >
                     <TreeView x:Name="treeView" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
                 </TabItem>
             </TabControl>

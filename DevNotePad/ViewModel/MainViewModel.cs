@@ -15,12 +15,20 @@ namespace DevNotePad.ViewModel
 {
     public class MainViewModel : AbstractViewModel, IMainViewModel
     {
+        private readonly string ApplicationComponent = "Application";
+        private readonly string JsonComponent = "JSON";
+        private readonly string XmlComponent = "XML";
+
         private IMainViewUi? Ui { get; set; }
 
         private EditorState currentState;
 
         private string initialText;
         private DateTime latestTimeStamp;
+
+        private string FileName { get; set; }
+        private bool LineWrapMode { get; set; }
+        private bool ScrollbarMode { get; set; }
 
         public MainViewModel()
         {
@@ -36,6 +44,9 @@ namespace DevNotePad.ViewModel
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
             JsonToStringParser = new DefaultCommand(OnJsonToString);
             JsonToTreeParser = new DefaultCommand(OnJsonToTree);
+            XmlFormatter = new DefaultCommand(OnXmlFormatter);
+            XmlToStringParser = new DefaultCommand(OnXmlToString);
+            XmlToTreeParser = new DefaultCommand(OnXmlToTree);
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
@@ -71,10 +82,15 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand JsonToTreeParser { get; set; }
 
+        public IRefreshCommand XmlFormatter { get; set; }
+
+        public IRefreshCommand XmlToStringParser { get; set; }
+
+        public IRefreshCommand XmlToTreeParser { get; set; }
+
         public IRefreshCommand About { get; set; }
 
         #endregion
-
 
         #region Command Delegates
 
@@ -152,13 +168,10 @@ namespace DevNotePad.ViewModel
 
         private void OnJsonFormatter()
         {
-            if (Ui == null)
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
             {
-                ShowError(new ApplicationException("Please init Ui first"), "Application");
-            }
-            else
-            {
-                var isTextSelected = Ui.IsTextSelected();
+                var isTextSelected = Ui!.IsTextSelected();
                 var input = Ui.GetText(isTextSelected);
                 try
                 {
@@ -169,20 +182,17 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, "JSON");
+                    ShowError(featureException, JsonComponent);
                 }
             }
         }
 
         private void OnJsonToString()
         {
-            if (Ui == null)
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
             {
-                ShowError(new ApplicationException("Please init Ui first"), "Application");
-            }
-            else
-            {
-                var isTextSelected = Ui.IsTextSelected();
+                var isTextSelected = Ui!.IsTextSelected();
                 var input = Ui.GetText(isTextSelected);
 
                 try
@@ -191,23 +201,21 @@ namespace DevNotePad.ViewModel
                     var la = jsonComponent.ParseToString(input);
 
                     Ui.AddToScratchPad(la);
+                    Ui.FocusScratchPad();
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, "JSON");
+                    ShowError(featureException, JsonComponent);
                 }
             }
         }
 
         private void OnJsonToTree()
         {
-            if (Ui == null)
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
             {
-                ShowError(new ApplicationException("Please init Ui first"), "Application");
-            }
-            else
-            {
-                var isTextSelected = Ui.IsTextSelected();
+                var isTextSelected = Ui!.IsTextSelected();
                 var input = Ui.GetText(isTextSelected);
 
                 try
@@ -218,10 +226,80 @@ namespace DevNotePad.ViewModel
                     Nodes = new ObservableCollection<ItemNode>();
                     Nodes.Add(rootNode);
                     RaisePropertyChange("Nodes");
+
+                    Ui.FocusTree();
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, "JSON");
+                    ShowError(featureException, JsonComponent);
+                }
+            }
+        }
+
+        private void OnXmlFormatter()
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                var isTextSelected = Ui!.IsTextSelected();
+                var input = Ui.GetText(isTextSelected);
+
+                try
+                {
+                    IXmlComponent component = new XmlComponent();
+                    var formatted = component.Formatter(input);
+
+                    Ui.SetText(formatted, isTextSelected);
+                }
+                catch (FeatureException featureException)
+                {
+                    ShowError(featureException, JsonComponent);
+                }
+            }
+        }
+
+        private void OnXmlToString()
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                var isTextSelected = Ui!.IsTextSelected();
+                var input = Ui.GetText(isTextSelected);
+
+                try
+                {
+                    //TODO
+                }
+                catch (FeatureException featureException)
+                {
+                    ShowError(featureException, JsonComponent);
+                }
+            }
+        }
+
+        private void OnXmlToTree()
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                var isTextSelected = Ui!.IsTextSelected();
+                var input = Ui.GetText(isTextSelected);
+
+                try
+                {
+                    //TODO
+                    IXmlComponent component = new XmlComponent();
+                    var rootNode = component.ParseToTree(input);
+
+                    Nodes = new ObservableCollection<ItemNode>();
+                    Nodes.Add(rootNode);
+                    RaisePropertyChange("Nodes");
+
+                    Ui.FocusTree();
+                }
+                catch (FeatureException featureException)
+                {
+                    ShowError(featureException, JsonComponent);
                 }
             }
         }
@@ -234,16 +312,22 @@ namespace DevNotePad.ViewModel
             }
         }
 
+        private bool CheckForUi()
+        {
+            if (Ui == null)
+            {
+                ShowError(new ApplicationException("Please init Ui first"), ApplicationComponent);
+                return false;
+            }
+
+            return true;
+            
+        }
+
+
         #endregion
 
         public ObservableCollection<ItemNode>? Nodes { get; set; }
-
-        public string FileName { get; set; }
-
-        public bool LineWrapMode { get; set; }
-
-        public bool ScrollbarMode { get; set; }
-
 
         #region IMainViewModel
 

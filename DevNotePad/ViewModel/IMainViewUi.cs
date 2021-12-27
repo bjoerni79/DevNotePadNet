@@ -25,6 +25,10 @@ namespace DevNotePad.ViewModel
 
         void AddToScratchPad(string text);
 
+        void FocusTree();
+
+        void FocusScratchPad();
+
         void CloseByViewModel();
     }
 }
