@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevNotePad.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,43 +18,33 @@ namespace DevNotePad.Shared
     /// <summary>
     /// Interaction logic for ConfirmDialog.xaml
     /// </summary>
-    public partial class ConfirmDialog : Window
+    public partial class ConfirmDialog : Window, IDialog
     {
         public ConfirmDialog()
         {
             InitializeComponent();
         }
 
-        public string Question { get; set; }
-        public string DialogTitle { get; set; }
-
-
-
-        private void okButton_Click(object sender, RoutedEventArgs e)
+        public void Init(string question, string dialogTitle)
         {
-            DialogResult = true;
-            Close();
+            var viewModel = new ConfimDialogViewModel();
+            DataContext = viewModel;
+
+            viewModel.Init(question, dialogTitle, this);
         }
 
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        public void CloseDialog(bool confirmed)
         {
-            DialogResult = false;
-            Close();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(DialogTitle))
+            if (confirmed)
             {
-                Title = DialogTitle;
+                DialogResult = true;
+            }
+            else
+            {
+                DialogResult = false;
             }
 
-            questionText.Text = Question; 
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
+            Close();
         }
     }
 }

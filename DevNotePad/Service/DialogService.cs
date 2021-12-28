@@ -20,10 +20,8 @@ namespace DevNotePad.Service
 
         public bool ShowConfirmationDialog(string question, string title)
         {
-            var confirmDialog = new ConfirmDialog();
-            confirmDialog.Question = question;
-            confirmDialog.Title = title;
-            confirmDialog.Owner = owner;
+            var confirmDialog = new ConfirmDialog() { Owner = owner };
+            confirmDialog.Init(question, title);
 
             var result = confirmDialog.ShowDialog();
             if (result.HasValue)
