@@ -31,6 +31,7 @@ namespace DevNotePad.Feature
                 using (var writer = new Utf8JsonWriter(stream, writerOptions))
                 {
                     document.WriteTo(writer);
+                    writer.Flush();
                 }
 
                 var bytes = stream.ToArray();

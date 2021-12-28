@@ -25,7 +25,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Label Grid.Row="0" FontWeight="DemiBold" Content="{Binding Path=Name}"/>
@@ -71,6 +71,7 @@
                     <MenuItem Header="To Text View" Command="{Binding Path=XmlToStringParser}" />
                     <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />
                     <MenuItem Header="Format" Command="{Binding Path=XmlFormatter}"/>
+                    <MenuItem IsEnabled="False" Header="Validate"/>
                 </MenuItem>
                 <MenuItem Header="Hex Coding">
                     <MenuItem IsEnabled="False" Header="Parse Hex String"/>

@@ -12,7 +12,7 @@ namespace DevNotePad.Shared
         public ItemNode()
         {
             Name = "Unknown";
-            Description = "None";
+            Description = String.Empty;
             Childs = new ObservableCollection<ItemNode>();
         }
 

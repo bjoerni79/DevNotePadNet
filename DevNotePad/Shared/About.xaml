@@ -49,7 +49,7 @@
             DevNotePad
         </TextBlock>
         <TextBlock Grid.Row="1" Style="{StaticResource release}">
-            Release : 0.1
+            Release : 0.2
         </TextBlock>
 
         <TextBlock Grid.Row="2" Style="{StaticResource about}">

@@ -25,14 +25,14 @@ namespace DevNotePad.Feature
             try
             {
                 using var stream = new MemoryStream();
-                using (var writer = XmlWriter.Create(stream, writerSettings)) 
+                using (var writer = XmlWriter.Create(stream, writerSettings))
                 {
-                    //TODO:  Check this code. ResultArray is empty.
-                    document.WriteTo(writer);
-
-                    var resultArray = stream.ToArray();
-                    result = Encoding.UTF8.GetString(resultArray);
+                    document.WriteContentTo(writer);
+                    writer.Flush();
                 }
+
+                var resultArray = stream.ToArray();
+                result = Encoding.UTF8.GetString(resultArray);
             }
             catch (Exception e)
             {
@@ -49,31 +49,71 @@ namespace DevNotePad.Feature
 
         public ItemNode ParseToTree(string xmlText)
         {
-            ItemNode rootNode;
+            ItemNode itemRootNode;
             var document = Read(xmlText);
 
             try
             {
                 // https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlnode?view=net-6.0
 
-                rootNode = ParseDom(document);
+                itemRootNode = ParseDom(document);
             }
             catch (Exception e)
             {
                 throw new FeatureException("Cannot parse XML format", e);
             }
 
-            return rootNode;
+            return itemRootNode;
         }
 
         ItemNode ParseDom(XmlNode node)
         {
+            var itemNode = new ItemNode();
+            var nodeType = node.NodeType;
+
+            // Root Node of the DOM
+            if (nodeType == XmlNodeType.Document)
+            {
+                itemNode.Name = "Root";
+                itemNode.Description = String.Empty;
+            }
+            else
+            {
+                if (nodeType == XmlNodeType.XmlDeclaration)
+                {
+                    itemNode.Name = "Declaration";
+                }
+
+                // Element Node of the DOM
+                if (nodeType == XmlNodeType.Element)
+                {
+                    itemNode.Name = node.Name;
+                }
+
+                // Text
+                if (nodeType == XmlNodeType.Text)
+                {
+                    itemNode.Name = "Text";
+                    itemNode.Description = node.InnerText;
+                }
+            }
+
+
             bool hasChilds = node.HasChildNodes;
+            if (hasChilds)
+            {
+                foreach (XmlNode child in node.ChildNodes)
+                {
+                    var childItem = ParseDom(child);
+                    itemNode.Childs.Add(childItem);
+                }
+            }
+
             var namespaceUri = node.NamespaceURI;
             var name = node.Name;
             var attributes = node.Attributes;
 
-            return new ItemNode() { Name = name, Description = "TODO" };
+            return itemNode;
         }
 
         private XmlDocument Read (string xmlText)
