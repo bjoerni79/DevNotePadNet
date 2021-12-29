@@ -1,5 +1,7 @@
 ﻿using DevNotePad.Features;
+using DevNotePad.Features.Json;
 using DevNotePad.Features.Shared;
+using DevNotePad.Features.Xml;
 using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;

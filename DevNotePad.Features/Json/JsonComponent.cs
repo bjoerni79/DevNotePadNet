@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.IO;
 using DevNotePad.Features.Shared;
 
-namespace DevNotePad.Features
+namespace DevNotePad.Features.Json
 {
     internal class JsonComponent : IJsonComponent
     {
