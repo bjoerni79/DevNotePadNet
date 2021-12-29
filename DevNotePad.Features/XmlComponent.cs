@@ -1,4 +1,4 @@
-﻿using DevNotePad.Shared;
+﻿using DevNotePad.Features.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace DevNotePad.Feature
+namespace DevNotePad.Features
 {
     internal class XmlComponent : IXmlComponent
     {

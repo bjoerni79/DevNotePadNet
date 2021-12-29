@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
-using DevNotePad.Shared;
+using DevNotePad.Features.Shared;
 
-namespace DevNotePad.Feature
+namespace DevNotePad.Features
 {
     internal class JsonComponent : IJsonComponent
     {

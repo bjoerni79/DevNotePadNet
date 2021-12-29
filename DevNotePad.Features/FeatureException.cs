@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevNotePad.Feature
+namespace DevNotePad.Features
 {
     public class FeatureException : ApplicationException
     {

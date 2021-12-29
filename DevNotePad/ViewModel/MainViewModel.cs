@@ -1,4 +1,5 @@
-﻿using DevNotePad.Feature;
+﻿using DevNotePad.Features;
+using DevNotePad.Features.Shared;
 using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
@@ -175,7 +176,7 @@ namespace DevNotePad.ViewModel
                 var input = Ui.GetText(isTextSelected);
                 try
                 {
-                    IJsonComponent jsonComponent = new JsonComponent();
+                    IJsonComponent jsonComponent = FeatureFactory.CreateJson();
                     var result = jsonComponent.Formatter(input);
 
                     Ui.SetText(result, isTextSelected);
@@ -197,7 +198,7 @@ namespace DevNotePad.ViewModel
 
                 try
                 {
-                    IJsonComponent jsonComponent = new JsonComponent();
+                    IJsonComponent jsonComponent = FeatureFactory.CreateJson();
                     var la = jsonComponent.ParseToString(input);
 
                     Ui.AddToScratchPad(la);
@@ -220,7 +221,7 @@ namespace DevNotePad.ViewModel
 
                 try
                 {
-                    IJsonComponent jsonComponent = new JsonComponent();
+                    IJsonComponent jsonComponent = FeatureFactory.CreateJson();
                     var rootNode = jsonComponent.ParseToTree(input);
 
                     Nodes = new ObservableCollection<ItemNode>();
@@ -246,7 +247,7 @@ namespace DevNotePad.ViewModel
 
                 try
                 {
-                    IXmlComponent component = new XmlComponent();
+                    IXmlComponent component = FeatureFactory.CreateXml();
                     var formatted = component.Formatter(input);
 
                     Ui.SetText(formatted, isTextSelected);
@@ -288,7 +289,7 @@ namespace DevNotePad.ViewModel
                 try
                 {
                     //TODO
-                    IXmlComponent component = new XmlComponent();
+                    IXmlComponent component = FeatureFactory.CreateXml();
                     var rootNode = component.ParseToTree(input);
 
                     Nodes = new ObservableCollection<ItemNode>();

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevNotePad.Shared
+namespace DevNotePad.Features.Shared
 {
     public class ItemNode
     {

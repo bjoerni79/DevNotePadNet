@@ -21,7 +21,7 @@
 
     <Window.Resources>
         <!-- Renders the tree -->
-        <HierarchicalDataTemplate x:Key="itemNodeTemplate" DataType="{x:Type shared:ItemNode}" ItemsSource="{Binding Path=Childs}">
+        <HierarchicalDataTemplate x:Key="itemNodeTemplate"  ItemsSource="{Binding Path=Childs}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -89,8 +89,8 @@
                 <MenuItem IsEnabled="False" Header="Clar Text" />
             </MenuItem>
             <MenuItem Header="Layout">
-                <MenuItem IsChecked="{Binding Path=ScrollbarMode}" Command="{Binding Path=ToggleScrollbar}" Header="Scrollbar Visible"></MenuItem>
-                <MenuItem IsChecked="{Binding Path=LineWrapMode}" Command="{Binding Path=ToggleLineWrap}" Header="Text Wrap Enabled"></MenuItem>
+                <MenuItem  Command="{Binding Path=ToggleScrollbar}" Header="Scrollbar Visible"></MenuItem>
+                <MenuItem  Command="{Binding Path=ToggleLineWrap}" Header="Text Wrap Enabled"></MenuItem>
 
             </MenuItem>
             <MenuItem Header="Help">

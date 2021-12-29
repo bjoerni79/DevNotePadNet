@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DevNotePad.Features\DevNotePad.Features.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Generic.MVVM">
       <HintPath>..\lib\netstandard2.0\Generic.MVVM.dll</HintPath>
     </Reference>
