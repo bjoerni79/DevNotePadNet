@@ -34,6 +34,8 @@ namespace DevNotePad.ViewModel
         private bool LineWrapMode { get; set; }
         private bool ScrollbarMode { get; set; }
 
+        public ObservableCollection<ItemNode>? Nodes { get; set; }
+
         public MainViewModel()
         {
             // File
@@ -55,6 +57,11 @@ namespace DevNotePad.ViewModel
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
             ToggleScrollbar = new DefaultCommand(OnToggleScrollbar);
+
+            // ScratchPad
+            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
+            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad);
+            ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad);
 
             // About
             About = new DefaultCommand(OnAbout);
@@ -92,6 +99,12 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand XmlToTreeParser { get; set; }
 
+        public IRefreshCommand ScratchPadClearAll { get; set; }
+
+        public IRefreshCommand ScratchPadClearText { get; set; }
+
+        public IRefreshCommand ScratchPadClearTree { get; set; }
+
         public IRefreshCommand About { get; set; }
 
         #endregion
@@ -128,7 +141,6 @@ namespace DevNotePad.ViewModel
 
             // Just save it
             InternalSave(FileName);
-            TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("File saved", false));
         }
 
         private void OnSaveAs()
@@ -184,10 +196,13 @@ namespace DevNotePad.ViewModel
                     var result = jsonComponent.Formatter(input);
 
                     Ui.SetText(result, isTextSelected);
+
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
                 }
                 catch (FeatureException featureException)
                 {
                     ShowError(featureException, JsonComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -207,10 +222,13 @@ namespace DevNotePad.ViewModel
 
                     Ui.AddToScratchPad(la);
                     Ui.FocusScratchPad();
+
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
                 }
                 catch (FeatureException featureException)
                 {
                     ShowError(featureException, JsonComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -233,10 +251,12 @@ namespace DevNotePad.ViewModel
                     RaisePropertyChange("Nodes");
 
                     Ui.FocusTree();
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
                 }
                 catch (FeatureException featureException)
                 {
                     ShowError(featureException, JsonComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -255,10 +275,12 @@ namespace DevNotePad.ViewModel
                     var formatted = component.Formatter(input);
 
                     Ui.SetText(formatted, isTextSelected);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
+                    ShowError(featureException, XmlComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -277,7 +299,8 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
+                    ShowError(featureException, XmlComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -304,7 +327,8 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
+                    ShowError(featureException, XmlComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -329,10 +353,34 @@ namespace DevNotePad.ViewModel
             
         }
 
+        private void OnClearAllScratchPad()
+        {
+            OnClearTextScratchPad();
+            OnClearTreeScratchPad();
+
+            TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad and Tree are empty", false));
+        }
+
+        private void OnClearTextScratchPad()
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                Ui!.CleanUpScratchPad();
+
+                TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad is empty", false));
+            }
+        }
+
+        private void OnClearTreeScratchPad()
+        {
+            Nodes = new ObservableCollection<ItemNode>();
+            RaisePropertyChange("Nodes");
+
+            TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad Tree is empty", false));
+        }
 
         #endregion
-
-        public ObservableCollection<ItemNode>? Nodes { get; set; }
 
         #region IMainViewModel
 
@@ -384,6 +432,8 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
+        #region Internal Logic for I/O
+
         /// <summary>
         /// Handles the internal save of the current Text and is called by Save and Save As
         /// </summary>
@@ -402,6 +452,8 @@ namespace DevNotePad.ViewModel
 
                 RaisePropertyChange("FileName");
                 Ui.SetFilename(FileName);
+
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
             }
             catch (Exception ex)
             {
@@ -431,6 +483,8 @@ namespace DevNotePad.ViewModel
                 RaisePropertyChange("Text");
                 RaisePropertyChange("FileName");
                 Ui.SetFilename(FileName);
+
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("File is loaded", false));
             }
             catch (Exception ex)
             {
@@ -464,6 +518,8 @@ namespace DevNotePad.ViewModel
                 RaisePropertyChange("Text");
                 RaisePropertyChange("FileName");
                 Ui.SetFilename(FileName);
+
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("New file created", false));
             }
         }
 
@@ -534,5 +590,7 @@ namespace DevNotePad.ViewModel
 
             return settings;
         }
+
+        #endregion
     }
 }

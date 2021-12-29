@@ -97,6 +97,11 @@ namespace DevNotePad
 
         #region IMainViewUI
 
+        public void CleanUpScratchPad()
+        {
+            scratchPad.Text = String.Empty;
+        }
+
         public void SetScrollbars(bool enable)
         {
             var scrollbarMode = ScrollBarVisibility.Auto;

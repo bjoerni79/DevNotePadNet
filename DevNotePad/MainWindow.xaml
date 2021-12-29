@@ -95,9 +95,9 @@
 
             </MenuItem>
             <MenuItem Header="ScratchPad">
-                <MenuItem IsEnabled="False" Header="Clear All"/>
-                <MenuItem IsEnabled="False" Header="Clear Tree"/>
-                <MenuItem IsEnabled="False" Header="Clar Text" />
+                <MenuItem Header="Clear All" Command="{Binding Path=ScratchPadClearAll}" />
+                <MenuItem Header="Clear Tree" Command="{Binding Path=ScratchPadClearTree}"/>
+                <MenuItem Header="Clar Text" Command="{Binding Path=ScratchPadClearText}" />
             </MenuItem>
             <MenuItem Header="Layout">
                 <MenuItem  Command="{Binding Path=ToggleScrollbar}" Header="Scrollbar Visible"></MenuItem>
