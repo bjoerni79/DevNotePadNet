@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevNotePad.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,39 +18,26 @@ namespace DevNotePad.Shared
     /// <summary>
     /// Interaction logic for ErrorDialog.xaml
     /// </summary>
-    public partial class OkDialog : Window
+    public partial class OkDialog : Window, IDialog
     {
         public OkDialog()
         {
             InitializeComponent();
 
-            Component = "Unknown";
-            Message = "Error 123";
         }
 
-        public string DialogTitle { get; set; }
-
-        public string Component { get; set; }
-
-        public string Message { get; set; }
-
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            messageLabel.Content = Message;
-            componentLabel.Content = Component;
-            Title = DialogTitle;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void CloseDialog(bool confirmed)
         {
             DialogResult = true;
             Close();
+        }
+
+        public void Init(string message, string component, string title)
+        {
+            var vm = new OkDialogViewModel();
+            vm.Init(message, component, title, this);
+
+            DataContext = vm;
         }
     }
 }

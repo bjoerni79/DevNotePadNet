@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevNotePad"
         mc:Ignorable="d"
-        Title="OK Dialog" 
+        Title="{Binding Path=DialogTitle}"
         MinHeight="200" 
         MaxHeight="400"
         MinWidth="300"
@@ -15,8 +15,6 @@
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
         
-        Loaded="Window_Loaded"
-        Closing="Window_Closing"
         FocusManager.FocusedElement="{Binding ElementName=focusElement}"
         >
     <Grid>
@@ -45,11 +43,11 @@
         <Label Name="focusElement" Grid.Row="0" Style="{StaticResource ResourceKey=description}">Component</Label>
         <Label Grid.Row="1" Style="{StaticResource ResourceKey=description}">Message:</Label>
 
-        <Label Name="componentLabel" Grid.Row="0" Grid.Column="1" Style="{StaticResource ResourceKey=details}" ></Label>
-        <Label Name="messageLabel" Grid.Row="1" Grid.Column="1" Style="{StaticResource ResourceKey=details}" />
+        <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource ResourceKey=details}" Content="{Binding Path=Component}" ></Label>
+        <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource ResourceKey=details}" Content="{Binding Path=Message}" />
 
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Width="80" Height="25" IsDefault="True" Content="OK" Click="Button_Click"/>
+            <Button Width="80" Height="25" IsDefault="True" Content="OK" Command="{Binding Path=Confirm}" />
         </StackPanel>
         
     </Grid>
