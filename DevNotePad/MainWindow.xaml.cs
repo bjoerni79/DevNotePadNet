@@ -51,7 +51,6 @@ namespace DevNotePad
 
         #region IMainViewUI
 
-
         public void SetScrollbars(bool enable)
         {
             var scrollbarMode = ScrollBarVisibility.Auto;
@@ -77,6 +76,7 @@ namespace DevNotePad
 
         public void ShowAbout()
         {
+            //TODO: Move this to the dialog service
             var aboutDialog = new About();
             aboutDialog.Owner = this;
             aboutDialog.ShowInTaskbar = false;
@@ -117,6 +117,7 @@ namespace DevNotePad
 
         public void SetFilename(string filename)
         {
+            //TODO: Move the logic to the View Model
             var filenameDescriptor = filename;
             var maxLength = 50;
             if (filename.Length > maxLength)
@@ -146,12 +147,14 @@ namespace DevNotePad
 
         public void FocusTree()
         {
+            //TODO:  Check this code!
             tabTreeView.Visibility = Visibility.Visible;
             treeView.Focus();
         }
 
         public void FocusScratchPad()
         {
+            //TODO:  Check this code!
             tabScratchPad.Visibility = Visibility.Visible;
             scratchPad.Focus();
         }

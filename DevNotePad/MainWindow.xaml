@@ -61,7 +61,7 @@
 
             </MenuItem>
             <MenuItem Header="Tools">
-                <MenuItem IsEnabled="False" Header="Open Binary File" />
+                <!--<MenuItem IsEnabled="False" Header="Open Binary File" />-->
                 <MenuItem Header="JSON">
                     <MenuItem Header="To Text View" Command="{Binding Path=JsonToStringParser}"/>
                     <MenuItem Header="To Tree View" Command="{Binding Path=JsonToTreeParser}"/>
@@ -71,17 +71,22 @@
                     <MenuItem Header="To Text View" Command="{Binding Path=XmlToStringParser}" />
                     <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />
                     <MenuItem Header="Format" Command="{Binding Path=XmlFormatter}"/>
-                    <MenuItem IsEnabled="False" Header="Validate"/>
+                    <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
                 </MenuItem>
-                <MenuItem Header="Hex Coding">
+                <!--<MenuItem Header="Hex Coding">
                     <MenuItem IsEnabled="False" Header="Parse Hex String"/>
                     <MenuItem IsEnabled="False" Header="Format Hex String"/>
                 </MenuItem>
                 <MenuItem Header="Base64">
                     <MenuItem IsEnabled="False" Header="Decode"/>
                     <MenuItem IsEnabled="False" Header="Encode"/>
-                </MenuItem>
+                </MenuItem>-->
 
+            </MenuItem>
+            <MenuItem Header="ScratchPad">
+                <MenuItem IsEnabled="False" Header="Clear All"/>
+                <MenuItem IsEnabled="False" Header="Clear Tree"/>
+                <MenuItem IsEnabled="False" Header="Clar Text" />
             </MenuItem>
             <MenuItem Header="Layout">
                 <MenuItem IsChecked="{Binding Path=ScrollbarMode}" Command="{Binding Path=ToggleScrollbar}" Header="Scrollbar Visible"></MenuItem>
@@ -106,21 +111,27 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="213*"/>
-                <ColumnDefinition Width="451*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="133*" MinWidth="10"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" AcceptsReturn="True" AcceptsTab="True" FontSize="14" TextChanged="editor_TextChanged" Grid.ColumnSpan="2" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True" FontSize="14" TextChanged="editor_TextChanged" Grid.ColumnSpan="2" />
 
 
-            <GridSplitter Grid.Column="2"   HorizontalAlignment="Center"
+            <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"   HorizontalAlignment="Center"
               Background="LightBlue" 
               ShowsPreview="True"
               Width="3"  />
 
-            <TabControl Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="3,0,0,0" >
-                <TabItem Name="tabScratchPad" Header="ScratchPad">
+            <Label Grid.Row="0" Grid.Column="2">ScratchPad</Label>
+            
+            <TabControl Grid.Row="1" Grid.Column="2" Margin="3,0,0,0" >
+                <TabItem Name="tabScratchPad" Header="Text">
                     <TextBox x:Name="scratchPad" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
                 </TabItem>
                 <TabItem Name="tabTreeView" Header="Tree" >
