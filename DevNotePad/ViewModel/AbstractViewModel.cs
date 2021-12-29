@@ -1,6 +1,8 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Service;
+using DevNotePad.Shared.Event;
 using Generic.MVVM;
+using Generic.MVVM.Event;
 using Generic.MVVM.IOC;
 using System;
 using System.Collections.Generic;
@@ -56,6 +58,22 @@ namespace DevNotePad.ViewModel
         {
             var dialogService = GetDialogService();
             dialogService.ShowErrorDialog(exception, component);
+        }
+
+        /// <summary>
+        /// Triggers the UpdateToolbar event
+        /// </summary>
+        /// <param name="parameter">the parameter for the event</param>
+        protected void TriggerToolbarNotification(UpdateStatusBarParameter parameter)
+        {
+            var facade = GetFacade();
+            var eventController = facade.Get<EventController>();
+
+            var eventInstance = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
+            if (eventInstance != null)
+            {
+                eventInstance.Trigger(parameter);
+            }
         }
     }
 }

@@ -76,6 +76,7 @@ namespace DevNotePad.Features.Xml
             {
                 itemNode.Name = "Root";
                 itemNode.Description = String.Empty;
+                itemNode.Style = ItemNodeStyle.Group;
             }
             else
             {

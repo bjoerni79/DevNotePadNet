@@ -1,6 +1,7 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
+using DevNotePad.Shared.Event;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
 using System;
@@ -23,19 +24,23 @@ namespace DevNotePad
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IMainViewUi
+    public partial class MainWindow : Window, IMainViewUi, IEventListener
     {
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        #region Event Delegates
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var facade = FacadeFactory.Create();
             if (facade != null)
             {
-                //var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+                var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+                var updateToolbarEvent = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
+                updateToolbarEvent.AddListener(this);
 
                 IDialogService dialogService = new DialogService(this);
                 facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
@@ -48,6 +53,47 @@ namespace DevNotePad
                 vm.ApplySettings();
             }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                var needsSaving = vm.IsChanged();
+                if (needsSaving)
+                {
+                    var facade = FacadeFactory.Create();
+                    if (facade != null)
+                    {
+                        var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
+                        if (dialogService != null)
+                        {
+                            //TODO: Ask if the user wants to save first
+                            var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close");
+                            e.Cancel = !doClose;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void editor_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                var textChange = e.Changes.First();
+                vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
+            }
+        }
+
+        private IMainViewModel? GetViewModel()
+        {
+            var vm = DataContext as IMainViewModel;
+            return vm;
+        }
+
+        #endregion
 
         #region IMainViewUI
 
@@ -166,45 +212,48 @@ namespace DevNotePad
 
         #endregion
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        #region IEventListener
+
+        public void OnTrigger(string eventId)
         {
-             var vm = GetViewModel();
-            if (vm != null)
+            //None
+        }
+
+        public void OnTrigger(string eventId, object parameter)
+        {
+            if (eventId == Bootstrap.UpdateToolBarEvent)
             {
-                var needsSaving = vm.IsChanged();
-                if (needsSaving)
+                var updateStatusBarParameter = parameter as UpdateStatusBarParameter;
+                if (updateStatusBarParameter != null)
                 {
-                    var facade = FacadeFactory.Create();
-                    if (facade != null)
-                    {
-                        var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
-                        if (dialogService != null)
-                        {
-                            //TODO: Ask if the user wants to save first
-                            var doClose= dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close");
-                            e.Cancel = !doClose;
-                        }
-                    }
+                    ApplyNotification(updateStatusBarParameter);
                 }
             }
         }
 
-        private void editor_TextChanged(object sender, TextChangedEventArgs e)
+        private void ApplyNotification(UpdateStatusBarParameter e)
         {
-            var vm = GetViewModel();
-            if (vm != null)
+            var styleDefault = "notificationDefault";
+            var styleWarning = "notificationWarning";
+
+            var message = e.Message;
+            var isWarning = e.IsWarning;
+
+            Style style;
+            if (isWarning)
             {
-                var textChange = e.Changes.First();
-                vm.NotifyContentChanged(textChange.AddedLength,textChange.Offset,textChange.RemovedLength);
+                style = Resources[styleWarning] as Style;
             }
+            else
+            {
+                style = Resources[styleDefault] as Style;
+            }
+
+            notificationLabel.Content = message;
+            notificationLabel.Style = style;
         }
 
-        private IMainViewModel? GetViewModel()
-        {
-            var vm = DataContext as IMainViewModel;
-            return vm;
-        }
-
+        #endregion
 
     }
 }

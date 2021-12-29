@@ -5,6 +5,7 @@ using DevNotePad.Features.Xml;
 using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
+using DevNotePad.Shared.Event;
 using Generic.MVVM;
 using Generic.MVVM.IOC;
 using System;
@@ -127,6 +128,7 @@ namespace DevNotePad.ViewModel
 
             // Just save it
             InternalSave(FileName);
+            TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("File saved", false));
         }
 
         private void OnSaveAs()
@@ -352,6 +354,8 @@ namespace DevNotePad.ViewModel
                 Ui.SetScrollbars(ScrollbarMode);
                 Ui.SetWordWrap(LineWrapMode);
             }
+
+            TriggerToolbarNotification(new UpdateStatusBarParameter("Ready", false));
         }
 
         public void NotifyContentChanged(int added, int offset, int removed)

@@ -33,6 +33,17 @@
 
             </Grid>
         </HierarchicalDataTemplate>
+
+        <Style x:Key="notificationDefault" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="Blue"/>
+        </Style>
+
+        <Style x:Key="notificationWarning" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
@@ -104,6 +115,7 @@
 
 
         <StatusBar DockPanel.Dock="Bottom" >
+            <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
             <Label Name="notificationLabel">Basic Features</Label>
         </StatusBar>
 

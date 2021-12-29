@@ -59,20 +59,6 @@ namespace DevNotePad.Features.Json
 
         public ItemNode ParseToTree(string jsonText)
         {
-            //// Sample code for rendering tests
-            //var rootItem = new ItemNode() { Name = "root", Value = String.Empty };
-            //var child1 = new ItemNode() { Name = "foo", Value = "bar" };
-            //var child2 = new ItemNode() { Name = "Guybrush", Value = "Threepwood" };
-            //var pythons = new ItemNode { Name = "Pythons" };
-            //var eric = new ItemNode { Name = "Eric", Value = "Idle" };
-
-            //pythons.Childs.Add(eric);
-
-            //rootItem.Childs.Add(child1);
-            //rootItem.Childs.Add(child2);
-            //rootItem.Childs.Add(pythons);
-
-
             // Read the JSON text
             JsonDocument document = Read(jsonText);
             var root = document.RootElement;
@@ -89,6 +75,7 @@ namespace DevNotePad.Features.Json
             {
                 node.Name = "Array";
                 node.Description = String.Empty;
+                node.Style = ItemNodeStyle.Group;
 
                 // Iterate over the childs
                 foreach (var childElement in element.EnumerateArray())
@@ -119,6 +106,7 @@ namespace DevNotePad.Features.Json
                     {
                         // Value is a array
                         childNode.Description = String.Empty;
+                        childNode.Style = ItemNodeStyle.Group;
 
                         foreach (var parameterChildNode in parameterValue.EnumerateArray())
                         {
