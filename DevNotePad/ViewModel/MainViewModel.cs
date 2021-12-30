@@ -29,8 +29,8 @@ namespace DevNotePad.ViewModel
 
         private string initialText;
         private DateTime latestTimeStamp;
+        private string fileName;
 
-        private string FileName { get; set; }
         private bool LineWrapMode { get; set; }
         private bool ScrollbarMode { get; set; }
 
@@ -66,7 +66,7 @@ namespace DevNotePad.ViewModel
             // About
             About = new DefaultCommand(OnAbout);
 
-            FileName = "Not Defined";
+            fileName = "Not Defined";
             initialText = String.Empty;
         }
 
@@ -140,7 +140,7 @@ namespace DevNotePad.ViewModel
             }
 
             // Just save it
-            InternalSave(FileName);
+            InternalSave(fileName);
         }
 
         private void OnSaveAs()
@@ -438,20 +438,26 @@ namespace DevNotePad.ViewModel
         /// Handles the internal save of the current Text and is called by Save and Save As
         /// </summary>
         /// <param name="filename">the filename</param>
-        private void InternalSave(string filename)
+        private void InternalSave(string targetfilename)
         {
             try
             {
                 var ioService = GetIoService();
-                FileName = filename;
+
+
+                //TODO: Check for update! What happens if the file is newer than the latest load?
+
+
+
+                initialText = Ui!.GetText(false);
+                ioService.WriteTextFile(targetfilename, initialText);
                 currentState = EditorState.Saved;
                 latestTimeStamp = DateTime.Now;
 
-                initialText = Ui!.GetText(false);
-                ioService.WriteTextFile(filename, initialText);
 
                 RaisePropertyChange("FileName");
-                Ui.SetFilename(FileName);
+                fileName = targetfilename;
+                Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
             }
@@ -466,23 +472,23 @@ namespace DevNotePad.ViewModel
         /// Handles the internal load of files and is called by ICommand delegates
         /// </summary>
         /// <param name="filename">the filename</param>
-        private void InternalLoad(string filename)
+        private void InternalLoad(string sourceFilename)
         {
             try
             {
                 var ioService = GetIoService();
-                FileName = filename;
+                fileName = sourceFilename; ;
                 currentState = EditorState.Loaded;
 
                 //TODO: Store the timestamp of the file right now
-                latestTimeStamp = ioService.GetModificationTimeStamp(filename);
+                latestTimeStamp = ioService.GetModificationTimeStamp(fileName);
 
-                initialText = ioService.ReadTextFile(FileName);
+                initialText = ioService.ReadTextFile(fileName);
                 Ui!.SetText(initialText);
 
                 RaisePropertyChange("Text");
                 RaisePropertyChange("FileName");
-                Ui.SetFilename(FileName);
+                Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("File is loaded", false));
             }
@@ -508,7 +514,7 @@ namespace DevNotePad.ViewModel
 
             if (proceed)
             {
-                FileName = "New";
+                fileName = "New";
                 currentState = EditorState.New;
                 initialText = String.Empty;
                 latestTimeStamp = DateTime.Now;
@@ -517,7 +523,7 @@ namespace DevNotePad.ViewModel
 
                 RaisePropertyChange("Text");
                 RaisePropertyChange("FileName");
-                Ui.SetFilename(FileName);
+                Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("New file created", false));
             }
@@ -535,41 +541,41 @@ namespace DevNotePad.ViewModel
             }
             else
             {
-                bool checkForReload = true;
-
-                //TODO:  Saving first? Check the states...
-                if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
+                try
                 {
-                    var dialogService = GetDialogService();
-                    checkForReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload");
-                }
+                    // Any file changes?  What is the creation date? etc
+                    var io = GetIoService();
+                    var currentModifiedTimestamp = io.GetModificationTimeStamp(fileName);
 
-                if (checkForReload)
-                {
-                    try
+                    if (currentModifiedTimestamp > latestTimeStamp)
                     {
-                        //TODO: Any file changes?  What is the creation date? etc
-                        var io = GetIoService();
-                        var currentModifiedTimestamp = io.GetModificationTimeStamp(FileName);
-
-                        if (currentModifiedTimestamp > latestTimeStamp)
+                        bool doReload = true;
+                        if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
                         {
-                            InternalLoad(FileName);
+                            var dialogService = GetDialogService();
+                            doReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload");
                         }
 
+
+                        if (doReload)
+                        {
+                            InternalLoad(fileName);
+                        }  
+                        else
+                        {
+                            TriggerToolbarNotification(new UpdateStatusBarParameter("Reload cancelled", true));
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        ShowError(ex, "Reload");
+                        TriggerToolbarNotification(new UpdateStatusBarParameter("Reload not required", false));
                     }
 
-
                 }
-                else
+                catch (Exception ex)
                 {
-                    //TODO Notify that no reload is required
+                    ShowError(ex, "Reload");
                 }
-
             }
         }
 
