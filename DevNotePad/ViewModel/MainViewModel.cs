@@ -388,6 +388,12 @@ namespace DevNotePad.ViewModel
         {
             Ui = ui;
             InternalNew();
+
+            if (Ui != null)
+            {
+                CreateFindViewModel();
+                CreateReplaceViewModel();
+            }
         }
 
         public void ApplySettings()
@@ -433,7 +439,7 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
-        #region Internal Logic for I/O
+        #region Internal Logic
 
         /// <summary>
         /// Handles the internal save of the current Text and is called by Save and Save As
@@ -596,6 +602,18 @@ namespace DevNotePad.ViewModel
             }
 
             return settings;
+        }
+
+        private void CreateFindViewModel()
+        {
+            //TODO:  Use the IMainViewUi interface for linking the vm with the editor
+            //TODO: Add it to the IoC container
+        }
+
+        private void CreateReplaceViewModel()
+        {
+            //TODO:  Use the IMainViewUi interface for linking the vm with the editor
+            //TODO: Add it to the IoC container
         }
 
         #endregion
