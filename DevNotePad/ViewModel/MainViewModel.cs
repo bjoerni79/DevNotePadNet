@@ -510,7 +510,7 @@ namespace DevNotePad.ViewModel
             if (currentState == EditorState.ChangedNew || currentState == EditorState.Changed)
             {
                 var dialogService = GetDialogService();
-                proceed = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to continue?","New");
+                proceed = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to continue?","New","Create New");
             }
 
             if (proceed)
@@ -538,7 +538,7 @@ namespace DevNotePad.ViewModel
             //TODO: If state is new, there is nothing to reload...
             if (currentState == EditorState.New)
             {
-                // TODO: Notify via toolbar that none action is taken..
+                TriggerToolbarNotification(new UpdateStatusBarParameter("Please save the file first", false));
             }
             else
             {
@@ -554,7 +554,7 @@ namespace DevNotePad.ViewModel
                         if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
                         {
                             var dialogService = GetDialogService();
-                            doReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload");
+                            doReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload","Reload Content");
                         }
 
 

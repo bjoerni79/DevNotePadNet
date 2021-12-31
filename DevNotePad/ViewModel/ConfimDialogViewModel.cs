@@ -18,6 +18,7 @@ namespace DevNotePad.ViewModel
 
             Question = "Question";
             DialogTitle = "Confirm Dialog";
+            ConfirmButtonText = "OK";
         }
 
         private IDialog? dialog;
@@ -25,6 +26,8 @@ namespace DevNotePad.ViewModel
         public string Question { get; set; }
 
         public string DialogTitle { get; set; }
+
+        public string ConfirmButtonText { get; set; }
 
         public ICommand Confirm { get; set; }
 
@@ -40,12 +43,22 @@ namespace DevNotePad.ViewModel
             dialog!.CloseDialog(false);
         }
 
-        public void Init(string question, string title, IDialog dialog)
+        public void Init(string question, string title, string okButtonText, IDialog dialog)
         {
-            Question = question;
-            RaisePropertyChange("Question");
-
             this.dialog = dialog;
+
+            if (!string.IsNullOrEmpty(question))
+            {
+                Question = question;
+                RaisePropertyChange("Question");
+            }
+
+            if (!string.IsNullOrEmpty(okButtonText))
+            {
+                ConfirmButtonText = okButtonText;
+                RaisePropertyChange("ConfirmButtonText");
+            }
+
 
             if (!string.IsNullOrEmpty(title))
             {
