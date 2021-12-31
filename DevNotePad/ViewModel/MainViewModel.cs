@@ -134,7 +134,7 @@ namespace DevNotePad.ViewModel
 
         private void OnSave()
         {
-            if (currentState == EditorState.Loaded || currentState == EditorState.Saved)
+            if (currentState == EditorState.New || currentState == EditorState.ChangedNew)
             {
                 OnSaveAs();
             }
@@ -411,7 +411,8 @@ namespace DevNotePad.ViewModel
             int internalTextLength = initialText.Length;
             var loadedEvent = offset == 0 && internalTextLength == added;
 
-            if (!loadedEvent)
+            var isChangedSelected = currentState == EditorState.Changed || currentState == EditorState.ChangedNew;
+            if (!loadedEvent && !isChangedSelected)
             {
                 if (currentState == EditorState.New)
                 {

@@ -61,12 +61,11 @@
                 <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
                 <MenuItem Header="Copy" InputGestureText="Ctrl+C"/>
                 <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
-                <MenuItem Header="Duplicate"/>
+                <MenuItem Header="To ScratchPad"/>
                 <Separator/>
                 <MenuItem Header="Find"/>
                 <MenuItem Header="Find Next"/>
                 <MenuItem Header="Replace"/>
-                <MenuItem Header="Replace All"/>
                 <Separator/>
                 <MenuItem Header="Select All"/>
 
@@ -114,10 +113,11 @@
         </ToolBar>-->
 
 
-        <StatusBar DockPanel.Dock="Bottom" >
+        <DockPanel DockPanel.Dock="Bottom" >
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
             <Label Name="notificationLabel">Basic Features</Label>
-        </StatusBar>
+            <Label Content="State" HorizontalContentAlignment="Right" />
+        </DockPanel>
 
         <Grid>
 
