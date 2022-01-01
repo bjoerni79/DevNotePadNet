@@ -26,6 +26,24 @@ namespace DevNotePad
     /// </summary>
     public partial class MainWindow : Window, IMainViewUi, IEventListener
     {
+
+        /*
+         *  Properties:
+         *  LineCount : https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.textbox.linecount?view=windowsdesktop-6.0#System_Windows_Controls_TextBox_LineCount
+         * 
+         *  Methods:
+         *  Copy()
+         *  Cut()
+         *  Paste
+         *  Undo
+         *  Redo
+         *  
+         *  Select(start, length)
+         *  Select All
+         *  
+         *  BeginChange / EndChange()...
+         */
+
         public MainWindow()
         {
             InitializeComponent();
@@ -142,6 +160,8 @@ namespace DevNotePad
 
         public void SetText(string text, bool selected)
         {
+            editor.BeginChange();
+
             if (selected)
             {
                 editor.SelectedText = text;
@@ -150,6 +170,8 @@ namespace DevNotePad
             {
                 editor.Text = text;
             }
+
+            editor.EndChange();
         }
 
         public string GetText(bool selected)
@@ -163,7 +185,6 @@ namespace DevNotePad
             {
                 return editor.Text;
             }
-
         }
 
         public void SetFilename(string filename)

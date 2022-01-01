@@ -14,6 +14,7 @@
         WindowStartupLocation="CenterOwner" 
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
         FocusManager.FocusedElement="{Binding ElementName=questionText}"
         
         >

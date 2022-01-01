@@ -10,8 +10,8 @@
         Height="150"
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterOwner" 
-        SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
         
         >
 
@@ -47,16 +47,16 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource titleLabel}" >Search For:</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource defaultTextBox}">test123</TextBox>
+        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource defaultTextBox}" Text="{Binding Path=SearchPattern,Mode=TwoWay}" ></TextBox>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-            <CheckBox Style="{StaticResource defaultCheckBox}">Igore lower/capital letter</CheckBox>
+            <CheckBox Style="{StaticResource defaultCheckBox}" IsChecked="{Binding Path=IgnoreLetterType,Mode=TwoWay}" >Igore lower/capital letter</CheckBox>
            
         </StackPanel>
 
         <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" >
-            <Button DockPanel.Dock="Left" IsDefault="True" Style="{StaticResource dialogButton}">Next</Button>
-            <Button DockPanel.Dock="Right" IsCancel="True" Style="{StaticResource dialogButton}">Cancel</Button>
+            <Button DockPanel.Dock="Left" IsDefault="True" Style="{StaticResource dialogButton}" Command="{Binding Path=FindNext}" >Next</Button>
+            <Button DockPanel.Dock="Right" IsCancel="True" Style="{StaticResource dialogButton}" Command="{Binding Path=Cancel}">Cancel</Button>
         </DockPanel>
         
     </Grid>

@@ -63,7 +63,7 @@
                 <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
                 <MenuItem Header="To ScratchPad"/>
                 <Separator/>
-                <MenuItem Header="Find"/>
+                <MenuItem Header="Find" Command="{Binding Path=Find}" />
                 <MenuItem Header="Find Next"/>
                 <MenuItem Header="Replace"/>
                 <Separator/>
@@ -144,10 +144,10 @@
             
             <TabControl Grid.Row="1" Grid.Column="2" Margin="3,0,0,0" >
                 <TabItem Name="tabScratchPad" Header="Text">
-                    <TextBox x:Name="scratchPad" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
+                    <TextBox x:Name="scratchPad" Background="LightYellow" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
                 </TabItem>
                 <TabItem Name="tabTreeView" Header="Tree" >
-                    <TreeView x:Name="treeView" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
+                    <TreeView x:Name="treeView" Background="LightYellow" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
                 </TabItem>
             </TabControl>
 

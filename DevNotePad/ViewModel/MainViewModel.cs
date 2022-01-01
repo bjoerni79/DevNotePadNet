@@ -46,6 +46,9 @@ namespace DevNotePad.ViewModel
             Reload = new DefaultCommand(OnReload);
             Close = new DefaultCommand(OnClose);
 
+            // Edit
+            Find = new DefaultCommand(OnFind);
+
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
             JsonToStringParser = new DefaultCommand(OnJsonToString);
@@ -72,6 +75,8 @@ namespace DevNotePad.ViewModel
 
         #region Commands
 
+        // File
+
         public IRefreshCommand New { get; set; }
 
         public IRefreshCommand Open { get; set; }
@@ -84,8 +89,16 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand Close { get; set; }
 
+        // Edit
+
+        public IRefreshCommand Find { get; set; }
+
+        // Layout
+
         public IRefreshCommand ToggleScrollbar { get; set; }
         public IRefreshCommand ToggleLineWrap { get; set; }
+
+        // Tools
 
         public IRefreshCommand JsonFormatter { get; set; }
 
@@ -104,6 +117,8 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand ScratchPadClearText { get; set; }
 
         public IRefreshCommand ScratchPadClearTree { get; set; }
+
+        // About
 
         public IRefreshCommand About { get; set; }
 
@@ -380,6 +395,12 @@ namespace DevNotePad.ViewModel
             TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad Tree is empty", false));
         }
 
+        private void OnFind()
+        {
+            var dialogService = GetDialogService();
+            dialogService.OpenFindDialog(Ui);
+        }
+
         #endregion
 
         #region IMainViewModel
@@ -541,7 +562,6 @@ namespace DevNotePad.ViewModel
         /// </summary>
         private void InternalReload()
         {
-            //TODO: If state is new, there is nothing to reload...
             if (currentState == EditorState.New)
             {
                 TriggerToolbarNotification(new UpdateStatusBarParameter("Please save the file first", false));

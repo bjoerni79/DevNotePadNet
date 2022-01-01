@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevNotePad.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,5 +20,7 @@ namespace DevNotePad.Service
         bool ShowConfirmationDialog(string question, string title);
 
         bool ShowConfirmationDialog(string question, string title,string okButtonText);
+
+        void OpenFindDialog(IMainViewUi ui);
     }
 }

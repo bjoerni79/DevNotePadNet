@@ -8,9 +8,11 @@ namespace DevNotePad.ViewModel
 {
     public class ReplaceDialogViewModel : AbstractViewModel
     {
-        public ReplaceDialogViewModel()
-        {
+        private IMainViewUi ui;
 
+        public ReplaceDialogViewModel(IMainViewUi mainViewUi)
+        {
+            ui = mainViewUi;
         }
 
 

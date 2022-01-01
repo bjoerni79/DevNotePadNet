@@ -1,4 +1,5 @@
 ﻿using DevNotePad.Shared;
+using DevNotePad.ViewModel;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,20 @@ namespace DevNotePad.Service
         internal DialogService(Window owner)
         {
             this.owner = owner;
+        }
+
+        public void OpenFindDialog(IMainViewUi ui)
+        {
+            if (ui == null)
+            {
+                throw new ArgumentNullException(nameof(ui));
+            }
+
+            var dialog = new FindDialog() { Owner=owner};
+            var viewModel = new FindDialogViewModel(ui, dialog);
+            dialog.DataContext = viewModel;
+
+            dialog.ShowDialog();
         }
 
         public bool ShowConfirmationDialog(string question, string title)
@@ -84,5 +99,7 @@ namespace DevNotePad.Service
             errorDialog.Init(warning, component, "Warning");
             errorDialog.ShowDialog();
         }
+
+        
     }
 }

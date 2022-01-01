@@ -17,11 +17,21 @@ namespace DevNotePad.Shared
     /// <summary>
     /// Interaction logic for FindDialog.xaml
     /// </summary>
-    public partial class FindDialog : Window
+    public partial class FindDialog : Window, IDialog
     {
         public FindDialog()
         {
             InitializeComponent();
+        }
+
+        public void Init()
+        {
+            //TODO: Apply the IDialog interface to the VM
+        }
+
+        public void CloseDialog(bool confirmed)
+        {
+            Close();
         }
     }
 }
