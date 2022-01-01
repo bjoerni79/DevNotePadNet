@@ -33,5 +33,7 @@ namespace DevNotePad.ViewModel
         void CleanUpScratchPad();
 
         void CloseByViewModel();
+
+        void SelectText(int startIndex, int length);
     }
 }

@@ -14,46 +14,97 @@ namespace DevNotePad.ViewModel
         private IMainViewUi ui;
         private IDialog dialog;
 
+        private int startIndex;
+        private string? searchPattern;
+
         public FindDialogViewModel(IMainViewUi mainViewUi, IDialog dialogUi)
         {
             ui = mainViewUi;
             dialog = dialogUi;
 
-            FindNext = new DefaultCommand(OnFindNext);
+            FindNext = new DefaultCommand(OnFindNext,()=>!string.IsNullOrEmpty(SearchPattern));
             Cancel = new DefaultCommand(OnCancel);
+
+            startIndex = 0;
         }
 
 
         public bool IgnoreLetterType { get; set; }
 
-        public string? SearchPattern { get; set; }
+        public string? SearchPattern
+        {
+            get
+            {
+                return searchPattern;
+            }
+            set
+            {
+                searchPattern = value;
+                FindNext.Refresh();
+            }
+        }
 
-        public ICommand FindNext { get; set; }
+        public IRefreshCommand FindNext { get; set; }
 
-        public ICommand Cancel { get; set; }
+        public IRefreshCommand Cancel { get; set; }
 
         private void OnFindNext()
         {
-            // Write some clever code.
             var content = ui.GetText(false);
 
             var result = RunSearch(content);
             if (result.Successful)
             {
+                ui.SelectText(result.StartIndex, result.Length);
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
             }
             else
             {
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", false));
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
             }
-
         }
 
         private SearchResultValue RunSearch(string text)
         {
+            //TODO: Start position?
+
             // https://docs.microsoft.com/en-us/dotnet/csharp/how-to/search-strings
 
-            return new SearchResultValue();
+            //
+            //  Check if the pattern can be found
+            //
+            string content;
+            int startIndex = 0;
+            int length = 0;
+            StringComparison comparison;
+
+            if (startIndex > 0)
+            {
+                content = text.Substring(startIndex);
+            }
+            else
+            { 
+                content = text;
+            }
+
+            if (IgnoreLetterType)
+            {
+                comparison = StringComparison.CurrentCultureIgnoreCase;
+            }
+            else
+            {
+                comparison = StringComparison.CurrentCulture;
+            }
+
+            var found = content.Contains(SearchPattern, comparison);
+
+            if (found)
+            {
+                startIndex = content.IndexOf(SearchPattern, comparison);
+                length = SearchPattern.Length;
+            }
+
+            return new SearchResultValue(found,startIndex,length);
         }
 
         private void OnCancel()

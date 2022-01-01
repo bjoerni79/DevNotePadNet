@@ -17,6 +17,7 @@
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding Path=Open}"/>
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding Path=Save}"/>
         <KeyBinding Modifiers="Ctrl" Key="R" Command="{Binding Path=Reload}"/>
+        <KeyBinding Modifiers="Ctrl" Key="F" Command="{Binding Path=Find}"/>
     </Window.InputBindings>
 
     <Window.Resources>

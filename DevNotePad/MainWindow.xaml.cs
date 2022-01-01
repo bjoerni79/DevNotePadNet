@@ -236,6 +236,11 @@ namespace DevNotePad
             Close();
         }
 
+        public void SelectText(int startIndex, int length)
+        {
+            editor.Select(startIndex, length);
+        }
+
         #endregion
 
         #region IEventListener
