@@ -64,7 +64,6 @@
                 <MenuItem Header="To ScratchPad"/>
                 <Separator/>
                 <MenuItem Header="Find" Command="{Binding Path=Find}" />
-                <MenuItem Header="Find Next"/>
                 <MenuItem Header="Replace"/>
                 <Separator/>
                 <MenuItem Header="Select All"/>

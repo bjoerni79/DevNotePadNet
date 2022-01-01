@@ -36,15 +36,25 @@ namespace DevNotePad.ViewModel
         {
             // Write some clever code.
             var content = ui.GetText(false);
-            bool ignoreCapitalLetter = IgnoreLetterType;
 
-            //TODO: 
+            var result = RunSearch(content);
+            if (result.Successful)
+            {
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
+            }
+            else
+            {
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", false));
+            }
 
-            // Trigger test
-            TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Find Next clicked", false));
         }
 
-        
+        private SearchResultValue RunSearch(string text)
+        {
+            // https://docs.microsoft.com/en-us/dotnet/csharp/how-to/search-strings
+
+            return new SearchResultValue();
+        }
 
         private void OnCancel()
         {
@@ -57,6 +67,6 @@ namespace DevNotePad.ViewModel
         /// <param name="Successful">true if any content has been found</param>
         /// <param name="start">the start index</param>
         /// <param name="length">the length</param>
-        private record SearchResultValue(bool Successful, int start, int length);
+        private record struct SearchResultValue(bool Successful, int StartIndex, int Length);
     }
 }
