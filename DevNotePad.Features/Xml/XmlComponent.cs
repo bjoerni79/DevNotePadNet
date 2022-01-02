@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace DevNotePad.Features
+namespace DevNotePad.Features.Xml
 {
     internal class XmlComponent : IXmlComponent
     {
@@ -76,6 +76,7 @@ namespace DevNotePad.Features
             {
                 itemNode.Name = "Root";
                 itemNode.Description = String.Empty;
+                itemNode.Style = ItemNodeStyle.Group;
             }
             else
             {

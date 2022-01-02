@@ -1,6 +1,7 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
+using DevNotePad.Shared.Event;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
 using System;
@@ -23,19 +24,41 @@ namespace DevNotePad
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IMainViewUi
+    public partial class MainWindow : Window, IMainViewUi, IEventListener
     {
+
+        /*
+         *  Properties:
+         *  LineCount : https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.textbox.linecount?view=windowsdesktop-6.0#System_Windows_Controls_TextBox_LineCount
+         * 
+         *  Methods:
+         *  Copy()
+         *  Cut()
+         *  Paste
+         *  Undo
+         *  Redo
+         *  
+         *  Select(start, length)
+         *  Select All
+         *  
+         *  BeginChange / EndChange()...
+         */
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        #region Event Delegates
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var facade = FacadeFactory.Create();
             if (facade != null)
             {
-                //var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+                var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+                var updateToolbarEvent = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
+                updateToolbarEvent.AddListener(this);
 
                 IDialogService dialogService = new DialogService(this);
                 facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
@@ -49,7 +72,81 @@ namespace DevNotePad
             }
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                var needsSaving = vm.IsChanged();
+                if (needsSaving)
+                {
+                    var facade = FacadeFactory.Create();
+                    if (facade != null)
+                    {
+                        var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
+                        if (dialogService != null)
+                        {
+                            //TODO: Ask if the user wants to save first
+                            var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close","Close Application");
+                            e.Cancel = !doClose;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void editor_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Update the view model
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                var textChange = e.Changes.First();
+                vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
+            }
+
+        }
+
+        private void UpdatePosition()
+        {
+            var caredIndex = editor.CaretIndex;
+            var lineCount = editor.LineCount;
+
+            var row = 0;
+            var col = 0;
+
+            for (int curLine = 0; curLine < lineCount; curLine++)
+            {
+                //TODO: Is there a better way, i.e. using the control directly?
+                var firstCharacterIndex = editor.GetCharacterIndexFromLineIndex(curLine);
+
+                if (firstCharacterIndex > caredIndex)
+                {
+                    // Stop Row detected
+
+                    row = curLine;
+                    col = caredIndex - firstCharacterIndex;
+                    break;
+                }
+            }
+
+            currentPositionLabel.Content = String.Format("Row : {0} Col : {1}", row, col);
+        }
+
+        private IMainViewModel? GetViewModel()
+        {
+            var vm = DataContext as IMainViewModel;
+            return vm;
+        }
+
+        #endregion
+
         #region IMainViewUI
+
+        public void CleanUpScratchPad()
+        {
+            scratchPad.Text = String.Empty;
+        }
 
         public void SetScrollbars(bool enable)
         {
@@ -91,6 +188,8 @@ namespace DevNotePad
 
         public void SetText(string text, bool selected)
         {
+            editor.BeginChange();
+
             if (selected)
             {
                 editor.SelectedText = text;
@@ -99,6 +198,8 @@ namespace DevNotePad
             {
                 editor.Text = text;
             }
+
+            editor.EndChange();
         }
 
         public string GetText(bool selected)
@@ -112,7 +213,6 @@ namespace DevNotePad
             {
                 return editor.Text;
             }
-
         }
 
         public void SetFilename(string filename)
@@ -164,47 +264,58 @@ namespace DevNotePad
             Close();
         }
 
+        public void SelectText(int startIndex, int length)
+        {
+            editor.SelectionStart = startIndex;
+            editor.SelectionLength = length;
+
+            //editor.Select(startIndex, length);
+        }
+
         #endregion
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        #region IEventListener
+
+        public void OnTrigger(string eventId)
         {
-             var vm = GetViewModel();
-            if (vm != null)
+            //None
+        }
+
+        public void OnTrigger(string eventId, object parameter)
+        {
+            if (eventId == Bootstrap.UpdateToolBarEvent)
             {
-                var needsSaving = vm.IsChanged();
-                if (needsSaving)
+                var updateStatusBarParameter = parameter as UpdateStatusBarParameter;
+                if (updateStatusBarParameter != null)
                 {
-                    var facade = FacadeFactory.Create();
-                    if (facade != null)
-                    {
-                        var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
-                        if (dialogService != null)
-                        {
-                            //TODO: Ask if the user wants to save first
-                            var doClose= dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close");
-                            e.Cancel = !doClose;
-                        }
-                    }
+                    ApplyNotification(updateStatusBarParameter);
                 }
             }
         }
 
-        private void editor_TextChanged(object sender, TextChangedEventArgs e)
+        private void ApplyNotification(UpdateStatusBarParameter e)
         {
-            var vm = GetViewModel();
-            if (vm != null)
+            var styleDefault = "notificationDefault";
+            var styleWarning = "notificationWarning";
+
+            var message = e.Message;
+            var isWarning = e.IsWarning;
+
+            Style style;
+            if (isWarning)
             {
-                var textChange = e.Changes.First();
-                vm.NotifyContentChanged(textChange.AddedLength,textChange.Offset,textChange.RemovedLength);
+                style = Resources[styleWarning] as Style;
             }
+            else
+            {
+                style = Resources[styleDefault] as Style;
+            }
+
+            notificationLabel.Content = message;
+            notificationLabel.Style = style;
         }
 
-        private IMainViewModel? GetViewModel()
-        {
-            var vm = DataContext as IMainViewModel;
-            return vm;
-        }
-
+        #endregion
 
     }
 }

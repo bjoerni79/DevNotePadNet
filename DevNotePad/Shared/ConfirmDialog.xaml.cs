@@ -25,12 +25,12 @@ namespace DevNotePad.Shared
             InitializeComponent();
         }
 
-        public void Init(string question, string dialogTitle)
+        public void Init(string question, string dialogTitle, string okButtonText)
         {
             var viewModel = new ConfimDialogViewModel();
             DataContext = viewModel;
 
-            viewModel.Init(question, dialogTitle, this);
+            viewModel.Init(question, dialogTitle,okButtonText, this);
         }
 
         public void CloseDialog(bool confirmed)

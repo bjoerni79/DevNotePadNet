@@ -1,4 +1,5 @@
 ﻿using DevNotePad.Shared;
+using DevNotePad.ViewModel;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,29 @@ namespace DevNotePad.Service
             this.owner = owner;
         }
 
+        public void OpenFindDialog(IMainViewUi ui)
+        {
+            if (ui == null)
+            {
+                throw new ArgumentNullException(nameof(ui));
+            }
+
+            var dialog = new FindDialog() { Owner=owner};
+            var viewModel = new FindDialogViewModel(ui, dialog);
+            dialog.DataContext = viewModel;
+
+            dialog.Show();
+        }
+
         public bool ShowConfirmationDialog(string question, string title)
         {
+            return ShowConfirmationDialog(question, title, "OK");
+        }
+
+        public bool ShowConfirmationDialog(string question, string title, string okButtonText)
+        {
             var confirmDialog = new ConfirmDialog() { Owner = owner };
-            confirmDialog.Init(question, title);
+            confirmDialog.Init(question, title,okButtonText);
 
             var result = confirmDialog.ShowDialog();
             if (result.HasValue)
@@ -79,5 +99,7 @@ namespace DevNotePad.Service
             errorDialog.Init(warning, component, "Warning");
             errorDialog.ShowDialog();
         }
+
+        
     }
 }

@@ -1,8 +1,11 @@
 ﻿using DevNotePad.Features;
+using DevNotePad.Features.Json;
 using DevNotePad.Features.Shared;
+using DevNotePad.Features.Xml;
 using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
+using DevNotePad.Shared.Event;
 using Generic.MVVM;
 using Generic.MVVM.IOC;
 using System;
@@ -11,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DevNotePad.ViewModel
 {
@@ -26,10 +30,12 @@ namespace DevNotePad.ViewModel
 
         private string initialText;
         private DateTime latestTimeStamp;
+        private string fileName;
 
-        private string FileName { get; set; }
         private bool LineWrapMode { get; set; }
         private bool ScrollbarMode { get; set; }
+
+        public ObservableCollection<ItemNode>? Nodes { get; set; }
 
         public MainViewModel()
         {
@@ -40,6 +46,10 @@ namespace DevNotePad.ViewModel
             SaveAs = new DefaultCommand(OnSaveAs);
             Reload = new DefaultCommand(OnReload);
             Close = new DefaultCommand(OnClose);
+
+            // Edit
+            Find = new DefaultCommand(OnFind);
+            CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
@@ -53,14 +63,22 @@ namespace DevNotePad.ViewModel
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
             ToggleScrollbar = new DefaultCommand(OnToggleScrollbar);
 
+            // ScratchPad
+            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
+            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad);
+            ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad);
+            ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad);
+
             // About
             About = new DefaultCommand(OnAbout);
 
-            FileName = "Not Defined";
+            fileName = "Not Defined";
             initialText = String.Empty;
         }
 
         #region Commands
+
+        // File
 
         public IRefreshCommand New { get; set; }
 
@@ -74,8 +92,18 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand Close { get; set; }
 
+        // Edit
+
+        public IRefreshCommand Find { get; set; }
+
+        public IRefreshCommand CopyToScratchPad { get; set; }
+
+        // Layout
+
         public IRefreshCommand ToggleScrollbar { get; set; }
         public IRefreshCommand ToggleLineWrap { get; set; }
+
+        // Tools
 
         public IRefreshCommand JsonFormatter { get; set; }
 
@@ -88,6 +116,16 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand XmlToStringParser { get; set; }
 
         public IRefreshCommand XmlToTreeParser { get; set; }
+
+        public IRefreshCommand ScratchPadClearAll { get; set; }
+
+        public IRefreshCommand ScratchPadClearText { get; set; }
+
+        public IRefreshCommand ScratchPadClearTree { get; set; }
+
+        public IRefreshCommand ScratchPadCopyClipboard { get; set; }
+
+        // About
 
         public IRefreshCommand About { get; set; }
 
@@ -118,13 +156,13 @@ namespace DevNotePad.ViewModel
 
         private void OnSave()
         {
-            if (currentState == EditorState.Loaded || currentState == EditorState.Saved)
+            if (currentState == EditorState.New || currentState == EditorState.ChangedNew)
             {
                 OnSaveAs();
             }
 
             // Just save it
-            InternalSave(FileName);
+            InternalSave(fileName);
         }
 
         private void OnSaveAs()
@@ -180,10 +218,13 @@ namespace DevNotePad.ViewModel
                     var result = jsonComponent.Formatter(input);
 
                     Ui.SetText(result, isTextSelected);
+
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
                 }
                 catch (FeatureException featureException)
                 {
                     ShowError(featureException, JsonComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -203,10 +244,13 @@ namespace DevNotePad.ViewModel
 
                     Ui.AddToScratchPad(la);
                     Ui.FocusScratchPad();
+
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
                 }
                 catch (FeatureException featureException)
                 {
                     ShowError(featureException, JsonComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -229,10 +273,12 @@ namespace DevNotePad.ViewModel
                     RaisePropertyChange("Nodes");
 
                     Ui.FocusTree();
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
                 }
                 catch (FeatureException featureException)
                 {
                     ShowError(featureException, JsonComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -251,10 +297,12 @@ namespace DevNotePad.ViewModel
                     var formatted = component.Formatter(input);
 
                     Ui.SetText(formatted, isTextSelected);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
+                    ShowError(featureException, XmlComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -273,7 +321,8 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
+                    ShowError(featureException, XmlComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -300,7 +349,8 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
+                    ShowError(featureException, XmlComponent);
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -325,10 +375,62 @@ namespace DevNotePad.ViewModel
             
         }
 
+        private void OnClearAllScratchPad()
+        {
+            OnClearTextScratchPad();
+            OnClearTreeScratchPad();
+
+            TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad and Tree are empty", false));
+        }
+
+        private void OnClearTextScratchPad()
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                Ui!.CleanUpScratchPad();
+
+                TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad is empty", false));
+            }
+        }
+
+        private void OnClearTreeScratchPad()
+        {
+            Nodes = new ObservableCollection<ItemNode>();
+            RaisePropertyChange("Nodes");
+
+            TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad Tree is empty", false));
+        }
+
+        private void OnCopyClipboardToScratchPad()
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                var containsText = Clipboard.ContainsText();
+                if (containsText)
+                {
+                    var content = Clipboard.GetText();
+                    Ui!.AddToScratchPad(content);
+                }
+            }
+        }
+
+        private void OnFind()
+        {
+            var dialogService = GetDialogService();
+            dialogService.OpenFindDialog(Ui);
+        }
+
+        private void OnCopyToScratchPad()
+        {
+            var isSelected = Ui!.IsTextSelected();
+            var text = Ui.GetText(isSelected);
+
+            Ui.AddToScratchPad(text);
+        }
 
         #endregion
-
-        public ObservableCollection<ItemNode>? Nodes { get; set; }
 
         #region IMainViewModel
 
@@ -336,6 +438,12 @@ namespace DevNotePad.ViewModel
         {
             Ui = ui;
             InternalNew();
+
+            if (Ui != null)
+            {
+                CreateFindViewModel();
+                CreateReplaceViewModel();
+            }
         }
 
         public void ApplySettings()
@@ -350,6 +458,8 @@ namespace DevNotePad.ViewModel
                 Ui.SetScrollbars(ScrollbarMode);
                 Ui.SetWordWrap(LineWrapMode);
             }
+
+            TriggerToolbarNotification(new UpdateStatusBarParameter("Ready", false));
         }
 
         public void NotifyContentChanged(int added, int offset, int removed)
@@ -357,7 +467,8 @@ namespace DevNotePad.ViewModel
             int internalTextLength = initialText.Length;
             var loadedEvent = offset == 0 && internalTextLength == added;
 
-            if (!loadedEvent)
+            var isChangedSelected = currentState == EditorState.Changed || currentState == EditorState.ChangedNew;
+            if (!loadedEvent && !isChangedSelected)
             {
                 if (currentState == EditorState.New)
                 {
@@ -378,24 +489,34 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
+        #region Internal Logic
+
         /// <summary>
         /// Handles the internal save of the current Text and is called by Save and Save As
         /// </summary>
         /// <param name="filename">the filename</param>
-        private void InternalSave(string filename)
+        private void InternalSave(string targetfilename)
         {
             try
             {
                 var ioService = GetIoService();
-                FileName = filename;
+
+
+                //TODO: Check for update! What happens if the file is newer than the latest load?
+
+
+
+                initialText = Ui!.GetText(false);
+                ioService.WriteTextFile(targetfilename, initialText);
                 currentState = EditorState.Saved;
                 latestTimeStamp = DateTime.Now;
 
-                initialText = Ui!.GetText(false);
-                ioService.WriteTextFile(filename, initialText);
 
                 RaisePropertyChange("FileName");
-                Ui.SetFilename(FileName);
+                fileName = targetfilename;
+                Ui.SetFilename(fileName);
+
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
             }
             catch (Exception ex)
             {
@@ -408,23 +529,25 @@ namespace DevNotePad.ViewModel
         /// Handles the internal load of files and is called by ICommand delegates
         /// </summary>
         /// <param name="filename">the filename</param>
-        private void InternalLoad(string filename)
+        private void InternalLoad(string sourceFilename)
         {
             try
             {
                 var ioService = GetIoService();
-                FileName = filename;
+                fileName = sourceFilename; ;
                 currentState = EditorState.Loaded;
 
                 //TODO: Store the timestamp of the file right now
-                latestTimeStamp = ioService.GetModificationTimeStamp(filename);
+                latestTimeStamp = ioService.GetModificationTimeStamp(fileName);
 
-                initialText = ioService.ReadTextFile(FileName);
+                initialText = ioService.ReadTextFile(fileName);
                 Ui!.SetText(initialText);
 
                 RaisePropertyChange("Text");
                 RaisePropertyChange("FileName");
-                Ui.SetFilename(FileName);
+                Ui.SetFilename(fileName);
+
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("File is loaded", false));
             }
             catch (Exception ex)
             {
@@ -443,12 +566,12 @@ namespace DevNotePad.ViewModel
             if (currentState == EditorState.ChangedNew || currentState == EditorState.Changed)
             {
                 var dialogService = GetDialogService();
-                proceed = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to continue?","New");
+                proceed = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to continue?","New","Create New");
             }
 
             if (proceed)
             {
-                FileName = "New";
+                fileName = "New";
                 currentState = EditorState.New;
                 initialText = String.Empty;
                 latestTimeStamp = DateTime.Now;
@@ -457,7 +580,9 @@ namespace DevNotePad.ViewModel
 
                 RaisePropertyChange("Text");
                 RaisePropertyChange("FileName");
-                Ui.SetFilename(FileName);
+                Ui.SetFilename(fileName);
+
+                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("New file created", false));
             }
         }
 
@@ -466,48 +591,47 @@ namespace DevNotePad.ViewModel
         /// </summary>
         private void InternalReload()
         {
-            //TODO: If state is new, there is nothing to reload...
             if (currentState == EditorState.New)
             {
-                // TODO: Notify via toolbar that none action is taken..
+                TriggerToolbarNotification(new UpdateStatusBarParameter("Please save the file first", false));
             }
             else
             {
-                bool checkForReload = true;
-
-                //TODO:  Saving first? Check the states...
-                if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
+                try
                 {
-                    var dialogService = GetDialogService();
-                    checkForReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload");
-                }
+                    // Any file changes?  What is the creation date? etc
+                    var io = GetIoService();
+                    var currentModifiedTimestamp = io.GetModificationTimeStamp(fileName);
 
-                if (checkForReload)
-                {
-                    try
+                    if (currentModifiedTimestamp > latestTimeStamp)
                     {
-                        //TODO: Any file changes?  What is the creation date? etc
-                        var io = GetIoService();
-                        var currentModifiedTimestamp = io.GetModificationTimeStamp(FileName);
-
-                        if (currentModifiedTimestamp > latestTimeStamp)
+                        bool doReload = true;
+                        if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
                         {
-                            InternalLoad(FileName);
+                            var dialogService = GetDialogService();
+                            doReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload","Reload Content");
                         }
 
+
+                        if (doReload)
+                        {
+                            InternalLoad(fileName);
+                        }  
+                        else
+                        {
+                            TriggerToolbarNotification(new UpdateStatusBarParameter("Reload cancelled", true));
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        ShowError(ex, "Reload");
+                        TriggerToolbarNotification(new UpdateStatusBarParameter("Reload not required", false));
                     }
 
-
                 }
-                else
+                catch (Exception ex)
                 {
-                    //TODO Notify that no reload is required
+                    ShowError(ex, "Reload");
                 }
-
             }
         }
 
@@ -528,5 +652,19 @@ namespace DevNotePad.ViewModel
 
             return settings;
         }
+
+        private void CreateFindViewModel()
+        {
+            //TODO:  Use the IMainViewUi interface for linking the vm with the editor
+            //TODO: Add it to the IoC container
+        }
+
+        private void CreateReplaceViewModel()
+        {
+            //TODO:  Use the IMainViewUi interface for linking the vm with the editor
+            //TODO: Add it to the IoC container
+        }
+
+        #endregion
     }
 }

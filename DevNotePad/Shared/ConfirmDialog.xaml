@@ -8,12 +8,13 @@
         Title="{Binding Path=DialogTitle}"
         MinHeight="200" 
         MaxHeight="400"
-        MinWidth="300"
+        MinWidth="500"
         MaxWidth="600"
         ResizeMode="CanResize" 
         WindowStartupLocation="CenterOwner" 
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
         FocusManager.FocusedElement="{Binding ElementName=questionText}"
         
         >
@@ -25,9 +26,9 @@
 
         <TextBlock Margin="10" FontSize="14" Grid.Row="0" Text="{Binding Path=Question}" />
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 15 0 15">
-            <Button Width="100" Height="25" IsDefault="True" Content="OK" Command="{Binding Path=Confirm}" />
-            <Button Width="100" Height="25" IsCancel="True" Margin="30 0 0 0" Content="Cancel" Command="{Binding Path=Cancel}"    />
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 25 0 15">
+            <Button Width="150" Height="25" IsDefault="True" Content="{Binding Path=ConfirmButtonText}" Command="{Binding Path=Confirm}" />
+            <Button Width="150" Height="25" IsCancel="True" Margin="30 0 0 0" Content="Cancel" Command="{Binding Path=Cancel}"    />
         </StackPanel>
 
     </Grid>

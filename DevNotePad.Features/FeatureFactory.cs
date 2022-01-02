@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DevNotePad.Features.Json;
+using DevNotePad.Features.Xml;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

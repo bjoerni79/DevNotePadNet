@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevNotePad.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,10 @@ namespace DevNotePad.ViewModel
 
         void FocusScratchPad();
 
+        void CleanUpScratchPad();
+
         void CloseByViewModel();
+
+        void SelectText(int startIndex, int length);
     }
 }
