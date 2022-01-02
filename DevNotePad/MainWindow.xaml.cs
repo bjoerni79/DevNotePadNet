@@ -48,99 +48,6 @@ namespace DevNotePad
         {
             InitializeComponent();
         }
-
-        #region Event Delegates
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            var facade = FacadeFactory.Create();
-            if (facade != null)
-            {
-                var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
-                var updateToolbarEvent = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
-                updateToolbarEvent.AddListener(this);
-
-                IDialogService dialogService = new DialogService(this);
-                facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
-            }
-
-            var vm = GetViewModel();
-            if (vm != null)
-            {
-                vm.Init(this);
-                vm.ApplySettings();
-            }
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            var vm = GetViewModel();
-            if (vm != null)
-            {
-                var needsSaving = vm.IsChanged();
-                if (needsSaving)
-                {
-                    var facade = FacadeFactory.Create();
-                    if (facade != null)
-                    {
-                        var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
-                        if (dialogService != null)
-                        {
-                            //TODO: Ask if the user wants to save first
-                            var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close","Close Application");
-                            e.Cancel = !doClose;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void editor_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Update the view model
-            var vm = GetViewModel();
-            if (vm != null)
-            {
-                var textChange = e.Changes.First();
-                vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
-            }
-
-        }
-
-        private void UpdatePosition()
-        {
-            var caredIndex = editor.CaretIndex;
-            var lineCount = editor.LineCount;
-
-            var row = 0;
-            var col = 0;
-
-            for (int curLine = 0; curLine < lineCount; curLine++)
-            {
-                //TODO: Is there a better way, i.e. using the control directly?
-                var firstCharacterIndex = editor.GetCharacterIndexFromLineIndex(curLine);
-
-                if (firstCharacterIndex > caredIndex)
-                {
-                    // Stop Row detected
-
-                    row = curLine;
-                    col = caredIndex - firstCharacterIndex;
-                    break;
-                }
-            }
-
-            currentPositionLabel.Content = String.Format("Row : {0} Col : {1}", row, col);
-        }
-
-        private IMainViewModel? GetViewModel()
-        {
-            var vm = DataContext as IMainViewModel;
-            return vm;
-        }
-
-        #endregion
-
         #region IMainViewUI
 
         public void CleanUpScratchPad()
@@ -317,5 +224,101 @@ namespace DevNotePad
 
         #endregion
 
+
+        #region Event Delegates
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var facade = FacadeFactory.Create();
+            if (facade != null)
+            {
+                var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+                var updateToolbarEvent = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
+                updateToolbarEvent.AddListener(this);
+
+                IDialogService dialogService = new DialogService(this);
+                facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
+            }
+
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                vm.Init(this);
+                vm.ApplySettings();
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                var needsSaving = vm.IsChanged();
+                if (needsSaving)
+                {
+                    var facade = FacadeFactory.Create();
+                    if (facade != null)
+                    {
+                        var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
+                        if (dialogService != null)
+                        {
+                            //TODO: Ask if the user wants to save first
+                            var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close","Close Application");
+                            e.Cancel = !doClose;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void editor_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Update the view model
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                var textChange = e.Changes.First();
+                vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
+            }
+
+            UpdatePosition();
+        }
+
+        private void UpdatePosition()
+        {
+            var caredIndex = editor.CaretIndex;
+            var lineCount = editor.LineCount;
+
+            var row = 0;
+            var col = 0;
+
+            //for (int curLine = 0; curLine < lineCount; curLine++)
+            //{
+            //    //TODO: Is there a better way, i.e. using the control directly?
+            //    var firstCharacterIndex = editor.GetCharacterIndexFromLineIndex(curLine);
+
+            //    if (firstCharacterIndex > caredIndex)
+            //    {
+            //        // Stop Row detected
+
+            //        row = curLine;
+            //        col = caredIndex - firstCharacterIndex;
+            //        break;
+            //    }
+            //}
+
+            //currentPositionLabel.Content = String.Format("Row : {0} Col : {1}", row, col);
+            currentPositionLabel.Content = String.Format("CaretIndex : {0}", caredIndex);
+        }
+
+
+
+        #endregion
+
+        private IMainViewModel? GetViewModel()
+        {
+            var vm = DataContext as IMainViewModel;
+            return vm;
+        }
     }
 }
