@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevNotePad"
         xmlns:shared="clr-namespace:DevNotePad.Shared"
+        xmlns:ui="clr-namespace:DevNotePad.UI"
         mc:Ignorable="d"
         Title="DevNotePad - New" Height="450" Width="800"
         DataContext="{Binding Source={StaticResource bootstrap},Path=Main}"
@@ -144,7 +145,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBox x:Name="editor"  
+            <ui:DevTextBox x:Name="editor"  
                      Grid.Row="0" 
                      Grid.Column="0" 
                      Grid.RowSpan="2" 

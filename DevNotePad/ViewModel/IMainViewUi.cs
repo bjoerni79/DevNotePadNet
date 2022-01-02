@@ -35,5 +35,7 @@ namespace DevNotePad.ViewModel
         void CloseByViewModel();
 
         void SelectText(int startIndex, int length);
+
+        TextPosition GetPosition();
     }
 }

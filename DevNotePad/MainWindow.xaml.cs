@@ -281,37 +281,7 @@ namespace DevNotePad
                 vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
             }
 
-            UpdatePosition();
         }
-
-        private void UpdatePosition()
-        {
-            var caredIndex = editor.CaretIndex;
-            var lineCount = editor.LineCount;
-
-            var row = 0;
-            var col = 0;
-
-            //for (int curLine = 0; curLine < lineCount; curLine++)
-            //{
-            //    //TODO: Is there a better way, i.e. using the control directly?
-            //    var firstCharacterIndex = editor.GetCharacterIndexFromLineIndex(curLine);
-
-            //    if (firstCharacterIndex > caredIndex)
-            //    {
-            //        // Stop Row detected
-
-            //        row = curLine;
-            //        col = caredIndex - firstCharacterIndex;
-            //        break;
-            //    }
-            //}
-
-            //currentPositionLabel.Content = String.Format("Row : {0} Col : {1}", row, col);
-            currentPositionLabel.Content = String.Format("CaretIndex : {0}", caredIndex);
-        }
-
-
 
         #endregion
 
