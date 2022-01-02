@@ -97,12 +97,40 @@ namespace DevNotePad
 
         private void editor_TextChanged(object sender, TextChangedEventArgs e)
         {
+            // Update the view model
             var vm = GetViewModel();
             if (vm != null)
             {
                 var textChange = e.Changes.First();
                 vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
             }
+
+        }
+
+        private void UpdatePosition()
+        {
+            var caredIndex = editor.CaretIndex;
+            var lineCount = editor.LineCount;
+
+            var row = 0;
+            var col = 0;
+
+            for (int curLine = 0; curLine < lineCount; curLine++)
+            {
+                //TODO: Is there a better way, i.e. using the control directly?
+                var firstCharacterIndex = editor.GetCharacterIndexFromLineIndex(curLine);
+
+                if (firstCharacterIndex > caredIndex)
+                {
+                    // Stop Row detected
+
+                    row = curLine;
+                    col = caredIndex - firstCharacterIndex;
+                    break;
+                }
+            }
+
+            currentPositionLabel.Content = String.Format("Row : {0} Col : {1}", row, col);
         }
 
         private IMainViewModel? GetViewModel()
@@ -238,7 +266,10 @@ namespace DevNotePad
 
         public void SelectText(int startIndex, int length)
         {
-            editor.Select(startIndex, length);
+            editor.SelectionStart = startIndex;
+            editor.SelectionLength = length;
+
+            //editor.Select(startIndex, length);
         }
 
         #endregion

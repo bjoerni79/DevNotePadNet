@@ -30,7 +30,7 @@ namespace DevNotePad.Service
             var viewModel = new FindDialogViewModel(ui, dialog);
             dialog.DataContext = viewModel;
 
-            dialog.ShowDialog();
+            dialog.Show();
         }
 
         public bool ShowConfirmationDialog(string question, string title)

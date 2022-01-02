@@ -11,8 +11,9 @@
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterOwner" 
         WindowStyle="ToolWindow"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
         
+        FocusManager.FocusedElement="{Binding ElementName=textBoxSearchFor}"
         >
 
     <Window.Resources>
@@ -47,7 +48,7 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource titleLabel}" >Search For:</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource defaultTextBox}" Text="{Binding Path=SearchPattern,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></TextBox>
+        <TextBox Name="textBoxSearchFor" Grid.Row="0" Grid.Column="1" Style="{StaticResource defaultTextBox}" Text="{Binding Path=SearchPattern,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></TextBox>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <CheckBox Style="{StaticResource defaultCheckBox}" IsChecked="{Binding Path=IgnoreLetterType,Mode=TwoWay}" >Igore lower/capital letter</CheckBox>

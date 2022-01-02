@@ -45,6 +45,21 @@
             <Setter Property="Foreground" Value="Red"/>
         </Style>
 
+        <Style x:Key="editorTextbox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="AcceptsTab" Value="True" />
+            <Setter Property="IsInactiveSelectionHighlightEnabled" Value="True"/>
+        </Style>
+
+        <Style x:Key="scratchPadTextbox" TargetType="TextBox" BasedOn="{StaticResource editorTextbox}">
+            <Setter Property="Background" Value="LightYellow"/>
+        </Style>
+
+        <Style x:Key="scratchPadTree" TargetType="TreeView">
+            <Setter Property="Background" Value="LightYellow"/>
+        </Style>
+
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
@@ -62,7 +77,7 @@
                 <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
                 <MenuItem Header="Copy" InputGestureText="Ctrl+C"/>
                 <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
-                <MenuItem Header="To ScratchPad"/>
+                <MenuItem Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
                 <Separator/>
                 <MenuItem Header="Find" Command="{Binding Path=Find}" />
                 <MenuItem Header="Replace"/>
@@ -78,8 +93,8 @@
                     <MenuItem Header="Format" Command="{Binding Path=JsonFormatter}" />
                 </MenuItem>
                 <MenuItem Header="XML">
-                    <MenuItem Header="To Text View" Command="{Binding Path=XmlToStringParser}" />
-                    <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />
+                    <!--<MenuItem Header="To Text View" Command="{Binding Path=XmlToStringParser}" />
+                    <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />-->
                     <MenuItem Header="Format" Command="{Binding Path=XmlFormatter}"/>
                     <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
                 </MenuItem>
@@ -97,6 +112,8 @@
                 <MenuItem Header="Clear All" Command="{Binding Path=ScratchPadClearAll}" />
                 <MenuItem Header="Clear Tree" Command="{Binding Path=ScratchPadClearTree}"/>
                 <MenuItem Header="Clar Text" Command="{Binding Path=ScratchPadClearText}" />
+                <Separator/>
+                <MenuItem Header="Copy Clipboard Content" Command="{Binding Path=ScratchPadCopyClipboard}" />
             </MenuItem>
             <MenuItem Header="Layout">
                 <MenuItem  Command="{Binding Path=ToggleScrollbar}" Header="Scrollbar Visible"></MenuItem>
@@ -108,15 +125,10 @@
             </MenuItem>
         </Menu>
 
-        <!--<ToolBar DockPanel.Dock="Top" >
-            <Label>TODO:</Label>
-        </ToolBar>-->
-
-
         <DockPanel DockPanel.Dock="Bottom" >
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
             <Label Name="notificationLabel">Basic Features</Label>
-            <Label Content="State" HorizontalContentAlignment="Right" />
+            <Label Name="currentPositionLabel" Content="Row: x Col: y" HorizontalContentAlignment="Right" />
         </DockPanel>
 
         <Grid>
@@ -131,8 +143,14 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
-            <TextBox x:Name="editor"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" AcceptsReturn="True" AcceptsTab="True" FontSize="14" TextChanged="editor_TextChanged" Grid.ColumnSpan="2" />
+
+            <TextBox x:Name="editor"  
+                     Grid.Row="0" 
+                     Grid.Column="0" 
+                     Grid.RowSpan="2" 
+                     Style="{StaticResource editorTextbox}"
+                     TextChanged="editor_TextChanged" 
+            />
 
 
             <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"   HorizontalAlignment="Center"
@@ -141,13 +159,18 @@
               Width="3"  />
 
             <Label Grid.Row="0" Grid.Column="2">ScratchPad</Label>
-            
+
             <TabControl Grid.Row="1" Grid.Column="2" Margin="3,0,0,0" >
                 <TabItem Name="tabScratchPad" Header="Text">
-                    <TextBox x:Name="scratchPad" Background="LightYellow" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True"  />
+                    <TextBox 
+                        x:Name="scratchPad" 
+                        Style="{StaticResource scratchPadTextbox}" />
                 </TabItem>
                 <TabItem Name="tabTreeView" Header="Tree" >
-                    <TreeView x:Name="treeView" Background="LightYellow" ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" ItemsSource="{Binding Path=Nodes}" />
+                    <TreeView x:Name="treeView" 
+                        Style="{StaticResource scratchPadTree}" 
+                        ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" 
+                        ItemsSource="{Binding Path=Nodes}" />
                 </TabItem>
             </TabControl>
 

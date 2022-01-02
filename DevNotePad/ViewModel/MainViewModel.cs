@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DevNotePad.ViewModel
 {
@@ -48,6 +49,7 @@ namespace DevNotePad.ViewModel
 
             // Edit
             Find = new DefaultCommand(OnFind);
+            CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
@@ -65,6 +67,7 @@ namespace DevNotePad.ViewModel
             ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
             ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad);
             ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad);
+            ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad);
 
             // About
             About = new DefaultCommand(OnAbout);
@@ -93,6 +96,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand Find { get; set; }
 
+        public IRefreshCommand CopyToScratchPad { get; set; }
+
         // Layout
 
         public IRefreshCommand ToggleScrollbar { get; set; }
@@ -117,6 +122,8 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand ScratchPadClearText { get; set; }
 
         public IRefreshCommand ScratchPadClearTree { get; set; }
+
+        public IRefreshCommand ScratchPadCopyClipboard { get; set; }
 
         // About
 
@@ -395,10 +402,32 @@ namespace DevNotePad.ViewModel
             TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad Tree is empty", false));
         }
 
+        private void OnCopyClipboardToScratchPad()
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                var containsText = Clipboard.ContainsText();
+                if (containsText)
+                {
+                    var content = Clipboard.GetText();
+                    Ui!.AddToScratchPad(content);
+                }
+            }
+        }
+
         private void OnFind()
         {
             var dialogService = GetDialogService();
             dialogService.OpenFindDialog(Ui);
+        }
+
+        private void OnCopyToScratchPad()
+        {
+            var isSelected = Ui!.IsTextSelected();
+            var text = Ui.GetText(isSelected);
+
+            Ui.AddToScratchPad(text);
         }
 
         #endregion
