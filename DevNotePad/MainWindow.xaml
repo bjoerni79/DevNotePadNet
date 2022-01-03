@@ -19,6 +19,11 @@
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding Path=Save}"/>
         <KeyBinding Modifiers="Ctrl" Key="R" Command="{Binding Path=Reload}"/>
         <KeyBinding Modifiers="Ctrl" Key="F" Command="{Binding Path=Find}"/>
+
+        <KeyBinding Modifiers="Ctrl" Key="X" Command="{Binding Path=Cut}"/>
+        <KeyBinding Modifiers="Ctrl" Key="V" Command="{Binding Path=Paste}"/>
+        <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding Path=Copy}"/>
+        <KeyBinding Modifiers="Ctrl" Key="A" Command="{Binding Path=SelectAll}"/>
     </Window.InputBindings>
 
     <Window.Resources>
@@ -61,6 +66,13 @@
             <Setter Property="Background" Value="LightYellow"/>
         </Style>
 
+        <ContextMenu x:Key="editorContextMenu">
+            <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=Cut}" />
+            <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=Copy}"/>
+            <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=Paste}"/>
+            <MenuItem Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
+        </ContextMenu>
+        
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
@@ -75,15 +87,15 @@
                 <MenuItem Header="Close" Command="{Binding Path=Close}"/>
             </MenuItem>
             <MenuItem Header="Edit">
-                <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
-                <MenuItem Header="Copy" InputGestureText="Ctrl+C"/>
-                <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
+                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=Cut}" />
+                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=Copy}"/>
+                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=Paste}"/>
                 <MenuItem Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
                 <Separator/>
                 <MenuItem Header="Find" Command="{Binding Path=Find}" />
                 <MenuItem Header="Replace"/>
                 <Separator/>
-                <MenuItem Header="Select All"/>
+                <MenuItem Header="Select All" Command="{Binding Path=SelectAll}"/>
 
             </MenuItem>
             <MenuItem Header="Tools">
@@ -126,13 +138,19 @@
             </MenuItem>
         </Menu>
 
-        <DockPanel DockPanel.Dock="Bottom" >
+        <DockPanel DockPanel.Dock="Bottom" Margin="10 0 10 0" >
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                <Label Content="Row:" FontWeight="DemiBold" />
+                <Label Content="{Binding ElementName=editor, Path=CurrentRow}" />
+                <Label Content=" Column:" FontWeight="DemiBold" />
+                <Label Content="{Binding ElementName=editor, Path=CurrentColumn}"/>
+                <Label Content="State:" FontWeight="DemiBold" />
+                <Label Content="{Binding Path=State}"/>
+            </StackPanel>
+
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
             <Label Name="notificationLabel">Basic Features</Label>
-            <Label Content="Row:"  />
-            <Label Content="{Binding ElementName=editor, Path=CurrentRow}" />
-            <Label Content=" Column:" />
-            <Label Content="{Binding ElementName=editor, Path=CurrentColumn}"/>
         </DockPanel>
 
         <Grid>
@@ -154,8 +172,8 @@
                      Grid.RowSpan="2" 
                      Style="{StaticResource editorTextbox}"
                      TextChanged="editor_TextChanged" 
+                     ContextMenu="{StaticResource editorContextMenu}"
             />
-
 
             <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"   HorizontalAlignment="Center"
               Background="LightBlue" 

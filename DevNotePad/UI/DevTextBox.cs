@@ -63,20 +63,13 @@ namespace DevNotePad.UI
             }
         }
 
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            base.OnMouseLeftButtonDown(e);
+            base.OnMouseDown(e);
 
-            if (e.LeftButton == MouseButtonState.Released)
-            {
-                UpdatePosition();
-            }
+            UpdatePosition();
         }
 
-        protected override void OnSelectionChanged(RoutedEventArgs e)
-        {
-            base.OnSelectionChanged(e);
-        }
 
         private void UpdatePosition()
         {   
@@ -89,8 +82,8 @@ namespace DevNotePad.UI
             {
                 // No text
 
-                CurrentColumn = 0;
-                CurrentRow = 0;
+                CurrentColumn = 1;
+                CurrentRow = 1;
             }
             else if (lineCount == -1)
             {
@@ -102,7 +95,7 @@ namespace DevNotePad.UI
             else
             {
                 // Calculate the current column and row
-                int rowAfterHit=0;
+                int rowAfterHit=-1;
                 for (int curLine = 0; curLine < lineCount; curLine++)
                 {
                     var firstCharacterindex = GetCharacterIndexFromLineIndex(curLine);
@@ -121,11 +114,16 @@ namespace DevNotePad.UI
                     }
                 }
 
+                if (rowAfterHit == -1)
+                {
+                    rowAfterHit = lineCount-1;
+                }
+
                 var startIndex = GetCharacterIndexFromLineIndex(rowAfterHit);
 
                 // It is zero based.
-                CurrentRow = rowAfterHit + 1;
-                CurrentColumn = caretIndex - startIndex;
+                CurrentRow = rowAfterHit +1;
+                CurrentColumn = caretIndex - startIndex + 1;
             }
         }
     }

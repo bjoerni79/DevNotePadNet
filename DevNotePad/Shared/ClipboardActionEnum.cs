@@ -6,5 +6,11 @@ using System.Threading.Tasks;
 
 namespace DevNotePad.Shared
 {
-    public record struct TextPosition (int Row, int Column);
+    public enum ClipboardActionEnum
+    {
+        Copy,
+        Cut,
+        Paste,
+        SelectAll
+    }
 }

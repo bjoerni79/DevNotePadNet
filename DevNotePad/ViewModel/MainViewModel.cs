@@ -37,6 +37,8 @@ namespace DevNotePad.ViewModel
 
         public ObservableCollection<ItemNode>? Nodes { get; set; }
 
+        public string State { get; private set; }
+
         public MainViewModel()
         {
             // File
@@ -50,6 +52,14 @@ namespace DevNotePad.ViewModel
             // Edit
             Find = new DefaultCommand(OnFind);
             CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
+            // Cut
+            Cut = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Cut));
+            // Copy
+            Copy = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Copy));
+            // Paste
+            Paste = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Paste));
+            // Select All
+            SelectAll = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.SelectAll));
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
@@ -74,6 +84,7 @@ namespace DevNotePad.ViewModel
 
             fileName = "Not Defined";
             initialText = String.Empty;
+            State = String.Empty;
         }
 
         #region Commands
@@ -97,6 +108,14 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand Find { get; set; }
 
         public IRefreshCommand CopyToScratchPad { get; set; }
+
+        public IRefreshCommand Cut { get; set; }
+
+        public IRefreshCommand Copy { get; set; }
+
+        public IRefreshCommand Paste { get; set; }
+
+        public IRefreshCommand SelectAll { get; set; }
 
         // Layout
 
@@ -478,6 +497,9 @@ namespace DevNotePad.ViewModel
                 {
                     currentState = EditorState.Changed;
                 }
+
+                State = "Changed";
+                RaisePropertyChange("State");
             }
         }
 
@@ -490,6 +512,15 @@ namespace DevNotePad.ViewModel
         #endregion
 
         #region Internal Logic
+
+        private void PerfromClipboardAction(ClipboardActionEnum action)
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                Ui!.PerformClipboardAction(action);
+            }
+        }
 
         /// <summary>
         /// Handles the internal save of the current Text and is called by Save and Save As
@@ -512,11 +543,13 @@ namespace DevNotePad.ViewModel
                 latestTimeStamp = DateTime.Now;
 
 
-                RaisePropertyChange("FileName");
                 fileName = targetfilename;
                 Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
+
+                State = "Saved";
+                RaisePropertyChange("State");
             }
             catch (Exception ex)
             {
@@ -542,12 +575,12 @@ namespace DevNotePad.ViewModel
 
                 initialText = ioService.ReadTextFile(fileName);
                 Ui!.SetText(initialText);
-
-                RaisePropertyChange("Text");
-                RaisePropertyChange("FileName");
                 Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("File is loaded", false));
+
+                State = "Loaded";
+                RaisePropertyChange("State");
             }
             catch (Exception ex)
             {
@@ -583,6 +616,9 @@ namespace DevNotePad.ViewModel
                 Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("New file created", false));
+
+                State = "New";
+                RaisePropertyChange("State");
             }
         }
 

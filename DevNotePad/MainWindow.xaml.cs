@@ -27,23 +27,6 @@ namespace DevNotePad
     public partial class MainWindow : Window, IMainViewUi, IEventListener
     {
 
-        /*
-         *  Properties:
-         *  LineCount : https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.textbox.linecount?view=windowsdesktop-6.0#System_Windows_Controls_TextBox_LineCount
-         * 
-         *  Methods:
-         *  Copy()
-         *  Cut()
-         *  Paste
-         *  Undo
-         *  Redo
-         *  
-         *  Select(start, length)
-         *  Select All
-         *  
-         *  BeginChange / EndChange()...
-         */
-
         public MainWindow()
         {
             InitializeComponent();
@@ -175,8 +158,26 @@ namespace DevNotePad
         {
             editor.SelectionStart = startIndex;
             editor.SelectionLength = length;
+        }
 
-            //editor.Select(startIndex, length);
+        public void PerformClipboardAction(ClipboardActionEnum action)
+        {
+
+            switch (action)
+            {
+                case ClipboardActionEnum.Copy:
+                    editor.Copy();
+                    break;
+                case ClipboardActionEnum.Paste:
+                    editor.Paste();
+                    break;
+                case ClipboardActionEnum.Cut:
+                    editor.Cut();
+                    break;
+                case ClipboardActionEnum.SelectAll:
+                    editor.SelectAll();
+                    break;
+            }
         }
 
         #endregion
@@ -223,7 +224,6 @@ namespace DevNotePad
         }
 
         #endregion
-
 
         #region Event Delegates
 
