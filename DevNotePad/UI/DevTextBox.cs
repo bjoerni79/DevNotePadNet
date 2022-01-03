@@ -13,17 +13,36 @@ namespace DevNotePad.UI
     {
         // https://docs.microsoft.com/en-us/dotnet/desktop/wpf/properties/dependency-properties-overview?view=netdesktop-6.0
 
+        public static readonly DependencyProperty CurrentRowProperty = DependencyProperty.Register(
+            "CurrentRow", typeof(int),
+            typeof(DevTextBox));
+
+        public static readonly DependencyProperty CurrentColumnProperty = DependencyProperty.Register(
+            "CurrentColumn", typeof(int),
+            typeof(DevTextBox));
 
         public DevTextBox() : base()
         {
             // Empty
         }
 
-        //TODO: Convert this to a dependency property and connect via Binding to the label (Element)
-        public int CurrentRow { get; private set; }
+        /// <summary>
+        /// Contains the current Row of the caret
+        /// </summary>
+        public int CurrentRow
+        {
+            get => (int)GetValue(CurrentRowProperty);
+            set => SetValue(CurrentRowProperty, value);
+        }
 
-        //TODO: Convert this to a dependency property and connect via Binding to the label (Element)
-        public int CurrentColumn { get; private set; }
+        /// <summary>
+        /// Contains the current column of the caret
+        /// </summary>
+        public int CurrentColumn
+        {
+            get => (int)GetValue(CurrentColumnProperty);
+            set => SetValue(CurrentColumnProperty, value);
+        }
 
         protected override void OnTextChanged(TextChangedEventArgs e)
         {

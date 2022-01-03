@@ -129,7 +129,10 @@
         <DockPanel DockPanel.Dock="Bottom" >
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
             <Label Name="notificationLabel">Basic Features</Label>
-            <Label Name="currentPositionLabel" Content="Row: x Col: y" HorizontalContentAlignment="Right" />
+            <Label Content="Row:"  />
+            <Label Content="{Binding ElementName=editor, Path=CurrentRow}" />
+            <Label Content=" Column:" />
+            <Label Content="{Binding ElementName=editor, Path=CurrentColumn}"/>
         </DockPanel>
 
         <Grid>
