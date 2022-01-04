@@ -44,6 +44,64 @@ namespace DevNotePad.UI
             set => SetValue(CurrentColumnProperty, value);
         }
 
+        private void UpdatePosition()
+        {
+            // Maybe sync with Begin/End...
+
+            var caretIndex = CaretIndex;
+            var lineCount = LineCount;
+
+            if (caretIndex < 1)
+            {
+                // No text
+
+                CurrentColumn = 1;
+                CurrentRow = 1;
+            }
+            else if (lineCount == -1)
+            {
+                // Unkown state. Just set it to 0
+
+                CurrentRow = 0;
+                CurrentColumn = 0;
+            }
+            else
+            {
+                // Calculate the current column and row
+                int rowAfterHit = -1;
+                for (int curLine = 0; curLine < lineCount; curLine++)
+                {
+                    var firstCharacterindex = GetCharacterIndexFromLineIndex(curLine);
+
+                    if (caretIndex == firstCharacterindex)
+                    {
+                        rowAfterHit = curLine;
+                        break;
+                    }
+
+                    if (caretIndex < firstCharacterindex)
+                    {
+                        // Stop.
+                        rowAfterHit = curLine - 1;
+                        break;
+                    }
+                }
+
+                if (rowAfterHit == -1)
+                {
+                    rowAfterHit = lineCount - 1;
+                }
+
+                var startIndex = GetCharacterIndexFromLineIndex(rowAfterHit);
+
+                // It is zero based.
+                CurrentRow = rowAfterHit + 1;
+                CurrentColumn = caretIndex - startIndex + 1;
+            }
+        }
+
+        #region Protected 
+
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
@@ -70,61 +128,9 @@ namespace DevNotePad.UI
             UpdatePosition();
         }
 
+        #endregion
 
-        private void UpdatePosition()
-        {   
-            // Maybe sync with Begin/End...
 
-            var caretIndex = CaretIndex;
-            var lineCount = LineCount;
 
-            if (caretIndex < 1)
-            {
-                // No text
-
-                CurrentColumn = 1;
-                CurrentRow = 1;
-            }
-            else if (lineCount == -1)
-            {
-                // Unkown state. Just set it to 0
-
-                CurrentRow = 0;
-                CurrentColumn = 0;
-            }
-            else
-            {
-                // Calculate the current column and row
-                int rowAfterHit=-1;
-                for (int curLine = 0; curLine < lineCount; curLine++)
-                {
-                    var firstCharacterindex = GetCharacterIndexFromLineIndex(curLine);
-
-                    if (caretIndex == firstCharacterindex)
-                    {
-                        rowAfterHit = curLine;
-                        break;
-                    }
-                    
-                    if (caretIndex < firstCharacterindex)
-                    {
-                        // Stop.
-                        rowAfterHit = curLine - 1;
-                        break;
-                    }
-                }
-
-                if (rowAfterHit == -1)
-                {
-                    rowAfterHit = lineCount-1;
-                }
-
-                var startIndex = GetCharacterIndexFromLineIndex(rowAfterHit);
-
-                // It is zero based.
-                CurrentRow = rowAfterHit +1;
-                CurrentColumn = caretIndex - startIndex + 1;
-            }
-        }
     }
 }

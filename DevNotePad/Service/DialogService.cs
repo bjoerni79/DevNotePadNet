@@ -14,6 +14,13 @@ namespace DevNotePad.Service
     {
         private Window owner;
 
+        // ShowDialog does not work for the Find and Replace dialog due to a selection/focus issue. 
+        // This is a work around, which simulates the ShowDialog method call
+        private FindDialog? currentFindDialog;
+        private ReplaceDialog? currentReplaceDialog;
+        private FindDialogViewModel? findDialogViewModel;
+        private ReplaceDialogViewModel? replaceDialogViewModel;
+
         internal DialogService(Window owner)
         {
             this.owner = owner;
@@ -26,11 +33,30 @@ namespace DevNotePad.Service
                 throw new ArgumentNullException(nameof(ui));
             }
 
-            var dialog = new FindDialog() { Owner=owner};
-            var viewModel = new FindDialogViewModel(ui, dialog);
-            dialog.DataContext = viewModel;
+            if (currentFindDialog == null)
+            {
+                currentFindDialog = new FindDialog() { Owner = owner};
+                findDialogViewModel = new FindDialogViewModel(ui, currentFindDialog);
+                currentFindDialog.DataContext = findDialogViewModel;
+            }
 
-            dialog.Show();
+            currentFindDialog.Show();
+        }
+
+        public void OpenReplaceDialog(IMainViewUi ui)
+        {
+            if (ui == null)
+            {
+                throw new ArgumentNullException(nameof(ui));
+            }
+
+            if (currentReplaceDialog == null)
+            {
+                currentReplaceDialog = new ReplaceDialog() { Owner = owner};
+                replaceDialogViewModel = new ReplaceDialogViewModel(ui, currentReplaceDialog);
+            }
+
+            currentReplaceDialog.Show();
         }
 
         public bool ShowConfirmationDialog(string question, string title)

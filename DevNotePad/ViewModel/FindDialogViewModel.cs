@@ -66,15 +66,12 @@ namespace DevNotePad.ViewModel
 
         private SearchResultValue RunSearch(string text)
         {
-            //TODO: Start position?
-
             // https://docs.microsoft.com/en-us/dotnet/csharp/how-to/search-strings
 
             //
             //  Check if the pattern can be found
             //
             string content;
-            int startIndex = 0;
             int length = 0;
             StringComparison comparison;
 

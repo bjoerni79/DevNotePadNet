@@ -51,6 +51,7 @@ namespace DevNotePad.ViewModel
 
             // Edit
             Find = new DefaultCommand(OnFind);
+            Replace = new DefaultCommand(OnReplace);
             CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
             // Cut
             Cut = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Cut));
@@ -107,6 +108,7 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand Find { get; set; }
 
+        public IRefreshCommand Replace { get; set; }
         public IRefreshCommand CopyToScratchPad { get; set; }
 
         public IRefreshCommand Cut { get; set; }
@@ -439,6 +441,12 @@ namespace DevNotePad.ViewModel
         {
             var dialogService = GetDialogService();
             dialogService.OpenFindDialog(Ui);
+        }
+
+        private void OnReplace()
+        {
+            var dialogService = GetDialogService();
+            dialogService.OpenReplaceDialog(Ui);
         }
 
         private void OnCopyToScratchPad()

@@ -156,8 +156,11 @@ namespace DevNotePad
 
         public void SelectText(int startIndex, int length)
         {
-            editor.SelectionStart = startIndex;
-            editor.SelectionLength = length;
+            editor.Focus();
+            editor.Select(startIndex, length);
+
+            //var selectedText = editor.SelectedText;
+
         }
 
         public void PerformClipboardAction(ClipboardActionEnum action)

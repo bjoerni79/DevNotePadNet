@@ -56,14 +56,30 @@
             <Setter Property="AcceptsReturn" Value="True"/>
             <Setter Property="AcceptsTab" Value="True" />
             <Setter Property="IsInactiveSelectionHighlightEnabled" Value="True"/>
+            <Setter Property="SelectionTextBrush" Value="LightBlue"/>
+            <Setter Property="SelectionBrush" Value="LightBlue"/>
         </Style>
 
         <Style x:Key="scratchPadTextbox" TargetType="TextBox" BasedOn="{StaticResource editorTextbox}">
             <Setter Property="Background" Value="LightYellow"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
         </Style>
 
         <Style x:Key="scratchPadTree" TargetType="TreeView">
             <Setter Property="Background" Value="LightYellow"/>
+        </Style>
+
+        <Style x:Key="toolbarTitleLabel" TargetType="Label">
+            <Setter Property="FontWeight" Value="DemiBold"/>
+        </Style>
+
+        <Style x:Key="toolbarContentNumberLabel" TargetType="Label">
+            <Setter Property="MinWidth" Value="30"/>
+        </Style>
+
+        <Style x:Key="toolbarContentStateLabel" TargetType="Label">
+            <Setter Property="MinWidth" Value="60"/>
         </Style>
 
         <ContextMenu x:Key="editorContextMenu">
@@ -93,9 +109,9 @@
                 <MenuItem Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
                 <Separator/>
                 <MenuItem Header="Find" Command="{Binding Path=Find}" />
-                <MenuItem Header="Replace"/>
+                <MenuItem Header="Replace" Command="{Binding Path=Replace}" />
                 <Separator/>
-                <MenuItem Header="Select All" Command="{Binding Path=SelectAll}"/>
+                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding Path=SelectAll}"/>
 
             </MenuItem>
             <MenuItem Header="Tools">
@@ -138,15 +154,15 @@
             </MenuItem>
         </Menu>
 
-        <DockPanel DockPanel.Dock="Bottom" Margin="10 0 10 0" >
+        <DockPanel DockPanel.Dock="Bottom" Margin="5 0 5 0" >
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                <Label Content="Row:" FontWeight="DemiBold" />
-                <Label Content="{Binding ElementName=editor, Path=CurrentRow}" />
-                <Label Content=" Column:" FontWeight="DemiBold" />
-                <Label Content="{Binding ElementName=editor, Path=CurrentColumn}"/>
-                <Label Content="State:" FontWeight="DemiBold" />
-                <Label Content="{Binding Path=State}"/>
+                <Label Style="{StaticResource toolbarTitleLabel}" Content="Row:"  />
+                <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding ElementName=editor, Path=CurrentRow}" />
+                <Label Style="{StaticResource toolbarTitleLabel}" Content=" Column:"  />
+                <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding ElementName=editor, Path=CurrentColumn}"/>
+                <Label Style="{StaticResource toolbarTitleLabel}" Content="State:"  />
+                <Label Style="{StaticResource toolbarContentStateLabel}" Content="{Binding Path=State}"/>
             </StackPanel>
 
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
@@ -158,7 +174,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="213*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="133*" MinWidth="10"/>
+                <ColumnDefinition Width="80" MaxWidth="300" MinWidth="80"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -182,7 +198,7 @@
 
             <Label Grid.Row="0" Grid.Column="2">ScratchPad</Label>
 
-            <TabControl Grid.Row="1" Grid.Column="2" Margin="3,0,0,0" >
+            <TabControl Grid.Row="1" Grid.Column="2"  Margin="3,0,0,0" >
                 <TabItem Name="tabScratchPad" Header="Text">
                     <TextBox 
                         x:Name="scratchPad" 
