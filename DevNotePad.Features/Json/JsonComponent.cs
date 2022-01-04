@@ -86,7 +86,7 @@ namespace DevNotePad.Features.Json
                     node.Childs.Add(childNode);
                 }
             }
-            else
+            else if (kind == JsonValueKind.Object)
             {
                 // Object
                 node.Name = "Object";
@@ -133,6 +133,15 @@ namespace DevNotePad.Features.Json
                         childNode.Description = stringBuilder.ToString();
                     }
                 }
+            }
+            else
+            {
+                // Value
+                var sb = new StringBuilder();
+                RenderValue(element, sb);
+
+                node.Style = ItemNodeStyle.Default;
+                node.Name = sb.ToString();
             }
         }
 
@@ -202,17 +211,17 @@ namespace DevNotePad.Features.Json
             var kind = element.ValueKind;
             if (kind == JsonValueKind.Object || kind == JsonValueKind.Array)
             {
-                builder.AppendFormat("## Object/ Array detected\n");
+                builder.AppendFormat("Object/ Array\n");
             }
 
             if (kind == JsonValueKind.Null)
             {
-                builder.AppendFormat("## Null detected\n");
+                builder.AppendFormat("Null\n");
             }
 
             if (kind == JsonValueKind.Number)
             {
-                builder.AppendFormat("Value = {0}\n", element.GetInt32());
+                builder.AppendFormat("Value = {0}\n", element.GetInt64());
             }
 
             if (kind == JsonValueKind.String)
@@ -222,12 +231,12 @@ namespace DevNotePad.Features.Json
 
             if (kind == JsonValueKind.True)
             {
-                builder.AppendLine("Value is true");
+                builder.AppendLine("True");
             }
 
             if (kind == JsonValueKind.False)
             {
-                builder.AppendLine("Value is false");
+                builder.AppendLine("False");
             }
         }
 
