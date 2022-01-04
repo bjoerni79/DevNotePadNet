@@ -172,9 +172,9 @@
         <Grid>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="213*"/>
+                <ColumnDefinition Width="213*" MinWidth="200" />
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="80" MaxWidth="300" MinWidth="80"/>
+                <ColumnDefinition Width="80"  MinWidth="80"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
