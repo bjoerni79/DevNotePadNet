@@ -105,6 +105,10 @@ namespace DevNotePad
             }
         }
 
+        public int GetCurrentPosition()
+        {
+            return editor.CaretIndex;
+        }
         public void SetFilename(string filename)
         {
             //TODO: Move the logic to the View Model

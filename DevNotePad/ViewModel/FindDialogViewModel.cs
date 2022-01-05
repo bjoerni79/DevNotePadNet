@@ -9,27 +9,26 @@ using System.Windows.Input;
 
 namespace DevNotePad.ViewModel
 {
-    public class FindDialogViewModel : AbstractViewModel
+    public class FindDialogViewModel : MainViewUiViewModel
     {
-        private IMainViewUi ui;
-        private IDialog dialog;
-
         private int startIndex;
         private string? searchPattern;
 
-        public FindDialogViewModel(IMainViewUi mainViewUi, IDialog dialogUi)
-        {
-            ui = mainViewUi;
-            dialog = dialogUi;
+        private SearchEngine searchEngine;
 
-            FindNext = new DefaultCommand(OnFindNext,()=>!string.IsNullOrEmpty(SearchPattern));
+        public FindDialogViewModel()
+        {
+            Find = new DefaultCommand(OnFind);
+            FindNext = new DefaultCommand(OnFindNext,() => startIndex >= 0);
             Cancel = new DefaultCommand(OnCancel);
 
-            startIndex = 0;
+            startIndex = -1;
+            searchEngine = new SearchEngine();
         }
 
-
         public bool IgnoreLetterType { get; set; }
+
+        public bool StartFromCurrentPosition { get; set; }
 
         public string? SearchPattern
         {
@@ -40,19 +39,39 @@ namespace DevNotePad.ViewModel
             set
             {
                 searchPattern = value;
-                FindNext.Refresh();
             }
         }
+
+        public IRefreshCommand Find { get; set; }
 
         public IRefreshCommand FindNext { get; set; }
 
         public IRefreshCommand Cancel { get; set; }
 
+        private void OnFind()
+        {
+            if (StartFromCurrentPosition)
+            {
+                startIndex = ui.GetCurrentPosition();
+            }
+            else
+            {
+                startIndex = 0;
+            }
+
+            searchEngine.SearchPattern = SearchPattern;
+            searchEngine.IgnoreLetterType = IgnoreLetterType;
+            searchEngine.StartIndex = startIndex;
+
+            FindNext.Refresh();
+            OnFindNext();
+        }
+
         private void OnFindNext()
         {
             var content = ui.GetText(false);
 
-            var result = RunSearch(content);
+            var result = searchEngine.RunSearch(content);
             if (result.Successful)
             {
                 ui.SelectText(result.StartIndex, result.Length);
@@ -64,57 +83,11 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        private SearchResultValue RunSearch(string text)
-        {
-            // https://docs.microsoft.com/en-us/dotnet/csharp/how-to/search-strings
-
-            //
-            //  Check if the pattern can be found
-            //
-            string content;
-            int length = 0;
-            StringComparison comparison;
-
-            if (startIndex > 0)
-            {
-                content = text.Substring(startIndex);
-            }
-            else
-            { 
-                content = text;
-            }
-
-            if (IgnoreLetterType)
-            {
-                comparison = StringComparison.CurrentCultureIgnoreCase;
-            }
-            else
-            {
-                comparison = StringComparison.CurrentCulture;
-            }
-
-            var found = content.Contains(SearchPattern, comparison);
-
-            if (found)
-            {
-                startIndex = content.IndexOf(SearchPattern, comparison);
-                length = SearchPattern.Length;
-            }
-
-            return new SearchResultValue(found,startIndex,length);
-        }
-
         private void OnCancel()
         {
             dialog.CloseDialog(true);
         }
 
-        /// <summary>
-        /// Specifies the result of the search operation
-        /// </summary>
-        /// <param name="Successful">true if any content has been found</param>
-        /// <param name="start">the start index</param>
-        /// <param name="length">the length</param>
-        private record struct SearchResultValue(bool Successful, int StartIndex, int Length);
+
     }
 }

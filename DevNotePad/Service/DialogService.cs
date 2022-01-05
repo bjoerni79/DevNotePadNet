@@ -1,4 +1,5 @@
-﻿using DevNotePad.Shared;
+﻿using DevNotePad.MVVM;
+using DevNotePad.Shared;
 using DevNotePad.ViewModel;
 using Microsoft.Win32;
 using System;
@@ -33,30 +34,43 @@ namespace DevNotePad.Service
                 throw new ArgumentNullException(nameof(ui));
             }
 
-            if (currentFindDialog == null)
+            var facade = FacadeFactory.Create();
+            var vw = facade.Get<FindDialogViewModel>(Bootstrap.ViewModelFindDialog);
+            if (vw == null)
             {
-                currentFindDialog = new FindDialog() { Owner = owner};
-                findDialogViewModel = new FindDialogViewModel(ui, currentFindDialog);
-                currentFindDialog.DataContext = findDialogViewModel;
+                
             }
 
-            currentFindDialog.Show();
+            //if (currentFindDialog == null)
+            //{
+            //    currentFindDialog = new FindDialog() { Owner = owner};
+            //    findDialogViewModel = new FindDialogViewModel(ui, currentFindDialog);
+            //    currentFindDialog.DataContext = findDialogViewModel;
+            //}
+
+            //var visibleState = currentFindDialog.Visibility;
+            //if (visibleState == Visibility.Visible)
+            //{
+            //    currentFindDialog.Focus();
+            //}
+
+            //currentFindDialog.Show();
         }
 
         public void OpenReplaceDialog(IMainViewUi ui)
         {
-            if (ui == null)
-            {
-                throw new ArgumentNullException(nameof(ui));
-            }
+            //if (ui == null)
+            //{
+            //    throw new ArgumentNullException(nameof(ui));
+            //}
 
-            if (currentReplaceDialog == null)
-            {
-                currentReplaceDialog = new ReplaceDialog() { Owner = owner};
-                replaceDialogViewModel = new ReplaceDialogViewModel(ui, currentReplaceDialog);
-            }
+            //if (currentReplaceDialog == null)
+            //{
+            //    currentReplaceDialog = new ReplaceDialog() { Owner = owner};
+            //    replaceDialogViewModel = new ReplaceDialogViewModel(ui, currentReplaceDialog);
+            //}
 
-            currentReplaceDialog.Show();
+            //currentReplaceDialog.Show();
         }
 
         public bool ShowConfirmationDialog(string question, string title)
@@ -126,6 +140,5 @@ namespace DevNotePad.Service
             errorDialog.ShowDialog();
         }
 
-        
     }
 }

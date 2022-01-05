@@ -16,6 +16,7 @@ namespace DevNotePad.ViewModel
 
         string GetText(bool selected);
 
+        int GetCurrentPosition();
         void SetText(string text);
 
         void SetFilename(string filename);
