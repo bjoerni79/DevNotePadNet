@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterOwner" 
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
         >
 
     <Window.Resources>

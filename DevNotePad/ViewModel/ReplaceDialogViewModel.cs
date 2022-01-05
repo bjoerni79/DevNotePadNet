@@ -7,15 +7,12 @@ using System.Threading.Tasks;
 
 namespace DevNotePad.ViewModel
 {
-    public class ReplaceDialogViewModel : AbstractViewModel
+    public class ReplaceDialogViewModel : MainViewUiViewModel
     {
-        private IMainViewUi ui;
-        private IDialog dialog;
 
-        public ReplaceDialogViewModel(IMainViewUi mainViewUi, IDialog dialogUi)
+        public ReplaceDialogViewModel()
         {
-            ui = mainViewUi;
-            dialog = dialogUi;
+
         }
 
 

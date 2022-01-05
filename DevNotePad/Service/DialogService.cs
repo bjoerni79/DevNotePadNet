@@ -19,8 +19,6 @@ namespace DevNotePad.Service
         // This is a work around, which simulates the ShowDialog method call
         private FindDialog? currentFindDialog;
         private ReplaceDialog? currentReplaceDialog;
-        private FindDialogViewModel? findDialogViewModel;
-        private ReplaceDialogViewModel? replaceDialogViewModel;
 
         internal DialogService(Window owner)
         {
@@ -34,43 +32,67 @@ namespace DevNotePad.Service
                 throw new ArgumentNullException(nameof(ui));
             }
 
+            // Maintain only one view model independant from IMainViewUi and IDialog instance
             var facade = FacadeFactory.Create();
-            var vw = facade.Get<FindDialogViewModel>(Bootstrap.ViewModelFindDialog);
-            if (vw == null)
+
+            FindDialogViewModel vm;
+            var isVmAvailable = facade.Exists(Bootstrap.ViewModelFindDialog);
+            if (isVmAvailable)
             {
-                
+                vm = facade.Get<FindDialogViewModel>(Bootstrap.ViewModelFindDialog);
+            }
+            else
+            {
+                vm = new FindDialogViewModel();
+                facade.AddUnique(vm, Bootstrap.ViewModelFindDialog);
+            }
+            
+            // Workaround:  We have to close the view and open a new one. All data is stored in the view model
+            if (currentFindDialog != null)
+            {
+                currentFindDialog.Close();
             }
 
-            //if (currentFindDialog == null)
-            //{
-            //    currentFindDialog = new FindDialog() { Owner = owner};
-            //    findDialogViewModel = new FindDialogViewModel(ui, currentFindDialog);
-            //    currentFindDialog.DataContext = findDialogViewModel;
-            //}
+            currentFindDialog = new FindDialog() { Owner = owner };
+            currentFindDialog.DataContext = vm;
+            vm.Init(ui, currentFindDialog);
 
-            //var visibleState = currentFindDialog.Visibility;
-            //if (visibleState == Visibility.Visible)
-            //{
-            //    currentFindDialog.Focus();
-            //}
-
-            //currentFindDialog.Show();
+            currentFindDialog.Show();
         }
 
         public void OpenReplaceDialog(IMainViewUi ui)
         {
-            //if (ui == null)
-            //{
-            //    throw new ArgumentNullException(nameof(ui));
-            //}
+            if (ui == null)
+            {
+                throw new ArgumentNullException(nameof(ui));
+            }
 
-            //if (currentReplaceDialog == null)
-            //{
-            //    currentReplaceDialog = new ReplaceDialog() { Owner = owner};
-            //    replaceDialogViewModel = new ReplaceDialogViewModel(ui, currentReplaceDialog);
-            //}
+            // Maintain only one view model independant from IMainViewUi and IDialog instance
+            var facade = FacadeFactory.Create();
 
-            //currentReplaceDialog.Show();
+            ReplaceDialogViewModel vm;
+            var isVmAvailable = facade.Exists(Bootstrap.ViewModelReplaceDialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<ReplaceDialogViewModel>(Bootstrap.ViewModelReplaceDialog);
+            }
+            else
+            {
+                vm = new ReplaceDialogViewModel();
+                facade.AddUnique(vm, Bootstrap.ViewModelReplaceDialog);
+            }
+
+            // Workaround:  We have to close the view and open a new one. All data is stored in the view model
+            if (currentReplaceDialog != null)
+            {
+                currentReplaceDialog.Close();
+            }
+
+            currentReplaceDialog = new ReplaceDialog() { Owner = owner };
+            currentReplaceDialog.DataContext = vm;
+            vm.Init(ui, currentReplaceDialog);
+
+            currentReplaceDialog.Show();
         }
 
         public bool ShowConfirmationDialog(string question, string title)
