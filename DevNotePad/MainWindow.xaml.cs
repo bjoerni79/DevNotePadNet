@@ -141,16 +141,12 @@ namespace DevNotePad
 
         public void FocusTree()
         {
-            //TODO:  Check this code!
-            tabTreeView.Visibility = Visibility.Visible;
-            treeView.Focus();
+            tabTreeView.Focus();
         }
 
         public void FocusScratchPad()
         {
-            //TODO:  Check this code!
-            tabScratchPad.Visibility = Visibility.Visible;
-            scratchPad.Focus();
+            tabScratchPad.Focus();
         }
 
         public void CloseByViewModel()
