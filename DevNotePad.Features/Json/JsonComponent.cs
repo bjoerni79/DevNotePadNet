@@ -47,14 +47,10 @@ namespace DevNotePad.Features.Json
 
         public string ParseToString(string jsonText)
         {
-            // Read the JSON text
-            JsonDocument document = Read(jsonText);
-
-            var builder = new StringBuilder();
-            var root = document.RootElement;
-
-            DomParserOld(root, builder);
-            return builder.ToString();
+            var rootNode = ParseToTree(jsonText);
+            var stringBuilder = new StringBuilder();
+            
+            return stringBuilder.ToString();
         }
 
         public ItemNode ParseToTree(string jsonText)

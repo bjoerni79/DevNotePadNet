@@ -32,7 +32,7 @@ namespace DevNotePad.ViewModel
         private DateTime latestTimeStamp;
         private string fileName;
 
-        private bool LineWrapMode { get; set; }
+        public bool LineWrapMode { get; private set; }
         private bool ScrollbarMode { get; set; }
 
         public ObservableCollection<ItemNode>? Nodes { get; set; }
@@ -72,7 +72,6 @@ namespace DevNotePad.ViewModel
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
-            ToggleScrollbar = new DefaultCommand(OnToggleScrollbar);
 
             // ScratchPad
             ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
@@ -121,7 +120,6 @@ namespace DevNotePad.ViewModel
 
         // Layout
 
-        public IRefreshCommand ToggleScrollbar { get; set; }
         public IRefreshCommand ToggleLineWrap { get; set; }
 
         // Tools
@@ -200,18 +198,6 @@ namespace DevNotePad.ViewModel
         private void OnClose()
         {
             Ui!.CloseByViewModel();
-        }
-
-        private void OnToggleScrollbar()
-        {
-            var settings = GetSettings();
-
-            var scrollbarMOde = settings.ScrollbarAlwaysOn;
-            ScrollbarMode = !scrollbarMOde;
-
-            settings.ScrollbarAlwaysOn = ScrollbarMode;
-            RaisePropertyChange("ScrollbarMode");
-            ApplySettings();
         }
 
         private void OnToggleTextWrap()
@@ -479,10 +465,10 @@ namespace DevNotePad.ViewModel
 
             if (Ui != null)
             {
-                ScrollbarMode = settings.ScrollbarAlwaysOn;
+                //ScrollbarMode = settings.ScrollbarAlwaysOn;
                 LineWrapMode = settings.LineWrap;
 
-                Ui.SetScrollbars(ScrollbarMode);
+                //Ui.SetScrollbars(ScrollbarMode);
                 Ui.SetWordWrap(LineWrapMode);
             }
 

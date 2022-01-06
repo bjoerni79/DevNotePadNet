@@ -98,7 +98,7 @@ namespace DevNotePad.ViewModel
                     ui.SetText(ReplaceWith, true);
                 }
 
-                string notifier = String.Format("String replaced at caret {0}", ui.GetCurrentPosition());
+                string notifier = "Search Pattern is replaced";
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, false));
             }
 
@@ -126,7 +126,10 @@ namespace DevNotePad.ViewModel
                     ui.SelectText(result.StartIndex, result.Length);
                     ui.SetText(ReplaceWith, true);
 
+                    // Increase the counter and update the search text
+                    content = ui.GetText(false);
                     replaceCount++;
+
                     result = searchEngine.RunSearch(content);
                 }
 
@@ -139,10 +142,12 @@ namespace DevNotePad.ViewModel
                 }
                 if (replaceCount == 1)
                 {
+                    isWarning = false;
                     notifier = "One replace action performed";
                 }
                 if (replaceCount > 1)
                 {
+                    isWarning = false;
                     notifier = String.Format("Replaced action performed {0} times", replaceCount);
                 }
 
