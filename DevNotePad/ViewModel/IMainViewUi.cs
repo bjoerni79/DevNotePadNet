@@ -16,6 +16,7 @@ namespace DevNotePad.ViewModel
 
         string GetText(bool selected);
 
+        int GetCurrentPosition();
         void SetText(string text);
 
         void SetFilename(string filename);
@@ -35,5 +36,7 @@ namespace DevNotePad.ViewModel
         void CloseByViewModel();
 
         void SelectText(int startIndex, int length);
+
+        void PerformClipboardAction(ClipboardActionEnum action);
     }
 }

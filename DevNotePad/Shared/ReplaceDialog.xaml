@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterOwner" 
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
         >
 
     <Window.Resources>
@@ -49,22 +49,23 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource titleLabel}" >Search for:</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource defaultTextBox}">test123</TextBox>
+        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource defaultTextBox}" Text="{Binding Path=SearchFor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
         <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource titleLabel}" >Replace with:</Label>
-        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource defaultTextBox}">test456</TextBox>
+        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource defaultTextBox}" Text="{Binding Path=ReplaceWith,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-            <CheckBox Style="{StaticResource defaultCheckBox}">Igore lower/capital letter</CheckBox>
+            <CheckBox Style="{StaticResource defaultCheckBox}" IsChecked="{Binding Path=IgnoreLetterType,Mode=TwoWay}" >Igore lower/capital letter</CheckBox>
+            <CheckBox Style="{StaticResource defaultCheckBox}" IsChecked="{Binding Path=StartFromCurrentPosition,Mode=TwoWay}">Start from Current Position</CheckBox>
 
         </StackPanel>
 
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Orientation="Horizontal">
-            <Button IsDefault="True" Style="{StaticResource dialogButton}">Next</Button>
-            <Button Style="{StaticResource dialogButton}">Replace</Button>
-            <Button Style="{StaticResource dialogButton}">Next</Button>
-            <Button Style="{StaticResource dialogButton}">Replace All</Button>
-            <Button IsCancel="True" Style="{StaticResource dialogButton}">Cancel</Button>
+            <Button IsDefault="True" Style="{StaticResource dialogButton}" Command="{Binding Path=Find}" >Find</Button>
+            <Button Style="{StaticResource dialogButton}" Command="{Binding Path=FindNext}" >Find Next</Button>
+            <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Replace}">Replace</Button>
+            <Button Style="{StaticResource dialogButton}" Command="{Binding Path=ReplaceAll}">Replace All</Button>
+            <Button IsCancel="True" Style="{StaticResource dialogButton}" Command="{Binding Path=Cancel}">Cancel</Button>
         </StackPanel>
         
     </Grid>

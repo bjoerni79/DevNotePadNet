@@ -22,5 +22,7 @@ namespace DevNotePad.Service
         bool ShowConfirmationDialog(string question, string title,string okButtonText);
 
         void OpenFindDialog(IMainViewUi ui);
+
+        void OpenReplaceDialog(IMainViewUi ui);
     }
 }

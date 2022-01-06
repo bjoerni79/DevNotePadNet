@@ -17,11 +17,16 @@ namespace DevNotePad.Shared
     /// <summary>
     /// Interaction logic for ReplaceDialog.xaml
     /// </summary>
-    public partial class ReplaceDialog : Window
+    public partial class ReplaceDialog : Window, IDialog
     {
         public ReplaceDialog()
         {
             InitializeComponent();
+        }
+
+        public void CloseDialog(bool confirmed)
+        {
+            Close();
         }
     }
 }

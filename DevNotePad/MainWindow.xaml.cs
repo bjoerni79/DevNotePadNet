@@ -27,23 +27,6 @@ namespace DevNotePad
     public partial class MainWindow : Window, IMainViewUi, IEventListener
     {
 
-        /*
-         *  Properties:
-         *  LineCount : https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.textbox.linecount?view=windowsdesktop-6.0#System_Windows_Controls_TextBox_LineCount
-         * 
-         *  Methods:
-         *  Copy()
-         *  Cut()
-         *  Paste
-         *  Undo
-         *  Redo
-         *  
-         *  Select(start, length)
-         *  Select All
-         *  
-         *  BeginChange / EndChange()...
-         */
-
         public MainWindow()
         {
             InitializeComponent();
@@ -122,6 +105,10 @@ namespace DevNotePad
             }
         }
 
+        public int GetCurrentPosition()
+        {
+            return editor.CaretIndex;
+        }
         public void SetFilename(string filename)
         {
             //TODO: Move the logic to the View Model
@@ -154,16 +141,12 @@ namespace DevNotePad
 
         public void FocusTree()
         {
-            //TODO:  Check this code!
-            tabTreeView.Visibility = Visibility.Visible;
-            treeView.Focus();
+            tabTreeView.Focus();
         }
 
         public void FocusScratchPad()
         {
-            //TODO:  Check this code!
-            tabScratchPad.Visibility = Visibility.Visible;
-            scratchPad.Focus();
+            tabScratchPad.Focus();
         }
 
         public void CloseByViewModel()
@@ -173,10 +156,31 @@ namespace DevNotePad
 
         public void SelectText(int startIndex, int length)
         {
-            editor.SelectionStart = startIndex;
-            editor.SelectionLength = length;
+            editor.Focus();
+            editor.Select(startIndex, length);
 
-            //editor.Select(startIndex, length);
+            //var selectedText = editor.SelectedText;
+
+        }
+
+        public void PerformClipboardAction(ClipboardActionEnum action)
+        {
+
+            switch (action)
+            {
+                case ClipboardActionEnum.Copy:
+                    editor.Copy();
+                    break;
+                case ClipboardActionEnum.Paste:
+                    editor.Paste();
+                    break;
+                case ClipboardActionEnum.Cut:
+                    editor.Cut();
+                    break;
+                case ClipboardActionEnum.SelectAll:
+                    editor.SelectAll();
+                    break;
+            }
         }
 
         #endregion
@@ -223,7 +227,6 @@ namespace DevNotePad
         }
 
         #endregion
-
 
         #region Event Delegates
 
@@ -281,37 +284,7 @@ namespace DevNotePad
                 vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
             }
 
-            UpdatePosition();
         }
-
-        private void UpdatePosition()
-        {
-            var caredIndex = editor.CaretIndex;
-            var lineCount = editor.LineCount;
-
-            var row = 0;
-            var col = 0;
-
-            //for (int curLine = 0; curLine < lineCount; curLine++)
-            //{
-            //    //TODO: Is there a better way, i.e. using the control directly?
-            //    var firstCharacterIndex = editor.GetCharacterIndexFromLineIndex(curLine);
-
-            //    if (firstCharacterIndex > caredIndex)
-            //    {
-            //        // Stop Row detected
-
-            //        row = curLine;
-            //        col = caredIndex - firstCharacterIndex;
-            //        break;
-            //    }
-            //}
-
-            //currentPositionLabel.Content = String.Format("Row : {0} Col : {1}", row, col);
-            currentPositionLabel.Content = String.Format("CaretIndex : {0}", caredIndex);
-        }
-
-
 
         #endregion
 

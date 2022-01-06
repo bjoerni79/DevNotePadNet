@@ -32,10 +32,12 @@ namespace DevNotePad.ViewModel
         private DateTime latestTimeStamp;
         private string fileName;
 
-        private bool LineWrapMode { get; set; }
+        public bool LineWrapMode { get; private set; }
         private bool ScrollbarMode { get; set; }
 
         public ObservableCollection<ItemNode>? Nodes { get; set; }
+
+        public string State { get; private set; }
 
         public MainViewModel()
         {
@@ -49,7 +51,16 @@ namespace DevNotePad.ViewModel
 
             // Edit
             Find = new DefaultCommand(OnFind);
+            Replace = new DefaultCommand(OnReplace);
             CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
+            // Cut
+            Cut = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Cut));
+            // Copy
+            Copy = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Copy));
+            // Paste
+            Paste = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Paste));
+            // Select All
+            SelectAll = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.SelectAll));
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
@@ -61,7 +72,6 @@ namespace DevNotePad.ViewModel
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
-            ToggleScrollbar = new DefaultCommand(OnToggleScrollbar);
 
             // ScratchPad
             ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
@@ -74,6 +84,7 @@ namespace DevNotePad.ViewModel
 
             fileName = "Not Defined";
             initialText = String.Empty;
+            State = String.Empty;
         }
 
         #region Commands
@@ -96,11 +107,19 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand Find { get; set; }
 
+        public IRefreshCommand Replace { get; set; }
         public IRefreshCommand CopyToScratchPad { get; set; }
+
+        public IRefreshCommand Cut { get; set; }
+
+        public IRefreshCommand Copy { get; set; }
+
+        public IRefreshCommand Paste { get; set; }
+
+        public IRefreshCommand SelectAll { get; set; }
 
         // Layout
 
-        public IRefreshCommand ToggleScrollbar { get; set; }
         public IRefreshCommand ToggleLineWrap { get; set; }
 
         // Tools
@@ -179,18 +198,6 @@ namespace DevNotePad.ViewModel
         private void OnClose()
         {
             Ui!.CloseByViewModel();
-        }
-
-        private void OnToggleScrollbar()
-        {
-            var settings = GetSettings();
-
-            var scrollbarMOde = settings.ScrollbarAlwaysOn;
-            ScrollbarMode = !scrollbarMOde;
-
-            settings.ScrollbarAlwaysOn = ScrollbarMode;
-            RaisePropertyChange("ScrollbarMode");
-            ApplySettings();
         }
 
         private void OnToggleTextWrap()
@@ -422,6 +429,12 @@ namespace DevNotePad.ViewModel
             dialogService.OpenFindDialog(Ui);
         }
 
+        private void OnReplace()
+        {
+            var dialogService = GetDialogService();
+            dialogService.OpenReplaceDialog(Ui);
+        }
+
         private void OnCopyToScratchPad()
         {
             var isSelected = Ui!.IsTextSelected();
@@ -452,10 +465,10 @@ namespace DevNotePad.ViewModel
 
             if (Ui != null)
             {
-                ScrollbarMode = settings.ScrollbarAlwaysOn;
+                //ScrollbarMode = settings.ScrollbarAlwaysOn;
                 LineWrapMode = settings.LineWrap;
 
-                Ui.SetScrollbars(ScrollbarMode);
+                //Ui.SetScrollbars(ScrollbarMode);
                 Ui.SetWordWrap(LineWrapMode);
             }
 
@@ -478,6 +491,9 @@ namespace DevNotePad.ViewModel
                 {
                     currentState = EditorState.Changed;
                 }
+
+                State = "Changed";
+                RaisePropertyChange("State");
             }
         }
 
@@ -490,6 +506,15 @@ namespace DevNotePad.ViewModel
         #endregion
 
         #region Internal Logic
+
+        private void PerfromClipboardAction(ClipboardActionEnum action)
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                Ui!.PerformClipboardAction(action);
+            }
+        }
 
         /// <summary>
         /// Handles the internal save of the current Text and is called by Save and Save As
@@ -512,11 +537,13 @@ namespace DevNotePad.ViewModel
                 latestTimeStamp = DateTime.Now;
 
 
-                RaisePropertyChange("FileName");
                 fileName = targetfilename;
                 Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
+
+                State = "Saved";
+                RaisePropertyChange("State");
             }
             catch (Exception ex)
             {
@@ -542,12 +569,12 @@ namespace DevNotePad.ViewModel
 
                 initialText = ioService.ReadTextFile(fileName);
                 Ui!.SetText(initialText);
-
-                RaisePropertyChange("Text");
-                RaisePropertyChange("FileName");
                 Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("File is loaded", false));
+
+                State = "Loaded";
+                RaisePropertyChange("State");
             }
             catch (Exception ex)
             {
@@ -583,6 +610,9 @@ namespace DevNotePad.ViewModel
                 Ui.SetFilename(fileName);
 
                 TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("New file created", false));
+
+                State = "New";
+                RaisePropertyChange("State");
             }
         }
 
