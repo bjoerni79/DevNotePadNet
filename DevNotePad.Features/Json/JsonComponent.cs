@@ -244,9 +244,33 @@ namespace DevNotePad.Features.Json
                 var options = new JsonDocumentOptions() { AllowTrailingCommas = true };
                 document = JsonDocument.Parse(jsonCoding, options);
             }
+            catch (JsonException jsonException)
+            {
+                var featureException = new FeatureException("Generic Issue", jsonException);
+                //featureException.Details = jsonException.
+
+                var detailsBuilder = new StringBuilder();
+                if (jsonException.Message != null)
+                {
+                    detailsBuilder.AppendLine(jsonException.Message);
+                }
+
+                if (jsonException.LineNumber.HasValue)
+                {
+                    detailsBuilder.AppendFormat("Line : {0}\n", jsonException.LineNumber.Value + 1);
+                }
+
+                if (jsonException.BytePositionInLine.HasValue)
+                {
+                    detailsBuilder.AppendFormat("Position in Line: {0}", jsonException.BytePositionInLine.Value + 1);
+                }
+
+                featureException.Details = detailsBuilder.ToString();
+                throw (featureException);
+            }
             catch (Exception ex)
             {
-                throw new FeatureException("Cannot read JSON coding", ex);
+                throw new FeatureException("Generic Issue", ex);
             }
 
             return document;

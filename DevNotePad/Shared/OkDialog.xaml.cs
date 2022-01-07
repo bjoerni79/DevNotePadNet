@@ -32,12 +32,18 @@ namespace DevNotePad.Shared
             Close();
         }
 
-        public void Init(string message, string component, string title)
+        public void Init(string message, string component, string title, string? details)
         {
             var vm = new OkDialogViewModel();
             vm.Init(message, component, title, this);
+            vm.Details = details;
 
             DataContext = vm;
+        }
+
+        public void Init(string message, string component, string title)
+        {
+            Init(message, component, title, null);
         }
     }
 }

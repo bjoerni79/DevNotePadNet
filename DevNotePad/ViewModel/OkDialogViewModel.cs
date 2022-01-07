@@ -36,6 +36,10 @@ namespace DevNotePad.ViewModel
 
         public string Message { get; set; }
 
+        public bool ShowDetals { get; set; }
+
+        public string? Details { get; set; }
+
         // OK Button
         public ICommand Confirm { get; set; }
 

@@ -124,8 +124,8 @@
                     <MenuItem Header="Format" Command="{Binding Path=JsonFormatter}" />
                 </MenuItem>
                 <MenuItem Header="XML">
-                    <!--<MenuItem Header="To Text View" Command="{Binding Path=XmlToStringParser}" />
-                    <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />-->
+                    <MenuItem Header="To Text View" Command="{Binding Path=XmlToStringParser}" />
+                    <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />
                     <MenuItem Header="Format" Command="{Binding Path=XmlFormatter}"/>
                     <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
                 </MenuItem>
@@ -189,7 +189,7 @@
                      Grid.RowSpan="2" 
                      Style="{StaticResource editorTextbox}"
                      TextChanged="editor_TextChanged" 
-                     ContextMenu="{StaticResource editorContextMenu}"
+                     ContextMenu="{StaticResource editorContextMenu}" 
             />
 
             <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"   HorizontalAlignment="Center"

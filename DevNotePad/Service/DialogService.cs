@@ -1,4 +1,5 @@
-﻿using DevNotePad.MVVM;
+﻿using DevNotePad.Features;
+using DevNotePad.MVVM;
 using DevNotePad.Shared;
 using DevNotePad.ViewModel;
 using Microsoft.Win32;
@@ -120,7 +121,16 @@ namespace DevNotePad.Service
             var dialogTitle = "Error";
             var errorDialog = new OkDialog();
             errorDialog.Owner = owner;
-            errorDialog.Init(message, component, dialogTitle);
+ 
+            var featureException = ex as FeatureException;
+            if (featureException != null)
+            {
+                errorDialog.Init(message, component, dialogTitle, featureException.Details);
+            }
+            else
+            {
+                errorDialog.Init(message, component, dialogTitle);
+            }
 
             errorDialog.ShowDialog();
         }

@@ -33,6 +33,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.3*"/>
             <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
@@ -43,11 +44,14 @@
 
         <Label Name="focusElement" Grid.Row="0" Style="{StaticResource ResourceKey=description}">Component</Label>
         <Label Grid.Row="1" Style="{StaticResource ResourceKey=description}">Message:</Label>
-
+        <Label Grid.Row="2" Style="{StaticResource ResourceKey=description}">Details</Label>
+        
+        
         <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource ResourceKey=details}" Content="{Binding Path=Component}" ></Label>
         <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource ResourceKey=details}" Content="{Binding Path=Message}" />
+        <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource ResourceKey=details}" Content="{Binding Path=Details}" />
 
-        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Width="80" Height="25" IsDefault="True" Content="OK" Command="{Binding Path=Confirm}" />
         </StackPanel>
         

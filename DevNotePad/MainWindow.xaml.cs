@@ -293,5 +293,6 @@ namespace DevNotePad
             var vm = DataContext as IMainViewModel;
             return vm;
         }
+
     }
 }

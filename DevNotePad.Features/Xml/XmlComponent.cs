@@ -44,7 +44,9 @@ namespace DevNotePad.Features.Xml
 
         public string ParseToString(string xmlText)
         {
-            throw new NotImplementedException();
+            var rootNode = ParseToTree(xmlText);
+            var converter = new ItemNodeConverter();
+            return converter.ToTreeAsString(rootNode);
         }
 
         public ItemNode ParseToTree(string xmlText)

@@ -33,7 +33,6 @@ namespace DevNotePad.ViewModel
         private string fileName;
 
         public bool LineWrapMode { get; private set; }
-        private bool ScrollbarMode { get; set; }
 
         public ObservableCollection<ItemNode>? Nodes { get; set; }
 
@@ -41,46 +40,7 @@ namespace DevNotePad.ViewModel
 
         public MainViewModel()
         {
-            // File
-            New = new DefaultCommand(OnNew);
-            Open = new DefaultCommand(OnOpen);
-            Save = new DefaultCommand(OnSave);
-            SaveAs = new DefaultCommand(OnSaveAs);
-            Reload = new DefaultCommand(OnReload);
-            Close = new DefaultCommand(OnClose);
-
-            // Edit
-            Find = new DefaultCommand(OnFind);
-            Replace = new DefaultCommand(OnReplace);
-            CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
-            // Cut
-            Cut = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Cut));
-            // Copy
-            Copy = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Copy));
-            // Paste
-            Paste = new DefaultCommand(()=>PerfromClipboardAction(ClipboardActionEnum.Paste));
-            // Select All
-            SelectAll = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.SelectAll));
-
-            //Tools
-            JsonFormatter = new DefaultCommand(OnJsonFormatter);
-            JsonToStringParser = new DefaultCommand(OnJsonToString);
-            JsonToTreeParser = new DefaultCommand(OnJsonToTree);
-            XmlFormatter = new DefaultCommand(OnXmlFormatter);
-            XmlToStringParser = new DefaultCommand(OnXmlToString);
-            XmlToTreeParser = new DefaultCommand(OnXmlToTree);
-
-            // Layout
-            ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
-
-            // ScratchPad
-            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
-            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad);
-            ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad);
-            ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad);
-
-            // About
-            About = new DefaultCommand(OnAbout);
+            InitMenu();
 
             fileName = "Not Defined";
             initialText = String.Empty;
@@ -91,62 +51,62 @@ namespace DevNotePad.ViewModel
 
         // File
 
-        public IRefreshCommand New { get; set; }
+        public IRefreshCommand? New { get; set; }
 
-        public IRefreshCommand Open { get; set; }
+        public IRefreshCommand? Open { get; set; }
 
-        public IRefreshCommand Save { get; set; }
+        public IRefreshCommand? Save { get; set; }
 
-        public IRefreshCommand SaveAs { get; set; }
+        public IRefreshCommand? SaveAs { get; set; }
 
-        public IRefreshCommand Reload { get; set; }
+        public IRefreshCommand? Reload { get; set; }
 
-        public IRefreshCommand Close { get; set; }
+        public IRefreshCommand? Close { get; set; }
 
         // Edit
 
-        public IRefreshCommand Find { get; set; }
+        public IRefreshCommand? Find { get; set; }
 
-        public IRefreshCommand Replace { get; set; }
-        public IRefreshCommand CopyToScratchPad { get; set; }
+        public IRefreshCommand? Replace { get; set; }
+        public IRefreshCommand? CopyToScratchPad { get; set; }
 
-        public IRefreshCommand Cut { get; set; }
+        public IRefreshCommand? Cut { get; set; }
 
-        public IRefreshCommand Copy { get; set; }
+        public IRefreshCommand? Copy { get; set; }
 
-        public IRefreshCommand Paste { get; set; }
+        public IRefreshCommand? Paste { get; set; }
 
-        public IRefreshCommand SelectAll { get; set; }
+        public IRefreshCommand? SelectAll { get; set; }
 
         // Layout
 
-        public IRefreshCommand ToggleLineWrap { get; set; }
+        public IRefreshCommand? ToggleLineWrap { get; set; }
 
         // Tools
 
-        public IRefreshCommand JsonFormatter { get; set; }
+        public IRefreshCommand? JsonFormatter { get; set; }
 
-        public IRefreshCommand JsonToStringParser { get; set; }
+        public IRefreshCommand? JsonToStringParser { get; set; }
 
-        public IRefreshCommand JsonToTreeParser { get; set; }
+        public IRefreshCommand? JsonToTreeParser { get; set; }
 
-        public IRefreshCommand XmlFormatter { get; set; }
+        public IRefreshCommand? XmlFormatter { get; set; }
 
-        public IRefreshCommand XmlToStringParser { get; set; }
+        public IRefreshCommand? XmlToStringParser { get; set; }
 
-        public IRefreshCommand XmlToTreeParser { get; set; }
+        public IRefreshCommand? XmlToTreeParser { get; set; }
 
-        public IRefreshCommand ScratchPadClearAll { get; set; }
+        public IRefreshCommand? ScratchPadClearAll { get; set; }
 
-        public IRefreshCommand ScratchPadClearText { get; set; }
+        public IRefreshCommand? ScratchPadClearText { get; set; }
 
-        public IRefreshCommand ScratchPadClearTree { get; set; }
+        public IRefreshCommand? ScratchPadClearTree { get; set; }
 
-        public IRefreshCommand ScratchPadCopyClipboard { get; set; }
+        public IRefreshCommand? ScratchPadCopyClipboard { get; set; }
 
         // About
 
-        public IRefreshCommand About { get; set; }
+        public IRefreshCommand? About { get; set; }
 
         #endregion
 
@@ -451,12 +411,6 @@ namespace DevNotePad.ViewModel
         {
             Ui = ui;
             InternalNew();
-
-            if (Ui != null)
-            {
-                CreateFindViewModel();
-                CreateReplaceViewModel();
-            }
         }
 
         public void ApplySettings()
@@ -683,16 +637,48 @@ namespace DevNotePad.ViewModel
             return settings;
         }
 
-        private void CreateFindViewModel()
+        private void InitMenu()
         {
-            //TODO:  Use the IMainViewUi interface for linking the vm with the editor
-            //TODO: Add it to the IoC container
-        }
+            // File
+            New = new DefaultCommand(OnNew);
+            Open = new DefaultCommand(OnOpen);
+            Save = new DefaultCommand(OnSave);
+            SaveAs = new DefaultCommand(OnSaveAs);
+            Reload = new DefaultCommand(OnReload);
+            Close = new DefaultCommand(OnClose);
 
-        private void CreateReplaceViewModel()
-        {
-            //TODO:  Use the IMainViewUi interface for linking the vm with the editor
-            //TODO: Add it to the IoC container
+            // Edit
+            Find = new DefaultCommand(OnFind);
+            Replace = new DefaultCommand(OnReplace);
+            CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
+            // Cut
+            Cut = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.Cut));
+            // Copy
+            Copy = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.Copy));
+            // Paste
+            Paste = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.Paste));
+            // Select All
+            SelectAll = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.SelectAll));
+
+            //Tools
+            JsonFormatter = new DefaultCommand(OnJsonFormatter);
+            JsonToStringParser = new DefaultCommand(OnJsonToString);
+            JsonToTreeParser = new DefaultCommand(OnJsonToTree);
+            XmlFormatter = new DefaultCommand(OnXmlFormatter);
+            XmlToStringParser = new DefaultCommand(OnXmlToString);
+            XmlToTreeParser = new DefaultCommand(OnXmlToTree);
+
+            // Layout
+            ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
+
+            // ScratchPad
+            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
+            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad);
+            ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad);
+            ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad);
+
+            // About
+            About = new DefaultCommand(OnAbout);
         }
 
         #endregion

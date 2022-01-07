@@ -17,5 +17,7 @@ namespace DevNotePad.Features
         {
 
         }
+
+        public string Details { get; set; }
     }
 }
