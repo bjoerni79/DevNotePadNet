@@ -284,11 +284,17 @@ namespace DevNotePad.ViewModel
 
                 try
                 {
-                    //TODO
+                    IXmlComponent jsonComponent = FeatureFactory.CreateXml();
+                    var la = jsonComponent.ParseToString(input);
+
+                    Ui.AddToScratchPad(la);
+                    Ui.FocusScratchPad();
+
+                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, XmlComponent);
+                    ShowError(featureException, JsonComponent);
                     TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }

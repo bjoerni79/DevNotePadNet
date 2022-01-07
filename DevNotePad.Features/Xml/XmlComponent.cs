@@ -13,7 +13,6 @@ namespace DevNotePad.Features.Xml
     {
         internal XmlComponent()
         {
-
         }
 
         public string Formatter(string xmlText)
@@ -70,51 +69,85 @@ namespace DevNotePad.Features.Xml
 
         ItemNode ParseDom(XmlNode node)
         {
-            var itemNode = new ItemNode();
+            ItemNode itemNode;
             var nodeType = node.NodeType;
 
-            // Root Node of the DOM
-            if (nodeType == XmlNodeType.Document)
-            {
-                itemNode.Name = "Root";
-                itemNode.Description = String.Empty;
-                itemNode.Style = ItemNodeStyle.Group;
-            }
+            var hasChild = node.HasChildNodes;
+            var isDocument = nodeType == XmlNodeType.Document;
+            var isElement = nodeType == XmlNodeType.Element; ;
+            var isMeta = nodeType == XmlNodeType.XmlDeclaration;
+
+            if (isMeta)
+                itemNode = HandleMetaDeclaration(node);
             else
             {
-                if (nodeType == XmlNodeType.XmlDeclaration)
-                {
-                    itemNode.Name = "Declaration";
-                }
+                itemNode = new ItemNode();
 
-                // Element Node of the DOM
-                if (nodeType == XmlNodeType.Element)
+                if (isElement)
                 {
+                    var attributes = node.Attributes;
+                    if (attributes != null && attributes.Count > 0)
+                    {
+                         AddAttributes(node, itemNode);
+                    }
+
                     itemNode.Name = node.Name;
+                    itemNode.Style = ItemNodeStyle.Focus;
                 }
 
-                // Text
-                if (nodeType == XmlNodeType.Text)
+                if (isDocument)
                 {
-                    itemNode.Name = "Text";
-                    itemNode.Description = node.InnerText;
+                    itemNode.Name = "Root";
+                    itemNode.Style = ItemNodeStyle.Group;
+                }
+
+                // Iterate over childs
+                if (hasChild)
+                {
+                    foreach (XmlNode childXmlNode in node.ChildNodes)
+                    {
+                        var child = ParseDom(childXmlNode);
+                        itemNode.Childs.Add(child);
+                    }
                 }
             }
 
+            return itemNode;
+        }
 
-            bool hasChilds = node.HasChildNodes;
-            if (hasChilds)
+        private void AddAttributes(XmlNode xmlNode, ItemNode itemNode)
+        {
+            if (xmlNode.Attributes != null && xmlNode.Attributes.Count > 0)
             {
-                foreach (XmlNode child in node.ChildNodes)
+                foreach (XmlAttribute curattrbute in xmlNode.Attributes)
                 {
-                    var childItem = ParseDom(child);
-                    itemNode.Childs.Add(childItem);
+                    var attributeNode = new ItemNode();
+                    var name = curattrbute.Name;
+                    var value = curattrbute.Value;
+
+                    attributeNode.Name = name;
+                    attributeNode.Description = value;
+                    attributeNode.Style = ItemNodeStyle.Default;
+
+                    itemNode.Childs.Add(attributeNode);
                 }
             }
+        }
 
-            var namespaceUri = node.NamespaceURI;
-            var name = node.Name;
-            var attributes = node.Attributes;
+        private ItemNode HandleMetaDeclaration(XmlNode node)
+        {
+            var itemNode = new ItemNode();
+
+            switch (node.NodeType)
+            {
+                case XmlNodeType.XmlDeclaration:
+                    itemNode.Name = "XML Declare";
+                    break;
+                default:
+                    itemNode.Name = node.Name;
+                    break;
+            }
+
 
             return itemNode;
         }
@@ -128,9 +161,18 @@ namespace DevNotePad.Features.Xml
                 document = new XmlDocument();
                 document.LoadXml(xmlText);
             }
+            catch (XmlException xmlException)
+            {
+                var featureException = new FeatureException("Could not load XML", xmlException);
+
+                var details = String.Format("Line : {0}\nPosition : {1}\nMessage = {2}", xmlException.LineNumber, xmlException.LinePosition, xmlException.Message);
+                featureException.Details = details;
+
+                throw featureException;
+            }
             catch (Exception e)
             {
-                throw new FeatureException("Could not load XML document",e);
+                throw new FeatureException("Generic Error while reading XML",e);
             }
 
             return document;
