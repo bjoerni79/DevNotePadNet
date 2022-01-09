@@ -28,8 +28,10 @@
 
     <Window.Resources>
 
+        <!-- Renders the style of the ItemNode-->
         <shared:ItemNodeStyleConverter x:Key="itemNodeStyleConverter" />
 
+        <!-- Enables/Disables the description row-->
         <shared:VisibilityToBoolConverter x:Key="descriptionVisibleConverter"/>
 
         <!-- Renders the tree -->
@@ -132,14 +134,9 @@
                     <MenuItem Header="Format" Command="{Binding Path=XmlFormatter}"/>
                     <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
                 </MenuItem>
-                <!--<MenuItem Header="Hex Coding">
-                    <MenuItem IsEnabled="False" Header="Parse Hex String"/>
-                    <MenuItem IsEnabled="False" Header="Format Hex String"/>
+                <MenuItem Header="Text">
+                    <MenuItem Header="Split"/>
                 </MenuItem>
-                <MenuItem Header="Base64">
-                    <MenuItem IsEnabled="False" Header="Decode"/>
-                    <MenuItem IsEnabled="False" Header="Encode"/>
-                </MenuItem>-->
 
             </MenuItem>
             <MenuItem Header="ScratchPad">
