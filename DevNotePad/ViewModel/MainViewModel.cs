@@ -82,6 +82,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? ToggleLineWrap { get; set; }
 
+
+
         // Tools
 
         public IRefreshCommand? JsonFormatter { get; set; }
@@ -107,6 +109,8 @@ namespace DevNotePad.ViewModel
         // About
 
         public IRefreshCommand? About { get; set; }
+
+        public IRefreshCommand? Refresh { get; set; }
 
         #endregion
 
@@ -409,6 +413,11 @@ namespace DevNotePad.ViewModel
             Ui.AddToScratchPad(text);
         }
 
+        private void OnRefresh()
+        {
+
+        }
+
         #endregion
 
         #region IMainViewModel
@@ -676,6 +685,7 @@ namespace DevNotePad.ViewModel
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
+            Refresh = new DefaultCommand(OnRefresh);
 
             // ScratchPad
             ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);

@@ -75,7 +75,7 @@ namespace DevNotePad.Features.Xml
             var hasChild = node.HasChildNodes;
             var isDocument = nodeType == XmlNodeType.Document;
             var isElement = nodeType == XmlNodeType.Element; ;
-            var isMeta = nodeType == XmlNodeType.XmlDeclaration;
+            var isMeta = nodeType == XmlNodeType.XmlDeclaration || nodeType == XmlNodeType.Comment;
 
             if (isMeta)
                 itemNode = HandleMetaDeclaration(node);
@@ -92,13 +92,13 @@ namespace DevNotePad.Features.Xml
                     }
 
                     itemNode.Name = node.Name;
-                    itemNode.Style = ItemNodeStyle.Focus;
+                    itemNode.Style = ItemNodeStyle.Element;
                 }
 
                 if (isDocument)
                 {
                     itemNode.Name = "Root";
-                    itemNode.Style = ItemNodeStyle.Group;
+                    itemNode.Style = ItemNodeStyle.Title; ;
                 }
 
                 // Iterate over childs
@@ -127,7 +127,7 @@ namespace DevNotePad.Features.Xml
 
                     attributeNode.Name = name;
                     attributeNode.Description = value;
-                    attributeNode.Style = ItemNodeStyle.Default;
+                    attributeNode.Style = ItemNodeStyle.Attribute;
 
                     itemNode.Childs.Add(attributeNode);
                 }
@@ -137,11 +137,16 @@ namespace DevNotePad.Features.Xml
         private ItemNode HandleMetaDeclaration(XmlNode node)
         {
             var itemNode = new ItemNode();
+            itemNode.Style = ItemNodeStyle.Default;
 
             switch (node.NodeType)
             {
                 case XmlNodeType.XmlDeclaration:
                     itemNode.Name = "XML Declare";
+                    break;
+                case XmlNodeType.Comment:
+                    itemNode.Name = "Comment";
+                    itemNode.Description = node.InnerText;
                     break;
                 default:
                     itemNode.Name = node.Name;

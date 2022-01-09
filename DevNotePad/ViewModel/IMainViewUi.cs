@@ -38,5 +38,7 @@ namespace DevNotePad.ViewModel
         void SelectText(int startIndex, int length);
 
         void PerformClipboardAction(ClipboardActionEnum action);
+
+        void ResetLayout();
     }
 }

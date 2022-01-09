@@ -15,9 +15,27 @@ namespace DevNotePad.Features.Shared
             Description = String.Empty;
             Style = ItemNodeStyle.Default;
             Childs = new ObservableCollection<ItemNode>();
+
         }
 
         public string Name { get; set; }
+
+        public bool DisplayDescription
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Description))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+
         public string Description { get; set; }
 
         public ItemNodeStyle Style { get; set; }

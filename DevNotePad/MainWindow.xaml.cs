@@ -183,6 +183,11 @@ namespace DevNotePad
             }
         }
 
+        public void ResetLayout()
+        {
+
+        }
+
         #endregion
 
         #region IEventListener

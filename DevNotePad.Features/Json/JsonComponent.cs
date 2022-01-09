@@ -86,6 +86,7 @@ namespace DevNotePad.Features.Json
                 // Object
                 node.Name = "Object";
                 node.Description = String.Empty;
+                node.Style = ItemNodeStyle.Element;
 
                 foreach (var parameter in element.EnumerateObject())
                 {
@@ -125,6 +126,7 @@ namespace DevNotePad.Features.Json
                         var stringBuilder = new StringBuilder();
                         RenderValue(parameterValue, stringBuilder);
 
+                        childNode.Style = ItemNodeStyle.Value;
                         childNode.Description = stringBuilder.ToString();
                     }
                 }
@@ -135,7 +137,7 @@ namespace DevNotePad.Features.Json
                 var sb = new StringBuilder();
                 RenderValue(element, sb);
 
-                node.Style = ItemNodeStyle.Default;
+                node.Style = ItemNodeStyle.Value;
                 node.Name = sb.ToString();
             }
         }

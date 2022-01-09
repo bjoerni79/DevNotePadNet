@@ -10,6 +10,9 @@ namespace DevNotePad.Features.Shared
     {
         Default,
         Group,
-        Focus
+        Title,
+        Element,
+        Attribute,
+        Value
     }
 }
