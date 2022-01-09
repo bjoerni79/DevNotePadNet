@@ -135,7 +135,7 @@
                     <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
                 </MenuItem>
                 <MenuItem Header="Text">
-                    <MenuItem Header="Split"/>
+                    <MenuItem Header="Split" Command="{Binding Path=TextSplit}"/>
                 </MenuItem>
 
             </MenuItem>

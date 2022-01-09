@@ -23,6 +23,7 @@ namespace DevNotePad.ViewModel
         private readonly string ApplicationComponent = "Application";
         private readonly string JsonComponent = "JSON";
         private readonly string XmlComponent = "XML";
+        private readonly string TextComponent = "Text";
 
         private IMainViewUi? Ui { get; set; }
 
@@ -97,6 +98,10 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? XmlToStringParser { get; set; }
 
         public IRefreshCommand? XmlToTreeParser { get; set; }
+
+        public IRefreshCommand? TextSplit { get; set; }
+
+        // ScratchPad
 
         public IRefreshCommand? ScratchPadClearAll { get; set; }
 
@@ -415,7 +420,29 @@ namespace DevNotePad.ViewModel
 
         private void OnRefresh()
         {
+            //TODO
+        }
 
+        private void OnTextSplit()
+        {
+            var isSelected = Ui!.IsTextSelected();
+            if (!isSelected)
+            {
+                TriggerToolbarNotification(new UpdateStatusBarParameter("No Text selected. Please select a text first", true));
+            }
+            else
+            {
+                try
+                {
+                    var formatter = new TextFormatter();
+
+                    //TODO: Write some smart code here...
+                }
+                catch (Exception ex)
+                {
+                    ShowError(ex, TextComponent);
+                }
+            }
         }
 
         #endregion
@@ -682,6 +709,7 @@ namespace DevNotePad.ViewModel
             XmlFormatter = new DefaultCommand(OnXmlFormatter);
             XmlToStringParser = new DefaultCommand(OnXmlToString);
             XmlToTreeParser = new DefaultCommand(OnXmlToTree);
+            TextSplit = new DefaultCommand(OnTextSplit);
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
