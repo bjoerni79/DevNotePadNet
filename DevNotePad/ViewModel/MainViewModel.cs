@@ -436,7 +436,10 @@ namespace DevNotePad.ViewModel
                 {
                     var formatter = new TextFormatter();
 
-                    //TODO: Write some smart code here...
+                    var text = Ui.GetText(true);
+                    var formattedText = formatter.SplitString(text);
+
+                    Ui.SetText(formattedText, true);
                 }
                 catch (Exception ex)
                 {
