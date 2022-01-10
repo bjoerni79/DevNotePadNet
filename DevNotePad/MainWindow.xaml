@@ -94,6 +94,13 @@
             <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=Copy}"/>
             <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=Paste}"/>
             <MenuItem Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
+            <Separator/>
+            <MenuItem Header="Split" Command="{Binding Path=TextSplit}"/>
+            <MenuItem Header="Group" Command="{Binding Path=TextGroup}"/>
+            <MenuItem Header="To Lower" Command="{Binding Path=TextToLower}"/>
+            <MenuItem Header="To Higher" Command="{Binding Path=TextToUpper}"/>
+            <MenuItem Header="Trim" Command="{Binding Path=TextTrim}" />
+            <MenuItem Header="Count" Command="{Binding Path=TextCountLength}"/>
         </ContextMenu>
         
     </Window.Resources>
@@ -136,6 +143,11 @@
                 </MenuItem>
                 <MenuItem Header="Text">
                     <MenuItem Header="Split" Command="{Binding Path=TextSplit}"/>
+                    <MenuItem Header="Group" Command="{Binding Path=TextGroup}"/>
+                    <MenuItem Header="To Lower" Command="{Binding Path=TextToLower}"/>
+                    <MenuItem Header="To Higher" Command="{Binding Path=TextToUpper}"/>
+                    <MenuItem Header="Trim" Command="{Binding Path=TextTrim}" />
+                    <MenuItem Header="Count" Command="{Binding Path=TextCountLength}"/>
                 </MenuItem>
 
             </MenuItem>

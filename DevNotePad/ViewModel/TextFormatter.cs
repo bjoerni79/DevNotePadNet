@@ -20,6 +20,88 @@ namespace DevNotePad.ViewModel
             this.setting = setting;
         }
 
+        internal string CountLength(String text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            var length = text.Length;
+            return String.Format("Length Selected : {0} Dec / 0x{1:X2} Hex", length, length);
+
+        }
+
+        internal string GroupString(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            var filteredText = FilterContent(text);
+
+            if (filteredText.Count() > 0)
+            {
+                return filteredText;
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        internal string ToUpper(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            if (text.Length > 0)
+            {
+                return text.ToUpper();
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        internal string Trim(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            if (text.Length > 0)
+            {
+                return text.Trim();
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        internal string ToLower(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            if (text.Length > 0)
+            {
+                return text.ToLower();
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
         internal string SplitString(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -41,9 +123,8 @@ namespace DevNotePad.ViewModel
 
                     splittedText.AppendFormat("{0}  ",group);
                 }
+
                 splittedText.Append(filteredText);
-
-
                 return splittedText.ToString();
             }
             else

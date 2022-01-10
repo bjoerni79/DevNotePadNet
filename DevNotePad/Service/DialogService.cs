@@ -21,6 +21,8 @@ namespace DevNotePad.Service
         private FindDialog? currentFindDialog;
         private ReplaceDialog? currentReplaceDialog;
 
+
+
         internal DialogService(Window owner)
         {
             this.owner = owner;
@@ -135,9 +137,9 @@ namespace DevNotePad.Service
             errorDialog.ShowDialog();
         }
 
-        public DialogReturnValue ShowOpenFileNameDialog(string title, string defaultExtension, string searchPattern)
+        public DialogReturnValue ShowOpenFileNameDialog(string defaultExtension)
         {
-            var openFileDialog = new OpenFileDialog();
+            var openFileDialog = new OpenFileDialog() { Filter=defaultExtension, DefaultExt="*.txt"};
             var result = openFileDialog.ShowDialog(owner);
 
             if (result.HasValue && result.Value)
@@ -148,9 +150,9 @@ namespace DevNotePad.Service
             return new DialogReturnValue(false, String.Empty);
         }
 
-        public DialogReturnValue ShowSaveFileDialog()
+        public DialogReturnValue ShowSaveFileDialog(string defaultExtension)
         {
-            var saveFileDialog = new SaveFileDialog();
+            var saveFileDialog = new SaveFileDialog() { Filter=defaultExtension, DefaultExt = "*.txt" };
             var result = saveFileDialog.ShowDialog(owner);
 
             if (result.HasValue && result.Value)

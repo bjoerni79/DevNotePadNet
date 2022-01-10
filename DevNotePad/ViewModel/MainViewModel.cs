@@ -25,6 +25,8 @@ namespace DevNotePad.ViewModel
         private readonly string XmlComponent = "XML";
         private readonly string TextComponent = "Text";
 
+        private const string DefaultExtension = "All|*.*|Text Files|*.txt|Log Files|*.log|XML|*.xml|JSON|*.json";
+
         private IMainViewUi? Ui { get; set; }
 
         private EditorState currentState;
@@ -101,6 +103,16 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? TextSplit { get; set; }
 
+        public IRefreshCommand? TextGroup { get; set; }
+
+        public IRefreshCommand? TextToLower { get; set; }
+
+        public IRefreshCommand? TextToUpper { get; set; }
+
+        public IRefreshCommand? TextTrim { get; set; }
+
+        public IRefreshCommand? TextCountLength { get; set; }
+
         // ScratchPad
 
         public IRefreshCommand? ScratchPadClearAll { get; set; }
@@ -134,7 +146,7 @@ namespace DevNotePad.ViewModel
         private void OnOpen()
         {
             var dialogService = GetDialogService();
-            var result = dialogService.ShowOpenFileNameDialog("Open New File", "*.txt", String.Empty);
+            var result = dialogService.ShowOpenFileNameDialog(DefaultExtension);
 
             if (result.IsConfirmed)
             {
@@ -156,7 +168,7 @@ namespace DevNotePad.ViewModel
         private void OnSaveAs()
         {
             var dialogService = GetDialogService();
-            var result = dialogService.ShowSaveFileDialog();
+            var result = dialogService.ShowSaveFileDialog(DefaultExtension);
 
             if (result.IsConfirmed)
             {
@@ -423,7 +435,7 @@ namespace DevNotePad.ViewModel
             //TODO
         }
 
-        private void OnTextSplit()
+        private void OnTextSplit(TextActionEnum textAction)
         {
             var isSelected = Ui!.IsTextSelected();
             if (!isSelected)
@@ -436,10 +448,53 @@ namespace DevNotePad.ViewModel
                 {
                     var formatter = new TextFormatter();
 
-                    var text = Ui.GetText(true);
-                    var formattedText = formatter.SplitString(text);
+                    bool isWarnung = false;
+                    bool doUpdate = true;
+                    string notifier;
 
-                    Ui.SetText(formattedText, true);
+                    var text = Ui.GetText(true);
+                    string formattedText;
+                    switch (textAction)
+                    {
+                        case TextActionEnum.ToLower:
+                            formattedText = formatter.ToLower(text);
+                            notifier ="Converted to lower chars";
+                            break;
+                        case TextActionEnum.ToUpper:
+                            formattedText = formatter.ToUpper(text);
+                            notifier ="Converted to upper chars";
+                            break;
+                        case TextActionEnum.Group:
+                            formattedText = formatter.GroupString(text);
+                            notifier = "grouped all chars";
+                            break;
+                        case TextActionEnum.Split:
+                            formattedText = formatter.SplitString(text);
+                            notifier = "splitted the chars";
+                            break;
+                        case TextActionEnum.Trim:
+                            formattedText = formatter.Trim(text);
+                            notifier = "trimmed the start and the end";
+                            break;
+                        case TextActionEnum.LengthCount:
+                            notifier = formatter.CountLength(text);
+                            doUpdate = false;
+                            formattedText = text;
+                            break;
+                        default:
+                            formattedText = text;
+                            isWarnung = true;
+                            notifier = "Unknown Text action detected";
+                            break;
+                    }
+
+                    TriggerToolbarNotification(new UpdateStatusBarParameter(notifier, isWarnung));
+
+                    if (doUpdate)
+                    {
+                        Ui.SetText(formattedText, true);
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
@@ -712,7 +767,12 @@ namespace DevNotePad.ViewModel
             XmlFormatter = new DefaultCommand(OnXmlFormatter);
             XmlToStringParser = new DefaultCommand(OnXmlToString);
             XmlToTreeParser = new DefaultCommand(OnXmlToTree);
-            TextSplit = new DefaultCommand(OnTextSplit);
+            TextSplit = new DefaultCommand(()=>OnTextSplit(TextActionEnum.Split));
+            TextGroup = new DefaultCommand(() => OnTextSplit(TextActionEnum.Group));
+            TextToLower = new DefaultCommand(() => OnTextSplit(TextActionEnum.ToLower));
+            TextToUpper = new DefaultCommand(() => OnTextSplit(TextActionEnum.ToUpper));
+            TextTrim = new DefaultCommand(() => OnTextSplit(TextActionEnum.Trim));
+            TextCountLength = new DefaultCommand(() => OnTextSplit(TextActionEnum.LengthCount));
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
