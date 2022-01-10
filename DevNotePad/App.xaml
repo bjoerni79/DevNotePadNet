@@ -43,6 +43,7 @@
         <Style x:Key="itemNodeStyleValue" TargetType="Label">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
         </Style>
         
         <!-- Descrption -->
