@@ -67,36 +67,14 @@ namespace DevNotePad.UI
             }
             else
             {
-                // Calculate the current column and row
-                int rowAfterHit = -1;
-                for (int curLine = 0; curLine < lineCount; curLine++)
-                {
-                    var firstCharacterindex = GetCharacterIndexFromLineIndex(curLine);
-
-                    if (caretIndex == firstCharacterindex)
-                    {
-                        rowAfterHit = curLine;
-                        break;
-                    }
-
-                    if (caretIndex < firstCharacterindex)
-                    {
-                        // Stop.
-                        rowAfterHit = curLine - 1;
-                        break;
-                    }
-                }
-
-                if (rowAfterHit == -1)
-                {
-                    rowAfterHit = lineCount - 1;
-                }
-
-                var startIndex = GetCharacterIndexFromLineIndex(rowAfterHit);
+                var caret = CaretIndex;
+                var rowIndex = GetLineIndexFromCharacterIndex(CaretIndex);
+                var startIndex = GetCharacterIndexFromLineIndex(rowIndex);
+                var colIndex = caret - startIndex;
 
                 // It is zero based.
-                CurrentRow = rowAfterHit + 1;
-                CurrentColumn = caretIndex - startIndex + 1;
+                CurrentRow = rowIndex;
+                CurrentColumn = colIndex;
             }
         }
 

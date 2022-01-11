@@ -145,7 +145,7 @@
                     <MenuItem Header="Split" Command="{Binding Path=TextSplit}"/>
                     <MenuItem Header="Group" Command="{Binding Path=TextGroup}"/>
                     <MenuItem Header="To Lower" Command="{Binding Path=TextToLower}"/>
-                    <MenuItem Header="To Higher" Command="{Binding Path=TextToUpper}"/>
+                    <MenuItem Header="To Upper" Command="{Binding Path=TextToUpper}"/>
                     <MenuItem Header="Trim" Command="{Binding Path=TextTrim}" />
                     <MenuItem Header="Count" Command="{Binding Path=TextCountLength}"/>
                 </MenuItem>
