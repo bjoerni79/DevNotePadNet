@@ -14,6 +14,12 @@ namespace DevNotePad.Service
 
         }
 
+        public bool ExistFile(string filename)
+        {
+            var fileExists = File.Exists(filename);
+            return fileExists;
+        }
+
         public DateTime GetModificationTimeStamp(string filename)
         {
             if (String.IsNullOrEmpty(filename))

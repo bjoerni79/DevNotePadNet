@@ -8,6 +8,7 @@ namespace DevNotePad.Service
 {
     public interface IIoService
     {
+        bool ExistFile(string path);
 
         string ReadTextFile(string filename);
 

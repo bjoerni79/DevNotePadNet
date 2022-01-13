@@ -54,80 +54,82 @@ namespace DevNotePad.ViewModel
 
         // File
 
-        public IRefreshCommand? New { get; set; }
+        public IRefreshCommand? New { get; private set; }
 
-        public IRefreshCommand? Open { get; set; }
+        public IRefreshCommand? Open { get; private set; }
 
-        public IRefreshCommand? Save { get; set; }
+        public IRefreshCommand? Save { get; private set; }
 
-        public IRefreshCommand? SaveAs { get; set; }
+        public IRefreshCommand? SaveAs { get; private set; }
 
-        public IRefreshCommand? Reload { get; set; }
+        public IRefreshCommand? Reload { get; private set; }
 
-        public IRefreshCommand? Close { get; set; }
+        public IRefreshCommand? Close { get; private set; }
 
         // Edit
 
-        public IRefreshCommand? Find { get; set; }
+        public IRefreshCommand? Find { get; private set; }
 
-        public IRefreshCommand? Replace { get; set; }
-        public IRefreshCommand? CopyToScratchPad { get; set; }
+        public IRefreshCommand? Replace { get; private set; }
+        public IRefreshCommand? CopyToScratchPad { get; private set; }
 
-        public IRefreshCommand? Cut { get; set; }
+        public IRefreshCommand? Cut { get; private set; }
 
-        public IRefreshCommand? Copy { get; set; }
+        public IRefreshCommand? Copy { get; private set; }
 
-        public IRefreshCommand? Paste { get; set; }
+        public IRefreshCommand? Paste { get; private set; }
 
-        public IRefreshCommand? SelectAll { get; set; }
+        public IRefreshCommand? SelectAll { get; private set; }
 
         // Layout
 
-        public IRefreshCommand? ToggleLineWrap { get; set; }
+        public IRefreshCommand? ToggleLineWrap { get; private set; }
 
 
 
         // Tools
 
-        public IRefreshCommand? JsonFormatter { get; set; }
+        public IRefreshCommand? JsonFormatter { get; private set; }
 
-        public IRefreshCommand? JsonToStringParser { get; set; }
+        public IRefreshCommand? JsonToStringParser { get; private set; }
 
-        public IRefreshCommand? JsonToTreeParser { get; set; }
+        public IRefreshCommand? JsonToTreeParser { get; private set; }
 
-        public IRefreshCommand? XmlFormatter { get; set; }
+        public IRefreshCommand? XmlFormatter { get; private set; }
 
-        public IRefreshCommand? XmlToStringParser { get; set; }
+        public IRefreshCommand? XmlToStringParser { get; private set; }
 
-        public IRefreshCommand? XmlToTreeParser { get; set; }
+        public IRefreshCommand? XmlToTreeParser { get; private set; }
 
-        public IRefreshCommand? TextSplit { get; set; }
+        public IRefreshCommand? TextSplit { get; private set; }
 
-        public IRefreshCommand? TextGroup { get; set; }
+        public IRefreshCommand? TextGroup { get; private set; }
 
-        public IRefreshCommand? TextToLower { get; set; }
+        public IRefreshCommand? TextToLower { get; private set; }
 
-        public IRefreshCommand? TextToUpper { get; set; }
+        public IRefreshCommand? TextToUpper { get; private set; }
 
-        public IRefreshCommand? TextTrim { get; set; }
+        public IRefreshCommand? TextTrim { get; private set; }
 
-        public IRefreshCommand? TextCountLength { get; set; }
+        public IRefreshCommand? TextCountLength { get; private set; }
+
+
 
         // ScratchPad
 
-        public IRefreshCommand? ScratchPadClearAll { get; set; }
+        public IRefreshCommand? ScratchPadClearAll { get; private set; }
 
-        public IRefreshCommand? ScratchPadClearText { get; set; }
+        public IRefreshCommand? ScratchPadClearText { get; private set; }
 
-        public IRefreshCommand? ScratchPadClearTree { get; set; }
+        public IRefreshCommand? ScratchPadClearTree { get; private set; }
 
-        public IRefreshCommand? ScratchPadCopyClipboard { get; set; }
+        public IRefreshCommand? ScratchPadCopyClipboard { get; private set; }
 
         // About
 
-        public IRefreshCommand? About { get; set; }
+        public IRefreshCommand? About { get; private set; }
 
-        public IRefreshCommand? Refresh { get; set; }
+        public IRefreshCommand? Refresh { get; private set; }
 
         #endregion
 
@@ -435,72 +437,9 @@ namespace DevNotePad.ViewModel
             //TODO
         }
 
-        private void OnTextSplit(TextActionEnum textAction)
+        private void OnText(TextActionEnum textAction)
         {
-            var isSelected = Ui!.IsTextSelected();
-            if (!isSelected)
-            {
-                TriggerToolbarNotification(new UpdateStatusBarParameter("No Text selected. Please select a text first", true));
-            }
-            else
-            {
-                try
-                {
-                    var formatter = new TextFormatter();
-
-                    bool isWarnung = false;
-                    bool doUpdate = true;
-                    string notifier;
-
-                    var text = Ui.GetText(true);
-                    string formattedText;
-                    switch (textAction)
-                    {
-                        case TextActionEnum.ToLower:
-                            formattedText = formatter.ToLower(text);
-                            notifier ="Converted to lower chars";
-                            break;
-                        case TextActionEnum.ToUpper:
-                            formattedText = formatter.ToUpper(text);
-                            notifier ="Converted to upper chars";
-                            break;
-                        case TextActionEnum.Group:
-                            formattedText = formatter.GroupString(text);
-                            notifier = "grouped all chars";
-                            break;
-                        case TextActionEnum.Split:
-                            formattedText = formatter.SplitString(text);
-                            notifier = "splitted the chars";
-                            break;
-                        case TextActionEnum.Trim:
-                            formattedText = formatter.Trim(text);
-                            notifier = "trimmed the start and the end";
-                            break;
-                        case TextActionEnum.LengthCount:
-                            notifier = formatter.CountLength(text);
-                            doUpdate = false;
-                            formattedText = text;
-                            break;
-                        default:
-                            formattedText = text;
-                            isWarnung = true;
-                            notifier = "Unknown Text action detected";
-                            break;
-                    }
-
-                    TriggerToolbarNotification(new UpdateStatusBarParameter(notifier, isWarnung));
-
-                    if (doUpdate)
-                    {
-                        Ui.SetText(formattedText, true);
-                    }
-                    
-                }
-                catch (Exception ex)
-                {
-                    ShowError(ex, TextComponent);
-                }
-            }
+            InternalText(textAction);
         }
 
         #endregion
@@ -561,6 +500,74 @@ namespace DevNotePad.ViewModel
 
         #region Internal Logic
 
+        private void InternalText(TextActionEnum textAction)
+        {
+            var isSelected = Ui!.IsTextSelected();
+            if (!isSelected)
+            {
+                TriggerToolbarNotification(new UpdateStatusBarParameter("No Text selected. Please select a text first", true));
+            }
+            else
+            {
+                try
+                {
+                    var formatter = new TextFormatter();
+
+                    bool isWarnung = false;
+                    bool doUpdate = true;
+                    string notifier;
+
+                    var text = Ui.GetText(true);
+                    string formattedText;
+                    switch (textAction)
+                    {
+                        case TextActionEnum.ToLower:
+                            formattedText = formatter.ToLower(text);
+                            notifier = "Converted to lower chars";
+                            break;
+                        case TextActionEnum.ToUpper:
+                            formattedText = formatter.ToUpper(text);
+                            notifier = "Converted to upper chars";
+                            break;
+                        case TextActionEnum.Group:
+                            formattedText = formatter.GroupString(text);
+                            notifier = "grouped all chars";
+                            break;
+                        case TextActionEnum.Split:
+                            formattedText = formatter.SplitString(text);
+                            notifier = "splitted the chars";
+                            break;
+                        case TextActionEnum.Trim:
+                            formattedText = formatter.Trim(text);
+                            notifier = "trimmed the start and the end";
+                            break;
+                        case TextActionEnum.LengthCount:
+                            notifier = formatter.CountLength(text);
+                            doUpdate = false;
+                            formattedText = text;
+                            break;
+                        default:
+                            formattedText = text;
+                            isWarnung = true;
+                            notifier = "Unknown Text action detected";
+                            break;
+                    }
+
+                    TriggerToolbarNotification(new UpdateStatusBarParameter(notifier, isWarnung));
+
+                    if (doUpdate)
+                    {
+                        Ui.SetText(formattedText, true);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    ShowError(ex, TextComponent);
+                }
+            }
+        }
+
         private void PerfromClipboardAction(ClipboardActionEnum action)
         {
             bool isUiFound = CheckForUi();
@@ -580,24 +587,46 @@ namespace DevNotePad.ViewModel
             {
                 var ioService = GetIoService();
 
+                // Check for update! What happens if the file is newer than the latest load?
+                var fileExists = ioService.ExistFile(targetfilename);
+                bool updateDetected = false;
+                if (fileExists)
+                {
+                    var latest = ioService.GetModificationTimeStamp(targetfilename);
+                    if (latest > latestTimeStamp)
+                    {
+                        updateDetected = true;
+                    }
+                }
 
-                //TODO: Check for update! What happens if the file is newer than the latest load?
+                bool doSave = true;
+                if (updateDetected)
+                {
+                    var dialogService = GetDialogService();
+                    var result = dialogService.ShowConfirmationDialog("The file in the file system is newer. Do you want to continue?", "Conflict dectected","Save content");
 
+                    doSave = result;
+                }
 
+                if (doSave)
+                {
+                    initialText = Ui!.GetText(false);
+                    ioService.WriteTextFile(targetfilename, initialText);
+                    currentState = EditorState.Saved;
+                    latestTimeStamp = DateTime.Now;
 
-                initialText = Ui!.GetText(false);
-                ioService.WriteTextFile(targetfilename, initialText);
-                currentState = EditorState.Saved;
-                latestTimeStamp = DateTime.Now;
+                    fileName = targetfilename;
+                    Ui.SetFilename(fileName);
 
+                    TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
 
-                fileName = targetfilename;
-                Ui.SetFilename(fileName);
-
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
-
-                State = "Saved";
-                RaisePropertyChange("State");
+                    State = "Saved";
+                    RaisePropertyChange("State");
+                }
+                else
+                {
+                    TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is NOT saved", true));
+                }
             }
             catch (Exception ex)
             {
@@ -615,10 +644,10 @@ namespace DevNotePad.ViewModel
             try
             {
                 var ioService = GetIoService();
-                fileName = sourceFilename; ;
+                fileName = sourceFilename;
                 currentState = EditorState.Loaded;
 
-                //TODO: Store the timestamp of the file right now
+                //Store the timestamp of the file right now
                 latestTimeStamp = ioService.GetModificationTimeStamp(fileName);
 
                 initialText = ioService.ReadTextFile(fileName);
@@ -767,12 +796,12 @@ namespace DevNotePad.ViewModel
             XmlFormatter = new DefaultCommand(OnXmlFormatter);
             XmlToStringParser = new DefaultCommand(OnXmlToString);
             XmlToTreeParser = new DefaultCommand(OnXmlToTree);
-            TextSplit = new DefaultCommand(()=>OnTextSplit(TextActionEnum.Split));
-            TextGroup = new DefaultCommand(() => OnTextSplit(TextActionEnum.Group));
-            TextToLower = new DefaultCommand(() => OnTextSplit(TextActionEnum.ToLower));
-            TextToUpper = new DefaultCommand(() => OnTextSplit(TextActionEnum.ToUpper));
-            TextTrim = new DefaultCommand(() => OnTextSplit(TextActionEnum.Trim));
-            TextCountLength = new DefaultCommand(() => OnTextSplit(TextActionEnum.LengthCount));
+            TextSplit = new DefaultCommand(()=>OnText(TextActionEnum.Split));
+            TextGroup = new DefaultCommand(() => OnText(TextActionEnum.Group));
+            TextToLower = new DefaultCommand(() => OnText(TextActionEnum.ToLower));
+            TextToUpper = new DefaultCommand(() => OnText(TextActionEnum.ToUpper));
+            TextTrim = new DefaultCommand(() => OnText(TextActionEnum.Trim));
+            TextCountLength = new DefaultCommand(() => OnText(TextActionEnum.LengthCount));
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
