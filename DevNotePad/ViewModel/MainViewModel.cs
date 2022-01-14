@@ -23,7 +23,6 @@ namespace DevNotePad.ViewModel
         private readonly string ApplicationComponent = "Application";
         private readonly string JsonComponent = "JSON";
         private readonly string XmlComponent = "XML";
-        private readonly string TextComponent = "Text";
 
         private const string DefaultExtension = "All|*.*|Text Files|*.txt|Log Files|*.log|XML|*.xml|JSON|*.json";
 
@@ -140,7 +139,7 @@ namespace DevNotePad.ViewModel
         {
             if (fileLogic != null)
             {
-                fileLogic.InternalNew();
+                fileLogic.New();
                 UpdateFileStatus();
             }
         }
@@ -149,7 +148,7 @@ namespace DevNotePad.ViewModel
         {
             if (fileLogic != null)
             {
-                fileLogic.InternalReload();
+                fileLogic.Reload();
                 UpdateFileStatus();
             }
             
@@ -164,7 +163,7 @@ namespace DevNotePad.ViewModel
 
                 if (result.IsConfirmed)
                 {
-                    fileLogic.InternalLoad(result.File);
+                    fileLogic.Load(result.File);
                     UpdateFileStatus();
                 }
             }
@@ -181,7 +180,7 @@ namespace DevNotePad.ViewModel
                 }
 
                 // Just save it
-                fileLogic.InternalSave(fileLogic.FileName);
+                fileLogic.Save(fileLogic.FileName);
 
                 UpdateFileStatus();
             }
@@ -198,7 +197,7 @@ namespace DevNotePad.ViewModel
 
                 if (result.IsConfirmed)
                 {
-                    fileLogic.InternalSave(result.File);
+                    fileLogic.Save(result.File);
                 }
 
                 UpdateFileStatus();
@@ -463,7 +462,7 @@ namespace DevNotePad.ViewModel
         {
             if (fileLogic != null)
             {
-                fileLogic.InternalText(textAction);
+                fileLogic.Modify(textAction);
             }
             
         }
@@ -485,7 +484,7 @@ namespace DevNotePad.ViewModel
             Ui = ui;
             fileLogic = new InternalFileLogic(ui);
 
-            fileLogic.InternalNew();
+            fileLogic.New();
             UpdateFileStatus();
         }
 
@@ -543,11 +542,38 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
+        /// <summary>
+        /// Updates the UI with the current state in the file logic
+        /// </summary>
         private void UpdateFileStatus()
         {
-            var currentState = "Unknown";
+            var currentUiState = "Unknown";
+            if (fileLogic != null)
+            {
+                var currentState = fileLogic.CurrentState;
+                if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
+                {
+                    currentUiState = "Changed";
+                }
 
-            State = currentState;
+                if (currentState == EditorState.New)
+                {
+                    currentUiState = "New";
+                }
+
+                if (currentState == EditorState.Saved)
+                {
+                    currentUiState = "Saved";
+                }
+
+                if (currentState == EditorState.Loaded)
+                {
+                    currentUiState = "Loaded";
+                }
+            }
+
+            // Notify the UI
+            State = currentUiState;
             RaisePropertyChange("State");
         }
 

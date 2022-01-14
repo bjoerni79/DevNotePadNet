@@ -8,28 +8,41 @@ using System.Threading.Tasks;
 namespace DevNotePad.ViewModel
 {
     /// <summary>
-    /// Result of a refactoring: The view model has been exploded and this componented has been extracted as consequence
+    /// Contains the logic required for maintaining the states of the content.
     /// </summary>
     public interface IFileLogic
     {
+        /// <summary>
+        /// The initial text of the load operation
+        /// </summary>
         string InitialText { get; set; }
 
+        /// <summary>
+        /// The latest time stamp after Load or Save. 
+        /// </summary>
         DateTime LatestTimeStamp { get; set; }
 
+        /// <summary>
+        /// The current filename
+        /// </summary>
         string FileName { get; set; }
 
+        /// <summary>
+        /// The current state
+        /// </summary>
         EditorState CurrentState { get; set; }
 
-        void InternalText(TextActionEnum textAction);
+
+        void Modify(TextActionEnum textAction);
 
         void PerfromClipboardAction(ClipboardActionEnum action);
 
-        bool InternalSave(string targetfilename);
+        bool Save(string targetfilename);
 
-        bool InternalLoad(string sourceFilename);
+        bool Load(string sourceFilename);
 
-        bool InternalNew();
+        bool New();
 
-        void InternalReload();
+        void Reload();
     }
 }

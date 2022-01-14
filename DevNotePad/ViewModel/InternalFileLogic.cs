@@ -27,7 +27,7 @@ namespace DevNotePad.ViewModel
 
         public EditorState CurrentState { get; set; }
 
-        public void InternalText(TextActionEnum textAction)
+        public void Modify(TextActionEnum textAction)
         {
             var isSelected = ui.IsTextSelected();
             if (!isSelected)
@@ -104,7 +104,7 @@ namespace DevNotePad.ViewModel
         /// Handles the internal save of the current Text and is called by Save and Save As
         /// </summary>
         /// <param name="filename">the filename</param>
-        public bool InternalSave(string targetfilename)
+        public bool Save(string targetfilename)
         {
             bool isSuccessful = false;
             try
@@ -144,9 +144,6 @@ namespace DevNotePad.ViewModel
 
                     isSuccessful = true;
                     ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
-
-                    //State = "Saved";
-                    //RaisePropertyChange("State");
                 }
                 else
                 {
@@ -165,7 +162,7 @@ namespace DevNotePad.ViewModel
         /// Handles the internal load of files and is called by ICommand delegates
         /// </summary>
         /// <param name="filename">the filename</param>
-        public bool InternalLoad(string sourceFilename)
+        public bool Load(string sourceFilename)
         {
             bool isSuccessful = false;
 
@@ -184,9 +181,6 @@ namespace DevNotePad.ViewModel
 
                 isSuccessful=true;
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
-
-                //State = "Loaded";
-                //RaisePropertyChange("State");
             }
             catch (Exception ex)
             {
@@ -199,7 +193,7 @@ namespace DevNotePad.ViewModel
         /// <summary>
         /// Handles the creation of new files
         /// </summary>
-        public bool InternalNew()
+        public bool New()
         {
             bool proceed = true;
 
@@ -220,9 +214,6 @@ namespace DevNotePad.ViewModel
                 ui.SetFilename(FileName);
 
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("New file created", false));
-
-                //State = "New";
-                //RaisePropertyChange("State");
             }
 
             return proceed;
@@ -231,7 +222,7 @@ namespace DevNotePad.ViewModel
         /// <summary>
         /// Handles the reload of a file
         /// </summary>
-        public void InternalReload()
+        public void Reload()
         {
             if (CurrentState == EditorState.New)
             {
@@ -257,7 +248,7 @@ namespace DevNotePad.ViewModel
 
                         if (doReload)
                         {
-                            InternalLoad(FileName);
+                            Load(FileName);
                         }
                         else
                         {
