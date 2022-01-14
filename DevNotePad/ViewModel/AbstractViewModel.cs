@@ -19,61 +19,6 @@ namespace DevNotePad.ViewModel
 
         }
 
-        protected IDialogService GetDialogService()
-        {
-            var facade = GetFacade();
-            var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
-            if (dialogService == null)
-            {
-                throw new Exception("Cannot access DialogService");
-            }
-
-            return dialogService;
-        }
-
-        protected IIoService GetIoService()
-        {
-            var facade = GetFacade();
-            var ioService = facade.Get<IIoService>(Bootstrap.IoServiceId);
-            if (ioService == null)
-            {
-                throw new Exception("Cannot access I/O Service");
-            }
-
-            return ioService;
-        }
-
-        protected ContainerFacade GetFacade()
-        {
-            var facade = FacadeFactory.Create();
-            if (facade == null)
-            {
-                throw new Exception("Cannot access MVVM facade");
-            }
-
-            return FacadeFactory.Create();
-        }
-
-        protected void ShowError(Exception exception, string component)
-        {
-            var dialogService = GetDialogService();
-            dialogService.ShowErrorDialog(exception, component);
-        }
-
-        /// <summary>
-        /// Triggers the UpdateToolbar event
-        /// </summary>
-        /// <param name="parameter">the parameter for the event</param>
-        protected void TriggerToolbarNotification(UpdateStatusBarParameter parameter)
-        {
-            var facade = GetFacade();
-            var eventController = facade.Get<EventController>();
-
-            var eventInstance = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
-            if (eventInstance != null)
-            {
-                eventInstance.Trigger(parameter);
-            }
-        }
+        // TODO: Do we need this?
     }
 }

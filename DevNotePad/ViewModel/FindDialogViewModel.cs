@@ -1,4 +1,5 @@
-﻿using DevNotePad.Shared;
+﻿using DevNotePad.MVVM;
+using DevNotePad.Shared;
 using Generic.MVVM;
 using System;
 using System.Collections.Generic;
@@ -75,11 +76,11 @@ namespace DevNotePad.ViewModel
             if (result.Successful)
             {
                 ui.SelectText(result.StartIndex, result.Length);
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
             }
             else
             {
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
             }
         }
 

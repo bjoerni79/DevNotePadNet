@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DevNotePad.Shared
 {
-    internal enum TextActionEnum
+    public enum TextActionEnum
     {
         ToLower,
         ToUpper,

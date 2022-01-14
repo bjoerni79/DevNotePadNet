@@ -60,6 +60,7 @@
 
         <Style x:Key="editorTextbox" TargetType="TextBox">
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
             <Setter Property="AcceptsReturn" Value="True"/>
             <Setter Property="AcceptsTab" Value="True" />
             <Setter Property="IsInactiveSelectionHighlightEnabled" Value="True"/>
@@ -70,8 +71,6 @@
         </Style>
 
         <Style x:Key="scratchPadTextbox" TargetType="TextBox" BasedOn="{StaticResource editorTextbox}">
-            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
         </Style>
 
         <Style x:Key="scratchPadTree" TargetType="TreeView">
@@ -98,9 +97,23 @@
             <MenuItem Header="Split" Command="{Binding Path=TextSplit}"/>
             <MenuItem Header="Group" Command="{Binding Path=TextGroup}"/>
             <MenuItem Header="To Lower" Command="{Binding Path=TextToLower}"/>
-            <MenuItem Header="To Higher" Command="{Binding Path=TextToUpper}"/>
+            <MenuItem Header="To Upper" Command="{Binding Path=TextToUpper}"/>
             <MenuItem Header="Trim" Command="{Binding Path=TextTrim}" />
             <MenuItem Header="Count" Command="{Binding Path=TextCountLength}"/>
+        </ContextMenu>
+
+        <ContextMenu x:Key="scratchPadContextMenu">
+            <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=ScratchPadCut}" />
+            <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=ScratchPadCopy}"/>
+            <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=ScratchPadPaste}"/>
+            <MenuItem Header="Copy To Text" Command="{Binding Path=CopyToText}"/>
+            <!--<Separator/>
+            <MenuItem Header="Split" Command="{Binding Path=ScratchPadSplit}"/>
+            <MenuItem Header="Group" Command="{Binding Path=ScratchPadGroup}"/>
+            <MenuItem Header="To Lower" Command="{Binding Path=ScratchPadToLower}"/>
+            <MenuItem Header="To Upper" Command="{Binding Path=ScratchPadToUpper}"/>
+            <MenuItem Header="Trim" Command="{Binding Path=ScratchPadTrim}" />
+            <MenuItem Header="Count" Command="{Binding Path=ScratchPadCountLength}"/>-->
         </ContextMenu>
         
     </Window.Resources>
@@ -216,7 +229,9 @@
                 <TabItem Name="tabScratchPad" Header="Text">
                     <TextBox 
                         x:Name="scratchPad" 
-                        Style="{StaticResource scratchPadTextbox}" />
+                        Style="{StaticResource scratchPadTextbox}" 
+                        ContextMenu="{StaticResource scratchPadContextMenu}"
+                        />
                 </TabItem>
                 <TabItem Name="tabTreeView" Header="Tree" >
                     <TreeView x:Name="treeView" 

@@ -1,4 +1,5 @@
-﻿using DevNotePad.Shared;
+﻿using DevNotePad.MVVM;
+using DevNotePad.Shared;
 using Generic.MVVM;
 using System;
 using System.Collections.Generic;
@@ -72,11 +73,11 @@ namespace DevNotePad.ViewModel
             if (result.Successful)
             {
                 ui.SelectText(result.StartIndex, result.Length);
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
             }
             else
             {
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
             }
 
             // Enable the replace feature if possible
@@ -88,7 +89,7 @@ namespace DevNotePad.ViewModel
         {
             if (string.IsNullOrEmpty(ReplaceWith))
             {
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Replace string is empty", true));
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Replace string is empty", true));
             }
             else
             {
@@ -99,7 +100,7 @@ namespace DevNotePad.ViewModel
                 }
 
                 string notifier = "Search Pattern is replaced";
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, false));
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, false));
             }
 
         }
@@ -108,7 +109,7 @@ namespace DevNotePad.ViewModel
         {
             if (string.IsNullOrEmpty(ReplaceWith))
             {
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Replace string is empty", true));
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Replace string is empty", true));
             }
             else
             {
@@ -151,7 +152,7 @@ namespace DevNotePad.ViewModel
                     notifier = String.Format("Replaced action performed {0} times", replaceCount);
                 }
 
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, isWarning));
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, isWarning));
             }
 
 

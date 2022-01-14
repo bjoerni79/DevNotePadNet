@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DevNotePad.Shared
 {
-    internal enum EditorState
+    public enum EditorState
     {
         Unknown,
         Saved,

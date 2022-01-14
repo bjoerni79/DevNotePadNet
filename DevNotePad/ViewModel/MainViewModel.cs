@@ -29,11 +29,7 @@ namespace DevNotePad.ViewModel
 
         private IMainViewUi? Ui { get; set; }
 
-        private EditorState currentState;
-
-        private string initialText;
-        private DateTime latestTimeStamp;
-        private string fileName;
+        private IFileLogic? fileLogic;
 
         public bool LineWrapMode { get; private set; }
 
@@ -43,11 +39,8 @@ namespace DevNotePad.ViewModel
 
         public MainViewModel()
         {
+            State = "Ready";
             InitMenu();
-
-            fileName = "Not Defined";
-            initialText = String.Empty;
-            State = String.Empty;
         }
 
         #region Commands
@@ -73,11 +66,19 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? Replace { get; private set; }
         public IRefreshCommand? CopyToScratchPad { get; private set; }
 
+        public IRefreshCommand? CopyToText { get; private set; }
+
         public IRefreshCommand? Cut { get; private set; }
+
+        public IRefreshCommand? ScratchPadCut { get; private set; }
 
         public IRefreshCommand? Copy { get; private set; }
 
+        public IRefreshCommand? ScratchPadCopy { get; private set; }
+
         public IRefreshCommand? Paste { get; private set; }
+
+        public IRefreshCommand? ScratchPadPaste { get; private set; }
 
         public IRefreshCommand? SelectAll { get; private set; }
 
@@ -137,44 +138,70 @@ namespace DevNotePad.ViewModel
 
         private void OnNew()
         {
-            InternalNew();
+            if (fileLogic != null)
+            {
+                fileLogic.InternalNew();
+                UpdateFileStatus();
+            }
         }
 
         private void OnReload()
         {
-            InternalReload();
+            if (fileLogic != null)
+            {
+                fileLogic.InternalReload();
+                UpdateFileStatus();
+            }
+            
         }
 
         private void OnOpen()
         {
-            var dialogService = GetDialogService();
-            var result = dialogService.ShowOpenFileNameDialog(DefaultExtension);
-
-            if (result.IsConfirmed)
+            if (fileLogic != null)
             {
-                InternalLoad(result.File);
+                var dialogService = ServiceHelper.GetDialogService();
+                var result = dialogService.ShowOpenFileNameDialog(DefaultExtension);
+
+                if (result.IsConfirmed)
+                {
+                    fileLogic.InternalLoad(result.File);
+                    UpdateFileStatus();
+                }
             }
+
         }
 
         private void OnSave()
         {
-            if (currentState == EditorState.New || currentState == EditorState.ChangedNew)
+            if (fileLogic != null)
             {
-                OnSaveAs();
+                if (fileLogic.CurrentState == EditorState.New || fileLogic.CurrentState == EditorState.ChangedNew)
+                {
+                    OnSaveAs();
+                }
+
+                // Just save it
+                fileLogic.InternalSave(fileLogic.FileName);
+
+                UpdateFileStatus();
             }
 
-            // Just save it
-            InternalSave(fileName);
+
         }
 
         private void OnSaveAs()
         {
-            var dialogService = GetDialogService();
-            var result = dialogService.ShowSaveFileDialog(DefaultExtension);
-
-            if (result.IsConfirmed)
+            if (fileLogic != null)
             {
-                InternalSave(result.File);
+                var dialogService = ServiceHelper.GetDialogService();
+                var result = dialogService.ShowSaveFileDialog(DefaultExtension);
+
+                if (result.IsConfirmed)
+                {
+                    fileLogic.InternalSave(result.File);
+                }
+
+                UpdateFileStatus();
             }
         }
 
@@ -209,12 +236,12 @@ namespace DevNotePad.ViewModel
 
                     Ui.SetText(result, isTextSelected);
 
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
+                    ServiceHelper.ShowError(featureException, JsonComponent);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -235,12 +262,12 @@ namespace DevNotePad.ViewModel
                     Ui.AddToScratchPad(la);
                     Ui.FocusScratchPad();
 
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
+                    ServiceHelper.ShowError(featureException, JsonComponent);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -263,12 +290,12 @@ namespace DevNotePad.ViewModel
                     RaisePropertyChange("Nodes");
 
                     Ui.FocusTree();
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
+                    ServiceHelper.ShowError(featureException, JsonComponent);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
                 }
             }
         }
@@ -287,12 +314,12 @@ namespace DevNotePad.ViewModel
                     var formatted = component.Formatter(input);
 
                     Ui.SetText(formatted, isTextSelected);
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, XmlComponent);
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
+                    ServiceHelper.ShowError(featureException, XmlComponent);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -313,12 +340,12 @@ namespace DevNotePad.ViewModel
                     Ui.AddToScratchPad(la);
                     Ui.FocusScratchPad();
 
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, JsonComponent);
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
+                    ServiceHelper.ShowError(featureException, JsonComponent);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -345,8 +372,8 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FeatureException featureException)
                 {
-                    ShowError(featureException, XmlComponent);
-                    TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
+                    ServiceHelper.ShowError(featureException, XmlComponent);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
             }
         }
@@ -363,7 +390,7 @@ namespace DevNotePad.ViewModel
         {
             if (Ui == null)
             {
-                ShowError(new ApplicationException("Please init Ui first"), ApplicationComponent);
+                ServiceHelper.ShowError(new ApplicationException("Please init Ui first"), ApplicationComponent);
                 return false;
             }
 
@@ -376,7 +403,7 @@ namespace DevNotePad.ViewModel
             OnClearTextScratchPad();
             OnClearTreeScratchPad();
 
-            TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad and Tree are empty", false));
+            ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad and Tree are empty", false));
         }
 
         private void OnClearTextScratchPad()
@@ -386,7 +413,7 @@ namespace DevNotePad.ViewModel
             {
                 Ui!.CleanUpScratchPad();
 
-                TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad is empty", false));
+                ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad is empty", false));
             }
         }
 
@@ -395,7 +422,7 @@ namespace DevNotePad.ViewModel
             Nodes = new ObservableCollection<ItemNode>();
             RaisePropertyChange("Nodes");
 
-            TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad Tree is empty", false));
+            ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad Tree is empty", false));
         }
 
         private void OnCopyClipboardToScratchPad()
@@ -414,13 +441,13 @@ namespace DevNotePad.ViewModel
 
         private void OnFind()
         {
-            var dialogService = GetDialogService();
+            var dialogService = ServiceHelper.GetDialogService();
             dialogService.OpenFindDialog(Ui);
         }
 
         private void OnReplace()
         {
-            var dialogService = GetDialogService();
+            var dialogService = ServiceHelper.GetDialogService();
             dialogService.OpenReplaceDialog(Ui);
         }
 
@@ -432,14 +459,21 @@ namespace DevNotePad.ViewModel
             Ui.AddToScratchPad(text);
         }
 
-        private void OnRefresh()
-        {
-            //TODO
-        }
-
         private void OnText(TextActionEnum textAction)
         {
-            InternalText(textAction);
+            if (fileLogic != null)
+            {
+                fileLogic.InternalText(textAction);
+            }
+            
+        }
+
+        private void OnTextClipboard(ClipboardActionEnum action)
+        {
+            if (fileLogic != null)
+            {
+                fileLogic.PerfromClipboardAction(action);
+            }
         }
 
         #endregion
@@ -449,7 +483,10 @@ namespace DevNotePad.ViewModel
         public void Init(IMainViewUi ui)
         {
             Ui = ui;
-            InternalNew();
+            fileLogic = new InternalFileLogic(ui);
+
+            fileLogic.InternalNew();
+            UpdateFileStatus();
         }
 
         public void ApplySettings()
@@ -465,287 +502,53 @@ namespace DevNotePad.ViewModel
                 Ui.SetWordWrap(LineWrapMode);
             }
 
-            TriggerToolbarNotification(new UpdateStatusBarParameter("Ready", false));
+            ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Ready", false));
         }
 
         public void NotifyContentChanged(int added, int offset, int removed)
         {
-            int internalTextLength = initialText.Length;
-            var loadedEvent = offset == 0 && internalTextLength == added;
-
-            var isChangedSelected = currentState == EditorState.Changed || currentState == EditorState.ChangedNew;
-            if (!loadedEvent && !isChangedSelected)
+            if (fileLogic != null)
             {
-                if (currentState == EditorState.New)
-                {
-                    currentState = EditorState.ChangedNew;
-                }
-                else
-                {
-                    currentState = EditorState.Changed;
-                }
+                int internalTextLength = fileLogic.InitialText.Length;
+                var loadedEvent = offset == 0 && internalTextLength == added;
 
-                State = "Changed";
-                RaisePropertyChange("State");
+                var isChangedSelected = fileLogic.CurrentState == EditorState.Changed || fileLogic.CurrentState == EditorState.ChangedNew;
+                if (!loadedEvent && !isChangedSelected)
+                {
+                    if (fileLogic.CurrentState == EditorState.New)
+                    {
+                        fileLogic.CurrentState = EditorState.ChangedNew;
+                    }
+                    else
+                    {
+                        fileLogic.CurrentState = EditorState.Changed;
+                    }
+
+                    UpdateFileStatus();
+                }
             }
         }
 
         public bool IsChanged()
         {
-            var isChangeRequired = currentState == EditorState.Changed || currentState == EditorState.ChangedNew;
-            return isChangeRequired;
+            if (fileLogic != null)
+            {
+                var isChangeRequired = fileLogic.CurrentState == EditorState.Changed || fileLogic.CurrentState == EditorState.ChangedNew;
+                return isChangeRequired;
+            }
+
+            return false;
+
         }
 
         #endregion
 
-        #region Internal Logic
-
-        private void InternalText(TextActionEnum textAction)
+        private void UpdateFileStatus()
         {
-            var isSelected = Ui!.IsTextSelected();
-            if (!isSelected)
-            {
-                TriggerToolbarNotification(new UpdateStatusBarParameter("No Text selected. Please select a text first", true));
-            }
-            else
-            {
-                try
-                {
-                    var formatter = new TextFormatter();
+            var currentState = "Unknown";
 
-                    bool isWarnung = false;
-                    bool doUpdate = true;
-                    string notifier;
-
-                    var text = Ui.GetText(true);
-                    string formattedText;
-                    switch (textAction)
-                    {
-                        case TextActionEnum.ToLower:
-                            formattedText = formatter.ToLower(text);
-                            notifier = "Converted to lower chars";
-                            break;
-                        case TextActionEnum.ToUpper:
-                            formattedText = formatter.ToUpper(text);
-                            notifier = "Converted to upper chars";
-                            break;
-                        case TextActionEnum.Group:
-                            formattedText = formatter.GroupString(text);
-                            notifier = "grouped all chars";
-                            break;
-                        case TextActionEnum.Split:
-                            formattedText = formatter.SplitString(text);
-                            notifier = "splitted the chars";
-                            break;
-                        case TextActionEnum.Trim:
-                            formattedText = formatter.Trim(text);
-                            notifier = "trimmed the start and the end";
-                            break;
-                        case TextActionEnum.LengthCount:
-                            notifier = formatter.CountLength(text);
-                            doUpdate = false;
-                            formattedText = text;
-                            break;
-                        default:
-                            formattedText = text;
-                            isWarnung = true;
-                            notifier = "Unknown Text action detected";
-                            break;
-                    }
-
-                    TriggerToolbarNotification(new UpdateStatusBarParameter(notifier, isWarnung));
-
-                    if (doUpdate)
-                    {
-                        Ui.SetText(formattedText, true);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    ShowError(ex, TextComponent);
-                }
-            }
-        }
-
-        private void PerfromClipboardAction(ClipboardActionEnum action)
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                Ui!.PerformClipboardAction(action);
-            }
-        }
-
-        /// <summary>
-        /// Handles the internal save of the current Text and is called by Save and Save As
-        /// </summary>
-        /// <param name="filename">the filename</param>
-        private void InternalSave(string targetfilename)
-        {
-            try
-            {
-                var ioService = GetIoService();
-
-                // Check for update! What happens if the file is newer than the latest load?
-                var fileExists = ioService.ExistFile(targetfilename);
-                bool updateDetected = false;
-                if (fileExists)
-                {
-                    var latest = ioService.GetModificationTimeStamp(targetfilename);
-                    if (latest > latestTimeStamp)
-                    {
-                        updateDetected = true;
-                    }
-                }
-
-                bool doSave = true;
-                if (updateDetected)
-                {
-                    var dialogService = GetDialogService();
-                    var result = dialogService.ShowConfirmationDialog("The file in the file system is newer. Do you want to continue?", "Conflict dectected","Save content");
-
-                    doSave = result;
-                }
-
-                if (doSave)
-                {
-                    initialText = Ui!.GetText(false);
-                    ioService.WriteTextFile(targetfilename, initialText);
-                    currentState = EditorState.Saved;
-                    latestTimeStamp = DateTime.Now;
-
-                    fileName = targetfilename;
-                    Ui.SetFilename(fileName);
-
-                    TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
-
-                    State = "Saved";
-                    RaisePropertyChange("State");
-                }
-                else
-                {
-                    TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is NOT saved", true));
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowError(ex, "Save File");
-            }
-
-        }
-
-        /// <summary>
-        /// Handles the internal load of files and is called by ICommand delegates
-        /// </summary>
-        /// <param name="filename">the filename</param>
-        private void InternalLoad(string sourceFilename)
-        {
-            try
-            {
-                var ioService = GetIoService();
-                fileName = sourceFilename;
-                currentState = EditorState.Loaded;
-
-                //Store the timestamp of the file right now
-                latestTimeStamp = ioService.GetModificationTimeStamp(fileName);
-
-                initialText = ioService.ReadTextFile(fileName);
-                Ui!.SetText(initialText);
-                Ui.SetFilename(fileName);
-
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("File is loaded", false));
-
-                State = "Loaded";
-                RaisePropertyChange("State");
-            }
-            catch (Exception ex)
-            {
-                ShowError(ex, "Load File");
-            }
-
-        }
-
-        /// <summary>
-        /// Handles the creation of new files
-        /// </summary>
-        private void InternalNew()
-        {
-            bool proceed = true;
-
-            if (currentState == EditorState.ChangedNew || currentState == EditorState.Changed)
-            {
-                var dialogService = GetDialogService();
-                proceed = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to continue?","New","Create New");
-            }
-
-            if (proceed)
-            {
-                fileName = "New";
-                currentState = EditorState.New;
-                initialText = String.Empty;
-                latestTimeStamp = DateTime.Now;
-
-                Ui!.SetText(initialText);
-
-                RaisePropertyChange("Text");
-                RaisePropertyChange("FileName");
-                Ui.SetFilename(fileName);
-
-                TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("New file created", false));
-
-                State = "New";
-                RaisePropertyChange("State");
-            }
-        }
-
-        /// <summary>
-        /// Handles the reload of a file
-        /// </summary>
-        private void InternalReload()
-        {
-            if (currentState == EditorState.New)
-            {
-                TriggerToolbarNotification(new UpdateStatusBarParameter("Please save the file first", false));
-            }
-            else
-            {
-                try
-                {
-                    // Any file changes?  What is the creation date? etc
-                    var io = GetIoService();
-                    var currentModifiedTimestamp = io.GetModificationTimeStamp(fileName);
-
-                    if (currentModifiedTimestamp > latestTimeStamp)
-                    {
-                        bool doReload = true;
-                        if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
-                        {
-                            var dialogService = GetDialogService();
-                            doReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload","Reload Content");
-                        }
-
-
-                        if (doReload)
-                        {
-                            InternalLoad(fileName);
-                        }  
-                        else
-                        {
-                            TriggerToolbarNotification(new UpdateStatusBarParameter("Reload cancelled", true));
-                        }
-                    }
-                    else
-                    {
-                        TriggerToolbarNotification(new UpdateStatusBarParameter("Reload not required", false));
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    ShowError(ex, "Reload");
-                }
-            }
+            State = currentState;
+            RaisePropertyChange("State");
         }
 
         private Settings GetSettings()
@@ -781,13 +584,13 @@ namespace DevNotePad.ViewModel
             Replace = new DefaultCommand(OnReplace);
             CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
             // Cut
-            Cut = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.Cut));
+            Cut = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.Cut));
             // Copy
-            Copy = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.Copy));
+            Copy = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.Copy));
             // Paste
-            Paste = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.Paste));
+            Paste = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.Paste));
             // Select All
-            SelectAll = new DefaultCommand(() => PerfromClipboardAction(ClipboardActionEnum.SelectAll));
+            SelectAll = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.SelectAll));
 
             //Tools
             JsonFormatter = new DefaultCommand(OnJsonFormatter);
@@ -805,7 +608,7 @@ namespace DevNotePad.ViewModel
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
-            Refresh = new DefaultCommand(OnRefresh);
+            //Refresh = new DefaultCommand(OnRefresh);
 
             // ScratchPad
             ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
@@ -817,6 +620,5 @@ namespace DevNotePad.ViewModel
             About = new DefaultCommand(OnAbout);
         }
 
-        #endregion
     }
 }
