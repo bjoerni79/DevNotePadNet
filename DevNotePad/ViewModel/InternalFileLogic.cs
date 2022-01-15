@@ -11,11 +11,13 @@ namespace DevNotePad.ViewModel
 {
     internal class InternalFileLogic : IFileLogic
     {
-        private IMainViewUi ui;
+        private ITextComponent textComponent;
+        private IMainViewUi mainUi;
 
-        internal InternalFileLogic(IMainViewUi ui)
+        internal InternalFileLogic(IMainViewUi ui,ITextComponent textComponent)
         {
-            this.ui = ui;
+            this.textComponent = textComponent;
+            this.mainUi = ui;
             InitialText = String.Empty;
             LatestTimeStamp = DateTime.Now;
             FileName = "Unknown";
@@ -29,7 +31,7 @@ namespace DevNotePad.ViewModel
 
         public void Modify(TextActionEnum textAction)
         {
-            var isSelected = ui.IsTextSelected();
+            var isSelected = textComponent.IsTextSelected();
             if (!isSelected)
             {
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("No Text selected. Please select a text first", true));
@@ -44,7 +46,7 @@ namespace DevNotePad.ViewModel
                     bool doUpdate = true;
                     string notifier;
 
-                    var text = ui.GetText(true);
+                    var text = textComponent.GetText(true);
                     string formattedText;
                     switch (textAction)
                     {
@@ -84,7 +86,7 @@ namespace DevNotePad.ViewModel
 
                     if (doUpdate)
                     {
-                        ui.SetText(formattedText, true);
+                        textComponent.SetText(formattedText, true);
                     }
 
                 }
@@ -97,7 +99,7 @@ namespace DevNotePad.ViewModel
 
         public void PerfromClipboardAction(ClipboardActionEnum action)
         {
-            ui.PerformClipboardAction(action);
+            textComponent.PerformClipboardAction(action);
         }
 
         /// <summary>
@@ -134,13 +136,13 @@ namespace DevNotePad.ViewModel
 
                 if (doSave)
                 {
-                    InitialText = ui.GetText(false);
+                    InitialText = textComponent.GetText(false);
                     ioService.WriteTextFile(targetfilename, InitialText);
                     CurrentState = EditorState.Saved;
                     LatestTimeStamp = DateTime.Now;
 
                     FileName = targetfilename;
-                    ui.SetFilename(FileName);
+                    mainUi.SetFilename(FileName);
 
                     isSuccessful = true;
                     ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
@@ -176,8 +178,8 @@ namespace DevNotePad.ViewModel
                 LatestTimeStamp = ioService.GetModificationTimeStamp(FileName);
 
                 InitialText = ioService.ReadTextFile(FileName);
-                ui.SetText(InitialText);
-                ui.SetFilename(FileName);
+                textComponent.SetText(InitialText);
+                mainUi.SetFilename(FileName);
 
                 isSuccessful=true;
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
@@ -210,8 +212,8 @@ namespace DevNotePad.ViewModel
                 InitialText = String.Empty;
                 LatestTimeStamp = DateTime.Now;
 
-                ui.SetText(InitialText);
-                ui.SetFilename(FileName);
+                textComponent.SetText(InitialText);
+                mainUi.SetFilename(FileName);
 
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("New file created", false));
             }

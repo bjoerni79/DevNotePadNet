@@ -14,16 +14,7 @@ namespace DevNotePad.ViewModel
 
         void ShowAbout();
 
-        string GetText(bool selected);
-
-        int GetCurrentPosition();
-        void SetText(string text);
-
         void SetFilename(string filename);
-
-        void SetText(string text, bool selected);
-
-        bool IsTextSelected();
 
         void AddToScratchPad(string text);
 
@@ -34,10 +25,6 @@ namespace DevNotePad.ViewModel
         void CleanUpScratchPad();
 
         void CloseByViewModel();
-
-        void SelectText(int startIndex, int length);
-
-        void PerformClipboardAction(ClipboardActionEnum action);
 
         void ResetLayout();
     }

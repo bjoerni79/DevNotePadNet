@@ -2,6 +2,7 @@
 using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
+using DevNotePad.UI;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
 using System;
@@ -31,6 +32,7 @@ namespace DevNotePad
         {
             InitializeComponent();
         }
+
         #region IMainViewUI
 
         public void CleanUpScratchPad()
@@ -71,44 +73,6 @@ namespace DevNotePad
             aboutDialog.ShowDialog();
         }
 
-        public void SetText(string text)
-        {
-            SetText(text, false);
-        }
-
-        public void SetText(string text, bool selected)
-        {
-            editor.BeginChange();
-
-            if (selected)
-            {
-                editor.SelectedText = text;
-            }
-            else
-            {
-                editor.Text = text;
-            }
-
-            editor.EndChange();
-        }
-
-        public string GetText(bool selected)
-        {
-            if (selected)
-            {
-                var selectedText = editor.SelectedText;
-                return selectedText;
-            }
-            else
-            {
-                return editor.Text;
-            }
-        }
-
-        public int GetCurrentPosition()
-        {
-            return editor.CaretIndex;
-        }
         public void SetFilename(string filename)
         {
             //TODO: Move the logic to the View Model
@@ -122,12 +86,6 @@ namespace DevNotePad
 
             var newTitle = string.Format("DevNotePad - {0}", filenameDescriptor);
             mainWindow.Title = newTitle;
-        }
-
-        public bool IsTextSelected()
-        {
-            var selectedText = editor.SelectedText;
-            return !string.IsNullOrWhiteSpace(selectedText);
         }
 
         public void AddToScratchPad(string text)
@@ -152,35 +110,6 @@ namespace DevNotePad
         public void CloseByViewModel()
         {
             Close();
-        }
-
-        public void SelectText(int startIndex, int length)
-        {
-            editor.Focus();
-            editor.Select(startIndex, length);
-
-            //var selectedText = editor.SelectedText;
-
-        }
-
-        public void PerformClipboardAction(ClipboardActionEnum action)
-        {
-
-            switch (action)
-            {
-                case ClipboardActionEnum.Copy:
-                    editor.Copy();
-                    break;
-                case ClipboardActionEnum.Paste:
-                    editor.Paste();
-                    break;
-                case ClipboardActionEnum.Cut:
-                    editor.Cut();
-                    break;
-                case ClipboardActionEnum.SelectAll:
-                    editor.SelectAll();
-                    break;
-            }
         }
 
         public void ResetLayout()
@@ -251,7 +180,7 @@ namespace DevNotePad
             var vm = GetViewModel();
             if (vm != null)
             {
-                vm.Init(this);
+                vm.Init(this, new TextComponent(editor));
                 vm.ApplySettings();
             }
         }

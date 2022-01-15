@@ -11,11 +11,13 @@ namespace DevNotePad.ViewModel
     {
         protected IMainViewUi ui;
         protected IDialog dialog;
+        protected ITextComponent textComponent;
 
-        public void Init(IMainViewUi mainViewUi, IDialog dialog)
+        public void Init(IMainViewUi mainViewUi, IDialog dialog, ITextComponent textComponent)
         {
             this.ui = mainViewUi;
             this.dialog = dialog;
+            this.textComponent = textComponent;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace DevNotePad.ViewModel
         {
             if (StartFromCurrentPosition)
             {
-                startIndex = ui.GetCurrentPosition();
+                startIndex = textComponent.GetCurrentPosition();
             }
             else
             {
@@ -70,12 +70,12 @@ namespace DevNotePad.ViewModel
 
         private void OnFindNext()
         {
-            var content = ui.GetText(false);
+            var content = textComponent.GetText(false);
 
             var result = searchEngine.RunSearch(content);
             if (result.Successful)
             {
-                ui.SelectText(result.StartIndex, result.Length);
+                textComponent.SelectText(result.StartIndex, result.Length);
                 ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
             }
             else

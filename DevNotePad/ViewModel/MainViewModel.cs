@@ -28,6 +28,8 @@ namespace DevNotePad.ViewModel
 
         private IMainViewUi? Ui { get; set; }
 
+        private ITextComponent? textComponent;
+
         private IFileLogic? fileLogic;
 
         public bool LineWrapMode { get; private set; }
@@ -226,14 +228,14 @@ namespace DevNotePad.ViewModel
             bool isUiFound = CheckForUi();
             if (isUiFound)
             {
-                var isTextSelected = Ui!.IsTextSelected();
-                var input = Ui.GetText(isTextSelected);
+                var isTextSelected = textComponent!.IsTextSelected();
+                var input = textComponent.GetText(isTextSelected);
                 try
                 {
                     IJsonComponent jsonComponent = FeatureFactory.CreateJson();
                     var result = jsonComponent.Formatter(input);
 
-                    Ui.SetText(result, isTextSelected);
+                    textComponent.SetText(result, isTextSelected);
 
                     ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
                 }
@@ -250,8 +252,8 @@ namespace DevNotePad.ViewModel
             bool isUiFound = CheckForUi();
             if (isUiFound)
             {
-                var isTextSelected = Ui!.IsTextSelected();
-                var input = Ui.GetText(isTextSelected);
+                var isTextSelected = textComponent.IsTextSelected();
+                var input = textComponent.GetText(isTextSelected);
 
                 try
                 {
@@ -276,8 +278,8 @@ namespace DevNotePad.ViewModel
             bool isUiFound = CheckForUi();
             if (isUiFound)
             {
-                var isTextSelected = Ui!.IsTextSelected();
-                var input = Ui.GetText(isTextSelected);
+                var isTextSelected = textComponent!.IsTextSelected();
+                var input = textComponent.GetText(isTextSelected);
 
                 try
                 {
@@ -304,15 +306,15 @@ namespace DevNotePad.ViewModel
             bool isUiFound = CheckForUi();
             if (isUiFound)
             {
-                var isTextSelected = Ui!.IsTextSelected();
-                var input = Ui.GetText(isTextSelected);
+                var isTextSelected = textComponent!.IsTextSelected();
+                var input = textComponent.GetText(isTextSelected);
 
                 try
                 {
                     IXmlComponent component = FeatureFactory.CreateXml();
                     var formatted = component.Formatter(input);
 
-                    Ui.SetText(formatted, isTextSelected);
+                    textComponent.SetText(formatted, isTextSelected);
                     ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
                 }
                 catch (FeatureException featureException)
@@ -328,8 +330,8 @@ namespace DevNotePad.ViewModel
             bool isUiFound = CheckForUi();
             if (isUiFound)
             {
-                var isTextSelected = Ui!.IsTextSelected();
-                var input = Ui.GetText(isTextSelected);
+                var isTextSelected = textComponent!.IsTextSelected();
+                var input = textComponent.GetText(isTextSelected);
 
                 try
                 {
@@ -354,8 +356,8 @@ namespace DevNotePad.ViewModel
             bool isUiFound = CheckForUi();
             if (isUiFound)
             {
-                var isTextSelected = Ui!.IsTextSelected();
-                var input = Ui.GetText(isTextSelected);
+                var isTextSelected = textComponent!.IsTextSelected();
+                var input = textComponent.GetText(isTextSelected);
 
                 try
                 {
@@ -441,19 +443,19 @@ namespace DevNotePad.ViewModel
         private void OnFind()
         {
             var dialogService = ServiceHelper.GetDialogService();
-            dialogService.OpenFindDialog(Ui);
+            dialogService.OpenFindDialog(Ui,textComponent);
         }
 
         private void OnReplace()
         {
             var dialogService = ServiceHelper.GetDialogService();
-            dialogService.OpenReplaceDialog(Ui);
+            dialogService.OpenReplaceDialog(Ui,textComponent);
         }
 
         private void OnCopyToScratchPad()
         {
-            var isSelected = Ui!.IsTextSelected();
-            var text = Ui.GetText(isSelected);
+            var isSelected = textComponent!.IsTextSelected();
+            var text = textComponent.GetText(isSelected);
 
             Ui.AddToScratchPad(text);
         }
@@ -479,10 +481,12 @@ namespace DevNotePad.ViewModel
 
         #region IMainViewModel
 
-        public void Init(IMainViewUi ui)
+        public void Init(IMainViewUi ui, ITextComponent text)
         {
             Ui = ui;
-            fileLogic = new InternalFileLogic(ui);
+            textComponent = text;
+
+            fileLogic = new InternalFileLogic(Ui,textComponent);
 
             fileLogic.New();
             UpdateFileStatus();

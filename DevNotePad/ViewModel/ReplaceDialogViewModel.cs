@@ -50,7 +50,7 @@ namespace DevNotePad.ViewModel
         {
             if (StartFromCurrentPosition)
             {
-                startIndex = ui.GetCurrentPosition();
+                startIndex = textComponent.GetCurrentPosition();
             }
             else
             {
@@ -67,12 +67,12 @@ namespace DevNotePad.ViewModel
 
         private void OnFindNext()
         {
-            var content = ui.GetText(false);
+            var content = textComponent.GetText(false);
 
             var result = searchEngine.RunSearch(content);
             if (result.Successful)
             {
-                ui.SelectText(result.StartIndex, result.Length);
+                textComponent.SelectText(result.StartIndex, result.Length);
                 ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
             }
             else
@@ -93,10 +93,10 @@ namespace DevNotePad.ViewModel
             }
             else
             {
-                var isSelectionAvailable = ui.IsTextSelected();
+                var isSelectionAvailable = textComponent.IsTextSelected();
                 if (isSelectionAvailable)
                 {
-                    ui.SetText(ReplaceWith, true);
+                    textComponent.SetText(ReplaceWith, true);
                 }
 
                 string notifier = "Search Pattern is replaced";
@@ -114,7 +114,7 @@ namespace DevNotePad.ViewModel
             else
             {
                 int replaceCount = 0;
-                var content = ui.GetText(false);
+                var content = textComponent.GetText(false);
                 startIndex = 0;
 
                 searchEngine.SearchPattern = SearchFor;
@@ -124,11 +124,11 @@ namespace DevNotePad.ViewModel
                 var result = searchEngine.RunSearch(content);
                 while (result.Successful)
                 {
-                    ui.SelectText(result.StartIndex, result.Length);
-                    ui.SetText(ReplaceWith, true);
+                    textComponent.SelectText(result.StartIndex, result.Length);
+                    textComponent.SetText(ReplaceWith, true);
 
                     // Increase the counter and update the search text
-                    content = ui.GetText(false);
+                    content = textComponent.GetText(false);
                     replaceCount++;
 
                     result = searchEngine.RunSearch(content);
@@ -154,10 +154,6 @@ namespace DevNotePad.ViewModel
 
                 ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, isWarning));
             }
-
-
-
-
         }
 
         private void OnCancel()

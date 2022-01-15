@@ -28,7 +28,7 @@ namespace DevNotePad.Service
             this.owner = owner;
         }
 
-        public void OpenFindDialog(IMainViewUi ui)
+        public void OpenFindDialog(IMainViewUi ui, ITextComponent textComponent)
         {
             if (ui == null)
             {
@@ -58,12 +58,12 @@ namespace DevNotePad.Service
 
             currentFindDialog = new FindDialog() { Owner = owner };
             currentFindDialog.DataContext = vm;
-            vm.Init(ui, currentFindDialog);
+            vm.Init(ui, currentFindDialog, textComponent);
 
             currentFindDialog.Show();
         }
 
-        public void OpenReplaceDialog(IMainViewUi ui)
+        public void OpenReplaceDialog(IMainViewUi ui, ITextComponent textComponent)
         {
             if (ui == null)
             {
@@ -93,7 +93,7 @@ namespace DevNotePad.Service
 
             currentReplaceDialog = new ReplaceDialog() { Owner = owner };
             currentReplaceDialog.DataContext = vm;
-            vm.Init(ui, currentReplaceDialog);
+            vm.Init(ui, currentReplaceDialog, textComponent);
 
             currentReplaceDialog.Show();
         }
