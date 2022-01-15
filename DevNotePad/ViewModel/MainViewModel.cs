@@ -137,69 +137,60 @@ namespace DevNotePad.ViewModel
 
         #region Command Delegates
 
-        private void OnNew()
-        {
-            if (fileLogic != null)
-            {
-                fileLogic.New();
-                UpdateFileStatus();
-            }
-        }
-
-        private void OnReload()
-        {
-            if (fileLogic != null)
-            {
-                fileLogic.Reload();
-                UpdateFileStatus();
-            }
-            
-        }
-
-        private void OnOpen()
+        private void OnFileOperation(FileOperation operation)
         {
             if (fileLogic != null)
             {
                 var dialogService = ServiceHelper.GetDialogService();
-                var result = dialogService.ShowOpenFileNameDialog(DefaultExtension);
 
-                if (result.IsConfirmed)
+                // File New
+                if (operation == FileOperation.New)
                 {
-                    fileLogic.Load(result.File);
-                    UpdateFileStatus();
-                }
-            }
-
-        }
-
-        private void OnSave()
-        {
-            if (fileLogic != null)
-            {
-                if (fileLogic.CurrentState == EditorState.New || fileLogic.CurrentState == EditorState.ChangedNew)
-                {
-                    OnSaveAs();
+                    fileLogic.New();
                 }
 
-                // Just save it
-                fileLogic.Save(fileLogic.FileName);
-
-                UpdateFileStatus();
-            }
-
-
-        }
-
-        private void OnSaveAs()
-        {
-            if (fileLogic != null)
-            {
-                var dialogService = ServiceHelper.GetDialogService();
-                var result = dialogService.ShowSaveFileDialog(DefaultExtension);
-
-                if (result.IsConfirmed)
+                // File Reload
+                if (operation == FileOperation.Reload)
                 {
-                    fileLogic.Save(result.File);
+                    fileLogic.Reload();
+                }
+
+                // File Open
+                if (operation == FileOperation.Open)
+                {
+                    var result = dialogService.ShowOpenFileNameDialog(DefaultExtension);
+                    if (result.IsConfirmed)
+                    {
+                        fileLogic.Load(result.File);
+                    }
+                }
+
+                // File Save
+                if (operation == FileOperation.Save)
+                {
+                    if (fileLogic.CurrentState == EditorState.New || fileLogic.CurrentState == EditorState.ChangedNew)
+                    {
+                        var result = dialogService.ShowSaveFileDialog(DefaultExtension);
+                        if (result.IsConfirmed)
+                        {
+                            fileLogic.Save(result.File);
+                        }
+                    }
+                    else
+                    {
+                        // Just save it
+                        fileLogic.Save(fileLogic.FileName);
+                    }
+                }
+
+                // File Save As
+                if (operation == FileOperation.SaveAs)
+                {
+                    var result = dialogService.ShowSaveFileDialog(DefaultExtension);
+                    if (result.IsConfirmed)
+                    {
+                        fileLogic.Save(result.File);
+                    }
                 }
 
                 UpdateFileStatus();
@@ -223,57 +214,7 @@ namespace DevNotePad.ViewModel
             ApplySettings();
         }
 
-        private void OnJsonFormatter()
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                var isTextSelected = textComponent!.IsTextSelected();
-                var input = textComponent.GetText(isTextSelected);
-                try
-                {
-                    IJsonComponent jsonComponent = FeatureFactory.CreateJson();
-                    var result = jsonComponent.Formatter(input);
-
-                    textComponent.SetText(result, isTextSelected);
-
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
-                }
-                catch (FeatureException featureException)
-                {
-                    ServiceHelper.ShowError(featureException, JsonComponent);
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
-                }
-            }
-        }
-
-        private void OnJsonToString()
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                var isTextSelected = textComponent.IsTextSelected();
-                var input = textComponent.GetText(isTextSelected);
-
-                try
-                {
-                    IJsonComponent jsonComponent = FeatureFactory.CreateJson();
-                    var la = jsonComponent.ParseToString(input);
-
-                    Ui.AddToScratchPad(la);
-                    Ui.FocusScratchPad();
-
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
-                }
-                catch (FeatureException featureException)
-                {
-                    ServiceHelper.ShowError(featureException, JsonComponent);
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
-                }
-            }
-        }
-
-        private void OnJsonToTree()
+        private void OnJson(JsonOperation operation)
         {
             bool isUiFound = CheckForUi();
             if (isUiFound)
@@ -284,14 +225,39 @@ namespace DevNotePad.ViewModel
                 try
                 {
                     IJsonComponent jsonComponent = FeatureFactory.CreateJson();
-                    var rootNode = jsonComponent.ParseToTree(input);
 
-                    Nodes = new ObservableCollection<ItemNode>();
-                    Nodes.Add(rootNode);
-                    RaisePropertyChange("Nodes");
+                    // JSON to Tree action
+                    if (operation == JsonOperation.ToTree)
+                    {
+                        var rootNode = jsonComponent.ParseToTree(input);
 
-                    Ui.FocusTree();
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
+                        Nodes = new ObservableCollection<ItemNode>();
+                        Nodes.Add(rootNode);
+                        RaisePropertyChange("Nodes");
+
+                        Ui.FocusTree();
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
+                    }
+
+                    // JSON to text action
+                    if (operation == JsonOperation.ToText)
+                    {
+                        var la = jsonComponent.ParseToString(input);
+
+                        Ui.AddToScratchPad(la);
+                        Ui.FocusScratchPad();
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
+                    }
+
+                    // JSON format action
+                    if (operation == JsonOperation.Format)
+                    {
+                        var result = jsonComponent.Formatter(input);
+
+                        textComponent.SetText(result, isTextSelected);
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
+                    }
+
                 }
                 catch (FeatureException featureException)
                 {
@@ -301,7 +267,7 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        private void OnXmlFormatter()
+        private void OnXml(XmlOperation operation)
         {
             bool isUiFound = CheckForUi();
             if (isUiFound)
@@ -312,64 +278,38 @@ namespace DevNotePad.ViewModel
                 try
                 {
                     IXmlComponent component = FeatureFactory.CreateXml();
-                    var formatted = component.Formatter(input);
 
-                    textComponent.SetText(formatted, isTextSelected);
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
-                }
-                catch (FeatureException featureException)
-                {
-                    ServiceHelper.ShowError(featureException, XmlComponent);
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
-                }
-            }
-        }
+                    // Format Action
+                    if (operation == XmlOperation.Format)
+                    {
+                        var formatted = component.Formatter(input);
 
-        private void OnXmlToString()
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                var isTextSelected = textComponent!.IsTextSelected();
-                var input = textComponent.GetText(isTextSelected);
+                        textComponent.SetText(formatted, isTextSelected);
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
+                    }
 
-                try
-                {
-                    IXmlComponent jsonComponent = FeatureFactory.CreateXml();
-                    var la = jsonComponent.ParseToString(input);
+                    // To Text Action
+                    if (operation == XmlOperation.ToText)
+                    {
+                        var la = component.ParseToString(input);
 
-                    Ui.AddToScratchPad(la);
-                    Ui.FocusScratchPad();
+                        Ui.AddToScratchPad(la);
+                        Ui.FocusScratchPad();
 
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
-                }
-                catch (FeatureException featureException)
-                {
-                    ServiceHelper.ShowError(featureException, JsonComponent);
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
-                }
-            }
-        }
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
+                    }
 
-        private void OnXmlToTree()
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                var isTextSelected = textComponent!.IsTextSelected();
-                var input = textComponent.GetText(isTextSelected);
+                    // To Tree Action
+                    if (operation == XmlOperation.ToTree)
+                    {
+                        var rootNode = component.ParseToTree(input);
 
-                try
-                {
-                    //TODO
-                    IXmlComponent component = FeatureFactory.CreateXml();
-                    var rootNode = component.ParseToTree(input);
+                        Nodes = new ObservableCollection<ItemNode>();
+                        Nodes.Add(rootNode);
+                        RaisePropertyChange("Nodes");
 
-                    Nodes = new ObservableCollection<ItemNode>();
-                    Nodes.Add(rootNode);
-                    RaisePropertyChange("Nodes");
-
-                    Ui.FocusTree();
+                        Ui.FocusTree();
+                    }
                 }
                 catch (FeatureException featureException)
                 {
@@ -602,11 +542,11 @@ namespace DevNotePad.ViewModel
         private void InitMenu()
         {
             // File
-            New = new DefaultCommand(OnNew);
-            Open = new DefaultCommand(OnOpen);
-            Save = new DefaultCommand(OnSave);
-            SaveAs = new DefaultCommand(OnSaveAs);
-            Reload = new DefaultCommand(OnReload);
+            New = new DefaultCommand(()=>OnFileOperation(FileOperation.New));
+            Open = new DefaultCommand(()=>OnFileOperation(FileOperation.Open));
+            Save = new DefaultCommand(()=>OnFileOperation(FileOperation.Save));
+            SaveAs = new DefaultCommand(()=>OnFileOperation(FileOperation.SaveAs));
+            Reload = new DefaultCommand(()=>OnFileOperation(FileOperation.Reload));
             Close = new DefaultCommand(OnClose);
 
             // Edit
@@ -623,12 +563,12 @@ namespace DevNotePad.ViewModel
             SelectAll = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.SelectAll));
 
             //Tools
-            JsonFormatter = new DefaultCommand(OnJsonFormatter);
-            JsonToStringParser = new DefaultCommand(OnJsonToString);
-            JsonToTreeParser = new DefaultCommand(OnJsonToTree);
-            XmlFormatter = new DefaultCommand(OnXmlFormatter);
-            XmlToStringParser = new DefaultCommand(OnXmlToString);
-            XmlToTreeParser = new DefaultCommand(OnXmlToTree);
+            JsonFormatter = new DefaultCommand(()=>OnJson(JsonOperation.Format));
+            JsonToStringParser = new DefaultCommand(()=>OnJson(JsonOperation.ToText));
+            JsonToTreeParser = new DefaultCommand(()=>OnJson(JsonOperation.ToTree));
+            XmlFormatter = new DefaultCommand(()=>OnXml(XmlOperation.Format));
+            XmlToStringParser = new DefaultCommand(()=>OnXml(XmlOperation.ToText));
+            XmlToTreeParser = new DefaultCommand(()=>OnXml(XmlOperation.ToTree));
             TextSplit = new DefaultCommand(()=>OnText(TextActionEnum.Split));
             TextGroup = new DefaultCommand(() => OnText(TextActionEnum.Group));
             TextToLower = new DefaultCommand(() => OnText(TextActionEnum.ToLower));
@@ -650,5 +590,27 @@ namespace DevNotePad.ViewModel
             About = new DefaultCommand(OnAbout);
         }
 
+        private enum JsonOperation
+        {
+            Format,
+            ToTree,
+            ToText
+        }
+
+        private enum XmlOperation
+        {
+            Format,
+            ToTree,
+            ToText
+        }
+
+        private enum FileOperation
+        {
+            New,
+            Open,
+            Save,
+            SaveAs,
+            Reload
+        }
     }
 }
