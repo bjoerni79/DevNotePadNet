@@ -113,13 +113,19 @@
             <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=ScratchPadCopy}"/>
             <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=ScratchPadPaste}"/>
             <MenuItem Header="Copy To Text" Command="{Binding Path=CopyToText}"/>
-            <!--<Separator/>
-            <MenuItem Header="Split" Command="{Binding Path=ScratchPadSplit}"/>
-            <MenuItem Header="Group" Command="{Binding Path=ScratchPadGroup}"/>
-            <MenuItem Header="To Lower" Command="{Binding Path=ScratchPadToLower}"/>
-            <MenuItem Header="To Upper" Command="{Binding Path=ScratchPadToUpper}"/>
-            <MenuItem Header="Trim" Command="{Binding Path=ScratchPadTrim}" />
-            <MenuItem Header="Count" Command="{Binding Path=ScratchPadCountLength}"/>-->
+
+            <MenuItem Header="Text">
+                <MenuItem Header="Split" />
+                <MenuItem Header="Group" />
+                <MenuItem Header="To Lower" />
+                <MenuItem Header="To Upper" />
+                <MenuItem Header="Trim"  />
+                <MenuItem Header="Count" />
+            </MenuItem>
+            <MenuItem Header="Format">
+                <MenuItem Header="JSON Format"  />
+                <MenuItem Header="XML Format" />
+            </MenuItem>
         </ContextMenu>
         
     </Window.Resources>
@@ -145,10 +151,7 @@
                 <MenuItem Header="Replace" Command="{Binding Path=Replace}" />
                 <Separator/>
                 <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding Path=SelectAll}"/>
-
-            </MenuItem>
-            <MenuItem Header="Tools">
-                <!--<MenuItem IsEnabled="False" Header="Open Binary File" />-->
+                <Separator/>
                 <MenuItem Header="JSON">
                     <MenuItem Header="To Text View" Command="{Binding Path=JsonToStringParser}"/>
                     <MenuItem Header="To Tree View" Command="{Binding Path=JsonToTreeParser}"/>
@@ -170,15 +173,48 @@
                 </MenuItem>
 
             </MenuItem>
+            
+            <!--<MenuItem Header="Tools">
+                --><!--<MenuItem IsEnabled="False" Header="Open Binary File" />--><!--
+            </MenuItem>-->
+            
             <MenuItem Header="ScratchPad">
-                <MenuItem Header="Clear All" Command="{Binding Path=ScratchPadClearAll}" />
-                <MenuItem Header="Clear Tree" Command="{Binding Path=ScratchPadClearTree}"/>
-                <MenuItem Header="Clar Text" Command="{Binding Path=ScratchPadClearText}" />
-                <Separator/>
+                <MenuItem Header="Cut" Command="{Binding Path=ScratchPadCut}" />
+                <MenuItem Header="Copy" Command="{Binding Path=ScratchPadCopy}"/>
+                <MenuItem Header="Paste" Command="{Binding Path=ScratchPadPaste}"/>
+                <Separator></Separator>
+                <MenuItem Header="Copy To Text" Command="{Binding Path=CopyToText}"/>
                 <MenuItem Header="Copy Clipboard Content" Command="{Binding Path=ScratchPadCopyClipboard}" />
+                <Separator></Separator>
+                <MenuItem Header="JSON">
+                    <MenuItem Header="To Text View" />
+                    <MenuItem Header="To Tree View" />
+                    <MenuItem Header="Format"  />
+                </MenuItem>
+                <MenuItem Header="XML">
+                    <MenuItem Header="To Text View"  />
+                    <MenuItem Header="To Tree View"  />
+                    <MenuItem Header="Format" />
+                    <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
+                </MenuItem>
+                <MenuItem Header="Text">
+                    <MenuItem Header="Split" />
+                    <MenuItem Header="Group" />
+                    <MenuItem Header="To Lower" />
+                    <MenuItem Header="To Upper" />
+                    <MenuItem Header="Trim"  />
+                    <MenuItem Header="Count" />
+                </MenuItem>
+
             </MenuItem>
             <MenuItem Header="Layout">
                 <MenuItem Command="{Binding Path=ToggleLineWrap}" IsChecked="{Binding Path=LineWrapMode,Mode=OneWay}" Header="Text Wrap Enabled"></MenuItem>
+                <MenuItem Header="ScratchPad">
+                    <MenuItem Header="Reset" Command="{Binding Path=ScratchPadClearAll}" />
+                    <MenuItem Header="Reset Tree" Command="{Binding Path=ScratchPadClearTree}"/>
+                    <MenuItem Header="Reset Text" Command="{Binding Path=ScratchPadClearText}" />
+                </MenuItem>
+
                 <!--<MenuItem Command="{Binding Path=Reset}" Header="Reset" />-->
 
             </MenuItem>

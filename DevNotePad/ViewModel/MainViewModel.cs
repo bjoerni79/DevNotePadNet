@@ -30,7 +30,9 @@ namespace DevNotePad.ViewModel
 
         private ITextComponent? textComponent;
 
-        private IFileLogic? fileLogic;
+        private IFileLogic? textLogic;
+
+        private IFileLogic? scratchPadLogic;
 
         public bool LineWrapMode { get; private set; }
 
@@ -65,21 +67,18 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? Find { get; private set; }
 
         public IRefreshCommand? Replace { get; private set; }
-        public IRefreshCommand? CopyToScratchPad { get; private set; }
+
 
         public IRefreshCommand? CopyToText { get; private set; }
 
         public IRefreshCommand? Cut { get; private set; }
 
-        public IRefreshCommand? ScratchPadCut { get; private set; }
+
 
         public IRefreshCommand? Copy { get; private set; }
 
-        public IRefreshCommand? ScratchPadCopy { get; private set; }
-
         public IRefreshCommand? Paste { get; private set; }
 
-        public IRefreshCommand? ScratchPadPaste { get; private set; }
 
         public IRefreshCommand? SelectAll { get; private set; }
 
@@ -115,8 +114,6 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? TextCountLength { get; private set; }
 
-
-
         // ScratchPad
 
         public IRefreshCommand? ScratchPadClearAll { get; private set; }
@@ -126,6 +123,14 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? ScratchPadClearTree { get; private set; }
 
         public IRefreshCommand? ScratchPadCopyClipboard { get; private set; }
+
+        public IRefreshCommand? CopyToScratchPad { get; private set; }
+
+        public IRefreshCommand? ScratchPadCut { get; private set; }
+
+        public IRefreshCommand? ScratchPadPaste { get; private set; }
+
+        public IRefreshCommand? ScratchPadCopy { get; private set; }
 
         // About
 
@@ -139,20 +144,20 @@ namespace DevNotePad.ViewModel
 
         private void OnFileOperation(FileOperation operation)
         {
-            if (fileLogic != null)
+            if (textLogic != null)
             {
                 var dialogService = ServiceHelper.GetDialogService();
 
                 // File New
                 if (operation == FileOperation.New)
                 {
-                    fileLogic.New();
+                    textLogic.New();
                 }
 
                 // File Reload
                 if (operation == FileOperation.Reload)
                 {
-                    fileLogic.Reload();
+                    textLogic.Reload();
                 }
 
                 // File Open
@@ -161,25 +166,25 @@ namespace DevNotePad.ViewModel
                     var result = dialogService.ShowOpenFileNameDialog(DefaultExtension);
                     if (result.IsConfirmed)
                     {
-                        fileLogic.Load(result.File);
+                        textLogic.Load(result.File);
                     }
                 }
 
                 // File Save
                 if (operation == FileOperation.Save)
                 {
-                    if (fileLogic.CurrentState == EditorState.New || fileLogic.CurrentState == EditorState.ChangedNew)
+                    if (textLogic.CurrentState == EditorState.New || textLogic.CurrentState == EditorState.ChangedNew)
                     {
                         var result = dialogService.ShowSaveFileDialog(DefaultExtension);
                         if (result.IsConfirmed)
                         {
-                            fileLogic.Save(result.File);
+                            textLogic.Save(result.File);
                         }
                     }
                     else
                     {
                         // Just save it
-                        fileLogic.Save(fileLogic.FileName);
+                        textLogic.Save(textLogic.FileName);
                     }
                 }
 
@@ -189,7 +194,7 @@ namespace DevNotePad.ViewModel
                     var result = dialogService.ShowSaveFileDialog(DefaultExtension);
                     if (result.IsConfirmed)
                     {
-                        fileLogic.Save(result.File);
+                        textLogic.Save(result.File);
                     }
                 }
 
@@ -400,20 +405,19 @@ namespace DevNotePad.ViewModel
             Ui.AddToScratchPad(text);
         }
 
-        private void OnText(TextActionEnum textAction)
+        private void OnText(IFileLogic logic,TextActionEnum textAction)
         {
-            if (fileLogic != null)
+            if (logic != null)
             {
-                fileLogic.Modify(textAction);
+                logic.Modify(textAction);
             }
-            
         }
 
-        private void OnTextClipboard(ClipboardActionEnum action)
+        private void OnTextClipboard(IFileLogic logic,ClipboardActionEnum action)
         {
-            if (fileLogic != null)
+            if (logic != null)
             {
-                fileLogic.PerfromClipboardAction(action);
+                logic.PerfromClipboardAction(action);
             }
         }
 
@@ -421,14 +425,18 @@ namespace DevNotePad.ViewModel
 
         #region IMainViewModel
 
-        public void Init(IMainViewUi ui, ITextComponent text)
+        public void Init(IMainViewUi ui, ITextComponent text, ITextComponent scratchPad)
         {
             Ui = ui;
             textComponent = text;
 
-            fileLogic = new InternalFileLogic(Ui,textComponent);
+            if (scratchPad != null)
+            {
+                scratchPadLogic = new InternalFileLogic(Ui, scratchPad);
+            }
 
-            fileLogic.New();
+            textLogic = new InternalFileLogic(Ui,textComponent);
+            textLogic.New();
             UpdateFileStatus();
         }
 
@@ -450,21 +458,21 @@ namespace DevNotePad.ViewModel
 
         public void NotifyContentChanged(int added, int offset, int removed)
         {
-            if (fileLogic != null)
+            if (textLogic != null)
             {
-                int internalTextLength = fileLogic.InitialText.Length;
+                int internalTextLength = textLogic.InitialText.Length;
                 var loadedEvent = offset == 0 && internalTextLength == added;
 
-                var isChangedSelected = fileLogic.CurrentState == EditorState.Changed || fileLogic.CurrentState == EditorState.ChangedNew;
+                var isChangedSelected = textLogic.CurrentState == EditorState.Changed || textLogic.CurrentState == EditorState.ChangedNew;
                 if (!loadedEvent && !isChangedSelected)
                 {
-                    if (fileLogic.CurrentState == EditorState.New)
+                    if (textLogic.CurrentState == EditorState.New)
                     {
-                        fileLogic.CurrentState = EditorState.ChangedNew;
+                        textLogic.CurrentState = EditorState.ChangedNew;
                     }
                     else
                     {
-                        fileLogic.CurrentState = EditorState.Changed;
+                        textLogic.CurrentState = EditorState.Changed;
                     }
 
                     UpdateFileStatus();
@@ -474,9 +482,9 @@ namespace DevNotePad.ViewModel
 
         public bool IsChanged()
         {
-            if (fileLogic != null)
+            if (textLogic != null)
             {
-                var isChangeRequired = fileLogic.CurrentState == EditorState.Changed || fileLogic.CurrentState == EditorState.ChangedNew;
+                var isChangeRequired = textLogic.CurrentState == EditorState.Changed || textLogic.CurrentState == EditorState.ChangedNew;
                 return isChangeRequired;
             }
 
@@ -492,9 +500,9 @@ namespace DevNotePad.ViewModel
         private void UpdateFileStatus()
         {
             var currentUiState = "Unknown";
-            if (fileLogic != null)
+            if (textLogic != null)
             {
-                var currentState = fileLogic.CurrentState;
+                var currentState = textLogic.CurrentState;
                 if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
                 {
                     currentUiState = "Changed";
@@ -553,14 +561,10 @@ namespace DevNotePad.ViewModel
             Find = new DefaultCommand(OnFind);
             Replace = new DefaultCommand(OnReplace);
             CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
-            // Cut
-            Cut = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.Cut));
-            // Copy
-            Copy = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.Copy));
-            // Paste
-            Paste = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.Paste));
-            // Select All
-            SelectAll = new DefaultCommand(() => OnTextClipboard(ClipboardActionEnum.SelectAll));
+            Cut = new DefaultCommand(() => OnTextClipboard(textLogic,ClipboardActionEnum.Cut));
+            Copy = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Copy));
+            Paste = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Paste));
+            SelectAll = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.SelectAll));
 
             //Tools
             JsonFormatter = new DefaultCommand(()=>OnJson(JsonOperation.Format));
@@ -569,27 +573,32 @@ namespace DevNotePad.ViewModel
             XmlFormatter = new DefaultCommand(()=>OnXml(XmlOperation.Format));
             XmlToStringParser = new DefaultCommand(()=>OnXml(XmlOperation.ToText));
             XmlToTreeParser = new DefaultCommand(()=>OnXml(XmlOperation.ToTree));
-            TextSplit = new DefaultCommand(()=>OnText(TextActionEnum.Split));
-            TextGroup = new DefaultCommand(() => OnText(TextActionEnum.Group));
-            TextToLower = new DefaultCommand(() => OnText(TextActionEnum.ToLower));
-            TextToUpper = new DefaultCommand(() => OnText(TextActionEnum.ToUpper));
-            TextTrim = new DefaultCommand(() => OnText(TextActionEnum.Trim));
-            TextCountLength = new DefaultCommand(() => OnText(TextActionEnum.LengthCount));
+            TextSplit = new DefaultCommand(()=>OnText(textLogic,TextActionEnum.Split));
+            TextGroup = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Group));
+            TextToLower = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToLower));
+            TextToUpper = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToUpper));
+            TextTrim = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Trim));
+            TextCountLength = new DefaultCommand(() => OnText(textLogic, TextActionEnum.LengthCount));
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
-            //Refresh = new DefaultCommand(OnRefresh);
 
             // ScratchPad
             ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
             ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad);
             ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad);
             ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad);
+            ScratchPadCopy = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Copy));
+            ScratchPadCut = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Cut));
+            ScratchPadPaste = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Paste));
 
             // About
             About = new DefaultCommand(OnAbout);
         }
 
+        /// <summary>
+        /// JSON Action commands 
+        /// </summary>
         private enum JsonOperation
         {
             Format,
@@ -597,6 +606,9 @@ namespace DevNotePad.ViewModel
             ToText
         }
 
+        /// <summary>
+        /// XML Action commands
+        /// </summary>
         private enum XmlOperation
         {
             Format,
@@ -604,6 +616,9 @@ namespace DevNotePad.ViewModel
             ToText
         }
 
+        /// <summary>
+        /// File Action commands
+        /// </summary>
         private enum FileOperation
         {
             New,

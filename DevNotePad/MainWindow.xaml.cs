@@ -180,7 +180,7 @@ namespace DevNotePad
             var vm = GetViewModel();
             if (vm != null)
             {
-                vm.Init(this, new TextComponent(editor));
+                vm.Init(this, new TextComponent(editor), new TextComponent(scratchPad));
                 vm.ApplySettings();
             }
         }

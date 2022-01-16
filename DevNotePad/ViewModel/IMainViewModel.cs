@@ -8,7 +8,7 @@ namespace DevNotePad.ViewModel
 {
     public interface IMainViewModel
     {
-        void Init(IMainViewUi ui, ITextComponent text);
+        void Init(IMainViewUi ui, ITextComponent text, ITextComponent scratchPad);
 
         void NotifyContentChanged(int added, int offset, int removed);
         void ApplySettings();
