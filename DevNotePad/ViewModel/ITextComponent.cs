@@ -39,6 +39,12 @@ namespace DevNotePad.ViewModel
         void SetText(string text, bool selected);
 
         /// <summary>
+        /// Adds some text at the current position
+        /// </summary>
+        /// <param name="text">the text</param>
+        void AddText(string text);
+
+        /// <summary>
         /// Checks if there is a text selection 
         /// </summary>
         /// <returns>true if there is, otherwise false</returns>

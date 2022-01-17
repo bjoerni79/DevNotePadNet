@@ -30,6 +30,8 @@ namespace DevNotePad.ViewModel
 
         private ITextComponent? textComponent;
 
+        private ITextComponent? scratchPadComponent;
+
         private IFileLogic? textLogic;
 
         private IFileLogic? scratchPadLogic;
@@ -131,6 +133,26 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? ScratchPadPaste { get; private set; }
 
         public IRefreshCommand? ScratchPadCopy { get; private set; }
+
+        public IRefreshCommand? ScratchPadJsonFormat { get; private set; }
+
+        public IRefreshCommand? ScratchPadJsonToTree { get; private set; }
+
+        public IRefreshCommand? ScratchPadXmlFormat { get; private set; }
+
+        public IRefreshCommand? ScratchPadXmlToTree { get; private set; }
+
+        public IRefreshCommand? ScratchPadSplit { get; private set; }
+
+        public IRefreshCommand? ScratchPadGroup { get; private set; }
+
+        public IRefreshCommand? ScratchpadToLower { get; private set; }
+
+        public IRefreshCommand? ScratchPadToUpper { get; private set; } 
+
+        public IRefreshCommand? ScratchPadTrim { get; private set; }
+
+        public IRefreshCommand? ScratchPadCountLength { get; private set; }
 
         // About
 
@@ -249,7 +271,7 @@ namespace DevNotePad.ViewModel
                     {
                         var la = jsonComponent.ParseToString(input);
 
-                        Ui.AddToScratchPad(la);
+                        scratchPadComponent.AddText(la);
                         Ui.FocusScratchPad();
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
                     }
@@ -263,6 +285,83 @@ namespace DevNotePad.ViewModel
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
                     }
 
+                }
+                catch (FeatureException featureException)
+                {
+                    ServiceHelper.ShowError(featureException, JsonComponent);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
+                }
+            }
+        }
+
+        private void OnScratchPadXml(XmlOperation operation)
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                var isTextSelected = scratchPadComponent!.IsTextSelected();
+                var input = scratchPadComponent.GetText(isTextSelected);
+
+                try
+                {
+                    IXmlComponent component = FeatureFactory.CreateXml();
+
+                    if (operation == XmlOperation.Format)
+                    {
+                        var formatted = component.Formatter(input);
+
+                        scratchPadComponent.SetText(formatted, isTextSelected);
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
+                    }
+
+                    if (operation == XmlOperation.ToTree)
+                    {
+                        var rootNode = component.ParseToTree(input);
+
+                        Nodes = new ObservableCollection<ItemNode>();
+                        Nodes.Add(rootNode);
+                        RaisePropertyChange("Nodes");
+
+                        Ui.FocusTree();
+                    }
+                }
+                catch (FeatureException featureException)
+                {
+                    ServiceHelper.ShowError(featureException, XmlComponent);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
+                }
+            }
+        }
+        private void OnScratchPadJson(JsonOperation operation)
+        {
+            bool isUiFound = CheckForUi();
+            if (isUiFound)
+            {
+                var isTextSelected = scratchPadComponent!.IsTextSelected();
+                var input = scratchPadComponent.GetText(isTextSelected);
+
+                try
+                {
+                    IJsonComponent jsonComponent = FeatureFactory.CreateJson();
+
+                    if (operation == JsonOperation.Format)
+                    {
+                        var result = jsonComponent.Formatter(input);
+
+                        scratchPadComponent.SetText(result, isTextSelected);
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
+                    }
+
+                    if (operation == JsonOperation.ToTree)
+                    {
+                        var rootNode = jsonComponent.ParseToTree(input);
+
+                        Nodes = new ObservableCollection<ItemNode>();
+                        Nodes.Add(rootNode);
+                        RaisePropertyChange("Nodes");
+
+                        Ui.FocusTree();
+                    }
                 }
                 catch (FeatureException featureException)
                 {
@@ -298,7 +397,7 @@ namespace DevNotePad.ViewModel
                     {
                         var la = component.ParseToString(input);
 
-                        Ui.AddToScratchPad(la);
+                        scratchPadComponent.AddText(la);
                         Ui.FocusScratchPad();
 
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
@@ -380,7 +479,7 @@ namespace DevNotePad.ViewModel
                 if (containsText)
                 {
                     var content = Clipboard.GetText();
-                    Ui!.AddToScratchPad(content);
+                    scratchPadComponent.AddText(content);
                 }
             }
         }
@@ -402,7 +501,16 @@ namespace DevNotePad.ViewModel
             var isSelected = textComponent!.IsTextSelected();
             var text = textComponent.GetText(isSelected);
 
-            Ui.AddToScratchPad(text);
+            scratchPadComponent.AddText(text);
+        }
+
+        private void OnCopyToText()
+        {
+            var isSelected = scratchPadComponent!.IsTextSelected();
+            var text = scratchPadComponent.GetText(isSelected);
+
+            textComponent.AddText(text);
+
         }
 
         private void OnText(IFileLogic logic,TextActionEnum textAction)
@@ -429,6 +537,7 @@ namespace DevNotePad.ViewModel
         {
             Ui = ui;
             textComponent = text;
+            scratchPadComponent = scratchPad;
 
             if (scratchPad != null)
             {
@@ -584,6 +693,7 @@ namespace DevNotePad.ViewModel
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
 
             // ScratchPad
+            CopyToText = new DefaultCommand(OnCopyToText);
             ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
             ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad);
             ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad);
@@ -591,6 +701,18 @@ namespace DevNotePad.ViewModel
             ScratchPadCopy = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Copy));
             ScratchPadCut = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Cut));
             ScratchPadPaste = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Paste));
+            ScratchPadXmlFormat = new DefaultCommand(()=>OnScratchPadXml(XmlOperation.Format));
+            ScratchPadXmlToTree = new DefaultCommand(() => OnScratchPadXml(XmlOperation.ToTree));
+            ScratchPadJsonFormat = new DefaultCommand(() => OnScratchPadJson(JsonOperation.Format));
+            ScratchPadJsonToTree = new DefaultCommand(() => OnScratchPadJson(JsonOperation.ToTree));
+
+            //TODO: Text Actions
+            ScratchPadSplit = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Split));
+            ScratchPadGroup = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Group));
+            ScratchpadToLower = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToLower));
+            ScratchPadToUpper = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToUpper));
+            ScratchPadTrim = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Trim));
+            ScratchPadCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.LengthCount));
 
             // About
             About = new DefaultCommand(OnAbout);

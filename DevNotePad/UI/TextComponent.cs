@@ -21,6 +21,11 @@ namespace DevNotePad.UI
             this.editor = textBox;
          }
 
+        public void AddText(string text)
+        {
+            editor.AppendText("\n" + text);
+        }
+
         public int GetCurrentPosition()
         {
             return editor.CaretIndex;

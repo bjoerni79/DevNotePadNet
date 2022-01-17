@@ -16,8 +16,6 @@ namespace DevNotePad.ViewModel
 
         void SetFilename(string filename);
 
-        void AddToScratchPad(string text);
-
         void FocusTree();
 
         void FocusScratchPad();
