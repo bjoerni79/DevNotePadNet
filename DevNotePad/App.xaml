@@ -53,5 +53,30 @@
             <Setter Property="Foreground" Value="Blue"/>
         </Style>
 
+        <!-- Notification Styles -->
+        
+        <Style x:Key="notificationDefault" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="Blue"/>
+        </Style>
+
+        <Style x:Key="notificationWarning" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+        
+        <!-- File Status Styles -->
+
+        <Style x:Key="fileStatusNoChange" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="Blue"/>
+        </Style>
+
+        <Style x:Key="fileStatusChange" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
     </Application.Resources>
 </Application>

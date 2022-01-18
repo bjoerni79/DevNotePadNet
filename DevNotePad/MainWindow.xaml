@@ -28,6 +28,8 @@
 
     <Window.Resources>
 
+        <shared:IsStatusChangedStyleConverter x:Key="isStatusChangedStyleConverter" />
+
         <!-- Renders the style of the ItemNode-->
         <shared:ItemNodeStyleConverter x:Key="itemNodeStyleConverter" />
 
@@ -47,16 +49,6 @@
 
             </Grid>
         </HierarchicalDataTemplate>
-
-        <Style x:Key="notificationDefault" TargetType="Label">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="Blue"/>
-        </Style>
-
-        <Style x:Key="notificationWarning" TargetType="Label">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="Red"/>
-        </Style>
 
         <Style x:Key="editorTextbox" TargetType="TextBox">
             <Setter Property="FontSize" Value="14"/>
@@ -229,7 +221,7 @@
                 <Label Style="{StaticResource toolbarTitleLabel}" Content=" Column:"  />
                 <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding ElementName=editor, Path=CurrentColumn}"/>
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="State:"  />
-                <Label Style="{StaticResource toolbarContentStateLabel}" Content="{Binding Path=State}"/>
+                <Label Style="{Binding Path=IsStateChanged,Converter={StaticResource isStatusChangedStyleConverter},Mode=OneWay}" Content="{Binding Path=State}"/>
             </StackPanel>
 
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>

@@ -73,8 +73,8 @@ namespace DevNotePad.UI
                 var colIndex = caret - startIndex;
 
                 // It is zero based.
-                CurrentRow = rowIndex;
-                CurrentColumn = colIndex;
+                CurrentRow = rowIndex + 1;
+                CurrentColumn = colIndex + 1;
             }
         }
 

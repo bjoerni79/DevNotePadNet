@@ -42,9 +42,12 @@ namespace DevNotePad.ViewModel
 
         public string State { get; private set; }
 
+        public bool IsStateChanged { get; private set; }
+
         public MainViewModel()
         {
             State = "Ready";
+            IsStateChanged = false;
             InitMenu();
         }
 
@@ -609,12 +612,14 @@ namespace DevNotePad.ViewModel
         private void UpdateFileStatus()
         {
             var currentUiState = "Unknown";
+            bool isChanged = false;
             if (textLogic != null)
             {
                 var currentState = textLogic.CurrentState;
                 if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
                 {
                     currentUiState = "Changed";
+                    isChanged = true;
                 }
 
                 if (currentState == EditorState.New)
@@ -635,7 +640,9 @@ namespace DevNotePad.ViewModel
 
             // Notify the UI
             State = currentUiState;
+            IsStateChanged = isChanged;
             RaisePropertyChange("State");
+            RaisePropertyChange("IsStateChanged");
         }
 
         private Settings GetSettings()
