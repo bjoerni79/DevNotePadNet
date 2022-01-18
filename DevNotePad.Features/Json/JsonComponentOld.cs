@@ -9,9 +9,9 @@ using DevNotePad.Features.Shared;
 
 namespace DevNotePad.Features.Json
 {
-    internal class JsonComponent : IJsonComponent
+    internal class JsonComponentOld : IJsonComponent
     {
-        internal JsonComponent()
+        internal JsonComponentOld()
         {
 
         }

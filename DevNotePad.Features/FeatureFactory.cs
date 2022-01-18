@@ -13,12 +13,12 @@ namespace DevNotePad.Features
 
         public static IXmlComponent CreateXml()
         {
-            return new XmlComponent();
+            return new XmlComponentOld();
         }
 
         public static IJsonComponent CreateJson()
         {
-            return new JsonComponent();
+            return new JsonComponentOld();
         }
 
 

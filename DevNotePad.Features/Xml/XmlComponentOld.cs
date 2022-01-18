@@ -9,9 +9,9 @@ using System.Xml;
 
 namespace DevNotePad.Features.Xml
 {
-    internal class XmlComponent : IXmlComponent
+    internal class XmlComponentOld : IXmlComponent
     {
-        internal XmlComponent()
+        internal XmlComponentOld()
         {
         }
 
