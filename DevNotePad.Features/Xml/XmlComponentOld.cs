@@ -76,6 +76,7 @@ namespace DevNotePad.Features.Xml
             var isDocument = nodeType == XmlNodeType.Document;
             var isElement = nodeType == XmlNodeType.Element; ;
             var isMeta = nodeType == XmlNodeType.XmlDeclaration || nodeType == XmlNodeType.Comment;
+            var isText = nodeType == XmlNodeType.Text;
 
             if (isMeta)
                 itemNode = HandleMetaDeclaration(node);
@@ -109,6 +110,12 @@ namespace DevNotePad.Features.Xml
                         var child = ParseDom(childXmlNode);
                         itemNode.Childs.Add(child);
                     }
+                }
+
+                if (isText)
+                {
+                    itemNode.Name = node.InnerText;
+                    itemNode.Style = ItemNodeStyle.Value;
                 }
             }
 
@@ -163,8 +170,23 @@ namespace DevNotePad.Features.Xml
 
             try
             {
+                // StringReader: https://docs.microsoft.com/en-us/dotnet/api/system.io.stringreader?view=net-6.0
+                // https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.load?view=net-6.0#system-xml-xmldocument-load(system-xml-xmlreader)
+                // TODO: Try using the Load() + XmlReader 
+
+                var readerSettings = new XmlReaderSettings()
+                {
+                    IgnoreWhitespace = true,
+                    IgnoreComments = true,
+                    IgnoreProcessingInstructions = true,
+                    ConformanceLevel = ConformanceLevel.Auto
+                };
+
                 document = new XmlDocument();
-                document.LoadXml(xmlText);
+
+                var reader = XmlReader.Create(new StringReader(xmlText),readerSettings);
+                document.Load(reader);
+                //document.LoadXml(xmlText);
             }
             catch (XmlException xmlException)
             {
