@@ -1,4 +1,5 @@
-﻿using DevNotePad.MVVM;
+﻿using DevNotePad.Features;
+using DevNotePad.MVVM;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
 using System;
@@ -40,7 +41,7 @@ namespace DevNotePad.ViewModel
             {
                 try
                 {
-                    var formatter = new TextFormatter();
+                    var formatter = FeatureFactory.CreateTextFormat();
 
                     bool isWarnung = false;
                     bool doUpdate = true;

@@ -4,23 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevNotePad.ViewModel
+namespace DevNotePad.Features.Text
 {
-    internal class TextFormatter
+    internal class TextFormatComponent : ITextFormatComponent
     {
-        private TextFormatterSetting setting;
 
-        internal TextFormatter() : this(new TextFormatterSetting())
+        internal TextFormatComponent()
         {
-            // Emptpy
+
         }
 
-        internal TextFormatter(TextFormatterSetting setting)
-        {
-            this.setting = setting;
-        }
-
-        internal string CountLength(String text)
+        public string CountLength(string text)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -29,10 +23,9 @@ namespace DevNotePad.ViewModel
 
             var length = text.Length;
             return String.Format("Length Selected : {0} Dec / 0x{1:X2} Hex", length, length);
-
         }
 
-        internal string GroupString(string text)
+        public string GroupString(string text)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -51,16 +44,40 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        internal string ToUpper(string text)
+        public string SplitString(string text)
+        {
+            return SplitString(text, new TextFormatComponentSettings());
+        }
+
+        public string SplitString(string text, TextFormatComponentSettings settings)
         {
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentNullException("text");
             }
 
-            if (text.Length > 0)
+            if (settings == null)
             {
-                return text.ToUpper();
+                throw new ArgumentNullException("settings");
+            }
+
+            var groupCount = settings.GroupCount;
+            var filteredText = FilterContent(text);
+
+            if (filteredText.Count() > 0)
+            {
+                // Split the text into groups of groupCount. 
+                var splittedText = new StringBuilder();
+                while (filteredText.Count() > groupCount)
+                {
+                    var group = filteredText.Substring(0, groupCount);
+                    filteredText = filteredText.Substring(groupCount);
+
+                    splittedText.AppendFormat("{0}  ", group);
+                }
+
+                splittedText.Append(filteredText);
+                return splittedText.ToString();
             }
             else
             {
@@ -68,24 +85,7 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        internal string Trim(string text)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                throw new ArgumentNullException("text");
-            }
-
-            if (text.Length > 0)
-            {
-                return text.Trim();
-            }
-            else
-            {
-                return String.Empty;
-            }
-        }
-
-        internal string ToLower(string text)
+        public string ToLower(string text)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -102,36 +102,38 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        internal string SplitString(string text)
+        public string ToUpper(string text)
         {
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentNullException("text");
             }
 
-            var groupCount = setting.GroupCount;
-            var filteredText = FilterContent(text);
-
-            if (filteredText.Count() > 0)
+            if (text.Length > 0)
             {
-                // Split the text into groups of groupCount. 
-                var splittedText = new StringBuilder();
-                while (filteredText.Count() > groupCount)
-                {
-                    var group = filteredText.Substring(0, groupCount);
-                    filteredText = filteredText.Substring(groupCount);
-
-                    splittedText.AppendFormat("{0}  ",group);
-                }
-
-                splittedText.Append(filteredText);
-                return splittedText.ToString();
+                return text.ToUpper();
             }
             else
             {
                 return String.Empty;
             }
+        }
 
+        public string Trim(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            if (text.Length > 0)
+            {
+                return text.Trim();
+            }
+            else
+            {
+                return String.Empty;
+            }
         }
 
         private string FilterContent(string text)

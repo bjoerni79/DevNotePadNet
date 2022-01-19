@@ -245,6 +245,7 @@ namespace DevNotePad.Features.Json
             {
                 // JSON files with comments cannot be loaded. The only option is to ignore them.
                 // The Format option deletes them from the formatted version later on.
+                // https://docs.microsoft.com/en-us/dotnet/api/system.text.json.jsondocumentoptions.commenthandling?view=net-6.0#system-text-json-jsondocumentoptions-commenthandling
 
                 var options = new JsonDocumentOptions() { AllowTrailingCommas = true };
                 options.CommentHandling = JsonCommentHandling.Skip;

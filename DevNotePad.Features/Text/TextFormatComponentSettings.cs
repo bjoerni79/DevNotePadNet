@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevNotePad.ViewModel
+namespace DevNotePad.Features.Text
 {
-    internal class TextFormatterSetting
+    public class TextFormatComponentSettings
     {
-        internal TextFormatterSetting()
+        public TextFormatComponentSettings()
         {
             GroupCount = 4;
         }
 
-        internal int GroupCount { get; set; }
+        public int GroupCount { get; set; }
     }
 }
