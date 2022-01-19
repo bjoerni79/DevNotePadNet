@@ -272,7 +272,7 @@ namespace DevNotePad.Features.Json
             }
             catch (Exception ex)
             {
-                throw new FeatureException("Generic Issue", ex);
+                throw new FeatureException("Cannot read JSON File", ex);
             }
 
             return document;

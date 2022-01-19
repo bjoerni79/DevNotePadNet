@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DevNotePad.ViewModel
@@ -18,6 +19,7 @@ namespace DevNotePad.ViewModel
             Message = "Test Message";
 
             Confirm = new DefaultCommand(OnConfirm);
+            Copy = new DefaultCommand(OnCopy);
         }
 
         private IDialog? dialog;
@@ -43,9 +45,25 @@ namespace DevNotePad.ViewModel
         // OK Button
         public ICommand Confirm { get; set; }
 
+        public ICommand Copy { get; set; }
+
         private void OnConfirm()
         {
             dialog!.CloseDialog(true);
+        }
+
+        private void OnCopy()
+        {
+            var textBuilder = new StringBuilder();
+            textBuilder.AppendFormat("Dialog Title = {0}\n", DialogTitle);
+            textBuilder.AppendFormat("Component = {0}\n", Component);
+            textBuilder.AppendFormat("Message = {0}\n", Message);
+            if (Details != null)
+            {
+                textBuilder.AppendFormat("Details = {0}", Details);
+            }
+
+            Clipboard.SetText(textBuilder.ToString());
         }
     }
 
