@@ -140,11 +140,11 @@ namespace DevNotePad
             Style style;
             if (isWarning)
             {
-                style = Resources[styleWarning] as Style;
+                style = App.Current.FindResource(styleWarning) as Style;
             }
             else
             {
-                style = Resources[styleDefault] as Style;
+                style = App.Current.FindResource(styleDefault) as Style;
             }
 
             notificationLabel.Content = message;

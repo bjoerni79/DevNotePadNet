@@ -74,6 +74,7 @@
 
         <Style x:Key="toolbarContentNumberLabel" TargetType="Label">
             <Setter Property="MinWidth" Value="30"/>
+            <Setter Property="Foreground" Value="Blue"/>
         </Style>
 
         <Style x:Key="toolbarContentStateLabel" TargetType="Label">
@@ -221,7 +222,7 @@
                 <Label Style="{StaticResource toolbarTitleLabel}" Content=" Column:"  />
                 <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding ElementName=editor, Path=CurrentColumn}"/>
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="State:"  />
-                <Label Style="{Binding Path=IsStateChanged,Converter={StaticResource isStatusChangedStyleConverter},Mode=OneWay}" Content="{Binding Path=State}"/>
+                <Label Style="{Binding Path=IsStateChanged,Converter={StaticResource isStatusChangedStyleConverter},Mode=OneWay}" Width="70"  Content="{Binding Path=State}"/>
             </StackPanel>
 
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
