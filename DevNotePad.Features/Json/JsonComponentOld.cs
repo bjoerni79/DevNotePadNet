@@ -243,13 +243,17 @@ namespace DevNotePad.Features.Json
 
             try
             {
+                // JSON files with comments cannot be loaded. The only option is to ignore them.
+                // The Format option deletes them from the formatted version later on.
+
                 var options = new JsonDocumentOptions() { AllowTrailingCommas = true };
+                options.CommentHandling = JsonCommentHandling.Skip;
+               
                 document = JsonDocument.Parse(jsonCoding, options);
             }
             catch (JsonException jsonException)
             {
-                var featureException = new FeatureException("Generic Issue", jsonException);
-                //featureException.Details = jsonException.
+                var featureException = new FeatureException("Cannot parse JSON coding", jsonException);
 
                 var detailsBuilder = new StringBuilder();
                 if (jsonException.Message != null)
@@ -272,7 +276,7 @@ namespace DevNotePad.Features.Json
             }
             catch (Exception ex)
             {
-                throw new FeatureException("Cannot read JSON File", ex);
+                throw new FeatureException("Generic Issue during pasing JSON content", ex);
             }
 
             return document;
