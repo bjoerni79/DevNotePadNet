@@ -1,0 +1,68 @@
+﻿<Window x:Class="DevNotePad.Shared.Base64ToolDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DevNotePad.Shared"
+        mc:Ignorable="d"
+        Title="Base64 Helper" 
+        MinHeight="200" 
+        MaxHeight="400"
+        MinWidth="500"
+        MaxWidth="600"
+        ResizeMode="CanResize" 
+        WindowStartupLocation="CenterOwner" 
+        SizeToContent="WidthAndHeight"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+        
+        >
+
+    <Window.Resources>
+
+        <Style x:Key="dialogButton" TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="0 5 10 0"/>
+        </Style>
+
+        <Style x:Key="titleLabel" TargetType="Label">
+            <Setter Property="FontWeight" Value="DemiBold"/>
+        </Style>
+
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0"  Style="{StaticResource titleLabel}" Content="Hex String:"/>
+
+        <Label Grid.Row="1" Content="TODO"/>
+
+        <StackPanel Grid.Row="2"  Margin="10" Orientation="Horizontal">
+            <Button Style="{StaticResource dialogButton}" >To Base64</Button>
+            <Button Style="{StaticResource dialogButton}" >Save As binary</Button>
+            <Button Style="{StaticResource dialogButton}" >Load binary</Button>
+        </StackPanel>
+
+        <Label Grid.Row="3" Style="{StaticResource titleLabel}" Content="Base64 Coding:"/>
+
+        <Label Grid.Row="4" Content="TODO"/>
+
+        <StackPanel Grid.Row="5"  Margin="10" Orientation="Horizontal">
+            <Button Style="{StaticResource dialogButton}" >To Hex String</Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="6"  Margin="10" Orientation="Horizontal">
+            <Button IsDefault="True" Style="{StaticResource dialogButton}" >Close</Button>
+        </StackPanel>
+
+    </Grid>
+</Window>

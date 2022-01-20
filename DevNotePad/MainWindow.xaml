@@ -169,11 +169,7 @@
                 </MenuItem>
 
             </MenuItem>
-            
-            <!--<MenuItem Header="Tools">
-                --><!--<MenuItem IsEnabled="False" Header="Open Binary File" />--><!--
-            </MenuItem>-->
-            
+                        
             <MenuItem Header="ScratchPad">
                 <MenuItem Header="Cut" Command="{Binding Path=ScratchPadCut}" />
                 <MenuItem Header="Copy" Command="{Binding Path=ScratchPadCopy}"/>
@@ -202,6 +198,11 @@
                 </MenuItem>
 
             </MenuItem>
+
+            <MenuItem Header="Tools">
+                <MenuItem Header="Base64 Helper" />
+            </MenuItem>
+
             <MenuItem Header="Layout">
                 <MenuItem Command="{Binding Path=ToggleLineWrap}" IsChecked="{Binding Path=LineWrapMode,Mode=OneWay}" Header="Text Wrap Enabled"></MenuItem>
                 <MenuItem Header="ScratchPad">
