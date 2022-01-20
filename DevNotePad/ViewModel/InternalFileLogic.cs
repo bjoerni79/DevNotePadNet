@@ -30,7 +30,7 @@ namespace DevNotePad.ViewModel
 
         public EditorState CurrentState { get; set; }
 
-        public void Modify(TextActionEnum textAction)
+        public void PerformTextAction(TextActionEnum textAction)
         {
             var isSelected = textComponent.IsTextSelected();
             if (!isSelected)
@@ -73,6 +73,11 @@ namespace DevNotePad.ViewModel
                             break;
                         case TextActionEnum.LengthCount:
                             notifier = formatter.CountLength(text);
+                            doUpdate = false;
+                            formattedText = text;
+                            break;
+                        case TextActionEnum.HexLengthCount:
+                            notifier = formatter.CountLength(text,true);
                             doUpdate = false;
                             formattedText = text;
                             break;

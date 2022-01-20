@@ -33,7 +33,7 @@ namespace DevNotePad.ViewModel
         EditorState CurrentState { get; set; }
 
 
-        void Modify(TextActionEnum textAction);
+        void PerformTextAction(TextActionEnum textAction);
 
         void PerfromClipboardAction(ClipboardActionEnum action);
 

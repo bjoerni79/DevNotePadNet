@@ -119,6 +119,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? TextCountLength { get; private set; }
 
+        public IRefreshCommand? TextHexCountLength { get; private set; }
+
         // ScratchPad
 
         public IRefreshCommand? ScratchPadClearAll { get; private set; }
@@ -156,6 +158,8 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? ScratchPadTrim { get; private set; }
 
         public IRefreshCommand? ScratchPadCountLength { get; private set; }
+
+        public IRefreshCommand? ScratchPadHexCountLength { get; private set; }
 
         // About
 
@@ -520,7 +524,7 @@ namespace DevNotePad.ViewModel
         {
             if (logic != null)
             {
-                logic.Modify(textAction);
+                logic.PerformTextAction(textAction);
             }
         }
 
@@ -695,6 +699,7 @@ namespace DevNotePad.ViewModel
             TextToUpper = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToUpper));
             TextTrim = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Trim));
             TextCountLength = new DefaultCommand(() => OnText(textLogic, TextActionEnum.LengthCount));
+            TextHexCountLength = new DefaultCommand(()=>OnText(textLogic, TextActionEnum.HexLengthCount));
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
@@ -720,6 +725,7 @@ namespace DevNotePad.ViewModel
             ScratchPadToUpper = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToUpper));
             ScratchPadTrim = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Trim));
             ScratchPadCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.LengthCount));
+            ScratchPadHexCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexLengthCount));
 
             // About
             About = new DefaultCommand(OnAbout);

@@ -93,6 +93,7 @@
                 <MenuItem Header="To Upper" Command="{Binding Path=TextToUpper}"/>
                 <MenuItem Header="Trim" Command="{Binding Path=TextTrim}" />
                 <MenuItem Header="Count" Command="{Binding Path=TextCountLength}"/>
+                <MenuItem Header="Hex Byte Count" Command="{Binding Path=TextHexCountLength}" />
             </MenuItem>
             <MenuItem Header="Format">
                 <MenuItem Header="JSON Format" Command="{Binding Path=JsonFormatter}" />
@@ -114,6 +115,7 @@
                 <MenuItem Header="To Upper" Command="{Binding ScratchPadToUpper}" />
                 <MenuItem Header="Trim" Command="{Binding ScratchPadTrim}" />
                 <MenuItem Header="Count" Command="{Binding ScratchPadCountLength}" />
+                <MenuItem Header="Hex Bytes Count" Command="{Binding ScratchPadHexCountLength}"/>
             </MenuItem>
             <MenuItem Header="Format">
                 <MenuItem Header="JSON Format" Command="{Binding Path=ScratchPadJsonFormat}" />
@@ -163,6 +165,7 @@
                     <MenuItem Header="To Upper" Command="{Binding Path=TextToUpper}"/>
                     <MenuItem Header="Trim" Command="{Binding Path=TextTrim}" />
                     <MenuItem Header="Count" Command="{Binding Path=TextCountLength}"/>
+                    <MenuItem Header="Hex Byte Count" Command="{Binding Path=TextHexCountLength}" />
                 </MenuItem>
 
             </MenuItem>
@@ -195,6 +198,7 @@
                     <MenuItem Header="To Upper" Command="{Binding ScratchPadToUpper}" />
                     <MenuItem Header="Trim" Command="{Binding ScratchPadTrim}" />
                     <MenuItem Header="Count" Command="{Binding ScratchPadCountLength}" />
+                    <MenuItem Header="Hex Bytes Count" Command="{Binding ScratchPadHexCountLength}"/>
                 </MenuItem>
 
             </MenuItem>

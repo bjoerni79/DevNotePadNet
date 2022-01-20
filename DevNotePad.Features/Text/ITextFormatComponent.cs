@@ -10,6 +10,8 @@ namespace DevNotePad.Features.Text
     {
         string CountLength(string text);
 
+        string CountLength(string text,bool inHexRepresentation);
+
         string GroupString(string text);
 
         string ToUpper(string text);
@@ -21,7 +23,6 @@ namespace DevNotePad.Features.Text
         string SplitString(string text);
 
         string SplitString(string text, TextFormatComponentSettings settings);
-
 
     }
 }

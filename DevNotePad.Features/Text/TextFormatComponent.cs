@@ -16,13 +16,37 @@ namespace DevNotePad.Features.Text
 
         public string CountLength(string text)
         {
+            return CountLength(text, false);
+        }
+
+        public string CountLength(string text, bool inHexRepresentation)
+        {
+            string result = String.Empty;
+
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentNullException("text");
             }
 
             var length = text.Length;
-            return String.Format("Length Selected : {0} Dec / 0x{1:X2} Hex", length, length);
+            if (inHexRepresentation)
+            {
+                if (length % 2 == 0)
+                {
+                    length = length / 2;
+                    result = String.Format("Hex Length Selected : {0} Dec / 0x{1:X2} Hex", length, length);
+                }
+                else
+                {
+                    result = "Length must be dividable by 2. Please check hex coding";
+                }
+            }
+            else
+            {
+                result = String.Format("Length Selected : {0} Dec / 0x{1:X2} Hex", length, length);
+            }
+
+            return result;
         }
 
         public string GroupString(string text)
