@@ -20,12 +20,44 @@ namespace DevNotePad.Service
         // This is a work around, which simulates the ShowDialog method call
         private FindDialog? currentFindDialog;
         private ReplaceDialog? currentReplaceDialog;
-
+        private Base64ToolDialog? currentBase64ToolDialog;
 
 
         internal DialogService(Window owner)
         {
             this.owner = owner;
+        }
+
+        public void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+            if (ui == null)
+            {
+                throw new ArgumentNullException(nameof(ui));
+            }
+
+            // Maintain only one view model independant from IMainViewUi and IDialog instance
+            var facade = FacadeFactory.Create();
+
+            Base64ToolViewModel vm;
+            var isVmAvailable = facade.Exists(Bootstrap.ViewModelBase64Dialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<Base64ToolViewModel>(Bootstrap.ViewModelBase64Dialog);
+            }
+            else
+            {
+                vm = new Base64ToolViewModel();
+                facade.AddUnique(vm, Bootstrap.ViewModelBase64Dialog);
+            }
+
+            if (currentBase64ToolDialog != null)
+            {
+                currentBase64ToolDialog.Close();
+            }
+
+            currentBase64ToolDialog = new Base64ToolDialog();
+            currentBase64ToolDialog.DataContext = vm;
+            currentBase64ToolDialog.Show();
         }
 
         public void OpenFindDialog(IMainViewUi ui, ITextComponent textComponent)

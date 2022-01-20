@@ -24,5 +24,7 @@ namespace DevNotePad.Service
         void OpenFindDialog(IMainViewUi ui, ITextComponent textComponent);
 
         void OpenReplaceDialog(IMainViewUi ui, ITextComponent textComponent);
+
+        void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent);
     }
 }

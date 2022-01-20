@@ -25,6 +25,7 @@ namespace DevNotePad
 
         public const string ViewModelFindDialog = "viewmodelfinddialog";
         public const string ViewModelReplaceDialog = "viewmodelreplacedialog";
+        public const string ViewModelBase64Dialog = "viewModelbase64dialog";
 
         public Bootstrap()
         {

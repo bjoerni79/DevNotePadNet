@@ -200,7 +200,7 @@
             </MenuItem>
 
             <MenuItem Header="Tools">
-                <MenuItem Header="Base64 Helper" />
+                <MenuItem Header="Base64 Helper" Command="{Binding Path=Base64Tool}" />
             </MenuItem>
 
             <MenuItem Header="Layout">

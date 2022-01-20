@@ -163,6 +163,8 @@ namespace DevNotePad.ViewModel
 
         // About
 
+        public IRefreshCommand? Base64Tool { get; private set; }
+
         public IRefreshCommand? About { get; private set; }
 
         public IRefreshCommand? Refresh { get; private set; }
@@ -436,6 +438,12 @@ namespace DevNotePad.ViewModel
             {
                 Ui.ShowAbout();
             }
+        }
+
+        private void OnBase64Tool()
+        {
+            var dialogService = ServiceHelper.GetDialogService();
+            dialogService.OpenBase64Dialog(Ui, textComponent);
         }
 
         private bool CheckForUi()
@@ -726,6 +734,8 @@ namespace DevNotePad.ViewModel
             ScratchPadTrim = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Trim));
             ScratchPadCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.LengthCount));
             ScratchPadHexCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexLengthCount));
+
+            Base64Tool = new DefaultCommand(OnBase64Tool);
 
             // About
             About = new DefaultCommand(OnAbout);

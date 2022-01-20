@@ -8,13 +8,11 @@
         Title="Base64 Helper" 
         MinHeight="200" 
         MaxHeight="400"
-        MinWidth="500"
-        MaxWidth="600"
         ResizeMode="CanResize" 
         WindowStartupLocation="CenterOwner" 
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
         
         >
 
@@ -60,8 +58,8 @@
             <Button Style="{StaticResource dialogButton}" >To Hex String</Button>
         </StackPanel>
 
-        <StackPanel Grid.Row="6"  Margin="10" Orientation="Horizontal">
-            <Button IsDefault="True" Style="{StaticResource dialogButton}" >Close</Button>
+        <StackPanel Grid.Row="6"  Margin="10" >
+            <Button IsDefault="True" Style="{StaticResource dialogButton}" HorizontalAlignment="Right" >Close</Button>
         </StackPanel>
 
     </Grid>

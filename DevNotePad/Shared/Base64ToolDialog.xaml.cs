@@ -17,11 +17,17 @@ namespace DevNotePad.Shared
     /// <summary>
     /// Interaction logic for Base64ToolDialog.xaml
     /// </summary>
-    public partial class Base64ToolDialog : Window
+    public partial class Base64ToolDialog : Window, IDialog
     {
         public Base64ToolDialog()
         {
             InitializeComponent();
+        }
+
+        public void CloseDialog(bool confirmed)
+        {
+            DialogResult = confirmed;
+            Close();
         }
     }
 }
