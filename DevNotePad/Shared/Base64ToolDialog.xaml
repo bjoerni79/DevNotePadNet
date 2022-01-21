@@ -6,17 +6,23 @@
         xmlns:local="clr-namespace:DevNotePad.Shared"
         mc:Ignorable="d"
         Title="Base64 Helper" 
-        MinHeight="200" 
-        MaxHeight="400"
+        Width="600" 
+        Height="400"
         ResizeMode="CanResize" 
         WindowStartupLocation="CenterOwner" 
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Manual"
         WindowStyle="ToolWindow"
         ShowInTaskbar="True"
         
         >
 
     <Window.Resources>
+
+        <Style x:Key="actionButton" TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="0 5 10 0"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
 
         <Style x:Key="dialogButton" TargetType="Button">
             <Setter Property="Width" Value="100"/>
@@ -27,39 +33,47 @@
             <Setter Property="FontWeight" Value="DemiBold"/>
         </Style>
 
+        <Style x:Key="defaultTextBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
     </Window.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="0.7*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0"  Style="{StaticResource titleLabel}" Content="Hex String:"/>
 
-        <Label Grid.Row="1" Content="TODO"/>
+        <TextBox Grid.Row="1" Style="{StaticResource defaultTextBox}" Text="{Binding Path=HexStringCoding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  />
 
-        <StackPanel Grid.Row="2"  Margin="10" Orientation="Horizontal">
-            <Button Style="{StaticResource dialogButton}" >To Base64</Button>
-            <Button Style="{StaticResource dialogButton}" >Save As binary</Button>
-            <Button Style="{StaticResource dialogButton}" >Load binary</Button>
+        <StackPanel Grid.Row="2" Margin="5 0 0 5"   Orientation="Horizontal">
+            <Button Style="{StaticResource actionButton}" Command="{Binding Path=ToBase64}" >To Base64</Button>
+            <Button Style="{StaticResource actionButton}" Command="{Binding Path=SaveBinary}" >Save As binary</Button>
+            <Button Style="{StaticResource actionButton}" Command="{Binding Path=LoadBinary}" >Load binary</Button>
         </StackPanel>
 
         <Label Grid.Row="3" Style="{StaticResource titleLabel}" Content="Base64 Coding:"/>
 
-        <Label Grid.Row="4" Content="TODO"/>
+        <TextBox Grid.Row="4" Style="{StaticResource defaultTextBox}" Text="{Binding Path=Base64StringCoding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
-        <StackPanel Grid.Row="5"  Margin="10" Orientation="Horizontal">
-            <Button Style="{StaticResource dialogButton}" >To Hex String</Button>
+        <StackPanel Grid.Row="5" Margin=" 5 0 0 5"  Orientation="Horizontal">
+            <Button Style="{StaticResource actionButton}" Command="{Binding Path=ToHex}" >To Hex String</Button>
         </StackPanel>
 
-        <StackPanel Grid.Row="6"  Margin="10" >
-            <Button IsDefault="True" Style="{StaticResource dialogButton}" HorizontalAlignment="Right" >Close</Button>
+        <StackPanel Grid.Row="6"  Margin="10" Orientation="Horizontal" >
+            <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Reset}">Reset</Button>
+            <Button IsCancel="True" Style="{StaticResource dialogButton}" HorizontalAlignment="Right" Command="{Binding Path=Close}" >Close</Button>
         </StackPanel>
 
     </Grid>

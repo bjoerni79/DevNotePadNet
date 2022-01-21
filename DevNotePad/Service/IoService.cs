@@ -55,6 +55,49 @@ namespace DevNotePad.Service
             return File.ReadAllText(filename);
         }
 
+        public Span<byte> ReadBinary(string filename)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("filename is null or empty", filename);
+            }
+
+            var fileExists = File.Exists(filename);
+            if (!fileExists)
+            {
+                throw new FileNotFoundException("File cannot be found", filename);
+            }
+
+            // Read the bytes
+            byte[] content;
+            using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read))
+            {
+                var length = stream.Length;
+                content = new byte[length];
+                stream.Read(content);
+            }
+
+            return content;
+        }
+
+        public void WriteBinary(string filename, Span<byte> content)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("filename is null or empty", filename);
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException("content");
+            }
+
+            using (var stream = File.Create(filename))
+            {
+                stream.Write(content);
+            }
+        }
+
         public void WriteTextFile(string filename, string text)
         {
             if (String.IsNullOrEmpty(filename))

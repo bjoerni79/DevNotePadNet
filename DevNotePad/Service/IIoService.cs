@@ -12,7 +12,11 @@ namespace DevNotePad.Service
 
         string ReadTextFile(string filename);
 
+        Span<byte> ReadBinary(string filename);
+
         void WriteTextFile(string filename, string text);
+
+        void WriteBinary(string filename, Span<byte> content);
 
         DateTime GetModificationTimeStamp(string filename);
     }
