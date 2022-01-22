@@ -14,7 +14,7 @@ namespace DevNotePad.Service
 {
     internal class DialogService : IDialogService
     {
-        private Window owner;
+        private Window defaultOwner;
 
         // ShowDialog does not work for the Find and Replace dialog due to a selection/focus issue. 
         // This is a work around, which simulates the ShowDialog method call
@@ -25,7 +25,7 @@ namespace DevNotePad.Service
 
         internal DialogService(Window owner)
         {
-            this.owner = owner;
+            this.defaultOwner = owner;
         }
 
         public void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent)
@@ -57,7 +57,11 @@ namespace DevNotePad.Service
 
             currentBase64ToolDialog = new Base64ToolDialog();
             currentBase64ToolDialog.DataContext = vm;
+
+            vm.Init(ui, currentBase64ToolDialog, textComponent);
+
             currentBase64ToolDialog.Show();
+
         }
 
         public void OpenFindDialog(IMainViewUi ui, ITextComponent textComponent)
@@ -88,7 +92,7 @@ namespace DevNotePad.Service
                 currentFindDialog.Close();
             }
 
-            currentFindDialog = new FindDialog() { Owner = owner };
+            currentFindDialog = new FindDialog() { Owner = defaultOwner };
             currentFindDialog.DataContext = vm;
             vm.Init(ui, currentFindDialog, textComponent);
 
@@ -123,7 +127,7 @@ namespace DevNotePad.Service
                 currentReplaceDialog.Close();
             }
 
-            currentReplaceDialog = new ReplaceDialog() { Owner = owner };
+            currentReplaceDialog = new ReplaceDialog() { Owner = defaultOwner };
             currentReplaceDialog.DataContext = vm;
             vm.Init(ui, currentReplaceDialog, textComponent);
 
@@ -137,7 +141,7 @@ namespace DevNotePad.Service
 
         public bool ShowConfirmationDialog(string question, string title, string okButtonText)
         {
-            var confirmDialog = new ConfirmDialog() { Owner = owner };
+            var confirmDialog = new ConfirmDialog() { Owner = defaultOwner,Topmost= true };
             confirmDialog.Init(question, title,okButtonText);
 
             var result = confirmDialog.ShowDialog();
@@ -154,7 +158,8 @@ namespace DevNotePad.Service
             var message = ex.Message;
             var dialogTitle = "Error";
             var errorDialog = new OkDialog();
-            errorDialog.Owner = owner;
+            errorDialog.Owner = defaultOwner;
+            errorDialog.Topmost = true;
  
             var featureException = ex as FeatureException;
             if (featureException != null)
@@ -171,7 +176,12 @@ namespace DevNotePad.Service
 
         public DialogReturnValue ShowOpenFileNameDialog(string defaultExtension)
         {
-            var openFileDialog = new OpenFileDialog() { Filter=defaultExtension, DefaultExt="*.txt"};
+            return ShowOpenFileNameDialog(defaultExtension, defaultOwner);
+        }
+
+        public DialogReturnValue ShowOpenFileNameDialog(string defaultExtension, Window owner)
+        {
+            var openFileDialog = new OpenFileDialog() { Filter = defaultExtension, DefaultExt = "*.txt" };
             var result = openFileDialog.ShowDialog(owner);
 
             if (result.HasValue && result.Value)
@@ -184,7 +194,12 @@ namespace DevNotePad.Service
 
         public DialogReturnValue ShowSaveFileDialog(string defaultExtension)
         {
-            var saveFileDialog = new SaveFileDialog() { Filter=defaultExtension, DefaultExt = "*.txt" };
+            return ShowSaveFileDialog(defaultExtension, defaultOwner);
+        }
+
+        public DialogReturnValue ShowSaveFileDialog(string defaultExtension, Window owner)
+        {
+            var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension, DefaultExt = "*.txt" };
             var result = saveFileDialog.ShowDialog(owner);
 
             if (result.HasValue && result.Value)
@@ -200,7 +215,7 @@ namespace DevNotePad.Service
             //MessageBox.Show(warning, caption);
 
             var errorDialog = new OkDialog();
-            errorDialog.Owner = owner;
+            errorDialog.Owner = defaultOwner;
 
             errorDialog.Init(warning, component, "Warning");
             errorDialog.ShowDialog();

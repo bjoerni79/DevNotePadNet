@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterOwner" 
         WindowStyle="ToolWindow"
         ShowInTaskbar="True"
-        
+        Topmost="True"
         FocusManager.FocusedElement="{Binding ElementName=textBoxSearchFor}"
         >
 

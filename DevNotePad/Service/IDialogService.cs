@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DevNotePad.Service
 {
@@ -11,7 +12,11 @@ namespace DevNotePad.Service
     {
         DialogReturnValue ShowOpenFileNameDialog(string defaultExtension);
 
+        DialogReturnValue ShowOpenFileNameDialog(string defaultExtension, Window owner);
+
         DialogReturnValue ShowSaveFileDialog(string defaultExtension);
+
+        DialogReturnValue ShowSaveFileDialog(string defaultExtension, Window owner);
 
         void ShowErrorDialog(Exception ex, string component);
 

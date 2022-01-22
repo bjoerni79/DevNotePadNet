@@ -41,7 +41,7 @@ namespace DevNotePad.ViewModel
 
         private void OnToHex()
         {
-            //TODO: Review, Try..catch.. , check for null...
+            //TODO: Review, Try..catch.. , check for null... Check for Non-HexStrings
             var byteCoding = Convert.FromBase64String(Base64StringCoding);
             var hexCoding = Convert.ToHexString(byteCoding);
 
@@ -51,7 +51,7 @@ namespace DevNotePad.ViewModel
 
         private void OnToBase64()
         {
-            //TODO: Review, Try..catch.. , check for null...
+            //TODO: Review, Try..catch.. , check for null...Check for Non-HexStrings
             var byteCoding = Convert.FromHexString(HexStringCoding);
 
             var base64Coding = Convert.ToBase64String(byteCoding);
@@ -64,7 +64,8 @@ namespace DevNotePad.ViewModel
             //TODO: Review, Try..catch.. , check for null...
             var dialogService = ServiceHelper.GetDialogService();
 
-            var returnValue = dialogService.ShowOpenFileNameDialog(DefaultExtension);
+            var currentWindow = dialog.GetCurrentWindow();
+            var returnValue = dialogService.ShowOpenFileNameDialog(DefaultExtension, currentWindow);
             if (returnValue.IsConfirmed)
             {
                 var ioService = ServiceHelper.GetIoService();
@@ -84,7 +85,8 @@ namespace DevNotePad.ViewModel
 
             var dialogService = ServiceHelper.GetDialogService();
 
-            var returnValue = dialogService.ShowSaveFileDialog(DefaultExtension);
+            var currentWindow = dialog.GetCurrentWindow();
+            var returnValue = dialogService.ShowSaveFileDialog(DefaultExtension, currentWindow);
             if (returnValue.IsConfirmed)
             {
                 var ioService = ServiceHelper.GetIoService();

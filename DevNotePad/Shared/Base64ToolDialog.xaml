@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevNotePad.Shared"
         mc:Ignorable="d"
-        Title="Base64 Helper" 
+        Title="Base64 Tool" 
         Width="600" 
         Height="400"
         ResizeMode="CanResize" 
@@ -13,7 +13,7 @@
         SizeToContent="Manual"
         WindowStyle="ToolWindow"
         ShowInTaskbar="True"
-        
+        Topmost="True"
         >
 
     <Window.Resources>
@@ -21,7 +21,6 @@
         <Style x:Key="actionButton" TargetType="Button">
             <Setter Property="Width" Value="100"/>
             <Setter Property="Margin" Value="0 5 10 0"/>
-            <Setter Property="Background" Value="White"/>
         </Style>
 
         <Style x:Key="dialogButton" TargetType="Button">
@@ -50,7 +49,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="0.3*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0"  Style="{StaticResource titleLabel}" Content="Hex String:"/>
@@ -58,6 +56,7 @@
         <TextBox Grid.Row="1" Style="{StaticResource defaultTextBox}" Text="{Binding Path=HexStringCoding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  />
 
         <StackPanel Grid.Row="2" Margin="5 0 0 5"   Orientation="Horizontal">
+            <Button Style="{StaticResource actionButton}" Command="{Binding Path=ToHex}" >To Hex String</Button>
             <Button Style="{StaticResource actionButton}" Command="{Binding Path=ToBase64}" >To Base64</Button>
             <Button Style="{StaticResource actionButton}" Command="{Binding Path=SaveBinary}" >Save As binary</Button>
             <Button Style="{StaticResource actionButton}" Command="{Binding Path=LoadBinary}" >Load binary</Button>
@@ -67,11 +66,8 @@
 
         <TextBox Grid.Row="4" Style="{StaticResource defaultTextBox}" Text="{Binding Path=Base64StringCoding,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
-        <StackPanel Grid.Row="5" Margin=" 5 0 0 5"  Orientation="Horizontal">
-            <Button Style="{StaticResource actionButton}" Command="{Binding Path=ToHex}" >To Hex String</Button>
-        </StackPanel>
 
-        <StackPanel Grid.Row="6"  Margin="10" Orientation="Horizontal" >
+        <StackPanel Grid.Row="5"  Margin="10" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Reset}">Reset</Button>
             <Button IsCancel="True" Style="{StaticResource dialogButton}" HorizontalAlignment="Right" Command="{Binding Path=Close}" >Close</Button>
         </StackPanel>

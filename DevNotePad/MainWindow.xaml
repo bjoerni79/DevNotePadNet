@@ -130,6 +130,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="New" InputGestureText="Ctrl+N" Command="{Binding Path=New}"/>
                 <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding Path=Open}"/>
+                <!--<MenuItem Header="Open Binary" IsEnabled="false" />-->
                 <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding Path=Save}"/>
                 <MenuItem Header="Save As" Command="{Binding Path=SaveAs}" />
                 <MenuItem Header="Reload" InputGestureText="Ctrl+R" Command="{Binding Path=Reload}" />
@@ -200,7 +201,7 @@
             </MenuItem>
 
             <MenuItem Header="Tools">
-                <MenuItem Header="Base64 Helper" Command="{Binding Path=Base64Tool}" />
+                <MenuItem Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
             </MenuItem>
 
             <MenuItem Header="Layout">

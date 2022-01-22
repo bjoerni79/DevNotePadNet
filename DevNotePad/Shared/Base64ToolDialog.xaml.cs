@@ -26,8 +26,20 @@ namespace DevNotePad.Shared
 
         public void CloseDialog(bool confirmed)
         {
-            DialogResult = confirmed;
+            //DialogResult = confirmed;
             Close();
+        }
+
+        public void FocusDialog()
+        {
+            // https://stackoverflow.com/questions/257587/bring-a-window-to-the-front-in-wpf
+
+            //this.Show();
+        }
+
+        public Window GetCurrentWindow()
+        {
+            return this;
         }
     }
 }
