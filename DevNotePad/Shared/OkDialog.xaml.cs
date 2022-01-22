@@ -45,5 +45,15 @@ namespace DevNotePad.Shared
         {
             Init(message, component, title, null);
         }
+
+        public void FocusDialog()
+        {
+            this.Focus();
+        }
+
+        public Window GetCurrentWindow()
+        {
+            return this;
+        }
     }
 }

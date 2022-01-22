@@ -12,7 +12,7 @@ namespace DevNotePad.ViewModel
     public class Base64ToolViewModel : MainViewUiViewModel
     {
         private const string DefaultExtension = "All|*.*|bin|*.bin";
-
+        private const string ComponentName = "Base64";
         public Base64ToolViewModel()
         {
             ToHex = new DefaultCommand(OnToHex);
@@ -41,27 +41,61 @@ namespace DevNotePad.ViewModel
 
         private void OnToHex()
         {
-            //TODO: Review, Try..catch.. , check for null... Check for Non-HexStrings
-            var byteCoding = Convert.FromBase64String(Base64StringCoding);
-            var hexCoding = Convert.ToHexString(byteCoding);
+            var currentWindow = dialog.GetCurrentWindow();
+            var dialogService = ServiceHelper.GetDialogService();
 
-            HexStringCoding = hexCoding;
-            RaisePropertyChange("HexStringCoding");
+            if (!string.IsNullOrEmpty(Base64StringCoding))
+            {
+                try
+                {
+                    var byteCoding = Convert.FromBase64String(Base64StringCoding);
+                    var hexCoding = Convert.ToHexString(byteCoding);
+
+                    HexStringCoding = hexCoding;
+                    RaisePropertyChange("HexStringCoding");
+                }
+                catch (FormatException formatException)
+                {
+                    dialogService.ShowWarningDialog(formatException.Message, ComponentName, currentWindow);
+                }
+            }
+            else
+            {
+                dialogService.ShowWarningDialog("No Content available", ComponentName, currentWindow);
+            }
         }
 
         private void OnToBase64()
         {
-            //TODO: Review, Try..catch.. , check for null...Check for Non-HexStrings
-            var byteCoding = Convert.FromHexString(HexStringCoding);
+            var currentWindow = dialog.GetCurrentWindow();
+            var dialogService = ServiceHelper.GetDialogService();
 
-            var base64Coding = Convert.ToBase64String(byteCoding);
-            Base64StringCoding = base64Coding;
-            RaisePropertyChange("Base64StringCoding");
+            if (!string.IsNullOrEmpty(HexStringCoding))
+            {
+                try
+                {
+                    var byteCoding = Convert.FromHexString(HexStringCoding);
+
+                    var base64Coding = Convert.ToBase64String(byteCoding);
+                    Base64StringCoding = base64Coding;
+                    RaisePropertyChange("Base64StringCoding");
+                }
+                catch (FormatException formatException)
+                {
+                    currentWindow = dialog.GetCurrentWindow();
+                    dialogService = ServiceHelper.GetDialogService();
+
+                    dialogService.ShowWarningDialog(formatException.Message, ComponentName, currentWindow);
+                }
+            }
+            else
+            {
+                dialogService.ShowWarningDialog("No Content available", ComponentName, currentWindow);
+            }
         }
 
         private void OnLoadBinary()
         {
-            //TODO: Review, Try..catch.. , check for null...
             var dialogService = ServiceHelper.GetDialogService();
 
             var currentWindow = dialog.GetCurrentWindow();
@@ -71,30 +105,61 @@ namespace DevNotePad.ViewModel
                 var ioService = ServiceHelper.GetIoService();
                 var fileName = returnValue.File;
 
-                var content = ioService.ReadBinary(fileName);
-                var hexContent = Convert.ToHexString(content);
+                try
+                {
+                    //TODO: Asny?
 
-                HexStringCoding = hexContent;
-                RaisePropertyChange("HexStringCoding");
+                    var content = ioService.ReadBinary(fileName);
+                    var hexContent = Convert.ToHexString(content);
+
+                    HexStringCoding = hexContent;
+                    RaisePropertyChange("HexStringCoding");
+                }
+                catch (Exception ex)
+                {
+                    dialogService.ShowErrorDialog(ex, ComponentName, currentWindow);
+                }
             }
         }
 
         private void OnSaveBinary()
         {
-            //TODO: Review, Try..catch.. , check for null...
-
             var dialogService = ServiceHelper.GetDialogService();
 
             var currentWindow = dialog.GetCurrentWindow();
             var returnValue = dialogService.ShowSaveFileDialog(DefaultExtension, currentWindow);
-            if (returnValue.IsConfirmed)
-            {
-                var ioService = ServiceHelper.GetIoService();
-                var fileName = returnValue.File;
 
-                var byteContent = Convert.FromHexString(HexStringCoding);
-                ioService.WriteBinary(fileName, byteContent);
+            if (!string.IsNullOrEmpty(HexStringCoding))
+            {
+                if (returnValue.IsConfirmed)
+                {
+                    var ioService = ServiceHelper.GetIoService();
+                    var fileName = returnValue.File;
+
+                    try
+                    {
+                        // Saves the content to a file. Shows a warning if the format is not valid
+
+                        //TODO: Async?
+
+                        var byteContent = Convert.FromHexString(HexStringCoding);
+                        ioService.WriteBinary(fileName, byteContent);
+                    }
+                    catch (FormatException formatException)
+                    {
+                        dialogService.ShowWarningDialog(formatException.Message, ComponentName, currentWindow);
+                    }
+                    catch (Exception ex)
+                    {
+                        dialogService.ShowErrorDialog(ex, "Base64", currentWindow);
+                    }
+                }
             }
+            else
+            {
+                dialogService.ShowWarningDialog("No Content available", ComponentName, currentWindow);
+            }
+
         }
 
         private void OnReset()

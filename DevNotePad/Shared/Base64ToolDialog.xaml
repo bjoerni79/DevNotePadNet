@@ -9,7 +9,7 @@
         Width="600" 
         Height="400"
         ResizeMode="CanResize" 
-        WindowStartupLocation="CenterOwner" 
+        WindowStartupLocation="CenterScreen" 
         SizeToContent="Manual"
         WindowStyle="ToolWindow"
         ShowInTaskbar="True"

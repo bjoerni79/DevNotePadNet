@@ -153,14 +153,13 @@ namespace DevNotePad.Service
             return false;
         }
 
-        public void ShowErrorDialog(Exception ex, string component)
+        public void ShowErrorDialog(Exception ex, string component, Window owner)
         {
             var message = ex.Message;
             var dialogTitle = "Error";
             var errorDialog = new OkDialog();
-            errorDialog.Owner = defaultOwner;
-            errorDialog.Topmost = true;
- 
+            errorDialog.Owner = owner;
+
             var featureException = ex as FeatureException;
             if (featureException != null)
             {
@@ -172,6 +171,11 @@ namespace DevNotePad.Service
             }
 
             errorDialog.ShowDialog();
+        }
+
+        public void ShowErrorDialog(Exception ex, string component)
+        {
+            ShowErrorDialog(ex, component, defaultOwner);
         }
 
         public DialogReturnValue ShowOpenFileNameDialog(string defaultExtension)
@@ -212,10 +216,13 @@ namespace DevNotePad.Service
 
         public void ShowWarningDialog(string warning, string component)
         {
-            //MessageBox.Show(warning, caption);
+            ShowWarningDialog(warning, component, defaultOwner);
+        }
 
+        public void ShowWarningDialog(string warning, string component, Window owner)
+        {
             var errorDialog = new OkDialog();
-            errorDialog.Owner = defaultOwner;
+            errorDialog.Owner = owner;
 
             errorDialog.Init(warning, component, "Warning");
             errorDialog.ShowDialog();
