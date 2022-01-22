@@ -24,8 +24,8 @@ namespace DevNotePad.ViewModel
         private readonly string JsonComponent = "JSON";
         private readonly string XmlComponent = "XML";
 
-        private const string DefaultExtension = "All|*.*|Text Files|*.txt|Log Files|*.log|XML|*.xml|JSON|*.json";
-
+        private const string TextDefaultExtension = "All|*.*|Text Files|*.txt|Log Files|*.log|XML|*.xml|JSON|*.json";
+        private const string BinaryDefaultExtension = "All|*.*|bin|*.bin";
         private IMainViewUi? Ui { get; set; }
 
         private ITextComponent? textComponent;
@@ -59,9 +59,15 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? Open { get; private set; }
 
+        public IRefreshCommand? OpenBinary { get; private set; }
+
         public IRefreshCommand? Save { get; private set; }
 
+        public IRefreshCommand? SaveBinary { get; private set; }
+
         public IRefreshCommand? SaveAs { get; private set; }
+
+        public IRefreshCommand? SaveAsBinary { get; private set; }
 
         public IRefreshCommand? Reload { get; private set; }
 
@@ -192,12 +198,25 @@ namespace DevNotePad.ViewModel
                 }
 
                 // File Open
-                if (operation == FileOperation.Open)
+                if (operation == FileOperation.Open || operation == FileOperation.OpenBinary)
                 {
-                    var result = dialogService.ShowOpenFileNameDialog(DefaultExtension);
+                    string extensions = TextDefaultExtension;
+                    if (operation == FileOperation.OpenBinary)
+                    {
+                        extensions = BinaryDefaultExtension;
+                    }
+
+                    var result = dialogService.ShowOpenFileNameDialog(extensions);
                     if (result.IsConfirmed)
                     {
-                        textLogic.Load(result.File);
+                        if (operation == FileOperation.Open)
+                        {
+                            textLogic.Load(result.File);
+                        }
+                        else
+                        {
+                            textLogic.LoadBinary(result.File);
+                        }
                     }
                 }
 
@@ -206,7 +225,7 @@ namespace DevNotePad.ViewModel
                 {
                     if (textLogic.CurrentState == EditorState.New || textLogic.CurrentState == EditorState.ChangedNew)
                     {
-                        var result = dialogService.ShowSaveFileDialog(DefaultExtension);
+                        var result = dialogService.ShowSaveFileDialog(TextDefaultExtension);
                         if (result.IsConfirmed)
                         {
                             textLogic.Save(result.File);
@@ -219,10 +238,37 @@ namespace DevNotePad.ViewModel
                     }
                 }
 
+                // File Save Binary
+                if (operation == FileOperation.SaveBinary)
+                {
+                    if (textLogic.CurrentState == EditorState.New || textLogic.CurrentState == EditorState.ChangedNew)
+                    {
+                        var result = dialogService.ShowSaveFileDialog(BinaryDefaultExtension);
+                        if (result.IsConfirmed)
+                        {
+                            textLogic.SaveBinary(result.File);
+                        }
+                    }
+                    else
+                    {
+                        textLogic.SaveBinary(textLogic.FileName);
+                    }
+                }
+
+                // File Save As Binary
+                if (operation == FileOperation.SaveAsBinary)
+                {
+                    var result = dialogService.ShowSaveFileDialog(BinaryDefaultExtension);
+                    if (result.IsConfirmed)
+                    {
+                        textLogic.SaveBinary(result.File);
+                    }
+                }
+
                 // File Save As
                 if (operation == FileOperation.SaveAs)
                 {
-                    var result = dialogService.ShowSaveFileDialog(DefaultExtension);
+                    var result = dialogService.ShowSaveFileDialog(TextDefaultExtension);
                     if (result.IsConfirmed)
                     {
                         textLogic.Save(result.File);
@@ -680,8 +726,12 @@ namespace DevNotePad.ViewModel
             // File
             New = new DefaultCommand(()=>OnFileOperation(FileOperation.New));
             Open = new DefaultCommand(()=>OnFileOperation(FileOperation.Open));
+            OpenBinary = new DefaultCommand(() => OnFileOperation(FileOperation.OpenBinary));
+
             Save = new DefaultCommand(()=>OnFileOperation(FileOperation.Save));
+            SaveBinary = new DefaultCommand(() => OnFileOperation(FileOperation.SaveBinary));
             SaveAs = new DefaultCommand(()=>OnFileOperation(FileOperation.SaveAs));
+            SaveAsBinary = new DefaultCommand(() => OnFileOperation(FileOperation.SaveAsBinary));
             Reload = new DefaultCommand(()=>OnFileOperation(FileOperation.Reload));
             Close = new DefaultCommand(OnClose);
 
@@ -768,8 +818,11 @@ namespace DevNotePad.ViewModel
         {
             New,
             Open,
+            OpenBinary,
             Save,
             SaveAs,
+            SaveBinary,
+            SaveAsBinary,
             Reload
         }
     }

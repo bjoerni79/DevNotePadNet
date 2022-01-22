@@ -15,6 +15,8 @@ namespace DevNotePad.ViewModel
         private ITextComponent textComponent;
         private IMainViewUi mainUi;
 
+        private bool isTextFormatAvailable;
+
         internal InternalFileLogic(IMainViewUi ui,ITextComponent textComponent)
         {
             this.textComponent = textComponent;
@@ -22,6 +24,7 @@ namespace DevNotePad.ViewModel
             InitialText = String.Empty;
             LatestTimeStamp = DateTime.Now;
             FileName = "Unknown";
+            isTextFormatAvailable = true;
         }
 
         public string InitialText { get; set; }
@@ -150,6 +153,7 @@ namespace DevNotePad.ViewModel
                     FileName = targetfilename;
                     mainUi.SetFilename(FileName);
 
+                    isTextFormatAvailable = true;
                     isSuccessful = true;
                     ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
                 }
@@ -157,6 +161,37 @@ namespace DevNotePad.ViewModel
                 {
                     ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is NOT saved", true));
                 }
+            }
+            catch (Exception ex)
+            {
+                ServiceHelper.ShowError(ex, "Save File");
+            }
+
+            return isSuccessful;
+        }
+
+        public bool SaveBinary(string targetFilename)
+        {
+            var isSuccessful = false;
+            var ioService = ServiceHelper.GetIoService();
+
+            try
+            {
+                var currentHexCoding = textComponent.GetText(false);
+                var byteCoding = Convert.FromHexString(currentHexCoding.Trim());
+
+                FileName = targetFilename;
+                InitialText = textComponent.GetText(false);
+                ioService.WriteBinary(FileName, byteCoding);
+
+                isTextFormatAvailable = false;
+                CurrentState = EditorState.Saved;
+                isSuccessful = true;
+                
+            }
+            catch (FormatException)
+            {
+                ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is not a valid hex format. Save Binary operation failed", true));
             }
             catch (Exception ex)
             {
@@ -187,6 +222,7 @@ namespace DevNotePad.ViewModel
                 textComponent.SetText(InitialText);
                 mainUi.SetFilename(FileName);
 
+                isTextFormatAvailable = true;
                 isSuccessful=true;
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
             }
@@ -196,6 +232,89 @@ namespace DevNotePad.ViewModel
             }
 
             return isSuccessful;
+        }
+
+        public bool LoadBinary(string sourceFilename)
+        {
+            bool isSuccessful = false;
+
+            try
+            {
+                var ioService = ServiceHelper.GetIoService();
+                FileName = sourceFilename;
+                CurrentState= EditorState.Loaded;
+
+                LatestTimeStamp = ioService.GetModificationTimeStamp(FileName);
+
+                var byteContent = ioService.ReadBinary(FileName);
+                var hexContent = ToHexStringRow(byteContent);
+
+                InitialText=hexContent;
+                textComponent.SetText(InitialText);
+                mainUi.SetFilename(FileName);
+
+                isTextFormatAvailable = false;
+                isSuccessful = true;
+                ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
+            }
+            catch(Exception ex)
+            {
+                ServiceHelper.ShowError(ex, "Load File");
+            }
+
+            return isSuccessful;
+        }
+
+
+        private string ToHexStringRow(Span<byte> byteContent)
+        {
+            int offset = 0;
+            int hexBytePerGroup = 16;
+            int currentGroupsPerRow = 0;
+            int groupsPerRow = 3;
+            int length = byteContent.Length;
+            
+            var stringBuilder = new StringBuilder();
+
+            // Build a row with 16 bytes each
+            while ((offset+hexBytePerGroup) < length )
+            {
+                var bytesInRow = byteContent.Slice(offset, hexBytePerGroup);
+                var rowHexCoding = Convert.ToHexString(bytesInRow);
+
+                if (currentGroupsPerRow + 1 >= groupsPerRow)
+                {
+                    stringBuilder.AppendFormat("  {0}\n", rowHexCoding);
+                    currentGroupsPerRow = 0;
+                }
+                else
+                {
+                    currentGroupsPerRow++;
+                    stringBuilder.AppendFormat("  {0}", rowHexCoding);
+                }
+
+                offset += hexBytePerGroup;
+            }
+
+            // Add the last bytes at the end
+            int lastRowOffset = length - offset;
+            if (lastRowOffset > 0)
+            {
+                var lastRow = byteContent.Slice(offset);
+                var lastRowHexCoding = Convert.ToHexString(lastRow);
+
+                if (currentGroupsPerRow + 1 >= groupsPerRow )
+                {
+                    stringBuilder.AppendFormat("  {0}\n", lastRowHexCoding);
+                }
+                else
+                {
+                    stringBuilder.AppendFormat("  {0}", lastRowHexCoding);
+                }
+                
+            }
+
+            return stringBuilder.ToString();
         }
 
         /// <summary>
@@ -217,6 +336,7 @@ namespace DevNotePad.ViewModel
                 CurrentState = EditorState.New;
                 InitialText = String.Empty;
                 LatestTimeStamp = DateTime.Now;
+                isTextFormatAvailable = true;
 
                 textComponent.SetText(InitialText);
                 mainUi.SetFilename(FileName);
@@ -232,6 +352,12 @@ namespace DevNotePad.ViewModel
         /// </summary>
         public void Reload()
         {
+            if (!isTextFormatAvailable)
+            {
+                ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Reload feature is not available for binary mode", true));
+                return;
+            }
+
             if (CurrentState == EditorState.New)
             {
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Please save the file first", false));
@@ -275,5 +401,7 @@ namespace DevNotePad.ViewModel
                 }
             }
         }
+
+
     }
 }

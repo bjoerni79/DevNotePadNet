@@ -37,9 +37,13 @@ namespace DevNotePad.ViewModel
 
         void PerfromClipboardAction(ClipboardActionEnum action);
 
-        bool Save(string targetfilename);
+        bool Save(string targetFilename);
+
+        bool SaveBinary(string targetFilename);
 
         bool Load(string sourceFilename);
+
+        bool LoadBinary(string sourceFilename);
 
         bool New();
 

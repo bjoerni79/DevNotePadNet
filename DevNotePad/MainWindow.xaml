@@ -129,10 +129,15 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="New" InputGestureText="Ctrl+N" Command="{Binding Path=New}"/>
+                <Separator/>
                 <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding Path=Open}"/>
-                <!--<MenuItem Header="Open Binary" IsEnabled="false" />-->
                 <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding Path=Save}"/>
                 <MenuItem Header="Save As" Command="{Binding Path=SaveAs}" />
+                <Separator/>
+                <MenuItem Header="Open Binary" Command="{Binding Path=OpenBinary}" />
+                <MenuItem Header="Save Binary" Command="{Binding Path=SaveBinary}" />
+                <MenuItem Header="Save Binary As" Command="{Binding Path=SaveAsBinary}"/>
+                <Separator/>
                 <MenuItem Header="Reload" InputGestureText="Ctrl+R" Command="{Binding Path=Reload}" />
                 <Separator/>
                 <MenuItem Header="Close" Command="{Binding Path=Close}"/>
