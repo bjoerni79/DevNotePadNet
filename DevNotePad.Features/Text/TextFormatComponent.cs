@@ -28,13 +28,15 @@ namespace DevNotePad.Features.Text
                 throw new ArgumentNullException("text");
             }
 
-            var length = text.Length;
             if (inHexRepresentation)
             {
-                if (length % 2 == 0)
+                var groupedText = GroupString(text);
+                var groupedlength = groupedText.Length;
+
+                if (groupedlength % 2 == 0)
                 {
-                    length = length / 2;
-                    result = String.Format("Hex Length Selected : {0} Dec / 0x{1:X2} Hex", length, length);
+                    groupedlength = groupedlength / 2;
+                    result = String.Format("Hex Length Selected and ignoring spaces : {0} Dec / 0x{1:X2} Hex", groupedlength, groupedlength);
                 }
                 else
                 {
@@ -43,6 +45,7 @@ namespace DevNotePad.Features.Text
             }
             else
             {
+                var length = text.Length;
                 result = String.Format("Length Selected : {0} Dec / 0x{1:X2} Hex", length, length);
             }
 

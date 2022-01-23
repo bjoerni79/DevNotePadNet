@@ -32,7 +32,7 @@ namespace DevNotePad.ViewModel
         /// </summary>
         EditorState CurrentState { get; set; }
 
-
+        bool IsTextFormatAvailable { get; }
         void PerformTextAction(TextActionEnum textAction);
 
         void PerfromClipboardAction(ClipboardActionEnum action);
