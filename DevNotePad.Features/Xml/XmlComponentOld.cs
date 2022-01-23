@@ -179,7 +179,8 @@ namespace DevNotePad.Features.Xml
                     IgnoreWhitespace = true,
                     IgnoreComments = true,
                     IgnoreProcessingInstructions = true,
-                    ConformanceLevel = ConformanceLevel.Auto
+                    ConformanceLevel = ConformanceLevel.Auto,
+                    DtdProcessing = DtdProcessing.Parse,
                 };
 
                 document = new XmlDocument();
