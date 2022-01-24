@@ -98,30 +98,29 @@ namespace DevNotePad.Service
             return content;
         }
 
-        //public Task<Memory<byte>> ReadBinaryAsync(string filename)
-        //{
-        //    if (String.IsNullOrEmpty(filename))
-        //    {
-        //        throw new ArgumentException("filename is null or empty", filename);
-        //    }
+        public async Task<Memory<byte>> ReadBinaryAsync(string filename)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("filename is null or empty", filename);
+            }
 
-        //    var fileExists = File.Exists(filename);
-        //    if (!fileExists)
-        //    {
-        //        throw new FileNotFoundException("File cannot be found", filename);
-        //    }
+            var fileExists = File.Exists(filename);
+            if (!fileExists)
+            {
+                throw new FileNotFoundException("File cannot be found", filename);
+            }
 
-        //    //// Read the bytes
-        //    //byte[] content;
-        //    //using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read))
-        //    //{
-        //    //    var length = stream.Length;
-        //    //    content = new byte[length];
-        //    //    stream.Read(content);
-        //    //}
+            Memory<byte> content;
+            using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read))
+            {
+                byte[] byteBuffer = new byte[stream.Length];
+                content = new Memory<byte>(byteBuffer);
+                var status = await stream.ReadAsync(content);
+            }
 
-        //    //return content;
-        //}
+            return content;
+        }
 
         public void WriteBinary(string filename, Span<byte> content)
         {
@@ -141,6 +140,19 @@ namespace DevNotePad.Service
             }
         }
 
+        public async Task WriteBinaryAsync(string filename, Memory<byte> content)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("filename is null or empty", filename);
+            }
+
+            using (var stream = File.Create(filename))
+            {
+                await stream.WriteAsync(content);
+            }
+        }
+
         public void WriteTextFile(string filename, string text)
         {
             if (String.IsNullOrEmpty(filename))
@@ -156,6 +168,24 @@ namespace DevNotePad.Service
             using (var stream = File.CreateText(filename))
             {
                 stream.Write(text);
+            }
+        }
+
+        public async Task WriteTextFileAsync(string filename, string text)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("filename is null or empty", filename);
+            }
+
+            if (text == null)
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            using (var stream = File.CreateText(filename))
+            {
+                await stream.WriteAsync(text);
             }
         }
     }
