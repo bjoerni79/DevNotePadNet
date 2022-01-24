@@ -1,5 +1,6 @@
 ﻿using DevNotePad.Features.Json;
 using DevNotePad.Features.Text;
+using DevNotePad.Features.TlvDecoder;
 using DevNotePad.Features.Xml;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,11 @@ namespace DevNotePad.Features
         public static ITextFormatComponent CreateTextFormat()
         {
             return new TextFormatComponent();
+        }
+
+        public static ITlvDecoder CreateTlvDecoder()
+        {
+            return new TlvDecoder.TlvDecoder();
         }
 
     }

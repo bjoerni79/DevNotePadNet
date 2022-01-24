@@ -175,6 +175,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? Refresh { get; private set; }
 
+        public IRefreshCommand? DecodeTlv { get; private set; }
+
         #endregion
 
         #region Command Delegates
@@ -582,6 +584,28 @@ namespace DevNotePad.ViewModel
             }
         }
 
+        private void OnDecodeTlv()
+        {
+            if (textComponent != null)
+            {
+                bool isSelected = textComponent.IsTextSelected();
+                if (isSelected)
+                {
+                    var tlvDecoder = FeatureFactory.CreateTlvDecoder();
+                    var textFormatter = FeatureFactory.CreateTextFormat();
+                    var text = textComponent.GetText(true);
+
+                    // TODO: Check if the text is a valid hex string
+
+                    // TODO: Try to decode it to TLV
+                }
+                else
+                {
+                    // TODO: Show that no text is selected in the textbox
+                }
+            }
+        }
+
         private void OnTextClipboard(IFileLogic logic,ClipboardActionEnum action)
         {
             if (logic != null)
@@ -786,6 +810,7 @@ namespace DevNotePad.ViewModel
             ScratchPadHexCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexLengthCount));
 
             Base64Tool = new DefaultCommand(OnBase64Tool);
+            DecodeTlv = new DefaultCommand(OnDecodeTlv);
 
             // About
             About = new DefaultCommand(OnAbout);

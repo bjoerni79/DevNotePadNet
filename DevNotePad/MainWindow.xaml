@@ -207,6 +207,9 @@
 
             <MenuItem Header="Tools">
                 <MenuItem Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
+                <MenuItem Header="UICC">
+                    <MenuItem Header="Decode TLV" Command="{Binding Path=DecodeTlv}" />
+                </MenuItem>
             </MenuItem>
 
             <MenuItem Header="Layout">
