@@ -127,6 +127,15 @@ namespace DevNotePad
                     ApplyNotification(updateStatusBarParameter);
                 }
             }
+
+            if (eventId == Bootstrap.UpdateAsyncStateEvent)
+            {
+                var updateAsyncState = parameter as UpdateAsyncProcessState;
+                if (updateAsyncState != null)
+                {
+                    isRunningProgressBar.IsIndeterminate = updateAsyncState.InProgress;
+                }
+            }
         }
 
         private void ApplyNotification(UpdateStatusBarParameter e)

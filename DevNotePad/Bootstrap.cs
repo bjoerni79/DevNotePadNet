@@ -22,6 +22,7 @@ namespace DevNotePad
         public const string SettingsId = "settingsid";
 
         public const string UpdateToolBarEvent = "updatetoolbarevent";
+        public const string UpdateAsyncStateEvent = "updateasyncstateevent";
 
         public const string ViewModelFindDialog = "viewmodelfinddialog";
         public const string ViewModelReplaceDialog = "viewmodelreplacedialog";
