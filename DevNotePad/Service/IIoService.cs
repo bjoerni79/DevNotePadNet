@@ -12,7 +12,11 @@ namespace DevNotePad.Service
 
         string ReadTextFile(string filename);
 
+        Task<string> ReadTextFileAsync(string filename);
+
         Span<byte> ReadBinary(string filename);
+
+        //Task<Memory<byte>> ReadBinaryAsync(string filename);
 
         void WriteTextFile(string filename, string text);
 

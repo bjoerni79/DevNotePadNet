@@ -55,6 +55,24 @@ namespace DevNotePad.Service
             return File.ReadAllText(filename);
         }
 
+        public async Task<string> ReadTextFileAsync(string filename)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("filename is null or empty", filename);
+            }
+
+            // throw new FileNotFoundException("File cannot be found", filename);
+            var fileExists = File.Exists(filename);
+            if (!fileExists)
+            {
+                throw new FileNotFoundException("File cannot be found", filename);
+            }
+
+            string content = await File.ReadAllTextAsync(filename);
+            return content;
+        }
+
         public Span<byte> ReadBinary(string filename)
         {
             if (String.IsNullOrEmpty(filename))
@@ -79,6 +97,31 @@ namespace DevNotePad.Service
 
             return content;
         }
+
+        //public Task<Memory<byte>> ReadBinaryAsync(string filename)
+        //{
+        //    if (String.IsNullOrEmpty(filename))
+        //    {
+        //        throw new ArgumentException("filename is null or empty", filename);
+        //    }
+
+        //    var fileExists = File.Exists(filename);
+        //    if (!fileExists)
+        //    {
+        //        throw new FileNotFoundException("File cannot be found", filename);
+        //    }
+
+        //    //// Read the bytes
+        //    //byte[] content;
+        //    //using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read))
+        //    //{
+        //    //    var length = stream.Length;
+        //    //    content = new byte[length];
+        //    //    stream.Read(content);
+        //    //}
+
+        //    //return content;
+        //}
 
         public void WriteBinary(string filename, Span<byte> content)
         {
