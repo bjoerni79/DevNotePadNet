@@ -1,4 +1,6 @@
-﻿using DevNotePad.MVVM;
+﻿using DevNotePad.Features;
+using DevNotePad.Features.Text;
+using DevNotePad.MVVM;
 using Generic.MVVM;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,9 @@ namespace DevNotePad.ViewModel
     {
         private const string DefaultExtension = "All|*.*|bin|*.bin";
         private const string ComponentName = "Base64";
+
+        private ITextFormatComponent formatComponent;
+
         public Base64ToolViewModel()
         {
             ToHex = new DefaultCommand(OnToHex);
@@ -21,6 +26,8 @@ namespace DevNotePad.ViewModel
             SaveBinary = new DefaultCommand(OnSaveBinary);
             Close = new DefaultCommand(OnClose);
             Reset = new DefaultCommand(OnReset);
+
+            formatComponent = FeatureFactory.CreateTextFormat();
         }
 
         public IRefreshCommand ToHex { get; private set; }
@@ -48,7 +55,8 @@ namespace DevNotePad.ViewModel
             {
                 try
                 {
-                    var byteCoding = Convert.FromBase64String(Base64StringCoding);
+                    var groupedBase64 = formatComponent.GroupString(Base64StringCoding);
+                    var byteCoding = Convert.FromBase64String(groupedBase64);
                     var hexCoding = Convert.ToHexString(byteCoding);
 
                     HexStringCoding = hexCoding;
@@ -74,7 +82,8 @@ namespace DevNotePad.ViewModel
             {
                 try
                 {
-                    var byteCoding = Convert.FromHexString(HexStringCoding);
+                    var groupedHexString = formatComponent.GroupString(HexStringCoding);
+                    var byteCoding = Convert.FromHexString(groupedHexString);
 
                     var base64Coding = Convert.ToBase64String(byteCoding);
                     Base64StringCoding = base64Coding;
@@ -142,7 +151,8 @@ namespace DevNotePad.ViewModel
 
                         //TODO: Async?
 
-                        var byteContent = Convert.FromHexString(HexStringCoding);
+                        var groupedHexString = formatComponent.GroupString(HexStringCoding);
+                        var byteContent = Convert.FromHexString(groupedHexString);
                         ioService.WriteBinary(fileName, byteContent);
                     }
                     catch (FormatException formatException)
