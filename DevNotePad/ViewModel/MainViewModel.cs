@@ -607,14 +607,19 @@ namespace DevNotePad.ViewModel
 
                         var tag = Convert.ToHexString(tlv.TagBytes);
                         var length = Convert.ToHexString(tlv.LengthBytes);
-                        var value = Convert.ToHexString(tlv.ByteValue);
+                        
                         
                         // Format the byte
                         var formattedTlvBuilder = new StringBuilder();
                         formattedTlvBuilder.AppendFormat("{0}  {1}\n",tag,length);
-                        formattedTlvBuilder.AppendFormat("  {0}\n",value);
+
+                        if (tlv.ByteValue.Any())
+                        {
+                            var value = Convert.ToHexString(tlv.ByteValue);
+                            formattedTlvBuilder.AppendFormat("  {0}\n", value);
+                        }
                         
-                        if (tlv.RemainingBytes != null)
+                        if (tlv.RemainingBytes != null && tlv.RemainingBytes.Any())
                         {
                             var remaining = Convert.ToHexString(tlv.RemainingBytes);
                             formattedTlvBuilder.AppendFormat("{0}\n", remaining);

@@ -42,8 +42,21 @@ namespace DevNotePad.Features.TlvDecoder
 
             // Read the Tag, Length and Value now. Any remaining bytes are stored later.
             workingBuffer = ReadTag(workingBuffer, tlv);
+            // Validate:  If buffer is empty, the length coding is missing
+            if (workingBuffer.Length == 0)
+            {
+                throw new FeatureException("Invalid TLV coding: Length value is missing");
+            }
             workingBuffer = ReadLength(workingBuffer, tlv);
+
+            // Validate. If the length of the buffer does not match with the available bytes, it is malformed.
+            if (tlv.IsDefinite && tlv.Length > workingBuffer.Length)
+            {
+                throw new FeatureException("Invalid TLV coding: Length and Bytes does not match");
+            }
             workingBuffer = ReadValue(workingBuffer, tlv);
+
+            // Add the remaining bytes to a buffer 
             if (workingBuffer.Any())
             {
                 tlv.RemainingBytes = workingBuffer.ToArray();
