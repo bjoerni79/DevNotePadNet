@@ -86,12 +86,17 @@ namespace DevNotePad.Features.TlvDecoder
 
                     tlv.Tag = tagBuffer;
                 }
+
+                tlv.TagBytes = new byte[] { firstTagByte, secondTagByte };
             }
             else
             {
                 tagLength = 1;
                 tlv.Tag = firstTagByte;
+                tlv.TagBytes = new byte[] { firstTagByte };
             }
+
+
 
             return tlvBytes.Skip(tagLength).ToArray();
         }
@@ -111,6 +116,8 @@ namespace DevNotePad.Features.TlvDecoder
 
                 tlv.IsDefinite = false;
                 tlv.Length = 0x80;
+                tlv.LengthBytes = new byte[] { firstLengthByte };
+
                 returnBytes = tlvBytes.Skip(1).ToArray();
             }
             else
@@ -121,6 +128,8 @@ namespace DevNotePad.Features.TlvDecoder
                 {
                     // Only one Length byte
                     tlv.Length = firstLengthByte;
+                    tlv.LengthBytes = new byte[] { firstLengthByte };
+
                     returnBytes = tlvBytes.Skip(1).ToArray();
                 }
                 else
@@ -164,6 +173,8 @@ namespace DevNotePad.Features.TlvDecoder
                     }
 
                     tlv.Length = lengthBuffer;
+                    tlv.LengthBytes = bytes;
+
                     returnBytes = tlvBytes.Skip(1).Skip(lengthCount).ToArray();
                 }
             }

@@ -16,37 +16,32 @@ namespace DevNotePad.Features.TlvDecoder
         /// </summary>
         public Tlv()
         {
-            Childs = new Tlv[0];
-            ByteValue = new byte[0];
-            RemainingBytes = new byte[0];
-            Meaning = String.Empty;
             IsDefinite = true;
+            TagBytes = new byte[0];
+            LengthBytes = new byte[0];
+            ByteValue = new byte[0];
         }
 
-        /// <summary>
-        /// The child TLVs
-        /// </summary>
-        public Tlv[] Childs { get; internal set; }
         /// <summary>
         /// The tag 
         /// </summary>
         public int Tag { get; internal set; }
+
+        public byte[] TagBytes { get; internal set; }
+
         /// <summary>
         /// The Length
         /// </summary>
         public int Length { get; internal set; }
+
+        public byte[] LengthBytes { get; internal set; }
+
         /// <summary>
         /// The Value as byte
         /// </summary>
         public byte[] ByteValue { get; internal set; }
-        /// <summary>
-        /// Field for meaning
-        /// </summary>
-        public string Meaning { get; internal set; }
-        /// <summary>
-        /// The remaining bytes left in the stream. Can be ignored if the TLV is already parsed
-        /// </summary>
-        public byte[] RemainingBytes { get; internal set; }
+
+        public byte[]? RemainingBytes { get; internal set; }
 
         public bool IsDefinite { get; set; }
     }

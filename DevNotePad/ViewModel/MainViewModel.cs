@@ -591,17 +591,54 @@ namespace DevNotePad.ViewModel
                 bool isSelected = textComponent.IsTextSelected();
                 if (isSelected)
                 {
-                    var tlvDecoder = FeatureFactory.CreateTlvDecoder();
-                    var textFormatter = FeatureFactory.CreateTextFormat();
-                    var text = textComponent.GetText(true);
+                    try
+                    {
+                        var tlvDecoder = FeatureFactory.CreateTlvDecoder();
+                        var textFormatter = FeatureFactory.CreateTextFormat();
 
-                    // TODO: Check if the text is a valid hex string
+                        // Convert the hex bytes to bytes. 
+                        // A FormatException is thrown if not possible
+                        var selectedText = textComponent.GetText(isSelected);
+                        var groupedCoding = textFormatter.GroupString(selectedText);
+                        var hexBytes = Convert.FromHexString(groupedCoding);
 
-                    // TODO: Try to decode it to TLV
+                        // Try to decode the TLV
+                        var tlv = tlvDecoder.Decode(hexBytes);
+
+                        var tag = Convert.ToHexString(tlv.TagBytes);
+                        var length = Convert.ToHexString(tlv.LengthBytes);
+                        var value = Convert.ToHexString(tlv.ByteValue);
+                        
+                        // Format the byte
+                        var formattedTlvBuilder = new StringBuilder();
+                        formattedTlvBuilder.AppendFormat("{0}  {1}\n",tag,length);
+                        formattedTlvBuilder.AppendFormat("  {0}\n",value);
+                        
+                        if (tlv.RemainingBytes != null)
+                        {
+                            var remaining = Convert.ToHexString(tlv.RemainingBytes);
+                            formattedTlvBuilder.AppendFormat("{0}\n", remaining);
+                        }
+
+                        textComponent.SetText(formattedTlvBuilder.ToString(), true);
+                    }
+                    catch (FormatException formatException)
+                    {
+                        ServiceHelper.ShowError(formatException, "TLV Decoder");
+                    }
+                    catch (FeatureException featureException)
+                    {
+                        ServiceHelper.ShowError(featureException, "TLV Decoder");
+                    }
+                    catch (Exception ex)
+                    {
+                        ServiceHelper.ShowError(ex, "TLV Decoder");
+                    }
                 }
                 else
                 {
                     // TODO: Show that no text is selected in the textbox
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("No text selected", false));
                 }
             }
         }
