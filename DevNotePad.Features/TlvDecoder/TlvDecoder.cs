@@ -164,6 +164,8 @@ namespace DevNotePad.Features.TlvDecoder
                     }
 
                     var bytes = tlvBytes.Skip(1).Take(lengthCount).ToArray();
+                    tlv.LengthBytes = tlvBytes.Take(lengthCount+1).ToArray();
+
                     int lengthBuffer = 0;
                     if (lengthCount == 1)
                     {
@@ -186,7 +188,6 @@ namespace DevNotePad.Features.TlvDecoder
                     }
 
                     tlv.Length = lengthBuffer;
-                    tlv.LengthBytes = bytes;
 
                     returnBytes = tlvBytes.Skip(1).Skip(lengthCount).ToArray();
                 }
