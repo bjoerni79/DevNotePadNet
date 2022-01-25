@@ -150,10 +150,7 @@ namespace DevNotePad
                             isRunningProgressBar.Visibility = Visibility.Hidden;
                         }
 
-                        isRunningProgressBar.IsIndeterminate = updateAsyncState.InProgress;
                     }));
-
-
                 }
             }
         }
@@ -191,7 +188,10 @@ namespace DevNotePad
             {
                 var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
                 var updateToolbarEvent = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
+                var asyncOperationEvent = eventController.GetEvent(Bootstrap.UpdateAsyncStateEvent);
+
                 updateToolbarEvent.AddListener(this);
+                asyncOperationEvent.AddListener(this);
 
                 IDialogService dialogService = new DialogService(this);
                 facade.AddUnique(dialogService,Bootstrap.DialogServiceId);

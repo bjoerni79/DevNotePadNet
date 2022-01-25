@@ -59,7 +59,10 @@ namespace DevNotePad
         private void RegisterEvents(EventController eventController)
         {
             var updateStatusEvent = new Generic.MVVM.Event.Event(UpdateToolBarEvent);
+            var asyncOperationEvent = new Generic.MVVM.Event.Event(UpdateAsyncStateEvent);
+
             eventController.Add(updateStatusEvent);
+            eventController.Add(asyncOperationEvent);
         }
 
         private void LoadSettings()

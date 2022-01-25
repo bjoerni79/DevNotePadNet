@@ -99,7 +99,7 @@ namespace DevNotePad.MVVM
             var facade = GetFacade();
             var eventController = facade.Get<EventController>();
 
-            var eventInstance = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
+            var eventInstance = eventController.GetEvent(Bootstrap.UpdateAsyncStateEvent);
             if (eventInstance != null)
             {
                 eventInstance.Trigger(parameter);

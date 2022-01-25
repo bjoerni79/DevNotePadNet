@@ -33,15 +33,22 @@ namespace DevNotePad.UI
 
         public string GetText(bool selected)
         {
-            if (selected)
+            string result = String.Empty;
+
+            App.Current.Dispatcher.Invoke(() =>
             {
-                var selectedText = editor.SelectedText;
-                return selectedText;
-            }
-            else
-            {
-                return editor.Text;
-            }
+                if (selected)
+                {
+                    var selectedText = editor.SelectedText;
+                    result = selectedText;
+                }
+                else
+                {
+                    result = editor.Text;
+                }
+            });
+
+            return result;
         }
 
         public bool IsTextSelected()
@@ -84,18 +91,23 @@ namespace DevNotePad.UI
 
         public void SetText(string text, bool selected)
         {
-            editor.BeginChange();
-
-            if (selected)
+            App.Current.Dispatcher.Invoke(() =>
             {
-                editor.SelectedText = text;
-            }
-            else
-            {
-                editor.Text = text;
-            }
+                editor.BeginChange();
 
-            editor.EndChange();
+                if (selected)
+                {
+                    editor.SelectedText = text;
+                }
+                else
+                {
+                    editor.Text = text;
+                }
+
+                editor.EndChange();
+            });
+
+
         }
     }
 }

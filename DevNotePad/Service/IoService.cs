@@ -70,6 +70,9 @@ namespace DevNotePad.Service
                 throw new FileNotFoundException("File cannot be found", filename);
             }
 
+            // For debugging
+            //await Task.Run(() => Thread.Sleep(20000));
+
             string content = await File.ReadAllTextAsync(filename);
             return content;
         }
@@ -184,7 +187,7 @@ namespace DevNotePad.Service
                 throw new ArgumentNullException("text");
             }
 
-            await Task.Run(()=> Thread.Sleep(10000));
+            await Task.Run(()=> Thread.Sleep(60000));
 
             using (var stream = File.CreateText(filename))
             {
