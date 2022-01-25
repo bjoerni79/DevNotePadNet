@@ -238,7 +238,7 @@
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="State:"  />
                 <Label Style="{Binding Path=IsStateChanged,Converter={StaticResource isStatusChangedStyleConverter},Mode=OneWay}" Width="70"  Content="{Binding Path=State}"/>
             </StackPanel>
-            <ProgressBar x:Name="isRunningProgressBar" DockPanel.Dock="Right" Width="100" />
+            <ProgressBar x:Name="isRunningProgressBar" DockPanel.Dock="Right" Visibility="Hidden" Width="100" />
             
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
             <Label Name="notificationLabel">Basic Features</Label>

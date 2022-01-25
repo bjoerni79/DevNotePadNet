@@ -93,5 +93,17 @@ namespace DevNotePad.MVVM
                 eventInstance.Trigger(parameter);
             }
         }
+
+        internal static void TriggerStartStopAsnyOperation(UpdateAsyncProcessState parameter)
+        {
+            var facade = GetFacade();
+            var eventController = facade.Get<EventController>();
+
+            var eventInstance = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
+            if (eventInstance != null)
+            {
+                eventInstance.Trigger(parameter);
+            }
+        }
     }
 }

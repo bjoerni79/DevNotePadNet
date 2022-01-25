@@ -76,16 +76,19 @@ namespace DevNotePad
         public void SetFilename(string filename)
         {
             //TODO: Move the logic to the View Model
-            var filenameDescriptor = filename;
-            var maxLength = 50;
-            if (filename.Length > maxLength)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                var length = filename.Length;
-                filenameDescriptor = "..." + filename.Substring(length - maxLength, maxLength);
-            }
+                var filenameDescriptor = filename;
+                var maxLength = 50;
+                if (filename.Length > maxLength)
+                {
+                    var length = filename.Length;
+                    filenameDescriptor = "..." + filename.Substring(length - maxLength, maxLength);
+                }
 
-            var newTitle = string.Format("DevNotePad - {0}", filenameDescriptor);
-            mainWindow.Title = newTitle;
+                var newTitle = string.Format("DevNotePad - {0}", filenameDescriptor);
+                mainWindow.Title = newTitle;
+            }));
         }
 
         public void FocusTree()
@@ -119,12 +122,14 @@ namespace DevNotePad
 
         public void OnTrigger(string eventId, object parameter)
         {
+            // All actions in this method are thread sensitive! Use the dispatcher for UI changes only.
+
             if (eventId == Bootstrap.UpdateToolBarEvent)
             {
                 var updateStatusBarParameter = parameter as UpdateStatusBarParameter;
                 if (updateStatusBarParameter != null)
                 {
-                    ApplyNotification(updateStatusBarParameter);
+                    Dispatcher.BeginInvoke(new Action(() => ApplyNotification(updateStatusBarParameter)));
                 }
             }
 
@@ -133,7 +138,22 @@ namespace DevNotePad
                 var updateAsyncState = parameter as UpdateAsyncProcessState;
                 if (updateAsyncState != null)
                 {
-                    isRunningProgressBar.IsIndeterminate = updateAsyncState.InProgress;
+                    // Schedule it thread save via the Dispatcher
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        if (updateAsyncState.InProgress)
+                        {
+                            isRunningProgressBar.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            isRunningProgressBar.Visibility = Visibility.Hidden;
+                        }
+
+                        isRunningProgressBar.IsIndeterminate = updateAsyncState.InProgress;
+                    }));
+
+
                 }
             }
         }

@@ -152,17 +152,43 @@ namespace DevNotePad.ViewModel
 
                 if (doSave)
                 {
-                    InitialText = textComponent.GetText(false);
-                    ioService.WriteTextFile(targetfilename, InitialText);
-                    CurrentState = EditorState.Saved;
-                    LatestTimeStamp = DateTime.Now;
+                    var textToSave = textComponent.GetText(false);
+                    var saveTask = ioService.WriteTextFileAsync(targetfilename, textToSave);
 
-                    FileName = targetfilename;
-                    mainUi.SetFilename(FileName);
+                    //var startUiIndicatorTask = new Task(() => ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true)));
+                    //var stopUiIndicatorTask = new Task(() => ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false)));
 
-                    IsTextFormatAvailable = true;
-                    isSuccessful = true;
-                    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
+                    Task.Run(() => ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true))).
+                        ContinueWith((t)=>saveTask).
+                        ContinueWith((t)=>
+                    {
+                        if (!t.IsFaulted)
+                        {
+                            InitialText = textToSave;
+                            CurrentState = EditorState.Saved;
+                            LatestTimeStamp = DateTime.Now;
+                            FileName = targetfilename;
+                            mainUi.SetFilename(FileName);
+                            IsTextFormatAvailable = true;
+                            isSuccessful = true;
+                            ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is saved", false));
+                        }
+
+                        ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                    });
+
+                    //// Old Code
+                    //InitialText = textComponent.GetText(false);
+                    //ioService.WriteTextFile(targetfilename, InitialText);
+                    //CurrentState = EditorState.Saved;
+                    //LatestTimeStamp = DateTime.Now;
+
+                    //FileName = targetfilename;
+                    //mainUi.SetFilename(FileName);
+
+                    //IsTextFormatAvailable = true;
+                    //isSuccessful = true;
+                    //ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
                 }
                 else
                 {

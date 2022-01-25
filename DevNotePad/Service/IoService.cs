@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DevNotePad.Service
@@ -182,6 +183,8 @@ namespace DevNotePad.Service
             {
                 throw new ArgumentNullException("text");
             }
+
+            await Task.Run(()=> Thread.Sleep(10000));
 
             using (var stream = File.CreateText(filename))
             {
