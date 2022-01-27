@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevNotePad.Shared"
         mc:Ignorable="d"
-        Title="AppletToolDialog" 
+        Title="Applet Tool" 
         Height="450" 
         Width="800"
         ResizeMode="CanResize" 
@@ -48,7 +48,7 @@
 
     </Window.Resources>
     
-    <Grid>
+    <Grid Margin="5">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>

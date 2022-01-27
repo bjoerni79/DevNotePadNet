@@ -15,6 +15,8 @@ namespace DevNotePad.ViewModel
 {
     public class AppletToolViewModel : MainViewUiViewModel
     {
+        private const string Component = "Applet Tool";
+
         public AppletToolViewModel()
         {
             Select = new DefaultCommand(OnSelect);
@@ -115,40 +117,21 @@ namespace DevNotePad.ViewModel
                 }
             }
 
-            //var facade = FacadeFactory.Create();
-            //if (facade != null)
-            //{
-            //    var serviceDialog = facade.Get<IDialogService>(Bootstrap.DialogService);
-            //    if (serviceDialog != null)
-            //    {
-            //        var filename = serviceDialog.ShowOpenDialog("Open Applet", "All|*.*|Text documents|*.txt|CAP Files|*.cap|IJC|*.ijc", null);
-            //        if (filename != null)
-            //        {
-            //            FileName = filename;
-            //            RaisePropertyChange("FileName");
-
-            //            // Load it now as well
-            //            OnLoad();
-            //        }
-            //    }
-            //}
         }
 
         private void OnLoad()
         {
             if (string.IsNullOrEmpty(FileName))
             {
-                //TODO:
-                //UpdateErrorStatus("Please select a valid file first");
-                //ShowValidationError("Please select a valid file first");
+                var currentWindow = dialog.GetCurrentWindow();
+                ServiceHelper.ShowWarning("Please select a valid file first", Component, currentWindow);
             }
             else
             {
                 if (!File.Exists(FileName))
                 {
-                    //TODO
-                    //UpdateErrorStatus("Filename cannot be found");
-                    //ShowValidationError("Filename cannot be found");
+                    var currentWindow = dialog.GetCurrentWindow();
+                    ServiceHelper.ShowWarning("Filename cannot be found", Component, currentWindow);
                 }
                 else
                 {
@@ -171,16 +154,13 @@ namespace DevNotePad.ViewModel
                             RaisePropertyChange("Components");
                             RaisePropertyChange("CurrentComponent");
 
-                            //TODO
-                            //UpdateStatus("Applet is loaded");
                             RefreshCommands();
                         }
                     }
                     catch (Exception ex)
                     {
-                        //TODO
-                        //UpdateErrorStatus("Load failed");
-                        //ShowException(ex);
+                        var currentWindow = dialog.GetCurrentWindow();
+                        ServiceHelper.ShowError(ex, Component,currentWindow);
                     }
                 }
             }
@@ -193,7 +173,6 @@ namespace DevNotePad.ViewModel
             var serviceDialog = ServiceHelper.GetDialogService();
             if (serviceDialog != null)
             {
-                //fileName = serviceDialog.ShowSaveDialog("Save Applet", null, defaultExtension);
                 var currentWindow = dialog.GetCurrentWindow();
                 var fileNameResult = serviceDialog.ShowSaveFileDialog(defaultExtension,currentWindow);
                 if (fileNameResult.IsConfirmed)
@@ -208,7 +187,7 @@ namespace DevNotePad.ViewModel
 
         private void OnSaveToIjc()
         {
-            var fileName = GetFilename("*.ijc");
+            var fileName = GetFilename("IJC|*.ijc");
             if (fileName != null && RawComponents != null && RawComponents.Any())
             {
                 try
@@ -220,8 +199,8 @@ namespace DevNotePad.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    //UpdateErrorStatus("Save to IJC failed");
-                    //ShowException(ex);
+                    var currentWindow = dialog.GetCurrentWindow();
+                    ServiceHelper.ShowError(ex, Component, currentWindow);
                 }
 
             }
@@ -230,7 +209,7 @@ namespace DevNotePad.ViewModel
 
         private void OnSaveToHex()
         {
-            var fileName = GetFilename("*.txt");
+            var fileName = GetFilename("Text|*.txt");
             if (fileName != null && RawComponents != null && RawComponents.Any())
             {
                 try
@@ -242,8 +221,8 @@ namespace DevNotePad.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    //UpdateErrorStatus("Save to Hex String failed");
-                    //ShowException(ex);
+                    var currentWindow = dialog.GetCurrentWindow();
+                    ServiceHelper.ShowError(ex, Component,currentWindow);
                 }
 
             }
@@ -251,7 +230,7 @@ namespace DevNotePad.ViewModel
 
         private void OnCreateReport()
         {
-            var fileName = GetFilename("*.txt");
+            var fileName = GetFilename("Text|*.txt");
             if (fileName != null && RawComponents != null && RawComponents.Any())
             {
                 // Export the interpreted applet components now.
@@ -277,8 +256,8 @@ namespace DevNotePad.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    //UpdateErrorStatus("Report creation failed");
-                    //ShowException(ex);
+                    var currentWindow = dialog.GetCurrentWindow();
+                    ServiceHelper.ShowError(ex, Component,currentWindow);
                 }
 
             }

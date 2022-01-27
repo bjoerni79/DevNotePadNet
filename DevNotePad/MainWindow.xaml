@@ -24,6 +24,8 @@
         <KeyBinding Modifiers="Ctrl" Key="V" Command="{Binding Path=Paste}"/>
         <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding Path=Copy}"/>
         <KeyBinding Modifiers="Ctrl" Key="A" Command="{Binding Path=SelectAll}"/>
+
+        <KeyBinding Modifiers="Ctrl" Key="T" Command="{Binding Path=DecodeTlv}"/>
     </Window.InputBindings>
 
     <Window.Resources>
@@ -208,7 +210,7 @@
             <MenuItem Header="Tools">
                 <MenuItem Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
                 <MenuItem Header="UICC">
-                    <MenuItem Header="Decode TLV" Command="{Binding Path=DecodeTlv}" />
+                    <MenuItem Header="Decode TLV" InputGestureText="Ctrl+T" Command="{Binding Path=DecodeTlv}" />
                     <MenuItem Header="Applet Tool" Command="{Binding Path=AppletTool}" />
                 </MenuItem>
             </MenuItem>

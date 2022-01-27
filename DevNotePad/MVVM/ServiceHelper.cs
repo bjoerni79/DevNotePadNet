@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DevNotePad.MVVM
 {
@@ -75,6 +76,24 @@ namespace DevNotePad.MVVM
         {
             var dialogService = GetDialogService();
             dialogService.ShowErrorDialog(exception, component);
+        }
+
+        /// <summary>
+        /// Shows the error dialog via the Dialog Service
+        /// </summary>
+        /// <param name="exception">the exception</param>
+        /// <param name="component">the component</param>
+        /// <exception cref="Exception">An exception is thrown if the dialog service is not available</exception>
+        internal static void ShowError(Exception exception, string component, Window owner)
+        {
+            var dialogService = GetDialogService();
+            dialogService.ShowErrorDialog(exception, component, owner);
+        }
+
+        internal static void ShowWarning(string warning, string component, Window owner)
+        {
+            var dialogService = GetDialogService();
+            dialogService.ShowWarningDialog(warning, component, owner);
         }
 
         /// <summary>
