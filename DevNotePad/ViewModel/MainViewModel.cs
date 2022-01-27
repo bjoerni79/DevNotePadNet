@@ -179,6 +179,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? DecodeTlv { get; private set; }
 
+        public IRefreshCommand? AppletTool { get; private set; }
+
         #endregion
 
         #region Command Delegates
@@ -488,6 +490,11 @@ namespace DevNotePad.ViewModel
             {
                 Ui.ShowAbout();
             }
+        }
+
+        private void OnAppletTool()
+        {
+
         }
 
         private void OnBase64Tool()
@@ -873,6 +880,7 @@ namespace DevNotePad.ViewModel
 
             Base64Tool = new DefaultCommand(OnBase64Tool);
             DecodeTlv = new DefaultCommand(OnDecodeTlv);
+            AppletTool = new DefaultCommand(OnAppletTool);
 
             // About
             About = new DefaultCommand(OnAbout);

@@ -35,5 +35,7 @@ namespace DevNotePad.Service
         void OpenReplaceDialog(IMainViewUi ui, ITextComponent textComponent);
 
         void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent);
+
+        void OpenAppletToolDialog(IMainViewUi ui, ITextComponent textComponent);
     }
 }

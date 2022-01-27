@@ -28,6 +28,11 @@ namespace DevNotePad.Service
             this.defaultOwner = owner;
         }
 
+        public void OpenAppletToolDialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+
+        }
+
         public void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent)
         {
             if (ui == null)
