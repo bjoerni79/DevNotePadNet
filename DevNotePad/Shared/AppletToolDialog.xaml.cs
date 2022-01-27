@@ -17,11 +17,39 @@ namespace DevNotePad.Shared
     /// <summary>
     /// Interaction logic for AppletToolDialog.xaml
     /// </summary>
-    public partial class AppletToolDialog : Window
+    public partial class AppletToolDialog : Window, IDialog
     {
         public AppletToolDialog()
         {
             InitializeComponent();
+        }
+
+        private void OnCopyComponent(object sender, RoutedEventArgs e)
+        {
+            var item = componentView.SelectedItem as AppletComponentViewItem;
+            if (item != null)
+            {
+                var sb = new StringBuilder();
+                sb.AppendFormat("Title : {0}\n", item.Title);
+                sb.AppendFormat("ID : {0}\n", item.Id);
+                sb.AppendFormat("Content:\n{0}", item.Content);
+                Clipboard.SetText(sb.ToString());
+            }
+        }
+
+        public void CloseDialog(bool confirmed)
+        {
+            Close();
+        }
+
+        public void FocusDialog()
+        {
+            // Empty
+        }
+
+        public Window GetCurrentWindow()
+        {
+            return this;
         }
     }
 }

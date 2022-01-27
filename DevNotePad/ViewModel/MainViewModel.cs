@@ -494,7 +494,8 @@ namespace DevNotePad.ViewModel
 
         private void OnAppletTool()
         {
-
+            var dialogService = ServiceHelper.GetDialogService();
+            dialogService.OpenAppletToolDialog(Ui, textComponent);
         }
 
         private void OnBase64Tool()

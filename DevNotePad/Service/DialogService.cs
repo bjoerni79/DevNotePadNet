@@ -21,7 +21,7 @@ namespace DevNotePad.Service
         private FindDialog? currentFindDialog;
         private ReplaceDialog? currentReplaceDialog;
         private Base64ToolDialog? currentBase64ToolDialog;
-
+        private AppletToolDialog? currentAppletToolDialog;
 
         internal DialogService(Window owner)
         {
@@ -30,7 +30,37 @@ namespace DevNotePad.Service
 
         public void OpenAppletToolDialog(IMainViewUi ui, ITextComponent textComponent)
         {
+            if (ui == null)
+            {
+                throw new ArgumentNullException(nameof(ui));
+            }
 
+            // Maintain only one view model independant from IMainViewUi and IDialog instance
+            var facade = FacadeFactory.Create();
+
+            AppletToolViewModel vm;
+            var isVmAvailable = facade.Exists(Bootstrap.ViewModelAppletDialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<AppletToolViewModel>(Bootstrap.ViewModelAppletDialog);
+            }
+            else
+            {
+                vm = new AppletToolViewModel();
+                facade.AddUnique(vm, Bootstrap.ViewModelAppletDialog);
+            }
+
+            if (currentAppletToolDialog != null)
+            {
+                currentAppletToolDialog.Close();
+            }
+
+            currentAppletToolDialog = new AppletToolDialog();
+            currentAppletToolDialog.DataContext = vm;
+
+            vm.Init(ui, currentAppletToolDialog, textComponent);
+
+            currentAppletToolDialog.Show();
         }
 
         public void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent)
@@ -208,7 +238,8 @@ namespace DevNotePad.Service
 
         public DialogReturnValue ShowSaveFileDialog(string defaultExtension, Window owner)
         {
-            var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension, DefaultExt = "*.txt" };
+            //var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension, DefaultExt = "*.txt" };
+            var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension};
             var result = saveFileDialog.ShowDialog(owner);
 
             if (result.HasValue && result.Value)
