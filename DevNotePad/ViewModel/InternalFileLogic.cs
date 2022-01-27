@@ -116,15 +116,13 @@ namespace DevNotePad.ViewModel
         /// Handles the internal save of the current Text and is called by Save and Save As
         /// </summary>
         /// <param name="filename">the filename</param>
-        public bool Save(string targetfilename)
+        public void Save(string targetfilename)
         {
             if (!IsTextFormatAvailable)
             {
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Please save the content as binary", true));
-                return false;
             }
 
-            bool isSuccessful = false;
             try
             {
                 var ioService = ServiceHelper.GetIoService();
@@ -167,7 +165,7 @@ namespace DevNotePad.ViewModel
                             FileName = targetfilename;
                             mainUi.SetFilename(FileName);
                             IsTextFormatAvailable = true;
-                            isSuccessful = true;
+
                             ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is saved", false));
                         }
 
@@ -185,12 +183,10 @@ namespace DevNotePad.ViewModel
                 ServiceHelper.ShowError(ex, "Save File");
             }
 
-            return isSuccessful;
         }
 
-        public bool SaveBinary(string targetFilename)
+        public void SaveBinary(string targetFilename)
         {
-            var isSuccessful = false;
             var ioService = ServiceHelper.GetIoService();
 
             try
@@ -230,7 +226,6 @@ namespace DevNotePad.ViewModel
 
                         IsTextFormatAvailable = false;
                         CurrentState = EditorState.Saved;
-                        isSuccessful = true;
 
                         ServiceHelper.TriggerFileUpdate();
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
@@ -263,18 +258,14 @@ namespace DevNotePad.ViewModel
                 ServiceHelper.ShowError(ex, "Save File");
                 ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
             }
-
-            return isSuccessful;
         }
 
         /// <summary>
         /// Handles the internal load of files and is called by ICommand delegates
         /// </summary>
         /// <param name="filename">the filename</param>
-        public bool Load(string sourceFilename)
+        public void Load(string sourceFilename)
         {
-            bool isSuccessful = false;
-
             try
             {
                 var ioService = ServiceHelper.GetIoService();
@@ -295,7 +286,7 @@ namespace DevNotePad.ViewModel
                         textComponent.SetText(InitialText);
                         mainUi.SetFilename(FileName);
                         IsTextFormatAvailable = true;
-                        isSuccessful = true;
+
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
                         ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                     });
@@ -305,14 +296,10 @@ namespace DevNotePad.ViewModel
             {
                 ServiceHelper.ShowError(ex, "Load File");
             }
-
-            return isSuccessful;
         }
 
-        public bool LoadBinary(string sourceFilename)
+        public void LoadBinary(string sourceFilename)
         {
-            bool isSuccessful = false;
-
             try
             {
                 var ioService = ServiceHelper.GetIoService();
@@ -336,7 +323,6 @@ namespace DevNotePad.ViewModel
                         mainUi.SetFilename(FileName);
 
                         IsTextFormatAvailable = false;
-                        isSuccessful = true;
 
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
                         ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
@@ -348,7 +334,6 @@ namespace DevNotePad.ViewModel
                 ServiceHelper.ShowError(ex, "Load File");
             }
 
-            return isSuccessful;
         }
 
         private string ToHexStringRowForAsnyc(Memory<byte> byteContent)
@@ -406,7 +391,7 @@ namespace DevNotePad.ViewModel
         /// <summary>
         /// Handles the creation of new files
         /// </summary>
-        public bool New()
+        public void New()
         {
             bool proceed = true;
 
@@ -430,7 +415,6 @@ namespace DevNotePad.ViewModel
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("New file created", false));
             }
 
-            return proceed;
         }
 
         /// <summary>
