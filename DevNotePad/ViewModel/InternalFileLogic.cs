@@ -174,18 +174,6 @@ namespace DevNotePad.ViewModel
                         ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                     });
 
-                    //// Old Code
-                    //InitialText = textComponent.GetText(false);
-                    //ioService.WriteTextFile(targetfilename, InitialText);
-                    //CurrentState = EditorState.Saved;
-                    //LatestTimeStamp = DateTime.Now;
-
-                    //FileName = targetfilename;
-                    //mainUi.SetFilename(FileName);
-
-                    //IsTextFormatAvailable = true;
-                    //isSuccessful = true;
-                    //ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Content is saved", false));
                 }
                 else
                 {
@@ -210,42 +198,70 @@ namespace DevNotePad.ViewModel
                 FileName = targetFilename;
                 InitialText = textComponent.GetText(false);
 
-                Task.Run<Memory<byte>>(() =>
+                // https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task?view=net-6.0
+
+                Task.Run(async () =>
                 {
                     ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
                     // Group the chars and numbers first before writing. Convert.FromHexString() throws a FormatException if any parsing errors are occuring.
                     var textFormatComponent = FeatureFactory.CreateTextFormat();
                     var grouped = textFormatComponent.GroupString(InitialText);
-                    var byteCoding = Convert.FromHexString(grouped);
 
-                    //TODO: Deal with FormatExceptions!
+                    // https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/chaining-tasks-by-using-continuation-tasks
 
-                    return byteCoding;
-                }).ContinueWith((t) => ioService.WriteBinaryAsync(FileName, t.Result)).
-                ContinueWith(t => {
-                    IsTextFormatAvailable = false;
-                    CurrentState = EditorState.Saved;
-                    isSuccessful = true;
+                    byte[]? byteCoding = null;
+                    try
+                    {
+                        // Throws a Format Exception if the content is not a valid hex string
+                        byteCoding = Convert.FromHexString(grouped);
+                    }
+                    catch (FormatException)
+                    {
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is not a valid hex format. Save Binary operation failed", true));
+                        // Ignore.  byteCoding array is null.
+                    }
 
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
+                    if (byteCoding != null)
+                    {
+                        await ioService.WriteBinaryAsync(FileName, byteCoding);
+
+                        // Write operation done. Update the states now
+
+                        IsTextFormatAvailable = false;
+                        CurrentState = EditorState.Saved;
+                        isSuccessful = true;
+
+                        ServiceHelper.TriggerFileUpdate();
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
+                    }
+
                     ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                 });
-
-                //ioService.WriteBinary(FileName, byteCoding);
-
-                //IsTextFormatAvailable = false;
-                //CurrentState = EditorState.Saved;
-                //isSuccessful = true;
-                
             }
-            catch (FormatException)
+            catch (AggregateException aEx)
             {
-                ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is not a valid hex format. Save Binary operation failed", true));
+                var exceptions = aEx.InnerExceptions;
+                foreach (var inner in exceptions)
+                {
+                    if (inner is FormatException)
+                    {
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is not a valid hex format. Save Binary operation failed", true));
+                    }
+                    else
+                    {
+                        ServiceHelper.ShowError(inner, "Save File");
+                    }
+                }
+
+                ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+
+                // https://docs.microsoft.com/en-us/dotnet/api/system.aggregateexception?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.AggregateException);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0
             }
             catch (Exception ex)
             {
                 ServiceHelper.ShowError(ex, "Save File");
+                ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
             }
 
             return isSuccessful;
@@ -284,13 +300,6 @@ namespace DevNotePad.ViewModel
                         ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                     });
 
-                //InitialText = ioService.ReadTextFile(FileName);
-                //textComponent.SetText(InitialText);
-                //mainUi.SetFilename(FileName);
-
-                //IsTextFormatAvailable = true;
-                //isSuccessful=true;
-                //ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
             }
             catch (Exception ex)
             {
@@ -333,18 +342,6 @@ namespace DevNotePad.ViewModel
                         ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                     });
 
-
-                // Old
-                //var byteContent = ioService.ReadBinary(FileName);
-                //var hexContent = ToHexStringRow(byteContent);
-
-                //InitialText=hexContent;
-                //textComponent.SetText(InitialText);
-                //mainUi.SetFilename(FileName);
-
-                //IsTextFormatAvailable = false;
-                //isSuccessful = true;
-                //ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
             }
             catch(Exception ex)
             {
@@ -354,7 +351,6 @@ namespace DevNotePad.ViewModel
             return isSuccessful;
         }
 
-        //TODO: This works for now. Needs review! If this is stable, the span<byte> version can removed
         private string ToHexStringRowForAsnyc(Memory<byte> byteContent)
         {
             int offset = 0;
@@ -369,7 +365,7 @@ namespace DevNotePad.ViewModel
             while ((offset + hexBytePerGroup) < length)
             {
                 var bytesInRow = byteContent.Slice(offset, hexBytePerGroup);
-                var rowHexCoding = Convert.ToHexString(bytesInRow.ToArray());
+                var rowHexCoding = Convert.ToHexString(bytesInRow.Span);
 
                 if (currentGroupsPerRow + 1 >= groupsPerRow)
                 {
@@ -390,7 +386,7 @@ namespace DevNotePad.ViewModel
             if (lastRowOffset > 0)
             {
                 var lastRow = byteContent.Slice(offset);
-                var lastRowHexCoding = Convert.ToHexString(lastRow.ToArray());
+                var lastRowHexCoding = Convert.ToHexString(lastRow.Span);
 
                 if (currentGroupsPerRow + 1 >= groupsPerRow)
                 {
@@ -406,56 +402,6 @@ namespace DevNotePad.ViewModel
             return stringBuilder.ToString();
         }
 
-        private string ToHexStringRow(Span<byte> byteContent)
-        {
-            int offset = 0;
-            int hexBytePerGroup = 16;
-            int currentGroupsPerRow = 0;
-            int groupsPerRow = 3;
-            int length = byteContent.Length;
-            
-            var stringBuilder = new StringBuilder();
-
-            // Build a row with 16 bytes each
-            while ((offset+hexBytePerGroup) < length )
-            {
-                var bytesInRow = byteContent.Slice(offset, hexBytePerGroup);
-                var rowHexCoding = Convert.ToHexString(bytesInRow);
-
-                if (currentGroupsPerRow + 1 >= groupsPerRow)
-                {
-                    stringBuilder.AppendFormat("{0}\n", rowHexCoding);
-                    currentGroupsPerRow = 0;
-                }
-                else
-                {
-                    currentGroupsPerRow++;
-                    stringBuilder.AppendFormat("{0}  ", rowHexCoding);
-                }
-
-                offset += hexBytePerGroup;
-            }
-
-            // Add the last bytes at the end
-            int lastRowOffset = length - offset;
-            if (lastRowOffset > 0)
-            {
-                var lastRow = byteContent.Slice(offset);
-                var lastRowHexCoding = Convert.ToHexString(lastRow);
-
-                if (currentGroupsPerRow + 1 >= groupsPerRow )
-                {
-                    stringBuilder.AppendFormat("{0}\n", lastRowHexCoding);
-                }
-                else
-                {
-                    stringBuilder.AppendFormat("{0}", lastRowHexCoding);
-                }
-                
-            }
-
-            return stringBuilder.ToString();
-        }
 
         /// <summary>
         /// Handles the creation of new files

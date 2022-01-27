@@ -105,5 +105,17 @@ namespace DevNotePad.MVVM
                 eventInstance.Trigger(parameter);
             }
         }
+
+        internal static void TriggerFileUpdate()
+        {
+            var facade = GetFacade();
+            var eventController = facade.Get<EventController>();
+
+            var eventInstance = eventController.GetEvent(Bootstrap.UpdateFileStateEvent);
+            if (eventInstance != null)
+            {
+                eventInstance.Trigger();
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
 using Generic.MVVM;
+using Generic.MVVM.Event;
 using Generic.MVVM.IOC;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ using System.Windows;
 
 namespace DevNotePad.ViewModel
 {
-    public class MainViewModel : AbstractViewModel, IMainViewModel
+    public class MainViewModel : AbstractViewModel, IMainViewModel, IEventListener
     {
         private readonly string ApplicationComponent = "Application";
         private readonly string JsonComponent = "JSON";
@@ -49,6 +50,7 @@ namespace DevNotePad.ViewModel
             State = "Ready";
             IsStateChanged = false;
             InitMenu();
+
         }
 
         #region Commands
@@ -673,6 +675,8 @@ namespace DevNotePad.ViewModel
 
             textLogic = new InternalFileLogic(Ui,textComponent);
             textLogic.New();
+
+            InitEvents();
             UpdateFileStatus();
         }
 
@@ -735,6 +739,8 @@ namespace DevNotePad.ViewModel
         /// </summary>
         private void UpdateFileStatus()
         {
+            // No UI Thread involved. Can be run in a worker thread.
+
             var currentUiState = "Unknown";
             bool isChanged = false;
             if (textLogic != null)
@@ -785,6 +791,20 @@ namespace DevNotePad.ViewModel
             }
 
             return settings;
+        }
+
+        private void InitEvents()
+        {
+            var facade = FacadeFactory.Create();
+            var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+            if (eventController != null)
+            {
+                var fileStatsUpdateEvent = eventController.GetEvent(Bootstrap.UpdateFileStateEvent);
+                if (fileStatsUpdateEvent != null)
+                {
+                    fileStatsUpdateEvent.AddListener(this);
+                }
+            }
         }
 
         private void InitMenu()
@@ -856,6 +876,19 @@ namespace DevNotePad.ViewModel
 
             // About
             About = new DefaultCommand(OnAbout);
+        }
+
+        public void OnTrigger(string eventId)
+        {
+            if (eventId == Bootstrap.UpdateFileStateEvent)
+            {
+                UpdateFileStatus();
+            }
+        }
+
+        public void OnTrigger(string eventId, object parameter)
+        {
+            // None..
         }
 
         /// <summary>

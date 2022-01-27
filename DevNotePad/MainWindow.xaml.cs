@@ -141,15 +141,20 @@ namespace DevNotePad
                     // Schedule it thread save via the Dispatcher
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
+                        // Render the progress bar depending on the state.
                         if (updateAsyncState.InProgress)
                         {
                             isRunningProgressBar.Visibility = Visibility.Visible;
+                            
                         }
                         else
                         {
                             isRunningProgressBar.Visibility = Visibility.Hidden;
                         }
 
+                        // Disable the textboxes while I/O operation is in progresss
+                        editor.IsReadOnly = updateAsyncState.InProgress;
+                        scratchPad.IsReadOnly = updateAsyncState.InProgress;
                     }));
                 }
             }

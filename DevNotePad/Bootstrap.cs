@@ -23,6 +23,7 @@ namespace DevNotePad
 
         public const string UpdateToolBarEvent = "updatetoolbarevent";
         public const string UpdateAsyncStateEvent = "updateasyncstateevent";
+        public const string UpdateFileStateEvent = "updatefilestateevent";
 
         public const string ViewModelFindDialog = "viewmodelfinddialog";
         public const string ViewModelReplaceDialog = "viewmodelreplacedialog";
@@ -60,9 +61,11 @@ namespace DevNotePad
         {
             var updateStatusEvent = new Generic.MVVM.Event.Event(UpdateToolBarEvent);
             var asyncOperationEvent = new Generic.MVVM.Event.Event(UpdateAsyncStateEvent);
+            var updateFileStateEvent = new Generic.MVVM.Event.Event(UpdateFileStateEvent);
 
             eventController.Add(updateStatusEvent);
             eventController.Add(asyncOperationEvent);
+            eventController.Add(updateFileStateEvent);
         }
 
         private void LoadSettings()
