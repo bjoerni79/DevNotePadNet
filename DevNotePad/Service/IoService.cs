@@ -187,8 +187,6 @@ namespace DevNotePad.Service
                 throw new ArgumentNullException("text");
             }
 
-            await Task.Run(()=> Thread.Sleep(60000));
-
             using (var stream = File.CreateText(filename))
             {
                 await stream.WriteAsync(text);

@@ -150,15 +150,14 @@ namespace DevNotePad.ViewModel
 
                 if (doSave)
                 {
-                    var textToSave = textComponent.GetText(false);
-                    var saveTask = ioService.WriteTextFileAsync(targetfilename, textToSave);
-
-                    Task.Run(() => ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true))).
-                        ContinueWith((t)=>saveTask).
-                        ContinueWith((t)=>
+                    try
                     {
-                        if (!t.IsFaulted)
-                        {
+                        Task.Run(async () => {
+                            ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
+
+                            var textToSave = textComponent.GetText(false);
+                            await ioService.WriteTextFileAsync(targetfilename, textToSave);
+
                             InitialText = textToSave;
                             CurrentState = EditorState.Saved;
                             LatestTimeStamp = DateTime.Now;
@@ -166,12 +165,22 @@ namespace DevNotePad.ViewModel
                             mainUi.SetFilename(FileName);
                             IsTextFormatAvailable = true;
 
+                            ServiceHelper.TriggerFileUpdate();
                             ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is saved", false));
+
+                            ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                        });
+                    }
+                    catch (AggregateException aEx)
+                    {
+                        var exceptions = aEx.InnerExceptions;
+                        foreach (var inner in exceptions)
+                        {
+                            ServiceHelper.ShowError(inner, "Save File");
                         }
 
                         ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
-                    });
-
+                    }
                 }
                 else
                 {
@@ -275,22 +284,31 @@ namespace DevNotePad.ViewModel
                 //Store the timestamp of the file right now
                 LatestTimeStamp = ioService.GetModificationTimeStamp(FileName);
 
-                var readTask = ioService.ReadTextFileAsync(FileName);
+                Task.Run(async () =>
+                {
+                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
-                Task.Run(() => ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true))).
-                    ContinueWith((t) => readTask).
-                    ContinueWith((t) => 
-                    {
-                        var readerTask = t.Result;
-                        InitialText = readTask.Result;
-                        textComponent.SetText(InitialText);
-                        mainUi.SetFilename(FileName);
-                        IsTextFormatAvailable = true;
+                    var content = await ioService.ReadTextFileAsync(FileName);
+                    InitialText = content;
+                    textComponent.SetText(InitialText);
+                    mainUi.SetFilename(FileName);
+                    IsTextFormatAvailable = true;
 
-                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
-                        ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
-                    });
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
+                    ServiceHelper.TriggerFileUpdate();
+                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                });
 
+            }
+            catch (AggregateException aEx)
+            {
+                var exceptions = aEx.InnerExceptions;
+                foreach (var inner in exceptions)
+                {
+                    ServiceHelper.ShowError(inner, "Load File");
+                }
+
+                ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
             }
             catch (Exception ex)
             {
@@ -308,35 +326,44 @@ namespace DevNotePad.ViewModel
 
                 LatestTimeStamp = ioService.GetModificationTimeStamp(FileName);
 
-                Task.Run(() => ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true))).
-                    ContinueWith(t => ioService.ReadBinaryAsync(FileName)).
-                    ContinueWith(t =>
-                    {
-                        var loaderTask = t.Result;
-                        //TODO: Verify..
+                Task.Run(async () =>
+                {
+                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
-                        var byteContent = loaderTask.Result;
-                        var hexContent = ToHexStringRowForAsnyc(byteContent);
+                    var byteContent = await ioService.ReadBinaryAsync(FileName);
+                    var hexContent = ToHexStringRow(byteContent);
 
-                        InitialText = hexContent;
-                        textComponent.SetText(InitialText);
-                        mainUi.SetFilename(FileName);
+                    InitialText = hexContent;
+                    textComponent.SetText(InitialText);
+                    mainUi.SetFilename(FileName);
 
-                        IsTextFormatAvailable = false;
+                    IsTextFormatAvailable = false;
 
-                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
-                        ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
-                    });
+                    ServiceHelper.TriggerFileUpdate();
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
+                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                });
+
 
             }
-            catch(Exception ex)
+            catch (AggregateException aEx)
+            {
+                var exceptions = aEx.InnerExceptions;
+                foreach (var inner in exceptions)
+                {
+                    ServiceHelper.ShowError(inner, "Load File");
+                }
+
+                ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+            }
+            catch (Exception ex)
             {
                 ServiceHelper.ShowError(ex, "Load File");
             }
 
         }
 
-        private string ToHexStringRowForAsnyc(Memory<byte> byteContent)
+        private string ToHexStringRow(Memory<byte> byteContent)
         {
             int offset = 0;
             int hexBytePerGroup = 16;
