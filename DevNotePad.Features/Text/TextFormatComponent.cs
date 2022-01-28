@@ -163,6 +163,35 @@ namespace DevNotePad.Features.Text
             }
         }
 
+        public string FormatHex(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            var filteredText = FilterContent(text);
+            string result;
+            try
+            {
+                var byteContent = Convert.FromHexString(filteredText);
+                var formattedHexBuilder = new StringBuilder();
+
+                foreach (var curByte in byteContent)
+                {
+                    formattedHexBuilder.AppendFormat("{0:X2} ", curByte);
+                }
+
+                result = formattedHexBuilder.ToString().TrimEnd();
+            }
+            catch (FormatException formatException)
+            {
+                throw new FeatureException("Text is not a valid hex string", formatException);
+            }
+
+            return result;
+        }
+
         private string FilterContent(string text)
         {
             var filterText = new StringBuilder();

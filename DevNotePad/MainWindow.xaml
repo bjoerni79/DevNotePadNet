@@ -100,6 +100,7 @@
             <MenuItem Header="Format">
                 <MenuItem Header="JSON Format" Command="{Binding Path=JsonFormatter}" />
                 <MenuItem Header="XML Format" Command="{Binding Path=XmlFormatter}"/>
+                <MenuItem Header="Hex Format" Command="{Binding Path=TextFormatHex}"/>
             </MenuItem>
 
         </ContextMenu>
@@ -122,6 +123,7 @@
             <MenuItem Header="Format">
                 <MenuItem Header="JSON Format" Command="{Binding Path=ScratchPadJsonFormat}" />
                 <MenuItem Header="XML Format" Command="{Binding Path=ScratchPadXmlFormat}" />
+                <MenuItem Header="Hex Format" Command="{Binding Path=ScratchPadFormatHex}" />
             </MenuItem>
         </ContextMenu>
         
@@ -173,7 +175,10 @@
                     <MenuItem Header="To Upper" Command="{Binding Path=TextToUpper}"/>
                     <MenuItem Header="Trim" Command="{Binding Path=TextTrim}" />
                     <MenuItem Header="Count" Command="{Binding Path=TextCountLength}"/>
+                </MenuItem>
+                <MenuItem Header="Hex Byte">
                     <MenuItem Header="Hex Byte Count" Command="{Binding Path=TextHexCountLength}" />
+                    <MenuItem Header="Format" Command="{Binding Path=TextFormatHex}" />
                 </MenuItem>
 
             </MenuItem>
@@ -202,9 +207,11 @@
                     <MenuItem Header="To Upper" Command="{Binding ScratchPadToUpper}" />
                     <MenuItem Header="Trim" Command="{Binding ScratchPadTrim}" />
                     <MenuItem Header="Count" Command="{Binding ScratchPadCountLength}" />
-                    <MenuItem Header="Hex Bytes Count" Command="{Binding ScratchPadHexCountLength}"/>
                 </MenuItem>
-
+                <MenuItem Header="Hex Byte">
+                    <MenuItem Header="Hex Bytes Count" Command="{Binding ScratchPadHexCountLength}"/>
+                    <MenuItem Header="Format" Command="{Binding ScratchPadFormatHex}" />
+                </MenuItem>
             </MenuItem>
 
             <MenuItem Header="Tools">

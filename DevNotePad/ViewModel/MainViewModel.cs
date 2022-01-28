@@ -129,6 +129,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? TextHexCountLength { get; private set; }
 
+        public IRefreshCommand? TextFormatHex { get; private set; }
+
         // ScratchPad
 
         public IRefreshCommand? ScratchPadClearAll { get; private set; }
@@ -168,6 +170,8 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? ScratchPadCountLength { get; private set; }
 
         public IRefreshCommand? ScratchPadHexCountLength { get; private set; }
+
+        public IRefreshCommand? ScratchPadFormatHex { get; private set; }
 
         // About
 
@@ -852,6 +856,8 @@ namespace DevNotePad.ViewModel
             TextTrim = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Trim));
             TextCountLength = new DefaultCommand(() => OnText(textLogic, TextActionEnum.LengthCount));
             TextHexCountLength = new DefaultCommand(()=>OnText(textLogic, TextActionEnum.HexLengthCount));
+            TextFormatHex = new DefaultCommand(() => OnText(textLogic, TextActionEnum.HexFormat));
+
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
@@ -878,6 +884,7 @@ namespace DevNotePad.ViewModel
             ScratchPadTrim = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Trim));
             ScratchPadCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.LengthCount));
             ScratchPadHexCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexLengthCount));
+            ScratchPadFormatHex = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexFormat));
 
             Base64Tool = new DefaultCommand(OnBase64Tool);
             DecodeTlv = new DefaultCommand(OnDecodeTlv);

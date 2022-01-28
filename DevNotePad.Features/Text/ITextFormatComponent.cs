@@ -24,5 +24,7 @@ namespace DevNotePad.Features.Text
 
         string SplitString(string text, TextFormatComponentSettings settings);
 
+        string FormatHex(string text);
+
     }
 }

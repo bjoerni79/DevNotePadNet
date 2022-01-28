@@ -85,6 +85,11 @@ namespace DevNotePad.ViewModel
                             doUpdate = false;
                             formattedText = text;
                             break;
+                        case TextActionEnum.HexFormat:
+                            formattedText = formatter.FormatHex(text);
+                            notifier = "Hex bytes formatted.";
+                            doUpdate = true;
+                            break;
                         default:
                             formattedText = text;
                             isWarnung = true;

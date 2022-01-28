@@ -14,6 +14,7 @@ namespace DevNotePad.Shared
         Split,
         Trim,
         LengthCount,
-        HexLengthCount
+        HexLengthCount,
+        HexFormat
     }
 }
