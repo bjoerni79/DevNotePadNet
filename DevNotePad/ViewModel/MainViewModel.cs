@@ -25,7 +25,7 @@ namespace DevNotePad.ViewModel
         private readonly string JsonComponent = "JSON";
         private readonly string XmlComponent = "XML";
 
-        private const string TextDefaultExtension = "All|*.*|Text Files|*.txt|Log Files|*.log|XML|*.xml|JSON|*.json|SQL|*.sql";
+        private const string TextDefaultExtension = "All|*.*|Text Files|*.txt|Log Files|*.log|XML|*.xml;*.xsd;*.xslt|JSON|*.json|SQL|*.sql";
         private const string BinaryDefaultExtension = "All|*.*|bin|*.bin";
         private IMainViewUi? Ui { get; set; }
 

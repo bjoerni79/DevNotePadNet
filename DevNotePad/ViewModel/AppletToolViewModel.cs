@@ -106,7 +106,7 @@ namespace DevNotePad.ViewModel
             if (serviceDialog != null)
             {
                 var currentWindow = dialog.GetCurrentWindow();
-                var filename = serviceDialog.ShowOpenFileNameDialog("All | *.*| Text documents | *.txt | CAP Files | *.cap | IJC | *.ijc",currentWindow);
+                var filename = serviceDialog.ShowOpenFileNameDialog("All | *.*| Text documents | *.txt | CAP Files | *.cap | IJC | *.ijc| Applet | *.hex;*.ijc;*.cap",currentWindow);
                 if (filename.IsConfirmed)
                 {
                     FileName = filename.File;
