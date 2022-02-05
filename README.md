@@ -13,11 +13,19 @@ Beside the default features, the following features are planned:
 
 # Releases
 
+## Release 1.3 / 2.x
+- Depending on work load and motivation / feature set of WPF. I will not add a 3rd party control i.e.
+
+## Release 1.2.x
+- User / Admin Mode indication
+- XML Validation tool
+
 ## Release 1.2.1
-Planned and *TBD*
-- ScratchPad section can be enabled/disabled
-- User Mode / Admin Mode indication
-- About Page redirects to this page
+Improvements compared to R1.2
+
+- ScratchPad is optional and only visible if required or enabled
+- The commands are only enabled if they are applicable. I.e. Save as Binary is not enabled if the current content is a text.
+- The About Box links to the web page
 
 ## Release 1.2
 This is the first official release of the DevNotePad editor using .NET 6.0 and targets Windows WPF.
