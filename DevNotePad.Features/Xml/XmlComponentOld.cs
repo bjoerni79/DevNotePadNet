@@ -52,7 +52,7 @@ namespace DevNotePad.Features.Xml
         {
             ItemNode itemRootNode;
             var document = Read(xmlText);
-
+            
             try
             {
                 // https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlnode?view=net-6.0
