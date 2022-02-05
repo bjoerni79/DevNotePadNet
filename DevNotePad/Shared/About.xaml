@@ -62,10 +62,10 @@
                 </Paragraph>
                 <Paragraph>
                     Icon taken from the Phoenix Group at FlatIcon (https://www.flaticon.com/authors/phoenix-group)
-                    <LineBreak/>
                 </Paragraph>
                 <Paragraph>
-                    See also : https://github.com/bjoerni79/DevNotePadNet
+                    See also :
+                    <Bold>https://github.com/bjoerni79/DevNotePadNet</Bold>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
