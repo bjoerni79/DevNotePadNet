@@ -18,6 +18,7 @@ namespace DevNotePad.Shared
             var settings = new Settings();
             settings.ScrollbarAlwaysOn = false;
             settings.LineWrap = false;
+            settings.ScratchPadEnabled = false;
 
             return settings;
         }
@@ -25,5 +26,7 @@ namespace DevNotePad.Shared
         public bool ScrollbarAlwaysOn { get; set; }
 
         public bool LineWrap { get; set; }
+
+        public bool ScratchPadEnabled { get; set; }
     }
 }

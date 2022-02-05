@@ -39,6 +39,8 @@ namespace DevNotePad.ViewModel
 
         public bool LineWrapMode { get; private set; }
 
+        public bool ScratchPadMode { get; private set; }
+
         public ObservableCollection<ItemNode>? Nodes { get; set; }
 
         public string State { get; private set; }
@@ -99,6 +101,7 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? ToggleLineWrap { get; private set; }
 
+        public IRefreshCommand? ToggleScratchPad { get; private set; }
 
 
         // Tools
@@ -304,6 +307,18 @@ namespace DevNotePad.ViewModel
             settings.LineWrap = LineWrapMode;
             RaisePropertyChange("LineWrapMode");
             ApplySettings();
+        }
+
+        private void OnToggleScratchPad()
+        {
+            var settings = GetSettings();
+
+            ScratchPadMode = !ScratchPadMode;
+            settings.ScratchPadEnabled = ScratchPadMode;
+
+            RaisePropertyChange("ScratchPadMode");
+            ApplySettings();
+
         }
 
         private void OnJson(JsonOperation operation)
@@ -703,6 +718,9 @@ namespace DevNotePad.ViewModel
 
                 //Ui.SetScrollbars(ScrollbarMode);
                 Ui.SetWordWrap(LineWrapMode);
+
+                //TODO: Update Ui in regard of ScratchPad
+                Ui.SetScratchPad(settings.ScratchPadEnabled);
             }
 
             ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Ready", false));
@@ -861,6 +879,7 @@ namespace DevNotePad.ViewModel
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
+            ToggleScratchPad = new DefaultCommand(OnToggleScratchPad);
 
             // ScratchPad
             CopyToText = new DefaultCommand(OnCopyToText);

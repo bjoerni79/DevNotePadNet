@@ -63,6 +63,20 @@ namespace DevNotePad
             editor.TextWrapping = wrapping;
         }
 
+        public void SetScratchPad(bool enable)
+        {
+            if (enable)
+            {
+                // Show it
+                scratchPadGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // Hide it
+                scratchPadGrid.Visibility = Visibility.Collapsed;
+            }
+        }
+
         public void ShowAbout()
         {
             //TODO: Move this to the dialog service

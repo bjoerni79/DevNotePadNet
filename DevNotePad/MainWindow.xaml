@@ -129,7 +129,7 @@
         
     </Window.Resources>
 
-    <DockPanel LastChildFill="True">
+    <DockPanel LastChildFill="True" >
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="New" InputGestureText="Ctrl+N" Command="{Binding Path=New}"/>
@@ -224,6 +224,7 @@
 
             <MenuItem Header="Layout">
                 <MenuItem Command="{Binding Path=ToggleLineWrap}" IsChecked="{Binding Path=LineWrapMode,Mode=OneWay}" Header="Text Wrap Enabled"></MenuItem>
+                <MenuItem Command="{Binding Path=ToggleScratchPad}" IsChecked="{Binding Path=ScratchPadMode,Mode=OneWay}" Header="ScratchPad Enabled" />
                 <MenuItem Header="ScratchPad">
                     <MenuItem Header="Reset" Command="{Binding Path=ScratchPadClearAll}" />
                     <MenuItem Header="Reset Tree" Command="{Binding Path=ScratchPadClearTree}"/>
@@ -255,12 +256,12 @@
             
         </DockPanel>
 
-        <Grid>
+
+
+        <Grid DockPanel.Dock="Right" Name="scratchPadGrid">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="213*" MinWidth="200" />
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="80"  MinWidth="80"/>
+                <ColumnDefinition Width="300" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -268,23 +269,10 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <ui:DevTextBox x:Name="editor"  
-                     Grid.Row="0" 
-                     Grid.Column="0" 
-                     Grid.RowSpan="2" 
-                     Style="{StaticResource editorTextbox}"
-                     TextChanged="editor_TextChanged" 
-                     ContextMenu="{StaticResource editorContextMenu}" 
-            />
 
-            <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"   HorizontalAlignment="Center"
-              Background="LightBlue" 
-              ShowsPreview="True"
-              Width="3"  />
+            <Label Grid.Row="0">ScratchPad</Label>
 
-            <Label Grid.Row="0" Grid.Column="2">ScratchPad</Label>
-
-            <TabControl Grid.Row="1" Grid.Column="2"  Margin="3,0,0,0" >
+            <TabControl Grid.Row="1"  Margin="3,0,0,0" >
                 <TabItem Name="tabScratchPad" Header="Text">
                     <TextBox 
                         x:Name="scratchPad" 
@@ -304,6 +292,13 @@
 
         </Grid>
 
+        <ui:DevTextBox x:Name="editor"  
+                     DockPanel.Dock="Left"
+                     Style="{StaticResource editorTextbox}"
+                     TextChanged="editor_TextChanged" 
+                     ContextMenu="{StaticResource editorContextMenu}" 
+                       Width="Auto"
+            />
 
     </DockPanel>
 </Window>
