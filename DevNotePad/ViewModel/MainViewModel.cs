@@ -37,6 +37,10 @@ namespace DevNotePad.ViewModel
 
         private IFileLogic? scratchPadLogic;
 
+        private CommandGroup fileGroup;
+        private CommandGroup textOperationGroup;
+        private CommandGroup scratchOperationGroup;
+
         public bool LineWrapMode { get; private set; }
 
         public bool ScratchPadMode { get; private set; }
@@ -721,6 +725,7 @@ namespace DevNotePad.ViewModel
 
                 //TODO: Update Ui in regard of ScratchPad
                 Ui.SetScratchPad(settings.ScratchPadEnabled);
+                scratchOperationGroup.Refresh();
             }
 
             ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Ready", false));
@@ -748,6 +753,13 @@ namespace DevNotePad.ViewModel
                     UpdateFileStatus();
                 }
             }
+        }
+
+        public void NotifyScratchPadContentChanged(int added, int offset, int removed)
+        {
+            // Simply refresh the UI for now
+
+            scratchOperationGroup.Refresh();
         }
 
         public bool IsChanged()
@@ -803,6 +815,8 @@ namespace DevNotePad.ViewModel
             IsStateChanged = isChanged;
             RaisePropertyChange("State");
             RaisePropertyChange("IsStateChanged");
+            fileGroup.Refresh();
+            textOperationGroup.Refresh();
         }
 
         private Settings GetSettings()
@@ -837,73 +851,207 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        private void InitMenu()
+        private bool IsText()
+        {
+            bool isEnabled = false;
+
+            if (textLogic != null)
+            {
+                return textLogic.IsTextFormatAvailable;
+            }
+            return isEnabled;
+        }
+
+        private bool IsBinary()
+        {
+            bool isEnabled = false;
+
+            if (textLogic != null)
+            {
+                var isBinaryActive = !textLogic.IsTextFormatAvailable;
+                return isBinaryActive;
+            }
+            return isEnabled;
+        }
+
+        private bool IsReloadFeatureAvailable()
+        {
+            bool isEnabled = false;
+
+            if (textLogic != null)
+            {
+                var currentState = textLogic.CurrentState;
+
+                isEnabled = textLogic.IsTextFormatAvailable && currentState != EditorState.New && currentState != EditorState.ChangedNew;
+            }
+
+            return isEnabled;
+        }
+
+        private bool IsTextOperationEnabled()
+        {
+            return IsContentAvailable(textComponent);
+        }
+
+        private bool IsScratchPadOperationEnabled()
+        {
+            return ScratchPadMode && IsContentAvailable(scratchPadComponent);
+        }
+
+        private bool IsContentAvailable(ITextComponent component)
+        {
+            bool isEnabled = false;
+
+            if (component != null)
+            {
+                // enabled if the text is not empty
+                var text = component.GetText(false);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    isEnabled = true;
+                }
+            }
+
+            return isEnabled;
+        }
+
+        private void InitFileMenu()
         {
             // File
-            New = new DefaultCommand(()=>OnFileOperation(FileOperation.New));
-            Open = new DefaultCommand(()=>OnFileOperation(FileOperation.Open));
+            New = new DefaultCommand(() => OnFileOperation(FileOperation.New));
+            Open = new DefaultCommand(() => OnFileOperation(FileOperation.Open));
             OpenBinary = new DefaultCommand(() => OnFileOperation(FileOperation.OpenBinary));
 
-            Save = new DefaultCommand(()=>OnFileOperation(FileOperation.Save));
-            SaveBinary = new DefaultCommand(() => OnFileOperation(FileOperation.SaveBinary));
-            SaveAs = new DefaultCommand(()=>OnFileOperation(FileOperation.SaveAs));
-            SaveAsBinary = new DefaultCommand(() => OnFileOperation(FileOperation.SaveAsBinary));
-            Reload = new DefaultCommand(()=>OnFileOperation(FileOperation.Reload));
+            Save = new DefaultCommand(() => OnFileOperation(FileOperation.Save), IsText);
+            SaveBinary = new DefaultCommand(() => OnFileOperation(FileOperation.SaveBinary), IsBinary);
+            SaveAs = new DefaultCommand(() => OnFileOperation(FileOperation.SaveAs), IsText);
+            SaveAsBinary = new DefaultCommand(() => OnFileOperation(FileOperation.SaveAsBinary), IsBinary);
+            Reload = new DefaultCommand(() => OnFileOperation(FileOperation.Reload), IsReloadFeatureAvailable);
             Close = new DefaultCommand(OnClose);
 
+            // Assign the commands to a group for later refresh actions
+            fileGroup = new CommandGroup(new List<IRefreshCommand>()
+            {
+                Save,
+                SaveAs,
+                SaveAsBinary,
+                SaveBinary,
+                Reload
+            });
+        }
+
+        private void InitEditMenu()
+        {
             // Edit
-            Find = new DefaultCommand(OnFind);
-            Replace = new DefaultCommand(OnReplace);
-            CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad);
-            Cut = new DefaultCommand(() => OnTextClipboard(textLogic,ClipboardActionEnum.Cut));
-            Copy = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Copy));
+            Find = new DefaultCommand(OnFind,IsTextOperationEnabled);
+            Replace = new DefaultCommand(OnReplace,IsTextOperationEnabled);
+            CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad, IsTextOperationEnabled);
+            Cut = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Cut),IsTextOperationEnabled);
+            Copy = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Copy), IsTextOperationEnabled);
             Paste = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Paste));
-            SelectAll = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.SelectAll));
+            SelectAll = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.SelectAll), IsTextOperationEnabled);
 
             //Tools
-            JsonFormatter = new DefaultCommand(()=>OnJson(JsonOperation.Format));
-            JsonToStringParser = new DefaultCommand(()=>OnJson(JsonOperation.ToText));
-            JsonToTreeParser = new DefaultCommand(()=>OnJson(JsonOperation.ToTree));
-            XmlFormatter = new DefaultCommand(()=>OnXml(XmlOperation.Format));
-            XmlToStringParser = new DefaultCommand(()=>OnXml(XmlOperation.ToText));
-            XmlToTreeParser = new DefaultCommand(()=>OnXml(XmlOperation.ToTree));
-            TextSplit = new DefaultCommand(()=>OnText(textLogic,TextActionEnum.Split));
-            TextGroup = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Group));
-            TextToLower = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToLower));
-            TextToUpper = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToUpper));
-            TextTrim = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Trim));
-            TextCountLength = new DefaultCommand(() => OnText(textLogic, TextActionEnum.LengthCount));
-            TextHexCountLength = new DefaultCommand(()=>OnText(textLogic, TextActionEnum.HexLengthCount));
-            TextFormatHex = new DefaultCommand(() => OnText(textLogic, TextActionEnum.HexFormat));
+            JsonFormatter = new DefaultCommand(() => OnJson(JsonOperation.Format), IsTextOperationEnabled);
+            JsonToStringParser = new DefaultCommand(() => OnJson(JsonOperation.ToText), IsTextOperationEnabled);
+            JsonToTreeParser = new DefaultCommand(() => OnJson(JsonOperation.ToTree), IsTextOperationEnabled);
+            XmlFormatter = new DefaultCommand(() => OnXml(XmlOperation.Format), IsTextOperationEnabled);
+            XmlToStringParser = new DefaultCommand(() => OnXml(XmlOperation.ToText), IsTextOperationEnabled);
+            XmlToTreeParser = new DefaultCommand(() => OnXml(XmlOperation.ToTree), IsTextOperationEnabled);
+            TextSplit = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Split), IsTextOperationEnabled);
+            TextGroup = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Group), IsTextOperationEnabled);
+            TextToLower = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToLower), IsTextOperationEnabled);
+            TextToUpper = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToUpper), IsTextOperationEnabled);
+            TextTrim = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Trim), IsTextOperationEnabled);
+            TextCountLength = new DefaultCommand(() => OnText(textLogic, TextActionEnum.LengthCount), IsTextOperationEnabled);
+            TextHexCountLength = new DefaultCommand(() => OnText(textLogic, TextActionEnum.HexLengthCount), IsTextOperationEnabled);
+            TextFormatHex = new DefaultCommand(() => OnText(textLogic, TextActionEnum.HexFormat), IsTextOperationEnabled);
 
+            // Assign the commands to a group
+            textOperationGroup = new CommandGroup(new List<IRefreshCommand> () {
+                Find,
+                Replace,
+                CopyToScratchPad,
+                Cut,
+                Copy,
+                SelectAll,
+                JsonFormatter,
+                JsonToStringParser,
+                JsonToTreeParser,
+                XmlFormatter,
+                XmlToStringParser,
+                XmlToTreeParser,
+                TextSplit,
+                TextGroup,
+                TextToLower,
+                TextToUpper,
+                TextTrim,
+                TextCountLength,
+                TextHexCountLength,
+                TextFormatHex
+            });
+        }
+
+        private void InitScratchPadMenu()
+        {
+            // ScratchPad
+            CopyToText = new DefaultCommand(OnCopyToText,IsScratchPadOperationEnabled);
+            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad, ()=>ScratchPadMode);
+            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad, ()=>ScratchPadMode);
+            ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad, ()=>ScratchPadMode);
+            ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad, IsScratchPadOperationEnabled);
+            ScratchPadCopy = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Copy), IsScratchPadOperationEnabled);
+            ScratchPadCut = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Cut), IsScratchPadOperationEnabled);
+            ScratchPadPaste = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Paste),()=>ScratchPadMode);
+            ScratchPadXmlFormat = new DefaultCommand(() => OnScratchPadXml(XmlOperation.Format), IsScratchPadOperationEnabled);
+            ScratchPadXmlToTree = new DefaultCommand(() => OnScratchPadXml(XmlOperation.ToTree), IsScratchPadOperationEnabled);
+            ScratchPadJsonFormat = new DefaultCommand(() => OnScratchPadJson(JsonOperation.Format), IsScratchPadOperationEnabled);
+            ScratchPadJsonToTree = new DefaultCommand(() => OnScratchPadJson(JsonOperation.ToTree), IsScratchPadOperationEnabled);
+
+            //TODO: Text Actions
+            ScratchPadSplit = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Split), IsScratchPadOperationEnabled);
+            ScratchPadGroup = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Group), IsScratchPadOperationEnabled);
+            ScratchpadToLower = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToLower), IsScratchPadOperationEnabled);
+            ScratchPadToUpper = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToUpper), IsScratchPadOperationEnabled);
+            ScratchPadTrim = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Trim), IsScratchPadOperationEnabled);
+            ScratchPadCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.LengthCount), IsScratchPadOperationEnabled);
+            ScratchPadHexCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexLengthCount), IsScratchPadOperationEnabled);
+            ScratchPadFormatHex = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexFormat), IsScratchPadOperationEnabled);
+
+            // Assign to the scratchPad operation group
+            scratchOperationGroup = new CommandGroup(new List<IRefreshCommand>() {
+                CopyToText,
+                ScratchPadCopyClipboard,
+                ScratchPadCopy,
+                ScratchPadCut,
+                ScratchPadXmlFormat,
+                ScratchPadXmlToTree,
+                ScratchPadJsonFormat,
+                ScratchPadJsonToTree,
+                ScratchPadSplit,
+                ScratchPadGroup,
+                ScratchpadToLower,
+                ScratchPadToUpper,
+                ScratchPadTrim,
+                ScratchPadCountLength,
+                ScratchPadHexCountLength,
+                ScratchPadFormatHex,
+                ScratchPadClearAll,
+                ScratchPadClearText,
+                ScratchPadClearTree,
+                ScratchPadPaste
+            });
+        }
+
+        private void InitMenu()
+        {
+            InitFileMenu();
+            InitEditMenu();
+            InitScratchPadMenu();
 
             // Layout
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
             ToggleScratchPad = new DefaultCommand(OnToggleScratchPad);
-
-            // ScratchPad
-            CopyToText = new DefaultCommand(OnCopyToText);
-            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad);
-            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad);
-            ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad);
-            ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad);
-            ScratchPadCopy = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Copy));
-            ScratchPadCut = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Cut));
-            ScratchPadPaste = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Paste));
-            ScratchPadXmlFormat = new DefaultCommand(()=>OnScratchPadXml(XmlOperation.Format));
-            ScratchPadXmlToTree = new DefaultCommand(() => OnScratchPadXml(XmlOperation.ToTree));
-            ScratchPadJsonFormat = new DefaultCommand(() => OnScratchPadJson(JsonOperation.Format));
-            ScratchPadJsonToTree = new DefaultCommand(() => OnScratchPadJson(JsonOperation.ToTree));
-
-            //TODO: Text Actions
-            ScratchPadSplit = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Split));
-            ScratchPadGroup = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Group));
-            ScratchpadToLower = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToLower));
-            ScratchPadToUpper = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToUpper));
-            ScratchPadTrim = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Trim));
-            ScratchPadCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.LengthCount));
-            ScratchPadHexCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexLengthCount));
-            ScratchPadFormatHex = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexFormat));
 
             Base64Tool = new DefaultCommand(OnBase64Tool);
             DecodeTlv = new DefaultCommand(OnDecodeTlv);

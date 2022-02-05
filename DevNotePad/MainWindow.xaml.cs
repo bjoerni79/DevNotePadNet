@@ -267,5 +267,15 @@ namespace DevNotePad
             return vm;
         }
 
+        private void scratchPad_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Update the view model
+            var vm = GetViewModel();
+            if (vm != null)
+            {
+                var textChange = e.Changes.First();
+                vm.NotifyScratchPadContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
+            }
+        }
     }
 }

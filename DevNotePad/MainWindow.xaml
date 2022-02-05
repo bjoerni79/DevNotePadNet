@@ -276,6 +276,7 @@
                 <TabItem Name="tabScratchPad" Header="Text">
                     <TextBox 
                         x:Name="scratchPad" 
+                        TextChanged="scratchPad_TextChanged"
                         Style="{StaticResource scratchPadTextbox}" 
                         ContextMenu="{StaticResource scratchPadContextMenu}"
                         />

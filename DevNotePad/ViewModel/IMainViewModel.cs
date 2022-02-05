@@ -11,6 +11,9 @@ namespace DevNotePad.ViewModel
         void Init(IMainViewUi ui, ITextComponent text, ITextComponent scratchPad);
 
         void NotifyContentChanged(int added, int offset, int removed);
+
+        void NotifyScratchPadContentChanged(int added, int offset, int removed);
+
         void ApplySettings();
 
         bool IsChanged();
