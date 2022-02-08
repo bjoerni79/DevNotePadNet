@@ -1,4 +1,5 @@
 ﻿using DevNotePad.Shared;
+using DevNotePad.Shared.Dialog;
 using System;
 using System.Collections.Generic;
 using System.Linq;

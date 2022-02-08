@@ -2,6 +2,7 @@
 using DevNotePad.Features.JavaCardApplet;
 using DevNotePad.MVVM;
 using DevNotePad.Shared;
+using DevNotePad.Shared.AppletManagement;
 using Generic.MVVM;
 using System;
 using System.Collections.Generic;
