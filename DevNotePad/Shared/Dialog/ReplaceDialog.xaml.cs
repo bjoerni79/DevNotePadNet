@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace DevNotePad.Shared
+namespace DevNotePad.Shared.Dialog
 {
     /// <summary>
     /// Interaction logic for ReplaceDialog.xaml

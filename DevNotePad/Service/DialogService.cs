@@ -1,6 +1,7 @@
 ﻿using DevNotePad.Features;
 using DevNotePad.MVVM;
 using DevNotePad.Shared;
+using DevNotePad.Shared.Dialog;
 using DevNotePad.ViewModel;
 using Microsoft.Win32;
 using System;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace DevNotePad.Shared
+namespace DevNotePad.Shared.Converter
 {
     internal class VisibilityToBoolConverter : IValueConverter
     {

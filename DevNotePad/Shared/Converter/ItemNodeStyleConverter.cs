@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace DevNotePad.Shared
+namespace DevNotePad.Shared.Converter
 {
     internal class ItemNodeStyleConverter : IValueConverter
     {

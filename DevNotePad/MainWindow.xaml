@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevNotePad"
         xmlns:shared="clr-namespace:DevNotePad.Shared"
+        xmlns:converter="clr-namespace:DevNotePad.Shared.Converter"
         xmlns:ui="clr-namespace:DevNotePad.UI"
         mc:Ignorable="d"
         Title="DevNotePad - New" Height="450" Width="800"
@@ -30,13 +31,13 @@
 
     <Window.Resources>
 
-        <shared:IsStatusChangedStyleConverter x:Key="isStatusChangedStyleConverter" />
+        <converter:IsStatusChangedStyleConverter x:Key="isStatusChangedStyleConverter" />
 
         <!-- Renders the style of the ItemNode-->
-        <shared:ItemNodeStyleConverter x:Key="itemNodeStyleConverter" />
+        <converter:ItemNodeStyleConverter x:Key="itemNodeStyleConverter" />
 
         <!-- Enables/Disables the description row-->
-        <shared:VisibilityToBoolConverter x:Key="descriptionVisibleConverter"/>
+        <converter:VisibilityToBoolConverter x:Key="descriptionVisibleConverter"/>
 
         <!-- Renders the tree -->
         <HierarchicalDataTemplate x:Key="itemNodeTemplate"  ItemsSource="{Binding Path=Childs}">

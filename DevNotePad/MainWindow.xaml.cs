@@ -1,6 +1,7 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
+using DevNotePad.Shared.Dialog;
 using DevNotePad.Shared.Event;
 using DevNotePad.UI;
 using DevNotePad.ViewModel;
