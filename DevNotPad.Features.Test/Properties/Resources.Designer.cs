@@ -100,5 +100,21 @@ namespace DevNotPad.Features.Test.Properties {
                 return ResourceManager.GetString("bookstore_schema", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;menu id=&quot;file&quot; value=&quot;File&quot;&gt;
+        ///  &lt;popup&gt;
+        ///    &lt;menuitem value=&quot;New&quot; onclick=&quot;CreateNewDoc()&quot; /&gt;
+        ///    &lt;menuitem value=&quot;Open&quot; onclick=&quot;OpenDoc()&quot; /&gt;
+        ///    &lt;menuitem value=&quot;Close&quot; onclick=&quot;CloseDoc()&quot; /&gt;
+        ///  &lt;/popup&gt;
+        ///&lt;/menu&gt;.
+        /// </summary>
+        internal static string simpleXml1 {
+            get {
+                return ResourceManager.GetString("simpleXml1", resourceCulture);
+            }
+        }
     }
 }

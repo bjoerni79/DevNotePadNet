@@ -1,5 +1,6 @@
 ﻿using DevNotePad.Features;
 using DevNotePad.Features.Xml;
+using DevNotPad.Features.Test.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,11 @@ namespace DevNotPad.Features.Test.XML
         [TestMethod]
         public void PlaygroundTest()
         {
+            var xmlcontent = Resources.simpleXml1;
+            var tree = xmlComponent.ParseToTree(xmlcontent);
 
+            // Check the tree now
+            Assert.Fail("Todo");
         }
     }
 }

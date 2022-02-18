@@ -13,6 +13,8 @@ namespace DevNotePad.Features.Shared
         Title,
         Element,
         Attribute,
-        Value
+        Value,
+        Header,
+        Meta
     }
 }
