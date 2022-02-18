@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevNotePad", "DevNotePad\DevNotePad.csproj", "{E4341A69-EEEF-482F-AF89-17C0733CC02A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevNotePad.Features", "DevNotePad.Features\DevNotePad.Features.csproj", "{677AEC11-6E2E-4E6F-9B44-C94925C0BF01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevNotePad.Features", "DevNotePad.Features\DevNotePad.Features.csproj", "{677AEC11-6E2E-4E6F-9B44-C94925C0BF01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevNotPad.Features.Test", "DevNotPad.Features.Test\DevNotPad.Features.Test.csproj", "{FEDC03EE-7CBE-495C-AAAD-0F3F216EB026}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{677AEC11-6E2E-4E6F-9B44-C94925C0BF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{677AEC11-6E2E-4E6F-9B44-C94925C0BF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{677AEC11-6E2E-4E6F-9B44-C94925C0BF01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEDC03EE-7CBE-495C-AAAD-0F3F216EB026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEDC03EE-7CBE-495C-AAAD-0F3F216EB026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEDC03EE-7CBE-495C-AAAD-0F3F216EB026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEDC03EE-7CBE-495C-AAAD-0F3F216EB026}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
