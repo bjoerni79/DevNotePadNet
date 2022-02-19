@@ -140,41 +140,86 @@ namespace DevNotePad.Features.Xml
             var itemNodes = new List<ItemNode>();
             var nodeTypes = new List<XmlNodeType>();
 
+            ItemNode currentElement = null;
+
             using (var textReader = new StringReader(xmlText))
             using (var xmlreader = XmlReader.Create(textReader, settings))
             {
                 while (await xmlreader.ReadAsync())
                 {
                     // Query the state 
-                    var style = xmlreader.NodeType;
-                    var isElement = (style == XmlNodeType.Element) || (style == XmlNodeType.EndElement);
-                    var isAttribute = (style == XmlNodeType.Attribute);
-                    var isText = (style == XmlNodeType.Text);
-                    var isDocument = (style == XmlNodeType.Document) || (style == XmlNodeType.DocumentFragment) || (style == XmlNodeType.DocumentType);
-                    var isEntity = (style == XmlNodeType.Entity) || (style == XmlNodeType.EndEntity) || (style == XmlNodeType.EntityReference);
-                    var isXmlDeclaration = style == XmlNodeType.XmlDeclaration;
-                    var isComment = style == XmlNodeType.Comment;
-                    var isOther = (style == XmlNodeType.CDATA) || (style == XmlNodeType.ProcessingInstruction) || (style == XmlNodeType.Notation) || (style == XmlNodeType.Whitespace) || (style == XmlNodeType.SignificantWhitespace);
-
+                    var currentType = xmlreader.NodeType;
+                    var isElement = (currentType == XmlNodeType.Element) || (currentType == XmlNodeType.EndElement);
+                    var isDocument = (currentType == XmlNodeType.Document) || (currentType == XmlNodeType.DocumentFragment) || (currentType == XmlNodeType.DocumentType);
+                    var isEntity = (currentType == XmlNodeType.Entity) || (currentType == XmlNodeType.EndEntity) || (currentType == XmlNodeType.EntityReference);
+                    var isXmlDeclaration = currentType == XmlNodeType.XmlDeclaration;
+                    var isComment = currentType == XmlNodeType.Comment;
+ 
                     if (isXmlDeclaration)
                     {
+                        var xmlDeclareNode = new ItemNode();
+                        xmlDeclareNode.Style = ItemNodeStyle.Meta;
+                        xmlDeclareNode.Name = "XML Declaration";
+
+                        itemNodes.Add(xmlDeclareNode);
                     }
 
                     if (isDocument)
                     {
+                        await xmlreader.SkipAsync();
                     }
 
                     if (isElement)
                     {
+                        // Check the element state
+                        if (currentType == XmlNodeType.Element)
+                        {
+                            var elementNode = new ItemNode();
+                            elementNode.Name = "Node";
+                            elementNode.Description = xmlreader.Name;
+                            elementNode.Style = ItemNodeStyle.Element;
 
+                            // la
+                            var value = await xmlreader.GetValueAsync();
+                            var hasAttributes = xmlreader.AttributeCount > 0; 
+                            if (hasAttributes)
+                            {
+                                for (int curAttribute = 0; curAttribute < xmlreader.AttributeCount; curAttribute++)
+                                {
+                                    xmlreader.MoveToAttribute(curAttribute);
+
+                                    var attributeNote = new ItemNode();
+                                    attributeNote.Name = xmlreader.Name;
+                                    attributeNote.Description = xmlreader.Value;
+                                    attributeNote.Style = ItemNodeStyle.Attribute;
+
+                                    elementNode.Childs.Add(attributeNote);
+                                }
+                            }
+
+                            // Root Level
+                            if (currentElement == null)
+                            {
+                                itemNodes.Add(elementNode);
+                            }
+                            else
+                            {
+                                currentElement.Childs.Add(elementNode);
+                            }
+
+                        }
+                        else if (currentType == XmlNodeType.EndElement)
+                        {
+                            // Anything todo?
+                            
+                        }
+                        else
+                        {
+                            throw new FeatureException("Invalid End Element detected. It is neither Element nor EndElement.");
+                        }
                     }
 
-                    if (isAttribute)
-                    {
-                        //xmlreader.N
-                    }
-
-                    nodeTypes.Add(style);
+                    nodeTypes.Add(currentType);
                 }
             }
 

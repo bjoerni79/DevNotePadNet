@@ -14,13 +14,11 @@ namespace DevNotPad.Features.Test.XML
     [TestClass]
     public class BasicXmlComponentTest
     {
-        private IXmlComponent? xmlComponent;
         private IXmlComponent? xmlComponentUt;
 
         [TestInitialize]
         public void Init()
         {
-            xmlComponent = FeatureFactory.CreateXml();
             xmlComponentUt = FeatureFactory.CreateXmlUnderTest(); 
 
         }
@@ -43,6 +41,15 @@ namespace DevNotPad.Features.Test.XML
          *   - Whitespace
          *   - EndElement 
          * 
+         *      <?xml version="1.0" encoding="utf-8"?>
+                <menu id="file" value="File">
+                  <popup>
+                    <menuitem value="New" onclick="CreateNewDoc()" />
+                    <menuitem value="Open" onclick="OpenDoc()" />
+                    <menuitem value="Close" onclick="CloseDoc()" />
+                  </popup>
+                </menu>
+         * 
          */
 
         [TestMethod]
@@ -50,15 +57,17 @@ namespace DevNotPad.Features.Test.XML
         {
             var xmlcontent = Resources.simpleXml1;
             
-            var tree = xmlComponent!.ParseToTree(xmlcontent);
-            var treeUt = xmlComponentUt!.ParseToTree(xmlcontent);
+            var itemNodes = xmlComponentUt!.ParseToTree(xmlcontent);
 
             // Check the tree now
-            //Assert.IsNotNull(tree);
-            //Assert.AreEqual(tree.Style, ItemNodeStyle.Title);
+            Assert.IsNotNull(itemNodes);
 
-            //Assert.IsNotNull(treeUt);
-            //Assert.AreEqual(treeUt.Style, ItemNodeStyle.Title);
+            var xmlDeclare = itemNodes.First();
+            Assert.AreEqual(xmlDeclare.Style, ItemNodeStyle.Meta);
+
+            var element1 = itemNodes.Skip(1).First();
+            Assert.AreEqual(element1.Style, ItemNodeStyle.Element);
+
         }
     }
 }
