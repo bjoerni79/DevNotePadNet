@@ -142,67 +142,6 @@ namespace DevNotePad.Features.Json
             }
         }
 
-        private void DomParserOld(JsonElement element, StringBuilder builder)
-        {
-            var kind = element.ValueKind;
-            if (kind == JsonValueKind.Array)
-            {
-                //
-                // Recursive scan of the array
-                //
-
-                var arrayLength = element.GetArrayLength();
-                if (arrayLength > 0)
-                {
-                    foreach (var childElement in element.EnumerateArray())
-                    {
-                        builder.AppendLine("## Parse new Object");
-                        DomParserOld(childElement, builder);
-                    }
-                }
-                else
-                {
-                    builder.AppendLine("## Empty Array declaration detected.");
-                }
-            }
-            else
-            {
-                //
-                //  Parse the object 
-                //
-
-                foreach (var parameter in element.EnumerateObject())
-                {
-                    builder.AppendFormat("Name : {0}\n", parameter.Name);
-                    var parameterValue = parameter.Value;
-
-                    if (parameterValue.ValueKind == JsonValueKind.Array)
-                    {
-                        // Render as Array
-                        var arrayLength = parameterValue.GetArrayLength();
-                        if (arrayLength > 0)
-                        {
-                            foreach (var childElement in parameterValue.EnumerateArray())
-                            {
-                                builder.AppendLine("## Parse new Object");
-                                DomParserOld(childElement, builder);
-                            }
-
-                        }
-                        else
-                        {
-                            builder.AppendLine("## Empty Array declaration detected.");
-                        }
-                    }
-                    else
-                    {
-                        // Render as Object
-                        RenderValue(parameterValue, builder);
-                    }
-                }
-            }
-        }
-
         private void RenderValue(JsonElement element, StringBuilder builder)
         {
             var kind = element.ValueKind;

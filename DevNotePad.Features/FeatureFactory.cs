@@ -19,6 +19,11 @@ namespace DevNotePad.Features
             return new XmlComponentOld();
         }
 
+        public static IXmlComponent CreateXmlUnderTest()
+        {
+            return new XmlComponent();
+        }
+
         public static IJsonComponent CreateJson()
         {
             return new JsonComponentOld();
