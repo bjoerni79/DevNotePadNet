@@ -13,6 +13,7 @@ namespace DevNotePad.Features.Xml
 
         string ParseToString(string xmlText);
 
-        ItemNode ParseToTree(string xmlText);
+        IEnumerable<ItemNode> ParseToTree(string xmlText);
+
     }
 }

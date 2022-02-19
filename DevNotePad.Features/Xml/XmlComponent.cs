@@ -105,7 +105,7 @@ namespace DevNotePad.Features.Xml
          * 
          */
 
-        public ItemNode ParseToTree(string xmlText)
+        public IEnumerable<ItemNode> ParseToTree(string xmlText)
         {
             var parseTask = Task.Run(()=>ParseToTreeAsync(xmlText));
             parseTask.Wait();
@@ -133,11 +133,11 @@ namespace DevNotePad.Features.Xml
          * 
          */
 
-        private async Task<ItemNode> ParseToTreeAsync(string xmlText)
+        private async Task<IEnumerable<ItemNode>> ParseToTreeAsync(string xmlText)
         {
-            ItemNode rootNode = new ItemNode();
             var settings = GetReaderSettings();
 
+            var itemNodes = new List<ItemNode>();
             var nodeTypes = new List<XmlNodeType>();
 
             using (var textReader = new StringReader(xmlText))
@@ -158,13 +158,10 @@ namespace DevNotePad.Features.Xml
 
                     if (isXmlDeclaration)
                     {
-                        rootNode.Style = ItemNodeStyle.Meta;
                     }
 
                     if (isDocument)
                     {
-                        rootNode.Style = ItemNodeStyle.Title;
-
                     }
 
                     if (isElement)
@@ -183,7 +180,7 @@ namespace DevNotePad.Features.Xml
 
             Debug(nodeTypes);
 
-            return rootNode;
+            return itemNodes;
         }
 
         private XmlWriterSettings GetWriterSettings()

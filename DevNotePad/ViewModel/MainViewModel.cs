@@ -408,10 +408,9 @@ namespace DevNotePad.ViewModel
 
                     if (operation == XmlOperation.ToTree)
                     {
-                        var rootNode = component.ParseToTree(input);
+                        var nodeList = component.ParseToTree(input);
 
-                        Nodes = new ObservableCollection<ItemNode>();
-                        Nodes.Add(rootNode);
+                        Nodes = new ObservableCollection<ItemNode>(nodeList);
                         RaisePropertyChange("Nodes");
 
                         Ui.FocusTree();
@@ -504,10 +503,9 @@ namespace DevNotePad.ViewModel
                     // To Tree Action
                     if (operation == XmlOperation.ToTree)
                     {
-                        var rootNode = component.ParseToTree(input);
+                        var rootNodeList = component.ParseToTree(input);
 
-                        Nodes = new ObservableCollection<ItemNode>();
-                        Nodes.Add(rootNode);
+                        Nodes = new ObservableCollection<ItemNode>(rootNodeList);
                         RaisePropertyChange("Nodes");
 
                         Ui.FocusTree();

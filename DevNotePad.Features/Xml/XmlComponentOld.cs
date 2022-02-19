@@ -43,12 +43,12 @@ namespace DevNotePad.Features.Xml
 
         public string ParseToString(string xmlText)
         {
-            var rootNode = ParseToTree(xmlText);
+            var rootNodeList = ParseToTree(xmlText);
             var converter = new ItemNodeConverter();
-            return converter.ToTreeAsString(rootNode);
+            return converter.ToTreeAsString(rootNodeList.First()); ;
         }
 
-        public ItemNode ParseToTree(string xmlText)
+        public IEnumerable<ItemNode> ParseToTree(string xmlText)
         {
             ItemNode itemRootNode;
             var document = Read(xmlText);
@@ -64,7 +64,7 @@ namespace DevNotePad.Features.Xml
                 throw new FeatureException("Cannot parse XML format", e);
             }
 
-            return itemRootNode;
+            return new List<ItemNode>() { itemRootNode };
         }
 
         ItemNode ParseDom(XmlNode node)
