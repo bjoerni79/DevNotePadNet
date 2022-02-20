@@ -16,11 +16,6 @@ namespace DevNotePad.Features
 
         public static IXmlComponent CreateXml()
         {
-            return new XmlComponentOld();
-        }
-
-        public static IXmlComponent CreateXmlUnderTest()
-        {
             return new XmlComponent();
         }
 

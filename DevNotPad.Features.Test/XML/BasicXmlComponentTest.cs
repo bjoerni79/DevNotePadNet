@@ -19,7 +19,7 @@ namespace DevNotPad.Features.Test.XML
         [TestInitialize]
         public void Init()
         {
-            xmlComponentUt = FeatureFactory.CreateXmlUnderTest(); 
+            xmlComponentUt = FeatureFactory.CreateXml(); 
 
         }
 

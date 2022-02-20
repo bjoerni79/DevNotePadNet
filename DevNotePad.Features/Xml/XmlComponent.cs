@@ -18,20 +18,26 @@ namespace DevNotePad.Features.Xml
             // https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlreader?view=net-6.0#xmlreader_nodes
         }
 
-        public string Formatter(string xmlText)
+        public async Task<string> FormatterAsync(string xmlText)
         {
             // Open the XML Reader
+            var sb = new StringBuilder();
+
             var readerSettings = GetReaderSettings();
+            var writerSettings = GetWriterSettings();
+
             using (var textReader = new StringReader(xmlText))
+            using (var textWriter = new StringWriter(sb))
+            using (var xmlWriter = XmlWriter.Create(textWriter, writerSettings))
             using (var xmlreader = XmlReader.Create(textReader, readerSettings))
             {
-                while (xmlreader.Read())
+                while (await xmlreader.ReadAsync())
                 {
                     // TODO: Group the XML Node Types
                     // https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlnodetype?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Xml.XmlNodeType);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0
 
                     var nodeType = xmlreader.NodeType;
-                    
+
                     switch (nodeType)
                     {
                         case XmlNodeType.Element:
@@ -67,7 +73,7 @@ namespace DevNotePad.Features.Xml
                         case XmlNodeType.EndEntity:
                             break;
                         case XmlNodeType.XmlDeclaration:
-                            xmlreader.Skip();
+                            //xmlWriter.
                             break;
                         default:
                             throw new FeatureException("Unknown XML Node detected" + nodeType);
@@ -75,8 +81,15 @@ namespace DevNotePad.Features.Xml
                 }
             }
 
+            return sb.ToString();
+        }
 
-            return String.Empty;
+        public string Formatter(string xmlText)
+        {
+            var formatterTask = Task.Run(() => FormatterAsync(xmlText));
+            formatterTask.Wait();
+
+            return formatterTask.Result;
         }
 
         public string ParseToString(string xmlText)
@@ -262,8 +275,7 @@ namespace DevNotePad.Features.Xml
             var settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.Encoding = Encoding.UTF8;
-            settings.OmitXmlDeclaration = true;
-            
+            settings.Async = true;
             //TODO
 
             return settings;
@@ -280,6 +292,8 @@ namespace DevNotePad.Features.Xml
 
             return settings;
         }
+
+
 
         //private void Debug(IEnumerable<XmlNodeType> detectedTypes)
         //{

@@ -478,7 +478,7 @@ namespace DevNotePad.ViewModel
                         OnToggleScratchPad();
                     }
 
-                    IXmlComponent component = FeatureFactory.CreateXmlUnderTest();
+                    IXmlComponent component = FeatureFactory.CreateXml();
 
                     // Format Action
                     if (operation == XmlOperation.Format)

@@ -11,6 +11,8 @@ namespace DevNotePad.Features.Xml
     {
         string Formatter(string xmlText);
 
+        Task<string> FormatterAsync(string xmlText);
+
         string ParseToString(string xmlText);
 
         IEnumerable<ItemNode> ParseToTree(string xmlText);
