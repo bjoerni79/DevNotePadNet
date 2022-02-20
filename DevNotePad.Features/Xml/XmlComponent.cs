@@ -10,6 +10,9 @@ namespace DevNotePad.Features.Xml
 {
     internal class XmlComponent : IXmlComponent
     {
+        private List<ItemNode>? itemNodes;
+        private List<ItemNode>? parents;
+
         internal XmlComponent()
         {
             // https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlreader?view=net-6.0#xmlreader_nodes
@@ -113,34 +116,13 @@ namespace DevNotePad.Features.Xml
             return parseTask.Result;
         }
 
-        /*
-         * 
-         *   - XmlDeclaration
-         *   - Whitespace
-         *   - Element Menu
-         *   - Whitespace
-         *   - Element Popup
-         *   - Whitespace
-         *   - Element MenuItem
-         *   - Whitespace
-         *   - Element MenuItem
-         *   - Whitespace
-         *   - Element MenuItem
-         *   - Whitespace
-         *   - EndElement
-         *   - Whitespace
-         *   - EndElement 
-         * 
-         */
-
-        private async Task<IEnumerable<ItemNode>> ParseToTreeAsync(string xmlText)
+        public async Task<IEnumerable<ItemNode>> ParseToTreeAsync(string xmlText)
         {
             var settings = GetReaderSettings();
 
-            var itemNodes = new List<ItemNode>();
-            var nodeTypes = new List<XmlNodeType>();
-
-            ItemNode currentElement = null;
+            itemNodes = new List<ItemNode>();
+            //var nodeTypes = new List<XmlNodeType>();
+            parents = new List<ItemNode>();
 
             using (var textReader = new StringReader(xmlText))
             using (var xmlreader = XmlReader.Create(textReader, settings))
@@ -154,7 +136,20 @@ namespace DevNotePad.Features.Xml
                     var isEntity = (currentType == XmlNodeType.Entity) || (currentType == XmlNodeType.EndEntity) || (currentType == XmlNodeType.EntityReference);
                     var isXmlDeclaration = currentType == XmlNodeType.XmlDeclaration;
                     var isComment = currentType == XmlNodeType.Comment;
+                    var isText = currentType == XmlNodeType.Text;
+                    var isCDATA = currentType == XmlNodeType.CDATA;
  
+                    // Ignore some elements...
+                    if (isEntity || isDocument || isCDATA)
+                    {
+                        await xmlreader.SkipAsync();
+                    }
+
+                    // isEmpty = true :   <tag />
+                    // isEmpty = false :  <tag> ... </tag>
+                    var isEmpty = xmlreader.IsEmptyElement;
+                    var hasValue = xmlreader.HasValue;
+
                     if (isXmlDeclaration)
                     {
                         var xmlDeclareNode = new ItemNode();
@@ -164,10 +159,26 @@ namespace DevNotePad.Features.Xml
                         itemNodes.Add(xmlDeclareNode);
                     }
 
-                    if (isDocument)
+                    if (isText)
                     {
-                        await xmlreader.SkipAsync();
+                        
+                        if (hasValue)
+                        {
+                            var textValue = await xmlreader.GetValueAsync();
+                            var textNode = new ItemNode() { Style = ItemNodeStyle.Value, Name = "Content", Description=textValue };
+
+                            AddItemNode(textNode, isEmpty);
+                        }
                     }
+
+                    //if (isComment)
+                    //{
+                    //    if (hasValue)
+                    //    {
+                    //        var commentValue = await xmlreader.GetValueAsync();
+
+                    //    }
+                    //}
 
                     if (isElement)
                     {
@@ -175,12 +186,10 @@ namespace DevNotePad.Features.Xml
                         if (currentType == XmlNodeType.Element)
                         {
                             var elementNode = new ItemNode();
-                            elementNode.Name = "Node";
-                            elementNode.Description = xmlreader.Name;
+                            elementNode.Name = xmlreader.Name;
                             elementNode.Style = ItemNodeStyle.Element;
 
-                            // la
-                            var value = await xmlreader.GetValueAsync();
+                            // Read the attributes, if available
                             var hasAttributes = xmlreader.AttributeCount > 0; 
                             if (hasAttributes)
                             {
@@ -197,21 +206,12 @@ namespace DevNotePad.Features.Xml
                                 }
                             }
 
-                            // Root Level
-                            if (currentElement == null)
-                            {
-                                itemNodes.Add(elementNode);
-                            }
-                            else
-                            {
-                                currentElement.Childs.Add(elementNode);
-                            }
-
+                            AddItemNode(elementNode,isEmpty);
                         }
                         else if (currentType == XmlNodeType.EndElement)
                         {
-                            // Anything todo?
-                            
+                            // Remove the parent from the list
+                            parents = parents.SkipLast(1).ToList();
                         }
                         else
                         {
@@ -219,13 +219,42 @@ namespace DevNotePad.Features.Xml
                         }
                     }
 
-                    nodeTypes.Add(currentType);
+                    //nodeTypes.Add(currentType);
                 }
             }
 
-            Debug(nodeTypes);
+            //Debug(nodeTypes);
 
             return itemNodes;
+        }
+
+        private void AddItemNode(ItemNode elementNode, bool isEmpty)
+        {
+            // Build a hierarchy
+            if (parents.Any())
+            {
+                // Get the last parent and add the element
+                var parent = parents.Last();
+                parent.Childs.Add(elementNode);
+
+                if (!isEmpty)
+                {
+                    parents.Add(elementNode);
+                }
+            }
+            else
+            {
+                // Go to the root Root Level
+                // 
+                itemNodes.Add(elementNode);
+
+                // Add this one as the new parent
+                if (!isEmpty)
+                {
+                    parents.Add(elementNode);
+                }
+
+            }
         }
 
         private XmlWriterSettings GetWriterSettings()
@@ -252,24 +281,25 @@ namespace DevNotePad.Features.Xml
             return settings;
         }
 
-        private void Debug(IEnumerable<XmlNodeType> detectedTypes)
-        {
-            var file = @"D:\temp\xmlcomponent_debug.txt";
+        //private void Debug(IEnumerable<XmlNodeType> detectedTypes)
+        //{
+        //    var file = @"D:\temp\xmlcomponent_debug.txt";
 
-            try
-            {
-                using (var streamWriter = File.CreateText(file))
-                {
-                    foreach (var detectedType in detectedTypes)
-                    {
-                        streamWriter.WriteLine("- " + detectedType.ToString());
-                    }
-                }
-            }
-            catch (IOException ioEx)
-            {
-                // None... eat it and enjoy. Some red whine?
-            }
-        }
+        //    try
+        //    {
+        //        using (var streamWriter = File.CreateText(file))
+        //        {
+        //            foreach (var detectedType in detectedTypes)
+        //            {
+        //                streamWriter.WriteLine("- " + detectedType.ToString());
+        //            }
+        //        }
+        //    }
+        //    catch (IOException ioEx)
+        //    {
+        //        // None... eat it and enjoy. Some red whine?
+        //    }
+        //}
+
     }
 }

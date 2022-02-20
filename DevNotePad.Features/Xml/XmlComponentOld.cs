@@ -205,5 +205,10 @@ namespace DevNotePad.Features.Xml
 
             return document;
         }
+
+        public Task<IEnumerable<ItemNode>> ParseToTreeAsync(string xmlText)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -15,5 +15,6 @@ namespace DevNotePad.Features.Xml
 
         IEnumerable<ItemNode> ParseToTree(string xmlText);
 
+        Task<IEnumerable<ItemNode>> ParseToTreeAsync(string xmlText);
     }
 }
