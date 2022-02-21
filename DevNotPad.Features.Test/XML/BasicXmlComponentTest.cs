@@ -52,22 +52,22 @@ namespace DevNotPad.Features.Test.XML
          * 
          */
 
-        [TestMethod]
-        public void PlaygroundTest()
-        {
-            var xmlcontent = Resources.simpleXml1;
+        //[TestMethod]
+        //public void PlaygroundTest()
+        //{
+        //    var xmlcontent = Resources.simpleXml1;
             
-            var itemNodes = xmlComponentUt!.ParseToTree(xmlcontent);
+        //    var itemNodes = xmlComponentUt!.ParseToTree(xmlcontent);
 
-            // Check the tree now
-            Assert.IsNotNull(itemNodes);
+        //    // Check the tree now
+        //    Assert.IsNotNull(itemNodes);
 
-            var xmlDeclare = itemNodes.First();
-            Assert.AreEqual(xmlDeclare.Style, ItemNodeStyle.Meta);
+        //    var xmlDeclare = itemNodes.First();
+        //    Assert.AreEqual(xmlDeclare.Style, ItemNodeStyle.Meta);
 
-            var element1 = itemNodes.Skip(1).First();
-            Assert.AreEqual(element1.Style, ItemNodeStyle.Element);
+        //    var element1 = itemNodes.Skip(1).First();
+        //    Assert.AreEqual(element1.Style, ItemNodeStyle.Element);
 
-        }
+        //}
     }
 }

@@ -401,21 +401,37 @@ namespace DevNotePad.ViewModel
 
                     if (operation == XmlOperation.Format)
                     {
-                        var formatted = component.Formatter(input);
+                        // TODO: Convert to async!
+                        var formatterTask = Task.Run(() => component.FormatterAsync(input));
+                        //var formatted = component.Formatter(input);
 
-                        scratchPadComponent.SetText(formatted, isTextSelected);
+                        formatterTask.Wait();
+
+                        scratchPadComponent.SetText(formatterTask.Result, isTextSelected);
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
                     }
 
                     if (operation == XmlOperation.ToTree)
                     {
-                        var nodeList = component.ParseToTree(input);
+                        //TODO: Convert to async!
+                        var parseToTreeTask = Task.Run(() => component.ParseToTreeAsync(input));
+                        //var nodeList = component.ParseToTree(input);
+                        parseToTreeTask.Wait();
 
-                        Nodes = new ObservableCollection<ItemNode>(nodeList);
+                        Nodes = new ObservableCollection<ItemNode>(parseToTreeTask.Result);
                         RaisePropertyChange("Nodes");
 
                         Ui.FocusTree();
                     }
+                }
+                catch (AggregateException aEx)
+                {
+                    foreach (var ex in aEx.InnerExceptions)
+                    {
+                        ServiceHelper.ShowError(ex, XmlComponent);
+                    }
+
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
                 catch (FeatureException featureException)
                 {
@@ -484,9 +500,12 @@ namespace DevNotePad.ViewModel
                     // Format Action
                     if (operation == XmlOperation.Format)
                     {
-                        var formatted = component.Formatter(input);
+                        var formatterTask = Task.Run(()=>component.FormatterAsync(input));
+                        formatterTask.Wait();
 
-                        textComponent.SetText(formatted, isTextSelected);
+                        //var formatted = component.Formatter(input);
+
+                        textComponent.SetText(formatterTask.Result, isTextSelected);
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
                     }
 
@@ -505,14 +524,25 @@ namespace DevNotePad.ViewModel
                     // To Tree Action
                     if (operation == XmlOperation.ToTree)
                     {
-                        var rootNodeList = component.ParseToTree(input);
+                        var treeNodeTask = Task.Run(()=>component.ParseToTreeAsync(input));
+                        treeNodeTask.Wait();
+                        //var rootNodeList = component.ParseToTree(input);
 
-                        Nodes = new ObservableCollection<ItemNode>(rootNodeList);
+                        Nodes = new ObservableCollection<ItemNode>(treeNodeTask.Result);
                         RaisePropertyChange("Nodes");
 
                         Ui.FocusTree();
                     }
 
+                }
+                catch (AggregateException aEx)
+                {
+                    foreach (var ex in aEx.InnerExceptions)
+                    {
+                        ServiceHelper.ShowError(ex, XmlComponent);
+                    }
+
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
                 }
                 catch (FeatureException featureException)
                 {

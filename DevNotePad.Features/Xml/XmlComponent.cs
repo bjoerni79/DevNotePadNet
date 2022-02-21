@@ -229,6 +229,7 @@ namespace DevNotePad.Features.Xml
             settings.ConformanceLevel = ConformanceLevel.Fragment;
             settings.DtdProcessing = DtdProcessing.Ignore;
             
+
             //TODO...
 
             return settings;

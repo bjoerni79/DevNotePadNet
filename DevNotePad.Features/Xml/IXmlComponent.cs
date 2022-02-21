@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 namespace DevNotePad.Features.Xml
 {
     public interface IXmlComponent
-    {
-        string Formatter(string xmlText);
-
+ {
         Task<string> FormatterAsync(string xmlText);
-
-        IEnumerable<ItemNode> ParseToTree(string xmlText);
 
         Task<IEnumerable<ItemNode>> ParseToTreeAsync(string xmlText);
     }
