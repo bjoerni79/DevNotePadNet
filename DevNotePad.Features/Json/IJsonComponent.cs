@@ -11,7 +11,7 @@ namespace DevNotePad.Features.Json
     {
         string Formatter(string jsonText);
 
-        string ParseToString(string jsonText);
+        //string ParseToString(string jsonText);
 
         ItemNode ParseToTree(string jsonText);
     }

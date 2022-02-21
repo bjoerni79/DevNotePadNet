@@ -357,14 +357,15 @@ namespace DevNotePad.ViewModel
                     }
 
                     // JSON to text action
-                    if (operation == JsonOperation.ToText)
-                    {
-                        var la = jsonComponent.ParseToString(input);
+                    // TODO: Remove this.
+                    //if (operation == JsonOperation.ToText)
+                    //{
+                    //    var la = jsonComponent.ParseToString(input);
 
-                        scratchPadComponent.AddText(la);
-                        Ui.FocusScratchPad();
-                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
-                    }
+                    //    scratchPadComponent.AddText(la);
+                    //    Ui.FocusScratchPad();
+                    //    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
+                    //}
 
                     // JSON format action
                     if (operation == JsonOperation.Format)
@@ -490,15 +491,16 @@ namespace DevNotePad.ViewModel
                     }
 
                     // To Text Action
-                    if (operation == XmlOperation.ToText)
-                    {
-                        var la = component.ParseToString(input);
+                    // TODO: Remove this. It is not required.
+                    //if (operation == XmlOperation.ToText)
+                    //{
+                    //    var la = component.ParseToString(input);
 
-                        scratchPadComponent.AddText(la);
-                        Ui.FocusScratchPad();
+                    //    scratchPadComponent.AddText(la);
+                    //    Ui.FocusScratchPad();
 
-                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
-                    }
+                    //    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
+                    //}
 
                     // To Tree Action
                     if (operation == XmlOperation.ToTree)

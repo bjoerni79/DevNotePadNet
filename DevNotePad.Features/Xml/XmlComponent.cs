@@ -13,9 +13,12 @@ namespace DevNotePad.Features.Xml
         private List<ItemNode>? itemNodes;
         private List<ItemNode>? parents;
 
+        // References:
+        // XmlReader: https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlreader?view=net-6.0#xmlreader_nodes
+
         internal XmlComponent()
         {
-            // https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlreader?view=net-6.0#xmlreader_nodes
+            // Empty
         }
 
         public async Task<string> FormatterAsync(string xmlText)
@@ -33,51 +36,8 @@ namespace DevNotePad.Features.Xml
             {
                 while (await xmlreader.ReadAsync())
                 {
-                    // TODO: Group the XML Node Types
-                    // https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlnodetype?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Xml.XmlNodeType);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0
-
-                    var nodeType = xmlreader.NodeType;
-
-                    switch (nodeType)
-                    {
-                        case XmlNodeType.Element:
-                            break;
-                        case XmlNodeType.Attribute:
-                            break;
-                        case XmlNodeType.Text:
-                            break;
-                        case XmlNodeType.CDATA:
-                            break;
-                        case XmlNodeType.EntityReference:
-                            break;
-                        case XmlNodeType.Entity:
-                            break;
-                        case XmlNodeType.ProcessingInstruction:
-                            break;
-                        case XmlNodeType.Comment:
-                            break;
-                        case XmlNodeType.Document:
-                            break;
-                        case XmlNodeType.DocumentFragment:
-                            break;
-                        case XmlNodeType.DocumentType:
-                            break;
-                        case XmlNodeType.Notation:
-                            break;
-                        case XmlNodeType.Whitespace:
-                            break;
-                        case XmlNodeType.SignificantWhitespace:
-                            break;
-                        case XmlNodeType.EndElement:
-                            break;
-                        case XmlNodeType.EndEntity:
-                            break;
-                        case XmlNodeType.XmlDeclaration:
-                            //xmlWriter.
-                            break;
-                        default:
-                            throw new FeatureException("Unknown XML Node detected" + nodeType);
-                    }
+                    // Copy the reader and format it based on the ruling in the XmlWriter.
+                    await xmlWriter.WriteNodeAsync(xmlreader, true);
                 }
             }
 
@@ -97,29 +57,7 @@ namespace DevNotePad.Features.Xml
             throw new NotImplementedException();
         }
 
-        /*
-         *  TODO: Group the XML Node Types
-         *  https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlnodetype?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Xml.XmlNodeType);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0
-         *  None
-         *  X Element
-         *  X Attribute
-         *  X Text
-         *  X CDATA
-         *  X Entity Reference
-         *  X Entity
-         *  X Processing Instruction
-         *  X Comment
-         *  X Document
-         *  X DocumentFragment
-         *  X DocumentType
-         *  X Notation
-         *  X Whitespace
-         *  X SignificantWhitespace
-         *  X EndElement
-         *  X EndEntity
-         *  X XmlDeclaration
-         * 
-         */
+
 
         public IEnumerable<ItemNode> ParseToTree(string xmlText)
         {
@@ -276,6 +214,9 @@ namespace DevNotePad.Features.Xml
             settings.Indent = true;
             settings.Encoding = Encoding.UTF8;
             settings.Async = true;
+            settings.NewLineHandling = NewLineHandling.Entitize;
+            //settings.NewLineOnAttributes = true;
+            //settings.OmitXmlDeclaration = true;
             //TODO
 
             return settings;
@@ -293,27 +234,6 @@ namespace DevNotePad.Features.Xml
             return settings;
         }
 
-
-
-        //private void Debug(IEnumerable<XmlNodeType> detectedTypes)
-        //{
-        //    var file = @"D:\temp\xmlcomponent_debug.txt";
-
-        //    try
-        //    {
-        //        using (var streamWriter = File.CreateText(file))
-        //        {
-        //            foreach (var detectedType in detectedTypes)
-        //            {
-        //                streamWriter.WriteLine("- " + detectedType.ToString());
-        //            }
-        //        }
-        //    }
-        //    catch (IOException ioEx)
-        //    {
-        //        // None... eat it and enjoy. Some red whine?
-        //    }
-        //}
 
     }
 }

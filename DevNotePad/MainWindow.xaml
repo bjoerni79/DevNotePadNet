@@ -159,12 +159,10 @@
                 <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding Path=SelectAll}"/>
                 <Separator/>
                 <MenuItem Header="JSON">
-                    <MenuItem Header="To Text View" Command="{Binding Path=JsonToStringParser}"/>
                     <MenuItem Header="To Tree View" Command="{Binding Path=JsonToTreeParser}"/>
                     <MenuItem Header="Format" Command="{Binding Path=JsonFormatter}" />
                 </MenuItem>
                 <MenuItem Header="XML">
-                    <MenuItem Header="To Text View" Command="{Binding Path=XmlToStringParser}" />
                     <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />
                     <MenuItem Header="Format" Command="{Binding Path=XmlFormatter}"/>
                     <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
