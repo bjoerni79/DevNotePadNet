@@ -13,7 +13,10 @@ namespace DevNotePad.Features
 {
     public static class FeatureFactory
     {
-
+        public static IXmlSchemaValidator CreateXmlSchemaValidator()
+        {
+            return new XmlSchemaValidator();
+        }
         public static IXmlComponent CreateXml()
         {
             return new XmlComponent();

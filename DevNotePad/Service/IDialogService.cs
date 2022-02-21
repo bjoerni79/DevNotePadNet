@@ -37,5 +37,7 @@ namespace DevNotePad.Service
         void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent);
 
         void OpenAppletToolDialog(IMainViewUi ui, ITextComponent textComponent);
+
+        void OpenXmlSchemaValidatorDialog(IMainViewUi ui, ITextComponent textComponent);
     }
 }

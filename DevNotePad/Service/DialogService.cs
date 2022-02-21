@@ -23,6 +23,7 @@ namespace DevNotePad.Service
         private ReplaceDialog? currentReplaceDialog;
         private Base64ToolDialog? currentBase64ToolDialog;
         private AppletToolDialog? currentAppletToolDialog;
+        private XmlSchemaValidatorView? currentXmlSchemaValidatorView;
 
         internal DialogService(Window owner)
         {
@@ -168,6 +169,40 @@ namespace DevNotePad.Service
             vm.Init(ui, currentReplaceDialog, textComponent);
 
             currentReplaceDialog.Show();
+        }
+
+        public void OpenXmlSchemaValidatorDialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+            if (ui == null)
+            {
+                throw new ArgumentNullException(nameof(ui));
+            }
+
+            // Maintain only one view model independant from IMainViewUi and IDialog instance
+            var facade = FacadeFactory.Create();
+
+            XmlSchemaValidatorViewModel vm;
+            var isVmAvailable = facade.Exists(Bootstrap.ViewModelXmlValidatorSchemaDialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<XmlSchemaValidatorViewModel>(Bootstrap.ViewModelXmlValidatorSchemaDialog);
+            }
+            else
+            {
+                vm = new XmlSchemaValidatorViewModel();
+                facade.AddUnique(vm, Bootstrap.ViewModelXmlValidatorSchemaDialog);
+            }
+
+            if (currentXmlSchemaValidatorView != null)
+            {
+                currentXmlSchemaValidatorView.Close();
+            }
+
+            currentXmlSchemaValidatorView = new XmlSchemaValidatorView();
+            currentXmlSchemaValidatorView.DataContext = vm;
+
+            vm.Init(ui, currentXmlSchemaValidatorView, textComponent);
+            currentXmlSchemaValidatorView.Show();
         }
 
         public bool ShowConfirmationDialog(string question, string title)

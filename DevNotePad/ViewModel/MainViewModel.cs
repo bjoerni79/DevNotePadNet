@@ -108,7 +108,7 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? ToggleScratchPad { get; private set; }
 
 
-        // Tools
+
 
         public IRefreshCommand? JsonFormatter { get; private set; }
 
@@ -180,7 +180,7 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? ScratchPadFormatHex { get; private set; }
 
-        // About
+        public IRefreshCommand? SchemaValidatorTool { get; private set; }
 
         public IRefreshCommand? Base64Tool { get; private set; }
 
@@ -570,6 +570,12 @@ namespace DevNotePad.ViewModel
         {
             var dialogService = ServiceHelper.GetDialogService();
             dialogService.OpenBase64Dialog(Ui, textComponent);
+        }
+
+        private void OnSchemaXmlValidator()
+        {
+            var dialogService = ServiceHelper.GetDialogService();
+            dialogService.OpenXmlSchemaValidatorDialog(Ui, textComponent);
         }
 
         private bool CheckForUi()
@@ -1098,6 +1104,8 @@ namespace DevNotePad.ViewModel
             ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
             ToggleScratchPad = new DefaultCommand(OnToggleScratchPad);
 
+            //...
+            SchemaValidatorTool = new DefaultCommand(OnSchemaXmlValidator);
             Base64Tool = new DefaultCommand(OnBase64Tool);
             DecodeTlv = new DefaultCommand(OnDecodeTlv);
             AppletTool = new DefaultCommand(OnAppletTool);
@@ -1105,6 +1113,8 @@ namespace DevNotePad.ViewModel
             // About
             About = new DefaultCommand(OnAbout);
         }
+
+        #region Event Mechanism
 
         public void OnTrigger(string eventId)
         {
@@ -1118,6 +1128,8 @@ namespace DevNotePad.ViewModel
         {
             // None..
         }
+
+        #endregion
 
         /// <summary>
         /// JSON Action commands 

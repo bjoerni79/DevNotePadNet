@@ -29,6 +29,7 @@ namespace DevNotePad
         public const string ViewModelReplaceDialog = "viewmodelreplacedialog";
         public const string ViewModelBase64Dialog = "viewModelbase64dialog";
         public const string ViewModelAppletDialog = "viewmodelappletdialog";
+        public const string ViewModelXmlValidatorSchemaDialog = "viewmodelxmlvalidatorschemadialog";
 
         public Bootstrap()
         {

@@ -215,6 +215,7 @@
 
             <MenuItem Header="Tools">
                 <MenuItem Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
+                <MenuItem Header="XML Schema Validator Tool" Command="{Binding Path=SchemaValidatorTool}" />
                 <MenuItem Header="UICC">
                     <MenuItem Header="Decode TLV" InputGestureText="Ctrl+T" Command="{Binding Path=DecodeTlv}" />
                     <MenuItem Header="Applet Tool" Command="{Binding Path=AppletTool}" />
