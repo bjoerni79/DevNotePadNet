@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.MVVM;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,22 @@ namespace DevNotePad.ViewModel
         {
 
         }
+
+        public string? SchemaFile { get; set; }
+
+        public string? XmlContent { get; set; }
+
+
+        public IRefreshCommand? ImportFromText { get; private set; }
+
+        public IRefreshCommand? ExportToText { get; private set; }
+
+        public IRefreshCommand? ReadFromFile { get; private set; }
+
+        public IRefreshCommand? Valdate { get; private set; }
+
+        public IRefreshCommand? Clear { get; private set; }
+
 
         /*
          * see also : https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlreader?view=net-6.0#xmlreader_nodes

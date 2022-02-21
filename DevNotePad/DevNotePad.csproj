@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Page Remove="Shared\Dialog\SharedDialogResource.xaml" />
+    <Page Remove="Shared\SharedDialog.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="write_AAp_icon.ico" />
   </ItemGroup>
 
@@ -20,6 +25,12 @@
     <Reference Include="Generic.MVVM">
       <HintPath>..\lib\netstandard2.0\Generic.MVVM.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Shared\Dialog\SharedDialogResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
   </ItemGroup>
 
 </Project>
