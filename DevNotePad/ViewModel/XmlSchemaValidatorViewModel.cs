@@ -21,7 +21,7 @@ namespace DevNotePad.ViewModel
             ImportFromText = new DefaultCommand(OnImportFromText);
             Clear = new DefaultCommand(OnClear);
 
-            SchemaFile = @"D:\temp\test files\bookstore.xsd";
+            //SchemaFile = @"D:\temp\test files\bookstore.xsd";
         }
 
         /*
