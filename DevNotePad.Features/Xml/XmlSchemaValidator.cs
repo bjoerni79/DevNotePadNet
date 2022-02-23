@@ -36,12 +36,16 @@ namespace DevNotePad.Features.Xml
                 var xmlSchema = XmlSchema.Read(request.Schema, ReaderSettings_ValidationEventHandler);
                 readerSettings.Schemas.Add(xmlSchema);
 
-                //TODO: Use the XML Reader vor parsing the xml file
-                using (var reader = XmlReader.Create(request.XmlContent, readerSettings))
+                // Continue only if the validation are empty at this point
+                if (!validationItems.Any())
                 {
-                    while (await reader.ReadAsync())
+                    // Use the XML Reader vor parsing the xml file
+                    using (var reader = XmlReader.Create(request.XmlContent, readerSettings))
                     {
-                        // Just let the reader read each item..
+                        while (await reader.ReadAsync())
+                        {
+                            // Just let the reader read each item..
+                        }
                     }
                 }
             }

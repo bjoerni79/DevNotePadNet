@@ -15,7 +15,7 @@ namespace DevNotePad.Features
 
         public FeatureException(string message, Exception inner) : base(message,inner)
         {
-
+            Details = inner.Message;
         }
 
         public string Details { get; set; }

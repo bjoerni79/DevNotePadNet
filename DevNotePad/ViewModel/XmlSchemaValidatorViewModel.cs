@@ -18,6 +18,8 @@ namespace DevNotePad.ViewModel
         public XmlSchemaValidatorViewModel()
         {
             Validate = new DefaultCommand(OnValidate);
+            ImportFromText = new DefaultCommand(OnImportFromText);
+            Clear = new DefaultCommand(OnClear);
 
             SchemaFile = @"D:\temp\test files\bookstore.xsd";
         }
@@ -55,61 +57,98 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? Clear { get; private set; }
 
+        private void OnClear()
+        {
+            SchemaFile = null;
+            XmlContent = null;
+            Result = null;
+
+            RaisePropertyChange("SchemaFile");
+            RaisePropertyChange("XmlContent");
+            RaisePropertyChange("Result");
+        }
+
+        private void OnImportFromText()
+        {
+            var contentFromText = textComponent.GetText(false);
+            XmlContent = contentFromText;
+            RaisePropertyChange("XmlContent");
+        }
+
         private void OnValidate()
         {
             var schemaValidator = FeatureFactory.CreateXmlSchemaValidator();
+            var runValidation = true;
 
-            try
+
+            if (string.IsNullOrEmpty(SchemaFile))
             {
-                using (var schemaFileReader = File.OpenText(SchemaFile))
-                using (var xmlContent = new StringReader(XmlContent))
+                Result = "Invalid Schema File detected";
+                RaisePropertyChange("Result");
+                runValidation = false;
+            }
+
+            if (string.IsNullOrEmpty(XmlContent))
+            {
+                Result = "No Xml Content available to validate";
+                RaisePropertyChange("Result");
+                runValidation= false;
+            }
+
+            if (runValidation && !File.Exists(SchemaFile))
+            {
+                Result = "Schema File cannot be found";
+                RaisePropertyChange("Result");
+                runValidation = false;
+            }
+
+            if (runValidation)
+            {
+                try
                 {
-                    var request = new SchemaCompareRequest(xmlContent, schemaFileReader);
-                    var validateTask = Task.Run(() => schemaValidator.CompareAsync(request));
-
-                    validateTask.Wait();
-                    var result = validateTask.Result;
-
-                    var stringBuilder = new StringBuilder();
-                    stringBuilder.AppendFormat("Is Valid : {0}\n", result.IsPassed);
-
-                    if (result.ValidationItems != null)
+                    using (var schemaFileReader = File.OpenText(SchemaFile))
+                    using (var xmlContent = new StringReader(XmlContent))
                     {
-                        foreach (var item in result.ValidationItems)
+                        var request = new SchemaCompareRequest(xmlContent, schemaFileReader);
+                        var validateTask = Task.Run(() => schemaValidator.CompareAsync(request));
+
+                        // Wait for the result and continue with the result later
+                        validateTask.Wait();
+                        var result = validateTask.Result;
+
+                        var stringBuilder = new StringBuilder();
+                        stringBuilder.AppendFormat("Is Valid : {0}\n", result.IsPassed);
+
+                        if (result.ValidationItems != null)
                         {
-                            stringBuilder.AppendFormat("- {0}: {1}", item.Category, item.Description);
+                            foreach (var item in result.ValidationItems)
+                            {
+                                stringBuilder.AppendFormat("- {0}: {1}", item.Category, item.Description);
+                            }
                         }
-                    }
 
-                    Result = stringBuilder.ToString();
-                    RaisePropertyChange("Result");
+                        Result = stringBuilder.ToString();
+                        RaisePropertyChange("Result");
+                    }
                 }
-            }
-            catch (AggregateException aEx)
-            {
-                foreach (var inner in aEx.InnerExceptions)
+                catch (AggregateException aEx)
                 {
-                    var schemaException = inner as XmlSchemaException;
-                    if (schemaException != null)
+                    foreach (var inner in aEx.InnerExceptions)
                     {
-                        Result = schemaException.Message;
-                    }
+                        var featureException = inner as FeatureException;
+                        if (featureException != null)
+                        {
+                            Result = featureException.Message + "\n" + featureException.Details;
+                        }
+                        else
+                        {
+                            Result = inner.Message;
+                        }
 
-                    var xmlException = inner as XmlException;
-                    if (xmlException != null)
-                    {
-                        Result = xmlException.Message;
+                        RaisePropertyChange("Result");
                     }
-
-                    if (schemaException == null && xmlException == null)
-                    {
-                        Result = "Unknown Error " + inner.Message;
-                    }
-
-                    RaisePropertyChange("Result");
                 }
             }
-            
         }
     }
 }
