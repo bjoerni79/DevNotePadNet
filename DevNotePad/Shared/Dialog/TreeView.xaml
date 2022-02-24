@@ -1,0 +1,62 @@
+﻿<Window x:Class="DevNotePad.Shared.Dialog.TreeView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:DevNotePad.Shared.Converter"
+        xmlns:local="clr-namespace:DevNotePad.Shared.Dialog"
+        mc:Ignorable="d"
+        Title="Tree View" Height="450" Width="800"
+        
+                ResizeMode="CanResize" 
+        WindowStartupLocation="CenterScreen" 
+        SizeToContent="Manual"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="True"
+        Topmost="True"
+        
+        >
+
+    <Window.Resources>
+
+        <Style x:Key="scratchPadTree" TargetType="TreeView">
+        </Style>
+
+        <!-- Renders the style of the ItemNode-->
+        <converter:ItemNodeStyleConverter x:Key="itemNodeStyleConverter" />
+
+        <!-- Enables/Disables the description row-->
+        <converter:VisibilityToBoolConverter x:Key="descriptionVisibleConverter"/>
+
+        <!-- Renders the tree -->
+        <HierarchicalDataTemplate x:Key="itemNodeTemplate"  ItemsSource="{Binding Path=Childs}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Style="{Binding Path=Style,Converter={StaticResource itemNodeStyleConverter}}" Content="{Binding Path=Name}"/>
+                <Label Grid.Row="1" Style="{StaticResource itemNodeStyleDescription}" Content="{Binding Path=Description}" Visibility="{Binding Path=DisplayDescription,Mode=OneWay,Converter={StaticResource descriptionVisibleConverter}}" />
+
+            </Grid>
+        </HierarchicalDataTemplate>
+        
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TreeView x:Name="treeView" 
+                        Style="{StaticResource scratchPadTree}" 
+                        ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" 
+                        ItemsSource="{Binding Path=Nodes}" />
+
+        <StackPanel Grid.Row="1">
+            <Button>La</Button>
+        </StackPanel>
+    </Grid>
+</Window>

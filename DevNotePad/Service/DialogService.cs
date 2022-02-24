@@ -24,6 +24,7 @@ namespace DevNotePad.Service
         private Base64ToolDialog? currentBase64ToolDialog;
         private AppletToolDialog? currentAppletToolDialog;
         private XmlSchemaValidatorView? currentXmlSchemaValidatorView;
+        private TreeView? currentTreeView;
 
         internal DialogService(Window owner)
         {
@@ -203,6 +204,34 @@ namespace DevNotePad.Service
 
             vm.Init(ui, currentXmlSchemaValidatorView, textComponent);
             currentXmlSchemaValidatorView.Show();
+        }
+
+        public void OpenTreeView()
+        {
+            var facade = FacadeFactory.Create();
+
+            TreeViewModel vm;
+            var isVmAvailable = facade.Exists(Bootstrap.ViewModelTreeViewDialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<TreeViewModel>(Bootstrap.ViewModelTreeViewDialog);
+            }
+            else
+            {
+                vm = new TreeViewModel();
+                facade.AddUnique(vm, Bootstrap.ViewModelTreeViewDialog);
+            }
+
+            if (currentTreeView != null)
+            {
+                currentTreeView.Close();
+            }
+
+            currentTreeView = new TreeView();
+            currentTreeView.DataContext = vm;
+
+            vm.Init(currentTreeView);
+            currentTreeView.Show();
         }
 
         public bool ShowConfirmationDialog(string question, string title)

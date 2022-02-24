@@ -10,15 +10,20 @@ namespace DevNotePad.ViewModel
 {
     public class MainViewUiViewModel : AbstractViewModel
     {
-        protected IMainViewUi ui;
-        protected IDialog dialog;
-        protected ITextComponent textComponent;
+        protected IMainViewUi? ui;
+        protected IDialog? dialog;
+        protected ITextComponent? textComponent;
 
         public void Init(IMainViewUi mainViewUi, IDialog dialog, ITextComponent textComponent)
         {
             this.ui = mainViewUi;
             this.dialog = dialog;
             this.textComponent = textComponent;
+        }
+
+        public void Init(IDialog dialog)
+        {
+            this.dialog = dialog;
         }
     }
 }

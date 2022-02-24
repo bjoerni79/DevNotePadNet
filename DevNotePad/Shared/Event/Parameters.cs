@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevNotePad.Features.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,4 +12,5 @@ namespace DevNotePad.Shared.Event
     public record UpdateAsyncProcessState(bool InProgress);
 
     //public record UpdateFileState();
+    public record UpdateTree(IEnumerable<ItemNode> ItemNodes);
 }
