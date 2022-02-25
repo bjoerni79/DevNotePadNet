@@ -11,6 +11,5 @@ namespace DevNotePad.Shared.Event
 
     public record UpdateAsyncProcessState(bool InProgress);
 
-    //public record UpdateFileState();
     public record UpdateTree(IEnumerable<ItemNode> ItemNodes);
 }

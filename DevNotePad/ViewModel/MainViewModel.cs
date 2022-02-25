@@ -45,7 +45,6 @@ namespace DevNotePad.ViewModel
 
         public bool ScratchPadMode { get; private set; }
 
-        public ObservableCollection<ItemNode>? Nodes { get; set; }
 
         public string State { get; private set; }
 
@@ -348,24 +347,14 @@ namespace DevNotePad.ViewModel
                     {
                         var rootNode = jsonComponent.ParseToTree(input);
 
-                        Nodes = new ObservableCollection<ItemNode>();
-                        Nodes.Add(rootNode);
-                        RaisePropertyChange("Nodes");
+                        var dialogService = ServiceHelper.GetDialogService();
+                        dialogService.OpenTreeView();
 
-                        Ui.FocusTree();
+                        var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
+                        updateTreeEvent.Trigger(new UpdateTree(new List<ItemNode>() { rootNode, }));
+
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
                     }
-
-                    // JSON to text action
-                    // TODO: Remove this.
-                    //if (operation == JsonOperation.ToText)
-                    //{
-                    //    var la = jsonComponent.ParseToString(input);
-
-                    //    scratchPadComponent.AddText(la);
-                    //    Ui.FocusScratchPad();
-                    //    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to ScratchPad", false));
-                    //}
 
                     // JSON format action
                     if (operation == JsonOperation.Format)
@@ -401,9 +390,7 @@ namespace DevNotePad.ViewModel
 
                     if (operation == XmlOperation.Format)
                     {
-                        // TODO: Convert to async!
                         var formatterTask = Task.Run(() => component.FormatterAsync(input));
-                        //var formatted = component.Formatter(input);
 
                         formatterTask.Wait();
 
@@ -413,15 +400,15 @@ namespace DevNotePad.ViewModel
 
                     if (operation == XmlOperation.ToTree)
                     {
-                        //TODO: Convert to async!
                         var parseToTreeTask = Task.Run(() => component.ParseToTreeAsync(input));
-                        //var nodeList = component.ParseToTree(input);
                         parseToTreeTask.Wait();
 
-                        Nodes = new ObservableCollection<ItemNode>(parseToTreeTask.Result);
-                        RaisePropertyChange("Nodes");
+                        // Open the view and trigger the event
+                        var dialogFactory = ServiceHelper.GetDialogService();
+                        dialogFactory.OpenTreeView();
 
-                        Ui.FocusTree();
+                        var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
+                        updateTreeEvent.Trigger(new UpdateTree(parseToTreeTask.Result));
                     }
                 }
                 catch (AggregateException aEx)
@@ -464,11 +451,12 @@ namespace DevNotePad.ViewModel
                     {
                         var rootNode = jsonComponent.ParseToTree(input);
 
-                        Nodes = new ObservableCollection<ItemNode>();
-                        Nodes.Add(rootNode);
-                        RaisePropertyChange("Nodes");
+                        var dialogService = ServiceHelper.GetDialogService();
+                        dialogService.OpenTreeView();
 
-                        Ui.FocusTree();
+                        var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
+                        updateTreeEvent.Trigger(new UpdateTree(new List<ItemNode>() { rootNode, }));
+
                     }
                 }
                 catch (FeatureException featureException)
@@ -509,29 +497,18 @@ namespace DevNotePad.ViewModel
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
                     }
 
-                    // To Text Action
-                    // TODO: Remove this. It is not required.
-                    //if (operation == XmlOperation.ToText)
-                    //{
-                    //    var la = component.ParseToString(input);
-
-                    //    scratchPadComponent.AddText(la);
-                    //    Ui.FocusScratchPad();
-
-                    //    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML content rendered to ScratchPad", false));
-                    //}
-
                     // To Tree Action
                     if (operation == XmlOperation.ToTree)
                     {
                         var treeNodeTask = Task.Run(()=>component.ParseToTreeAsync(input));
                         treeNodeTask.Wait();
-                        //var rootNodeList = component.ParseToTree(input);
 
-                        Nodes = new ObservableCollection<ItemNode>(treeNodeTask.Result);
-                        RaisePropertyChange("Nodes");
+                        // Open the view and trigger the event
+                        var dialogFactory = ServiceHelper.GetDialogService();
+                        dialogFactory.OpenTreeView();
 
-                        Ui.FocusTree();
+                        var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
+                        updateTreeEvent.Trigger(new UpdateTree(treeNodeTask.Result));
                     }
 
                 }
@@ -593,7 +570,6 @@ namespace DevNotePad.ViewModel
         private void OnClearAllScratchPad()
         {
             OnClearTextScratchPad();
-            OnClearTreeScratchPad();
 
             ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad and Tree are empty", false));
         }
@@ -607,14 +583,6 @@ namespace DevNotePad.ViewModel
 
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad is empty", false));
             }
-        }
-
-        private void OnClearTreeScratchPad()
-        {
-            Nodes = new ObservableCollection<ItemNode>();
-            RaisePropertyChange("Nodes");
-
-            ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad Tree is empty", false));
         }
 
         private void OnCopyClipboardToScratchPad()
@@ -1049,7 +1017,6 @@ namespace DevNotePad.ViewModel
             CopyToText = new DefaultCommand(OnCopyToText,IsScratchPadOperationEnabled);
             ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad, ()=>ScratchPadMode);
             ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad, ()=>ScratchPadMode);
-            ScratchPadClearTree = new DefaultCommand(OnClearTreeScratchPad, ()=>ScratchPadMode);
             ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad, IsScratchPadOperationEnabled);
             ScratchPadCopy = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Copy), IsScratchPadOperationEnabled);
             ScratchPadCut = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Cut), IsScratchPadOperationEnabled);

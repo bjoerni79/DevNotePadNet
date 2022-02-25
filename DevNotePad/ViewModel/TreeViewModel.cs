@@ -1,5 +1,6 @@
 ﻿using DevNotePad.Features.Shared;
 using DevNotePad.MVVM;
+using Generic.MVVM;
 using Generic.MVVM.Event;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,11 @@ namespace DevNotePad.ViewModel
 
             var updateTreeEvent = eventController.GetEvent(Bootstrap.UpdateTreeEvent);
             updateTreeEvent.AddListener(this);
+
+            Close = new DefaultCommand(() => dialog.CloseDialog(true));
         }
+
+        public IRefreshCommand? Close { get; set; }
 
         public ObservableCollection<ItemNode>? Nodes { get; set; }
 

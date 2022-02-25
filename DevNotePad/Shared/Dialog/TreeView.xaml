@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Tree View" Height="450" Width="800"
         
-                ResizeMode="CanResize" 
+        ResizeMode="CanResize" 
         WindowStartupLocation="CenterScreen" 
         SizeToContent="Manual"
         WindowStyle="ToolWindow"
@@ -41,7 +41,12 @@
 
             </Grid>
         </HierarchicalDataTemplate>
-        
+
+        <Style x:Key="actionButton" TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="0 5 10 0"/>
+        </Style>
+
     </Window.Resources>
     
     <Grid>
@@ -55,8 +60,8 @@
                         ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" 
                         ItemsSource="{Binding Path=Nodes}" />
 
-        <StackPanel Grid.Row="1">
-            <Button>La</Button>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button IsDefault="True" IsCancel="True" Style="{StaticResource ResourceKey=actionButton}" Command="{Binding Path=Close}" >Close</Button>
         </StackPanel>
     </Grid>
 </Window>

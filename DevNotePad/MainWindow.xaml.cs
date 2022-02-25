@@ -106,16 +106,6 @@ namespace DevNotePad
             }));
         }
 
-        public void FocusTree()
-        {
-            tabTreeView.Focus();
-        }
-
-        public void FocusScratchPad()
-        {
-            tabScratchPad.Focus();
-        }
-
         public void CloseByViewModel()
         {
             Close();

@@ -33,6 +33,14 @@ namespace DevNotePad.MVVM
             return dialogService;
         }
 
+        internal static IEvent GetEvent(string eventId)
+        {
+            var facade = GetFacade();
+            var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
+
+            return eventController.GetEvent(eventId);
+        }
+
         /// <summary>
         /// Gets the I/O service
         /// </summary>

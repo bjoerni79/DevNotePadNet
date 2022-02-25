@@ -33,12 +33,6 @@
 
         <converter:IsStatusChangedStyleConverter x:Key="isStatusChangedStyleConverter" />
 
-        <!-- Renders the style of the ItemNode-->
-        <converter:ItemNodeStyleConverter x:Key="itemNodeStyleConverter" />
-
-        <!-- Enables/Disables the description row-->
-        <converter:VisibilityToBoolConverter x:Key="descriptionVisibleConverter"/>
-
         <!-- Renders the tree -->
         <HierarchicalDataTemplate x:Key="itemNodeTemplate"  ItemsSource="{Binding Path=Childs}">
             <Grid>
@@ -272,23 +266,12 @@
 
             <Label Grid.Row="0">ScratchPad</Label>
 
-            <TabControl Grid.Row="1"  Margin="3,0,0,0" >
-                <TabItem Name="tabScratchPad" Header="Text">
-                    <TextBox 
+            <TextBox Grid.Row="1" Margin="3,0,0,0"
                         x:Name="scratchPad" 
                         TextChanged="scratchPad_TextChanged"
                         Style="{StaticResource scratchPadTextbox}" 
                         ContextMenu="{StaticResource scratchPadContextMenu}"
                         />
-                </TabItem>
-                <TabItem Name="tabTreeView" Header="Tree" >
-                    <TreeView x:Name="treeView" 
-                        Style="{StaticResource scratchPadTree}" 
-                        ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" 
-                        ItemsSource="{Binding Path=Nodes}" />
-                </TabItem>
-            </TabControl>
-
 
 
         </Grid>

@@ -25,7 +25,11 @@ namespace DevNotePad.MVVM
         {
             foreach (var command in Commands)
             {
-                command.Refresh();
+                if (command != null)
+                {
+                    command.Refresh();
+                }
+                
             }
         }
     }

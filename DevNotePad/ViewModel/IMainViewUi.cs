@@ -18,10 +18,6 @@ namespace DevNotePad.ViewModel
 
         void SetFilename(string filename);
 
-        void FocusTree();
-
-        void FocusScratchPad();
-
         void CleanUpScratchPad();
 
         void CloseByViewModel();
