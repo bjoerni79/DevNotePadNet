@@ -334,12 +334,6 @@ namespace DevNotePad.ViewModel
 
                 try
                 {
-                    // Enable the scratchpad if disabled
-                    if (!ScratchPadMode && operation != JsonOperation.Format)
-                    {
-                        OnToggleScratchPad();
-                    }
-
                     IJsonComponent jsonComponent = FeatureFactory.CreateJson();
 
                     // JSON to Tree action
@@ -477,12 +471,6 @@ namespace DevNotePad.ViewModel
 
                 try
                 {
-                    // Enable the scratchpad if disabled
-                    if (!ScratchPadMode && operation != XmlOperation.Format)
-                    {
-                        OnToggleScratchPad();
-                    }
-
                     IXmlComponent component = FeatureFactory.CreateXml();
 
                     // Format Action

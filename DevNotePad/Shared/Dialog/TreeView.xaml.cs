@@ -26,6 +26,7 @@ namespace DevNotePad.Shared.Dialog
 
         public void CloseDialog(bool confirmed)
         {
+            Close();
         }
 
         public void FocusDialog()

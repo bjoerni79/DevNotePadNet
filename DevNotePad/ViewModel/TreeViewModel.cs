@@ -1,5 +1,6 @@
 ﻿using DevNotePad.Features.Shared;
 using DevNotePad.MVVM;
+using DevNotePad.Shared.Event;
 using Generic.MVVM;
 using Generic.MVVM.Event;
 using System;
@@ -39,10 +40,10 @@ namespace DevNotePad.ViewModel
         {
             if (eventId == Bootstrap.UpdateTreeEvent)
             {
-                var itemNodes = parameter as IEnumerable<ItemNode>;
-                if (itemNodes != null)
+                var updateParameter = parameter as UpdateTree;
+                if (updateParameter != null)
                 {
-                    Nodes = new ObservableCollection<ItemNode>(itemNodes);
+                    Nodes = new ObservableCollection<ItemNode>(updateParameter.ItemNodes);
                 }
                 else
                 {
