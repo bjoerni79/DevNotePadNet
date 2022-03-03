@@ -6,6 +6,12 @@
         <Setter Property="Margin" Value="0 5 10 0"/>
     </Style>
 
+    <Style x:Key="featuredActionButton" TargetType="Button">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Margin" Value="0 5 10 0"/>
+        <Setter Property="Background" Value="LightYellow"/>
+    </Style>
+
     <Style x:Key="dialogButton" TargetType="Button">
         <Setter Property="Width" Value="100"/>
         <Setter Property="Margin" Value="0 5 10 0"/>

@@ -26,26 +26,11 @@
         <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding Path=Copy}"/>
         <KeyBinding Modifiers="Ctrl" Key="A" Command="{Binding Path=SelectAll}"/>
 
-        <KeyBinding Modifiers="Ctrl" Key="T" Command="{Binding Path=DecodeTlv}"/>
     </Window.InputBindings>
 
     <Window.Resources>
 
         <converter:IsStatusChangedStyleConverter x:Key="isStatusChangedStyleConverter" />
-
-        <!-- Renders the tree -->
-        <HierarchicalDataTemplate x:Key="itemNodeTemplate"  ItemsSource="{Binding Path=Childs}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Style="{Binding Path=Style,Converter={StaticResource itemNodeStyleConverter}}" Content="{Binding Path=Name}"/>
-                <Label Grid.Row="1" Style="{StaticResource itemNodeStyleDescription}" Content="{Binding Path=Description}" Visibility="{Binding Path=DisplayDescription,Mode=OneWay,Converter={StaticResource descriptionVisibleConverter}}" />
-
-            </Grid>
-        </HierarchicalDataTemplate>
 
         <Style x:Key="editorTextbox" TargetType="TextBox">
             <Setter Property="FontSize" Value="14"/>
@@ -209,7 +194,10 @@
 
             <MenuItem Header="Tools">
                 <MenuItem Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
-                <MenuItem Header="XML Schema Validator Tool" Command="{Binding Path=SchemaValidatorTool}" />
+                <MenuItem Header="XML">
+                    <MenuItem Header="XML Schema Validator Tool" Command="{Binding Path=SchemaValidatorTool}" />
+                </MenuItem>
+                
                 <MenuItem Header="UICC">
                     <MenuItem Header="Decode TLV" InputGestureText="Ctrl+T" Command="{Binding Path=DecodeTlv}" />
                     <MenuItem Header="Applet Tool" Command="{Binding Path=AppletTool}" />

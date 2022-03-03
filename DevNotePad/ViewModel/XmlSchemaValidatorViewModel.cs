@@ -18,28 +18,15 @@ namespace DevNotePad.ViewModel
         public XmlSchemaValidatorViewModel()
         {
             Validate = new DefaultCommand(OnValidate);
+            LoadXml = new DefaultCommand(OnLoadXml);
             ImportFromText = new DefaultCommand(OnImportFromText);
             Clear = new DefaultCommand(OnClear);
-
-            //SchemaFile = @"D:\temp\test files\bookstore.xsd";
+            AddSchemaFile = new DefaultCommand(OnAddSchemaFile);
         }
 
-        /*
-         * see also : https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlreader?view=net-6.0#xmlreader_nodes
-         * via IXmlSchemaValidator interface
-         * 
-         * 
-         * - Import from text
-         * - Export to text
-         * - Read from text file
-         * 
-         * - Import schema file
-         * - Import
-         * 
-         * - Log? 
-         * 
-         * - Clear All
-         */
+        public readonly string FileDialogFilterXmlSchema = "All|*.*|Schema XML|*.xsd;";
+
+        public readonly string FileDialogFilterXml = "All|*.*|XML|*.xml;";
 
         public string? SchemaFile { get; set; }
 
@@ -49,9 +36,9 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? ImportFromText { get; private set; }
 
-        public IRefreshCommand? ExportToText { get; private set; }
+        public IRefreshCommand? LoadXml { get; private set; }
 
-        public IRefreshCommand? ReadFromFile { get; private set; }
+        public IRefreshCommand? AddSchemaFile { get; private set; }
 
         public IRefreshCommand? Validate { get; private set; }
 
@@ -68,6 +55,45 @@ namespace DevNotePad.ViewModel
             RaisePropertyChange("Result");
         }
 
+        private void OnAddSchemaFile()
+        {
+            var dialogService = ServiceHelper.GetDialogService();
+
+            var result = dialogService.ShowOpenFileNameDialog(FileDialogFilterXmlSchema, dialog.GetCurrentWindow());
+            if (result.IsConfirmed)
+            {
+                var file = result.File;
+                SchemaFile = file;
+                RaisePropertyChange("SchemaFile");
+            }
+        }
+
+        private void OnLoadXml()
+        {
+            //Load the XML from the file and copy it to the XmlContent
+            var dialogService = ServiceHelper.GetDialogService();
+
+            var result = dialogService.ShowOpenFileNameDialog(FileDialogFilterXml, dialog.GetCurrentWindow());
+            if (result.IsConfirmed)
+            {
+                var file = result.File;
+
+                try
+                {
+                    using (var stream = File.OpenText(file))
+                    {
+                        XmlContent = stream.ReadToEnd();
+                        RaisePropertyChange("XmlContent");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Result = ex.Message;
+                    RaisePropertyChange("Result");
+                }
+            }
+        }
+
         private void OnImportFromText()
         {
             var contentFromText = textComponent.GetText(false);
@@ -79,7 +105,6 @@ namespace DevNotePad.ViewModel
         {
             var schemaValidator = FeatureFactory.CreateXmlSchemaValidator();
             var runValidation = true;
-
 
             if (string.IsNullOrEmpty(SchemaFile))
             {
