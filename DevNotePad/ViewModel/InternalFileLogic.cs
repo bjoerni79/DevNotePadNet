@@ -157,24 +157,29 @@ namespace DevNotePad.ViewModel
                 {
                     try
                     {
-                        Task.Run(async () => {
+                        var textToSave = textComponent.GetText(false);
+
+                        var saveTask = Task.Run(async () => {
                             ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
-                            var textToSave = textComponent.GetText(false);
+                            
                             await ioService.WriteTextFileAsync(targetfilename, textToSave);
 
-                            InitialText = textToSave;
-                            CurrentState = EditorState.Saved;
-                            LatestTimeStamp = DateTime.Now;
-                            FileName = targetfilename;
-                            mainUi.SetFilename(FileName);
-                            IsTextFormatAvailable = true;
 
-                            ServiceHelper.TriggerFileUpdate();
-                            ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is saved", false));
-
-                            ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                         });
+
+                        saveTask.Wait();
+                        InitialText = textToSave;
+                        CurrentState = EditorState.Saved;
+                        LatestTimeStamp = DateTime.Now;
+                        FileName = targetfilename;
+                        mainUi.SetFilename(FileName);
+                        IsTextFormatAvailable = true;
+
+                        ServiceHelper.TriggerFileUpdate();
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is saved", false));
+
+                        ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                     }
                     catch (AggregateException aEx)
                     {
@@ -209,16 +214,17 @@ namespace DevNotePad.ViewModel
                 InitialText = textComponent.GetText(false);
 
                 // https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task?view=net-6.0
+                ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
-                Task.Run(async () =>
+                // Group the chars and numbers first before writing. Convert.FromHexString() throws a FormatException if any parsing errors are occuring.
+                var textFormatComponent = FeatureFactory.CreateTextFormat();
+                var grouped = textFormatComponent.GroupString(InitialText);
+
+                // https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/chaining-tasks-by-using-continuation-tasks
+
+                var saveTask = Task.Run(async () =>
                 {
-                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
-                    // Group the chars and numbers first before writing. Convert.FromHexString() throws a FormatException if any parsing errors are occuring.
-                    var textFormatComponent = FeatureFactory.CreateTextFormat();
-                    var grouped = textFormatComponent.GroupString(InitialText);
-
-                    // https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/chaining-tasks-by-using-continuation-tasks
 
                     byte[]? byteCoding = null;
                     try
@@ -245,8 +251,19 @@ namespace DevNotePad.ViewModel
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
                     }
 
-                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                    
                 });
+
+                saveTask.Wait();
+
+                ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                // Write operation done. Update the states now
+
+                IsTextFormatAvailable = false;
+                CurrentState = EditorState.Saved;
+
+                ServiceHelper.TriggerFileUpdate();
+                ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
             }
             catch (AggregateException aEx)
             {
@@ -289,11 +306,19 @@ namespace DevNotePad.ViewModel
                 //Store the timestamp of the file right now
                 LatestTimeStamp = ioService.GetModificationTimeStamp(FileName);
 
-                Task.Run(async () =>
+                String? content = null;
+                var loaderTask = Task.Run(async () =>
                 {
                     ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
-                    var content = await ioService.ReadTextFileAsync(FileName);
+                    content = await ioService.ReadTextFileAsync(FileName);
+
+                });
+
+                // Wait for the load operation to finish.
+                loaderTask.Wait();
+                if (content != null)
+                {
                     InitialText = content;
                     textComponent.SetText(InitialText);
                     mainUi.SetFilename(FileName);
@@ -302,7 +327,7 @@ namespace DevNotePad.ViewModel
                     ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
                     ServiceHelper.TriggerFileUpdate();
                     ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
-                });
+                }
 
             }
             catch (AggregateException aEx)
@@ -331,13 +356,20 @@ namespace DevNotePad.ViewModel
 
                 LatestTimeStamp = ioService.GetModificationTimeStamp(FileName);
 
-                Task.Run(async () =>
+                string? hexContent = null;
+                var loaderTask = Task.Run(async () =>
                 {
                     ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
                     var byteContent = await ioService.ReadBinaryAsync(FileName);
-                    var hexContent = ToHexStringRow(byteContent);
+                    hexContent = ToHexStringRow(byteContent);
 
+
+                });
+
+                loaderTask.Wait();
+                if (hexContent != null)
+                {
                     InitialText = hexContent;
                     textComponent.SetText(InitialText);
                     mainUi.SetFilename(FileName);
@@ -347,7 +379,7 @@ namespace DevNotePad.ViewModel
                     ServiceHelper.TriggerFileUpdate();
                     ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
                     ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
-                });
+                }
 
 
             }
