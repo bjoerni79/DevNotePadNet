@@ -60,7 +60,7 @@
                         ItemTemplate="{StaticResource ResourceKey=itemNodeTemplate}" 
                         ItemsSource="{Binding Path=Nodes}" />
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 2 5 5">
             <Button IsDefault="True" IsCancel="True" Style="{StaticResource ResourceKey=actionButton}" Command="{Binding Path=Close}" >Close</Button>
         </StackPanel>
     </Grid>
