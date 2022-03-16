@@ -160,38 +160,7 @@
                 </MenuItem>
 
             </MenuItem>
-                        
-            <MenuItem Header="ScratchPad">
-                <MenuItem Header="Cut" Command="{Binding Path=ScratchPadCut}" />
-                <MenuItem Header="Copy" Command="{Binding Path=ScratchPadCopy}"/>
-                <MenuItem Header="Paste" Command="{Binding Path=ScratchPadPaste}"/>
-                <Separator></Separator>
-                <MenuItem Header="Copy To Text" Command="{Binding Path=CopyToText}"/>
-                <MenuItem Header="Copy Clipboard Content" Command="{Binding Path=ScratchPadCopyClipboard}" />
-                <Separator></Separator>
-                <MenuItem Header="JSON">
-                    <MenuItem Header="To Tree View" Command="{Binding Path=ScratchPadJsonToTree}" />
-                    <MenuItem Header="Format"  Command="{Binding Path=ScratchPadJsonFormat}" />
-                </MenuItem>
-                <MenuItem Header="XML">
-                    <MenuItem Header="To Tree View" Command="{Binding Path=ScratchPadXmlToTree}" />
-                    <MenuItem Header="Format" Command="{Binding Path=ScratchPadXmlFormat}" />
-                    <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
-                </MenuItem>
-                <MenuItem Header="Text">
-                    <MenuItem Header="Split" Command="{Binding ScratchPadSplit}" />
-                    <MenuItem Header="Group" Command="{Binding ScratchPadGroup}" />
-                    <MenuItem Header="To Lower" Command="{Binding ScratchpadToLower}" />
-                    <MenuItem Header="To Upper" Command="{Binding ScratchPadToUpper}" />
-                    <MenuItem Header="Trim" Command="{Binding ScratchPadTrim}" />
-                    <MenuItem Header="Count" Command="{Binding ScratchPadCountLength}" />
-                </MenuItem>
-                <MenuItem Header="Hex Byte">
-                    <MenuItem Header="Hex Bytes Count" Command="{Binding ScratchPadHexCountLength}"/>
-                    <MenuItem Header="Format" Command="{Binding ScratchPadFormatHex}" />
-                </MenuItem>
-            </MenuItem>
-
+                     
             <MenuItem Header="Tools">
                 <MenuItem Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
                 <MenuItem Header="XML">
@@ -216,6 +185,7 @@
                 <!--<MenuItem Command="{Binding Path=Reset}" Header="Reset" />-->
 
             </MenuItem>
+
             <MenuItem Header="Help">
                 <MenuItem Command="{Binding About}"  Header="About"/>
             </MenuItem>
