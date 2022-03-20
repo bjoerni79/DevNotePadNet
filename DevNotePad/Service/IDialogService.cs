@@ -30,16 +30,5 @@ namespace DevNotePad.Service
 
         bool ShowConfirmationDialog(string question, string title,string okButtonText);
 
-        void OpenFindDialog(IMainViewUi ui, ITextComponent textComponent);
-
-        void OpenReplaceDialog(IMainViewUi ui, ITextComponent textComponent);
-
-        void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent);
-
-        void OpenAppletToolDialog(IMainViewUi ui, ITextComponent textComponent);
-
-        void OpenXmlSchemaValidatorDialog(IMainViewUi ui, ITextComponent textComponent);
-
-        void OpenTreeView();
     }
 }

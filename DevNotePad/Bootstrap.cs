@@ -18,6 +18,7 @@ namespace DevNotePad
         public const string BootstrapId = "bootstrap";
         public const string EventControllerId = "eventcontrollerid";
         public const string DialogServiceId = "dialogserviceid";
+        public const string ToolDialogServiceId = "tooldialogserviceid";
         public const string IoServiceId = "ioserviceid";
         public const string SettingsId = "settingsid";
 

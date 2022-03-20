@@ -205,6 +205,9 @@ namespace DevNotePad
 
                 IDialogService dialogService = new DialogService(this);
                 facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
+
+                IToolDialogService toolDialogService = new ToolDialogService(this);
+                facade.AddUnique(toolDialogService,Bootstrap.ToolDialogServiceId);
             }
 
             var vm = GetViewModel();

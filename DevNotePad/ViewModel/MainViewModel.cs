@@ -341,7 +341,7 @@ namespace DevNotePad.ViewModel
                     {
                         var rootNode = jsonComponent.ParseToTree(input);
 
-                        var dialogService = ServiceHelper.GetDialogService();
+                        var dialogService = ServiceHelper.GetToolDialogService();
                         dialogService.OpenTreeView();
 
                         var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
@@ -398,7 +398,7 @@ namespace DevNotePad.ViewModel
                         parseToTreeTask.Wait();
 
                         // Open the view and trigger the event
-                        var dialogFactory = ServiceHelper.GetDialogService();
+                        var dialogFactory = ServiceHelper.GetToolDialogService();
                         dialogFactory.OpenTreeView();
 
                         var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
@@ -445,7 +445,7 @@ namespace DevNotePad.ViewModel
                     {
                         var rootNode = jsonComponent.ParseToTree(input);
 
-                        var dialogService = ServiceHelper.GetDialogService();
+                        var dialogService = ServiceHelper.GetToolDialogService();
                         dialogService.OpenTreeView();
 
                         var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
@@ -492,7 +492,7 @@ namespace DevNotePad.ViewModel
                         treeNodeTask.Wait();
 
                         // Open the view and trigger the event
-                        var dialogFactory = ServiceHelper.GetDialogService();
+                        var dialogFactory = ServiceHelper.GetToolDialogService();
                         dialogFactory.OpenTreeView();
 
                         var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
@@ -527,19 +527,19 @@ namespace DevNotePad.ViewModel
 
         private void OnAppletTool()
         {
-            var dialogService = ServiceHelper.GetDialogService();
+            var dialogService = ServiceHelper.GetToolDialogService();
             dialogService.OpenAppletToolDialog(Ui, textComponent);
         }
 
         private void OnBase64Tool()
         {
-            var dialogService = ServiceHelper.GetDialogService();
+            var dialogService = ServiceHelper.GetToolDialogService();
             dialogService.OpenBase64Dialog(Ui, textComponent);
         }
 
         private void OnSchemaXmlValidator()
         {
-            var dialogService = ServiceHelper.GetDialogService();
+            var dialogService = ServiceHelper.GetToolDialogService();
             dialogService.OpenXmlSchemaValidatorDialog(Ui, textComponent);
         }
 
@@ -589,13 +589,13 @@ namespace DevNotePad.ViewModel
 
         private void OnFind()
         {
-            var dialogService = ServiceHelper.GetDialogService();
+            var dialogService = ServiceHelper.GetToolDialogService();
             dialogService.OpenFindDialog(Ui,textComponent);
         }
 
         private void OnReplace()
         {
-            var dialogService = ServiceHelper.GetDialogService();
+            var dialogService = ServiceHelper.GetToolDialogService();
             dialogService.OpenReplaceDialog(Ui,textComponent);
         }
 

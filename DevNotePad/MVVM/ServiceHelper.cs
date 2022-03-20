@@ -33,6 +33,18 @@ namespace DevNotePad.MVVM
             return dialogService;
         }
 
+        internal static IToolDialogService GetToolDialogService()
+        {
+            var facade = GetFacade();
+            var dialogService = facade.Get<IToolDialogService>(Bootstrap.ToolDialogServiceId);
+            if (dialogService == null)
+            {
+                throw new Exception("Cannot access DialogService");
+            }
+
+            return dialogService;
+        }
+
         internal static IEvent GetEvent(string eventId)
         {
             var facade = GetFacade();
