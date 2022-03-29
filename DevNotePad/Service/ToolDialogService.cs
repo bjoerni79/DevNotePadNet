@@ -22,6 +22,8 @@ namespace DevNotePad.Service
         private Base64ToolDialog? currentBase64ToolDialog;
         private AppletToolDialog? currentAppletToolDialog;
         private XmlSchemaValidatorView? currentXmlSchemaValidatorView;
+        private XmlXPathQueryView? currentXPathQueryView;
+        private XsltTransformerView? currentXSltTransformerView;
         private TreeView? currentTreeView;
 
         internal ToolDialogService(Window owner)
@@ -31,13 +33,7 @@ namespace DevNotePad.Service
 
         public void OpenAppletToolDialog(IMainViewUi ui, ITextComponent textComponent)
         {
-            if (ui == null)
-            {
-                throw new ArgumentNullException(nameof(ui));
-            }
-
-            // Maintain only one view model independant from IMainViewUi and IDialog instance
-            var facade = FacadeFactory.Create();
+            var facade = Init(ui);
 
             AppletToolViewModel vm;
             var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelAppletDialog);
@@ -57,22 +53,13 @@ namespace DevNotePad.Service
             }
 
             currentAppletToolDialog = new AppletToolDialog();
-            currentAppletToolDialog.DataContext = vm;
 
-            vm.Init(ui, currentAppletToolDialog, textComponent);
-
-            currentAppletToolDialog.Show();
+            OpenDialog(ui, textComponent, vm, currentAppletToolDialog, currentAppletToolDialog);
         }
 
         public void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent)
         {
-            if (ui == null)
-            {
-                throw new ArgumentNullException(nameof(ui));
-            }
-
-            // Maintain only one view model independant from IMainViewUi and IDialog instance
-            var facade = FacadeFactory.Create();
+            var facade = Init(ui);
 
             Base64ToolViewModel vm;
             var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelBase64Dialog);
@@ -92,23 +79,12 @@ namespace DevNotePad.Service
             }
 
             currentBase64ToolDialog = new Base64ToolDialog();
-            currentBase64ToolDialog.DataContext = vm;
-
-            vm.Init(ui, currentBase64ToolDialog, textComponent);
-
-            currentBase64ToolDialog.Show();
-
+            OpenDialog(ui, textComponent,vm, currentBase64ToolDialog, currentBase64ToolDialog);
         }
 
         public void OpenFindDialog(IMainViewUi ui, ITextComponent textComponent)
         {
-            if (ui == null)
-            {
-                throw new ArgumentNullException(nameof(ui));
-            }
-
-            // Maintain only one view model independant from IMainViewUi and IDialog instance
-            var facade = FacadeFactory.Create();
+            var facade = Init(ui);
 
             FindDialogViewModel vm;
             var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelFindDialog);
@@ -129,21 +105,13 @@ namespace DevNotePad.Service
             }
 
             currentFindDialog = new FindDialog() { Owner = defaultOwner };
-            currentFindDialog.DataContext = vm;
-            vm.Init(ui, currentFindDialog, textComponent);
 
-            currentFindDialog.Show();
+            OpenDialog(ui, textComponent, vm, currentFindDialog, currentFindDialog);
         }
 
         public void OpenReplaceDialog(IMainViewUi ui, ITextComponent textComponent)
         {
-            if (ui == null)
-            {
-                throw new ArgumentNullException(nameof(ui));
-            }
-
-            // Maintain only one view model independant from IMainViewUi and IDialog instance
-            var facade = FacadeFactory.Create();
+            var facade = Init(ui);
 
             ReplaceDialogViewModel vm;
             var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelReplaceDialog);
@@ -164,10 +132,7 @@ namespace DevNotePad.Service
             }
 
             currentReplaceDialog = new ReplaceDialog() { Owner = defaultOwner };
-            currentReplaceDialog.DataContext = vm;
-            vm.Init(ui, currentReplaceDialog, textComponent);
-
-            currentReplaceDialog.Show();
+            OpenDialog(ui, textComponent, vm, currentReplaceDialog, currentReplaceDialog);
         }
 
         public void OpenXmlSchemaValidatorDialog(IMainViewUi ui, ITextComponent textComponent)
@@ -198,12 +163,52 @@ namespace DevNotePad.Service
 
         public void OpenXPathQueryDialog(IMainViewUi ui, ITextComponent textComponent)
         {
-            throw new NotImplementedException();
+            var facade = Init(ui);
+
+            XPathQueryViewModel vm;
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelXmlXPath);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<XPathQueryViewModel>(ViewModelInstances.ViewModelXmlXPath);
+            }
+            else
+            {
+                vm = new XPathQueryViewModel();
+                facade.AddUnique(vm, ViewModelInstances.ViewModelXmlXPath);
+            }
+
+            if (currentXPathQueryView != null)
+            {
+                currentXPathQueryView.Close();
+            }
+
+            currentXPathQueryView = new XmlXPathQueryView();
+            OpenDialog(ui, textComponent, vm, currentXPathQueryView, currentXPathQueryView);
         }
 
         public void OpenXSltTransfomerDialog(IMainViewUi ui, ITextComponent textComponent)
         {
-            throw new NotImplementedException();
+            var facade = Init(ui);
+
+            XsltTransformerViewModel vm;
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelXmlXSlt);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<XsltTransformerViewModel>(ViewModelInstances.ViewModelXmlXSlt);
+            }
+            else
+            {
+                vm = new XsltTransformerViewModel();
+                facade.AddUnique(vm, ViewModelInstances.ViewModelXmlXSlt);
+            }
+
+            if (currentXSltTransformerView != null)
+            {
+                currentXSltTransformerView.Close();
+            }
+
+            currentXSltTransformerView = new XsltTransformerView();
+            OpenDialog(ui, textComponent, vm, currentXSltTransformerView, currentXSltTransformerView);
         }
 
         private ContainerFacade Init(IMainViewUi ui)
@@ -218,10 +223,20 @@ namespace DevNotePad.Service
             return facade;
         }
 
+        /// <summary>
+        /// Generic procedure for the tools dialog. Init the the view model and show the view.
+        /// </summary>
+        /// <param name="ui">the current main view</param>
+        /// <param name="textComponent">the active text component</param>
+        /// <param name="viewModel">the view model to connect</param>
+        /// <param name="view">the view as Window type</param>
+        /// <param name="dialogInstance">the view as IDialog type</param>
         private void OpenDialog(IMainViewUi ui, ITextComponent textComponent, MainViewUiViewModel viewModel, Window view,IDialog dialogInstance)
         {
+            // Init the view model. The IDialog interface is the channel between the view model and the view.
             viewModel.Init(ui, dialogInstance, textComponent);
 
+            // Set the context and show it.
             if (view != null)
             {
                 view.DataContext = viewModel;

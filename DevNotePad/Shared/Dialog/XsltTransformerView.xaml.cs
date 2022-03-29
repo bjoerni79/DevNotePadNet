@@ -17,11 +17,25 @@ namespace DevNotePad.Shared.Dialog
     /// <summary>
     /// Interaction logic for XsltTransformerView.xaml
     /// </summary>
-    public partial class XsltTransformerView : Window
+    public partial class XsltTransformerView : Window, IDialog
     {
         public XsltTransformerView()
         {
             InitializeComponent();
+        }
+
+        public void CloseDialog(bool confirmed)
+        {
+            Close();
+        }
+
+        public void FocusDialog()
+        {
+        }
+
+        public Window GetCurrentWindow()
+        {
+            return this;
         }
     }
 }
