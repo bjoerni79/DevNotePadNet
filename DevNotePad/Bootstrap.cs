@@ -22,18 +22,6 @@ namespace DevNotePad
         public const string IoServiceId = "ioserviceid";
         public const string SettingsId = "settingsid";
 
-        public const string UpdateToolBarEvent = "updatetoolbarevent";
-        public const string UpdateAsyncStateEvent = "updateasyncstateevent";
-        public const string UpdateFileStateEvent = "updatefilestateevent";
-        public const string UpdateTreeEvent = "updatetreeevent";
-
-        public const string ViewModelFindDialog = "viewmodelfinddialog";
-        public const string ViewModelReplaceDialog = "viewmodelreplacedialog";
-        public const string ViewModelBase64Dialog = "viewModelbase64dialog";
-        public const string ViewModelAppletDialog = "viewmodelappletdialog";
-        public const string ViewModelXmlValidatorSchemaDialog = "viewmodelxmlvalidatorschemadialog";
-        public const string ViewModelTreeViewDialog = "viewmodeltreeviewdialog";
-
         public Bootstrap()
         {
             FacadeFactory.InitFactory();
@@ -64,10 +52,10 @@ namespace DevNotePad
 
         private void RegisterEvents(EventController eventController)
         {
-            var updateStatusEvent = new Generic.MVVM.Event.Event(UpdateToolBarEvent);
-            var asyncOperationEvent = new Generic.MVVM.Event.Event(UpdateAsyncStateEvent);
-            var updateFileStateEvent = new Generic.MVVM.Event.Event(UpdateFileStateEvent);
-            var updateTreeEvent = new Generic.MVVM.Event.Event(UpdateTreeEvent);
+            var updateStatusEvent = new Generic.MVVM.Event.Event(Events.UpdateToolBarEvent);
+            var asyncOperationEvent = new Generic.MVVM.Event.Event(Events.UpdateAsyncStateEvent);
+            var updateFileStateEvent = new Generic.MVVM.Event.Event(Events.UpdateFileStateEvent);
+            var updateTreeEvent = new Generic.MVVM.Event.Event(Events.UpdateTreeEvent);
 
             eventController.Add(updateStatusEvent);
             eventController.Add(asyncOperationEvent);

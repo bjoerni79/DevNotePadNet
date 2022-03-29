@@ -1,6 +1,7 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Shared.Dialog;
 using DevNotePad.ViewModel;
+using Generic.MVVM.IOC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,15 +40,15 @@ namespace DevNotePad.Service
             var facade = FacadeFactory.Create();
 
             AppletToolViewModel vm;
-            var isVmAvailable = facade.Exists(Bootstrap.ViewModelAppletDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelAppletDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<AppletToolViewModel>(Bootstrap.ViewModelAppletDialog);
+                vm = facade.Get<AppletToolViewModel>(ViewModelInstances.ViewModelAppletDialog);
             }
             else
             {
                 vm = new AppletToolViewModel();
-                facade.AddUnique(vm, Bootstrap.ViewModelAppletDialog);
+                facade.AddUnique(vm, ViewModelInstances.ViewModelAppletDialog);
             }
 
             if (currentAppletToolDialog != null)
@@ -74,15 +75,15 @@ namespace DevNotePad.Service
             var facade = FacadeFactory.Create();
 
             Base64ToolViewModel vm;
-            var isVmAvailable = facade.Exists(Bootstrap.ViewModelBase64Dialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelBase64Dialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<Base64ToolViewModel>(Bootstrap.ViewModelBase64Dialog);
+                vm = facade.Get<Base64ToolViewModel>(ViewModelInstances.ViewModelBase64Dialog);
             }
             else
             {
                 vm = new Base64ToolViewModel();
-                facade.AddUnique(vm, Bootstrap.ViewModelBase64Dialog);
+                facade.AddUnique(vm, ViewModelInstances.ViewModelBase64Dialog);
             }
 
             if (currentBase64ToolDialog != null)
@@ -110,15 +111,15 @@ namespace DevNotePad.Service
             var facade = FacadeFactory.Create();
 
             FindDialogViewModel vm;
-            var isVmAvailable = facade.Exists(Bootstrap.ViewModelFindDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelFindDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<FindDialogViewModel>(Bootstrap.ViewModelFindDialog);
+                vm = facade.Get<FindDialogViewModel>(ViewModelInstances.ViewModelFindDialog);
             }
             else
             {
                 vm = new FindDialogViewModel();
-                facade.AddUnique(vm, Bootstrap.ViewModelFindDialog);
+                facade.AddUnique(vm, ViewModelInstances.ViewModelFindDialog);
             }
 
             // Workaround:  We have to close the view and open a new one. All data is stored in the view model
@@ -145,15 +146,15 @@ namespace DevNotePad.Service
             var facade = FacadeFactory.Create();
 
             ReplaceDialogViewModel vm;
-            var isVmAvailable = facade.Exists(Bootstrap.ViewModelReplaceDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelReplaceDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<ReplaceDialogViewModel>(Bootstrap.ViewModelReplaceDialog);
+                vm = facade.Get<ReplaceDialogViewModel>(ViewModelInstances.ViewModelReplaceDialog);
             }
             else
             {
                 vm = new ReplaceDialogViewModel();
-                facade.AddUnique(vm, Bootstrap.ViewModelReplaceDialog);
+                facade.AddUnique(vm, ViewModelInstances.ViewModelReplaceDialog);
             }
 
             // Workaround:  We have to close the view and open a new one. All data is stored in the view model
@@ -171,6 +172,42 @@ namespace DevNotePad.Service
 
         public void OpenXmlSchemaValidatorDialog(IMainViewUi ui, ITextComponent textComponent)
         {
+            var facade = Init(ui);
+
+            XmlSchemaValidatorViewModel vm;
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelXmlValidatorSchemaDialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<XmlSchemaValidatorViewModel>(ViewModelInstances.ViewModelXmlValidatorSchemaDialog);
+            }
+            else
+            {
+                vm = new XmlSchemaValidatorViewModel();
+                facade.AddUnique(vm, ViewModelInstances.ViewModelXmlValidatorSchemaDialog);
+            }
+
+            // Workaround:  If the view is still visible this is the only way of re-opening it. 
+            if (currentXmlSchemaValidatorView != null)
+            {
+                currentXmlSchemaValidatorView.Close();
+            }
+
+            currentXmlSchemaValidatorView = new XmlSchemaValidatorView();
+            OpenDialog(ui, textComponent, vm, currentXmlSchemaValidatorView, currentXmlSchemaValidatorView);
+        }
+
+        public void OpenXPathQueryDialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenXSltTransfomerDialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+            throw new NotImplementedException();
+        }
+
+        private ContainerFacade Init(IMainViewUi ui)
+        {
             if (ui == null)
             {
                 throw new ArgumentNullException(nameof(ui));
@@ -178,29 +215,18 @@ namespace DevNotePad.Service
 
             // Maintain only one view model independant from IMainViewUi and IDialog instance
             var facade = FacadeFactory.Create();
+            return facade;
+        }
 
-            XmlSchemaValidatorViewModel vm;
-            var isVmAvailable = facade.Exists(Bootstrap.ViewModelXmlValidatorSchemaDialog);
-            if (isVmAvailable)
+        private void OpenDialog(IMainViewUi ui, ITextComponent textComponent, MainViewUiViewModel viewModel, Window view,IDialog dialogInstance)
+        {
+            viewModel.Init(ui, dialogInstance, textComponent);
+
+            if (view != null)
             {
-                vm = facade.Get<XmlSchemaValidatorViewModel>(Bootstrap.ViewModelXmlValidatorSchemaDialog);
+                view.DataContext = viewModel;
+                view.Show();
             }
-            else
-            {
-                vm = new XmlSchemaValidatorViewModel();
-                facade.AddUnique(vm, Bootstrap.ViewModelXmlValidatorSchemaDialog);
-            }
-
-            if (currentXmlSchemaValidatorView != null)
-            {
-                currentXmlSchemaValidatorView.Close();
-            }
-
-            currentXmlSchemaValidatorView = new XmlSchemaValidatorView();
-            currentXmlSchemaValidatorView.DataContext = vm;
-
-            vm.Init(ui, currentXmlSchemaValidatorView, textComponent);
-            currentXmlSchemaValidatorView.Show();
         }
 
         public void OpenTreeView()
@@ -208,15 +234,15 @@ namespace DevNotePad.Service
             var facade = FacadeFactory.Create();
 
             TreeViewModel vm;
-            var isVmAvailable = facade.Exists(Bootstrap.ViewModelTreeViewDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelTreeViewDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<TreeViewModel>(Bootstrap.ViewModelTreeViewDialog);
+                vm = facade.Get<TreeViewModel>(ViewModelInstances.ViewModelTreeViewDialog);
             }
             else
             {
                 vm = new TreeViewModel();
-                facade.AddUnique(vm, Bootstrap.ViewModelTreeViewDialog);
+                facade.AddUnique(vm, ViewModelInstances.ViewModelTreeViewDialog);
             }
 
             if (currentTreeView != null)
@@ -229,16 +255,6 @@ namespace DevNotePad.Service
 
             vm.Init(currentTreeView);
             currentTreeView.Show();
-        }
-
-        public void OpenXPathQueryDialog(IMainViewUi ui, ITextComponent textComponent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OpenXSltTransfomerDialog(IMainViewUi ui, ITextComponent textComponent)
-        {
-            throw new NotImplementedException();
         }
     }
 }

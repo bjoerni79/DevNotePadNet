@@ -129,7 +129,7 @@ namespace DevNotePad
         {
             // All actions in this method are thread sensitive! Use the dispatcher for UI changes only.
 
-            if (eventId == Bootstrap.UpdateToolBarEvent)
+            if (eventId == Events.UpdateToolBarEvent)
             {
                 var updateStatusBarParameter = parameter as UpdateStatusBarParameter;
                 if (updateStatusBarParameter != null)
@@ -138,7 +138,7 @@ namespace DevNotePad
                 }
             }
 
-            if (eventId == Bootstrap.UpdateAsyncStateEvent)
+            if (eventId == Events.UpdateAsyncStateEvent)
             {
                 var updateAsyncState = parameter as UpdateAsyncProcessState;
                 if (updateAsyncState != null)
@@ -197,8 +197,8 @@ namespace DevNotePad
             if (facade != null)
             {
                 var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
-                var updateToolbarEvent = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
-                var asyncOperationEvent = eventController.GetEvent(Bootstrap.UpdateAsyncStateEvent);
+                var updateToolbarEvent = eventController.GetEvent(Events.UpdateToolBarEvent);
+                var asyncOperationEvent = eventController.GetEvent(Events.UpdateAsyncStateEvent);
 
                 updateToolbarEvent.AddListener(this);
                 asyncOperationEvent.AddListener(this);

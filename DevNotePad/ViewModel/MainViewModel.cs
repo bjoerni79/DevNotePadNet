@@ -343,7 +343,7 @@ namespace DevNotePad.ViewModel
                         var dialogService = ServiceHelper.GetToolDialogService();
                         dialogService.OpenTreeView();
 
-                        var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
+                        var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
                         updateTreeEvent.Trigger(new UpdateTree(new List<ItemNode>() { rootNode, }));
 
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
@@ -400,7 +400,7 @@ namespace DevNotePad.ViewModel
                         var dialogFactory = ServiceHelper.GetToolDialogService();
                         dialogFactory.OpenTreeView();
 
-                        var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
+                        var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
                         updateTreeEvent.Trigger(new UpdateTree(parseToTreeTask.Result));
                     }
                 }
@@ -447,7 +447,7 @@ namespace DevNotePad.ViewModel
                         var dialogService = ServiceHelper.GetToolDialogService();
                         dialogService.OpenTreeView();
 
-                        var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
+                        var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
                         updateTreeEvent.Trigger(new UpdateTree(new List<ItemNode>() { rootNode, }));
 
                     }
@@ -494,7 +494,7 @@ namespace DevNotePad.ViewModel
                         var dialogFactory = ServiceHelper.GetToolDialogService();
                         dialogFactory.OpenTreeView();
 
-                        var updateTreeEvent = ServiceHelper.GetEvent(Bootstrap.UpdateTreeEvent);
+                        var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
                         updateTreeEvent.Trigger(new UpdateTree(treeNodeTask.Result));
                     }
 
@@ -862,7 +862,7 @@ namespace DevNotePad.ViewModel
             var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
             if (eventController != null)
             {
-                var fileStatsUpdateEvent = eventController.GetEvent(Bootstrap.UpdateFileStateEvent);
+                var fileStatsUpdateEvent = eventController.GetEvent(Events.UpdateFileStateEvent);
                 if (fileStatsUpdateEvent != null)
                 {
                     fileStatsUpdateEvent.AddListener(this);
@@ -1088,7 +1088,7 @@ namespace DevNotePad.ViewModel
 
         public void OnTrigger(string eventId)
         {
-            if (eventId == Bootstrap.UpdateFileStateEvent)
+            if (eventId == Events.UpdateFileStateEvent)
             {
                 UpdateFileStatus();
             }

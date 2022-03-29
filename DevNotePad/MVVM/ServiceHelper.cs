@@ -126,7 +126,7 @@ namespace DevNotePad.MVVM
             var facade = GetFacade();
             var eventController = facade.Get<EventController>();
 
-            var eventInstance = eventController.GetEvent(Bootstrap.UpdateToolBarEvent);
+            var eventInstance = eventController.GetEvent(Events.UpdateToolBarEvent);
             if (eventInstance != null)
             {
                 eventInstance.Trigger(parameter);
@@ -138,7 +138,7 @@ namespace DevNotePad.MVVM
             var facade = GetFacade();
             var eventController = facade.Get<EventController>();
 
-            var eventInstance = eventController.GetEvent(Bootstrap.UpdateAsyncStateEvent);
+            var eventInstance = eventController.GetEvent(Events.UpdateAsyncStateEvent);
             if (eventInstance != null)
             {
                 eventInstance.Trigger(parameter);
@@ -150,7 +150,7 @@ namespace DevNotePad.MVVM
             var facade = GetFacade();
             var eventController = facade.Get<EventController>();
 
-            var eventInstance = eventController.GetEvent(Bootstrap.UpdateFileStateEvent);
+            var eventInstance = eventController.GetEvent(Events.UpdateFileStateEvent);
             if (eventInstance != null)
             {
                 eventInstance.Trigger();

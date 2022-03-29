@@ -21,7 +21,7 @@ namespace DevNotePad.ViewModel
             var facade = FacadeFactory.Create();
             var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
 
-            var updateTreeEvent = eventController.GetEvent(Bootstrap.UpdateTreeEvent);
+            var updateTreeEvent = eventController.GetEvent(Events.UpdateTreeEvent);
             updateTreeEvent.AddListener(this);
 
             Close = new DefaultCommand(() => dialog.CloseDialog(true));
@@ -38,7 +38,7 @@ namespace DevNotePad.ViewModel
 
         public void OnTrigger(string eventId, object parameter)
         {
-            if (eventId == Bootstrap.UpdateTreeEvent)
+            if (eventId == Events.UpdateTreeEvent)
             {
                 var updateParameter = parameter as UpdateTree;
                 if (updateParameter != null)
