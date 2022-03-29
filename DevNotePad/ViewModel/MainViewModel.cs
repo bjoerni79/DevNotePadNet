@@ -91,8 +91,6 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? Cut { get; private set; }
 
-
-
         public IRefreshCommand? Copy { get; private set; }
 
         public IRefreshCommand? Paste { get; private set; }
@@ -105,9 +103,6 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? ToggleLineWrap { get; private set; }
 
         public IRefreshCommand? ToggleScratchPad { get; private set; }
-
-
-
 
         public IRefreshCommand? JsonFormatter { get; private set; }
 
@@ -180,6 +175,10 @@ namespace DevNotePad.ViewModel
         public IRefreshCommand? ScratchPadFormatHex { get; private set; }
 
         public IRefreshCommand? SchemaValidatorTool { get; private set; }
+         
+        public IRefreshCommand? XPathQueryTool { get; private set; }
+
+        public IRefreshCommand? XSltTransformationTool { get; private set; }
 
         public IRefreshCommand? Base64Tool { get; private set; }
 
@@ -537,10 +536,23 @@ namespace DevNotePad.ViewModel
             dialogService.OpenBase64Dialog(Ui, textComponent);
         }
 
-        private void OnSchemaXmlValidator()
+        private void OnXmlTool(XmlToolFeature feature)
         {
-            var dialogService = ServiceHelper.GetToolDialogService();
-            dialogService.OpenXmlSchemaValidatorDialog(Ui, textComponent);
+            var toolDialogService = ServiceHelper.GetToolDialogService();
+
+            switch (feature)
+            {
+                case XmlToolFeature.SchemaValidation:
+                    toolDialogService.OpenXmlSchemaValidatorDialog(Ui, textComponent);
+                    break;
+                case XmlToolFeature.XPathQuery:
+                    break;
+                case XmlToolFeature.XSltTransformation:
+                    break;
+                default:
+                    break;
+            }
+            
         }
 
         private bool CheckForUi()
@@ -1060,7 +1072,10 @@ namespace DevNotePad.ViewModel
             ToggleScratchPad = new DefaultCommand(OnToggleScratchPad);
 
             //...
-            SchemaValidatorTool = new DefaultCommand(OnSchemaXmlValidator);
+            SchemaValidatorTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.SchemaValidation));
+            XPathQueryTool = new DefaultCommand(() => OnXmlTool(XmlToolFeature.XPathQuery));
+            XSltTransformationTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.XSltTransformation));
+
             Base64Tool = new DefaultCommand(OnBase64Tool);
             DecodeTlv = new DefaultCommand(OnDecodeTlv);
             AppletTool = new DefaultCommand(OnAppletTool);
@@ -1086,39 +1101,6 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
-        /// <summary>
-        /// JSON Action commands 
-        /// </summary>
-        private enum JsonOperation
-        {
-            Format,
-            ToTree,
-            ToText
-        }
 
-        /// <summary>
-        /// XML Action commands
-        /// </summary>
-        private enum XmlOperation
-        {
-            Format,
-            ToTree,
-            ToText
-        }
-
-        /// <summary>
-        /// File Action commands
-        /// </summary>
-        private enum FileOperation
-        {
-            New,
-            Open,
-            OpenBinary,
-            Save,
-            SaveAs,
-            SaveBinary,
-            SaveAsBinary,
-            Reload
-        }
     }
 }

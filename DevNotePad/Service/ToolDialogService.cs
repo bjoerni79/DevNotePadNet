@@ -230,5 +230,15 @@ namespace DevNotePad.Service
             vm.Init(currentTreeView);
             currentTreeView.Show();
         }
+
+        public void OpenXPathQueryDialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenXSltTransfomerDialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

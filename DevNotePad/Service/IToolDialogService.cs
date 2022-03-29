@@ -19,6 +19,11 @@ namespace DevNotePad.Service
 
         void OpenXmlSchemaValidatorDialog(IMainViewUi ui, ITextComponent textComponent);
 
+        void OpenXPathQueryDialog(IMainViewUi ui, ITextComponent textComponent);
+
+        void OpenXSltTransfomerDialog(IMainViewUi ui, ITextComponent textComponent);
+
         void OpenTreeView();
+
     }
 }
