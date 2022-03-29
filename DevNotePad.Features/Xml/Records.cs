@@ -11,4 +11,8 @@ namespace DevNotePad.Features.Xml
     public record SchemaCompareResult (bool IsPassed,IEnumerable<SchemaValidationItem>? ValidationItems);
 
     public record SchemaCompareRequest(TextReader XmlContent, StreamReader Schema);
+
+    public record XPathQueryRequest (TextReader xmlContent, string XPathQuery);
+
+    public record XPathQueryResponse (bool IsMatching, string result);
 }

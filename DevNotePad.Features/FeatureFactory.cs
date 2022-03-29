@@ -13,6 +13,11 @@ namespace DevNotePad.Features
 {
     public static class FeatureFactory
     {
+        public static IXmlXPathQuery CreateXmlXpathQuery()
+        {
+            return new XmlXPathQuery();
+        }
+
         public static IXmlSchemaValidator CreateXmlSchemaValidator()
         {
             return new XmlSchemaValidator();

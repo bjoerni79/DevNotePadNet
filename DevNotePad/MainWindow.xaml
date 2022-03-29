@@ -164,7 +164,9 @@
             <MenuItem Header="Tools">
                 <MenuItem Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
                 <MenuItem Header="XML">
-                    <MenuItem Header="XML Schema Validator Tool" Command="{Binding Path=SchemaValidatorTool}" />
+                    <MenuItem Header="Schema Validator" Command="{Binding Path=SchemaValidatorTool}" />
+                    <MenuItem Header="XPath Query" />
+                    <MenuItem Header="XSLT Transformation" />
                 </MenuItem>
                 
                 <MenuItem Header="UICC">
