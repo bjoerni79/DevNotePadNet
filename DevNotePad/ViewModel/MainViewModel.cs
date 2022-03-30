@@ -546,6 +546,7 @@ namespace DevNotePad.ViewModel
                     toolDialogService.OpenXmlSchemaValidatorDialog(Ui, textComponent);
                     break;
                 case XmlToolFeature.XPathQuery:
+                    toolDialogService.OpenXPathQueryDialog(Ui, textComponent);
                     break;
                 case XmlToolFeature.XSltTransformation:
                     toolDialogService.OpenXSltTransfomerDialog(Ui, textComponent);

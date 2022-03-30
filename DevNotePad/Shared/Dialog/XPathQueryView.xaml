@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource titleLabel}" >Query :</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Path=SchemaFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></TextBox>
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Path=Query,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></TextBox>
 
         <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource titleLabel}" >XML Source</Label>
         <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource defaultMultiLineTextBox}" Text="{Binding Path=XmlContent,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
