@@ -22,11 +22,8 @@ namespace DevNotePad.ViewModel
             ImportFromText = new DefaultCommand(OnImportFromText);
             Clear = new DefaultCommand(OnClear);
             AddSchemaFile = new DefaultCommand(OnAddSchemaFile);
+
         }
-
-        public readonly string FileDialogFilterXmlSchema = "All|*.*|Schema XML|*.xsd;";
-
-        public readonly string FileDialogFilterXml = "All|*.*|XML|*.xml;";
 
         public string? SchemaFile { get; set; }
 
@@ -59,7 +56,7 @@ namespace DevNotePad.ViewModel
         {
             var dialogService = ServiceHelper.GetDialogService();
 
-            var result = dialogService.ShowOpenFileNameDialog(FileDialogFilterXmlSchema, dialog.GetCurrentWindow());
+            var result = dialogService.ShowOpenFileNameDialog(XmlToolHelper.FileDialogFilterXmlSchema, dialog.GetCurrentWindow());
             if (result.IsConfirmed)
             {
                 var file = result.File;
@@ -70,27 +67,19 @@ namespace DevNotePad.ViewModel
 
         private void OnLoadXml()
         {
-            //Load the XML from the file and copy it to the XmlContent
-            var dialogService = ServiceHelper.GetDialogService();
-
-            var result = dialogService.ShowOpenFileNameDialog(FileDialogFilterXml, dialog.GetCurrentWindow());
-            if (result.IsConfirmed)
+            try
             {
-                var file = result.File;
-
-                try
+                var fileContent = xmlToolHelper.LoadXmlFromDialog();
+                if (fileContent != null)
                 {
-                    using (var stream = File.OpenText(file))
-                    {
-                        XmlContent = stream.ReadToEnd();
-                        RaisePropertyChange("XmlContent");
-                    }
+                    XmlContent = fileContent;
+                    RaisePropertyChange("XmlContent");
                 }
-                catch (Exception ex)
-                {
-                    Result = ex.Message;
-                    RaisePropertyChange("Result");
-                }
+            }
+            catch (Exception ex)
+            {
+                Result = ex.Message;
+                RaisePropertyChange("Result");
             }
         }
 

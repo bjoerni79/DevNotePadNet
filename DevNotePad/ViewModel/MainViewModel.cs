@@ -548,6 +548,7 @@ namespace DevNotePad.ViewModel
                 case XmlToolFeature.XPathQuery:
                     break;
                 case XmlToolFeature.XSltTransformation:
+                    toolDialogService.OpenXSltTransfomerDialog(Ui, textComponent);
                     break;
                 default:
                     break;
