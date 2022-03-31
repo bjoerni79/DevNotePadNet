@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace DevNotePad.Features.Xml
 {
@@ -15,4 +16,8 @@ namespace DevNotePad.Features.Xml
     public record XPathQueryRequest (TextReader XmlContent, string XPathQuery);
 
     public record XPathQueryResponse (bool IsMatching, string Result);
+
+    public record XSltTransformationRequest(TextReader XmlContent, XmlReader Transformation);
+
+    public record XSltTransformationResponse (bool IsPassed, string Result);
 }

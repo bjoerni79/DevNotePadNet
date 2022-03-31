@@ -13,6 +13,11 @@ namespace DevNotePad.Features
 {
     public static class FeatureFactory
     {
+        public static IXmlXsltTransformer CreateXsltTransformer()
+        {
+            return new XmlXsltTransformer();
+        }
+
         public static IXmlXPathQuery CreateXmlXpathQuery()
         {
             return new XmlXPathQuery();

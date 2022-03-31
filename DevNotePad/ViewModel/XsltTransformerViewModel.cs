@@ -86,7 +86,29 @@ namespace DevNotePad.ViewModel
 
         private void OnTransform()
         {
-            //TODO
+            var runValidation = true;
+
+            if (String.IsNullOrEmpty(TransformationFile))
+            {
+                Result = "Please provide a XSLT File";
+                runValidation = false;
+            }
+
+            if (runValidation && String.IsNullOrEmpty(XmlContent))
+            {
+                Result = "Please provide the XML content";
+            }
+
+            if (runValidation)
+            {
+                //TODO: Read the XML Content as TextReader
+
+                //TODO: Read the XSLT as XML Reader
+
+                //TODO: Run the service in a try..catch and return the value or the error.
+            }
+
+            RaisePropertyChange("Result");
         }
     }
 }
