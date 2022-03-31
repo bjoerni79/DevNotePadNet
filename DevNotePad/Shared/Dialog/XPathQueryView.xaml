@@ -34,7 +34,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
-            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="0.5*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -51,7 +51,7 @@
             <Button Style="{StaticResource actionButton}" Command="{Binding Path=Clear}">Clear</Button>
             <Button Style="{StaticResource actionButton}" Command="{Binding Path=ImportFromText}">Import XML</Button>
             <Button Style="{StaticResource actionButton}" Command="{Binding Path=LoadXml}">Load XML</Button>
-             <Button Style="{StaticResource featuredActionButton}" IsDefault="True" Command="{Binding Path=Transform}">Transform</Button>
+             <Button Style="{StaticResource featuredActionButton}" IsDefault="True" Command="{Binding Path=Run}">Run</Button>
         </StackPanel>
 
     </Grid>

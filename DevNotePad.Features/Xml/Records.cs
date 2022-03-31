@@ -12,7 +12,7 @@ namespace DevNotePad.Features.Xml
 
     public record SchemaCompareRequest(TextReader XmlContent, StreamReader Schema);
 
-    public record XPathQueryRequest (TextReader xmlContent, string XPathQuery);
+    public record XPathQueryRequest (TextReader XmlContent, string XPathQuery);
 
-    public record XPathQueryResponse (bool IsMatching, string result);
+    public record XPathQueryResponse (bool IsMatching, string Result);
 }
