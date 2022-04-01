@@ -19,5 +19,18 @@ namespace DevNotePad.Features
         }
 
         public string Details { get; set; }
+
+        public string BuildReport()
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("Error : {0}\n", Message);
+
+            if (Details != null)
+            {
+                sb.AppendFormat("Details : {0}\n", Details);
+            }
+
+            return sb.ToString();
+        }
     }
 }

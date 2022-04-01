@@ -22,6 +22,7 @@ namespace DevNotePad.Features.Xml
 
             var xmlContentReader = request.XmlContent;
             var transformationReader = request.Transformation;
+            var parameter = request.Parameter;
 
             if (xmlContentReader == null)
             {
@@ -33,18 +34,25 @@ namespace DevNotePad.Features.Xml
                 throw new ArgumentException("XML Transformation stream is not available");
             }
 
+            if (parameter == null)
+            {
+                throw new ArgumentException("Parameter not set");
+            }
+
             // Read the XSLT file
 
-            var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
+            var xsltSettings = new XsltSettings() { EnableScript = parameter.EnableScript, EnableDocumentFunction = parameter.EnableDocumentFunction };
+
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true, OmitXmlDeclaration=true };
             var buffer = new StringBuilder();
             var isPassed = false;
             var result = String.Empty;
 
             try
             {
-                // Load the Transformation content
+                // Load the Transformation content without any external resources.
                 var xslTransform = new XslCompiledTransform();
-                xslTransform.Load(transformationReader);
+                xslTransform.Load(transformationReader, xsltSettings, null);
 
                 // And now now parse the source using the XPathDocument and store it in a buffer via XmlWriter
                 var document = new XPathDocument(xmlContentReader);
@@ -57,7 +65,14 @@ namespace DevNotePad.Features.Xml
             }
             catch (Exception ex)
             {
-                throw new FeatureException(ex.Message);
+                if (ex.InnerException != null)
+                {
+                    throw new FeatureException(ex.Message, ex.InnerException) { Details = ex.InnerException.Message };
+                }
+                else
+                {
+                    throw new FeatureException(ex.Message);
+                }
             }
 
             return new XSltTransformationResponse(isPassed,result);

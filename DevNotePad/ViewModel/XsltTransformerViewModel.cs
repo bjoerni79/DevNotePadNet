@@ -1,10 +1,14 @@
-﻿using DevNotePad.MVVM;
+﻿using DevNotePad.Features;
+using DevNotePad.Features.Xml;
+using DevNotePad.MVVM;
 using Generic.MVVM;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace DevNotePad.ViewModel
 {
@@ -24,6 +28,10 @@ namespace DevNotePad.ViewModel
         public string? XmlContent { get; set; }
 
         public string? Result { get; set; }
+
+        public bool EnableScript { get; set; }
+
+        public bool EnableDocumentFunction { get; set; }
 
         public IRefreshCommand? ImportFromText { get; private set; }
 
@@ -101,11 +109,38 @@ namespace DevNotePad.ViewModel
 
             if (runValidation)
             {
-                //TODO: Read the XML Content as TextReader
+                var xsltService = FeatureFactory.CreateXsltTransformer();
+                XSltTransformationResponse? response = null;
 
-                //TODO: Read the XSLT as XML Reader
+                var parameter = new XsltParameter(EnableScript, EnableDocumentFunction);
 
-                //TODO: Run the service in a try..catch and return the value or the error.
+                try
+                {
+                    // Read the XML Content as TextReader...
+                    using (var textReader = new StringReader(XmlContent))
+                    using (var fileStream = File.OpenText(TransformationFile))
+                    using (var xmlReader = XmlReader.Create(fileStream))
+                    {
+                        var request = new XSltTransformationRequest(textReader, xmlReader,parameter);
+                        response = xsltService.Transform(request);
+                    }
+                }
+                catch (FeatureException featureException)
+                {
+                    Result = featureException.BuildReport();
+                }
+
+                if (response != null)
+                {
+                    if (response.IsPassed)
+                    {
+                        Result = response.Result;
+                    }
+                    else
+                    {
+                        Result = "Internal Error.";
+                    }
+                }
             }
 
             RaisePropertyChange("Result");

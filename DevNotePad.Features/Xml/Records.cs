@@ -17,7 +17,9 @@ namespace DevNotePad.Features.Xml
 
     public record XPathQueryResponse (bool IsMatching, string Result);
 
-    public record XSltTransformationRequest(TextReader XmlContent, XmlReader Transformation);
+    public record XsltParameter (bool EnableScript, bool EnableDocumentFunction);
+
+    public record XSltTransformationRequest(TextReader XmlContent, XmlReader Transformation, XsltParameter Parameter);
 
     public record XSltTransformationResponse (bool IsPassed, string Result);
 }
