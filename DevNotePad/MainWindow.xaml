@@ -63,6 +63,10 @@
             <Setter Property="MinWidth" Value="60"/>
         </Style>
 
+        <Style x:Key="defaultMenuItem" TargetType="MenuItem">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        
         <ContextMenu x:Key="editorContextMenu">
             <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=Cut}" />
             <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=Copy}"/>
@@ -110,90 +114,90 @@
     </Window.Resources>
 
     <DockPanel LastChildFill="True" >
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="File">
-                <MenuItem Header="New" InputGestureText="Ctrl+N" Command="{Binding Path=New}"/>
+        <Menu DockPanel.Dock="Top" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" >
+            <MenuItem Style="{StaticResource defaultMenuItem}" Header="File">
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="New" InputGestureText="Ctrl+N" Command="{Binding Path=New}"/>
                 <Separator/>
-                <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding Path=Open}"/>
-                <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding Path=Save}"/>
-                <MenuItem Header="Save As" Command="{Binding Path=SaveAs}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Open" InputGestureText="Ctrl+O" Command="{Binding Path=Open}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Save" InputGestureText="Ctrl+S" Command="{Binding Path=Save}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Save As" Command="{Binding Path=SaveAs}" />
                 <Separator/>
-                <MenuItem Header="Open Binary" Command="{Binding Path=OpenBinary}" />
-                <MenuItem Header="Save Binary" Command="{Binding Path=SaveBinary}" />
-                <MenuItem Header="Save Binary As" Command="{Binding Path=SaveAsBinary}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Open Binary" Command="{Binding Path=OpenBinary}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Save Binary" Command="{Binding Path=SaveBinary}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Save Binary As" Command="{Binding Path=SaveAsBinary}"/>
                 <Separator/>
-                <MenuItem Header="Reload" InputGestureText="Ctrl+R" Command="{Binding Path=Reload}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reload" InputGestureText="Ctrl+R" Command="{Binding Path=Reload}" />
                 <Separator/>
-                <MenuItem Header="Close" Command="{Binding Path=Close}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Close" Command="{Binding Path=Close}"/>
             </MenuItem>
-            <MenuItem Header="Edit">
-                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=Cut}" />
-                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=Copy}"/>
-                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=Paste}"/>
-                <MenuItem Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
+            <MenuItem Style="{StaticResource defaultMenuItem}" Header="Edit">
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=Cut}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=Copy}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=Paste}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
                 <Separator/>
-                <MenuItem Header="Find" Command="{Binding Path=Find}" />
-                <MenuItem Header="Replace" Command="{Binding Path=Replace}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Find" Command="{Binding Path=Find}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Replace" Command="{Binding Path=Replace}" />
                 <Separator/>
-                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding Path=SelectAll}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Select All" InputGestureText="Ctrl+A" Command="{Binding Path=SelectAll}"/>
                 <Separator/>
-                <MenuItem Header="JSON">
-                    <MenuItem Header="To Tree View" Command="{Binding Path=JsonToTreeParser}"/>
-                    <MenuItem Header="Format" Command="{Binding Path=JsonFormatter}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="JSON">
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="To Tree View" Command="{Binding Path=JsonToTreeParser}"/>
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Format" Command="{Binding Path=JsonFormatter}" />
                 </MenuItem>
-                <MenuItem Header="XML">
-                    <MenuItem Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />
-                    <MenuItem Header="Format" Command="{Binding Path=XmlFormatter}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="XML">
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="To Tree View" Command="{Binding Path=XmlToTreeParser}" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Format" Command="{Binding Path=XmlFormatter}"/>
                     <!--<MenuItem IsEnabled="False" Header="Validate"/>-->
                 </MenuItem>
-                <MenuItem Header="Text">
-                    <MenuItem Header="Split" Command="{Binding Path=TextSplit}"/>
-                    <MenuItem Header="Group" Command="{Binding Path=TextGroup}"/>
-                    <MenuItem Header="To Lower" Command="{Binding Path=TextToLower}"/>
-                    <MenuItem Header="To Upper" Command="{Binding Path=TextToUpper}"/>
-                    <MenuItem Header="Trim" Command="{Binding Path=TextTrim}" />
-                    <MenuItem Header="Count" Command="{Binding Path=TextCountLength}"/>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Text">
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Split" Command="{Binding Path=TextSplit}"/>
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Group" Command="{Binding Path=TextGroup}"/>
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="To Lower" Command="{Binding Path=TextToLower}"/>
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="To Upper" Command="{Binding Path=TextToUpper}"/>
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Trim" Command="{Binding Path=TextTrim}" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Count" Command="{Binding Path=TextCountLength}"/>
                 </MenuItem>
-                <MenuItem Header="Hex Byte">
-                    <MenuItem Header="Hex Byte Count" Command="{Binding Path=TextHexCountLength}" />
-                    <MenuItem Header="Format" Command="{Binding Path=TextFormatHex}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Hex Byte">
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Hex Byte Count" Command="{Binding Path=TextHexCountLength}" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Format" Command="{Binding Path=TextFormatHex}" />
                 </MenuItem>
 
             </MenuItem>
-                     
-            <MenuItem Header="Tools">
-                <MenuItem Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
-                <MenuItem Header="XML">
-                    <MenuItem Header="Schema Validator" Command="{Binding Path=SchemaValidatorTool}" />
-                    <MenuItem Header="XPath Query" Command="{Binding Path=XPathQueryTool}" />
-                    <MenuItem Header="XSLT Transformation" Command="{Binding Path=XSltTransformationTool}" />
+
+            <MenuItem Style="{StaticResource defaultMenuItem}" Header="Tools">
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="XML">
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Schema Validator" Command="{Binding Path=SchemaValidatorTool}" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="XPath Query" Command="{Binding Path=XPathQueryTool}" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="XSLT Transformation" Command="{Binding Path=XSltTransformationTool}" />
                 </MenuItem>
-                
-                <MenuItem Header="UICC">
-                    <MenuItem Header="Decode TLV"  Command="{Binding Path=DecodeTlv}" />
-                    <MenuItem Header="Applet Tool" Command="{Binding Path=AppletTool}" />
+
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="UICC">
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Decode TLV"  Command="{Binding Path=DecodeTlv}" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Applet Tool" Command="{Binding Path=AppletTool}" />
                 </MenuItem>
             </MenuItem>
 
             <MenuItem Header="Layout">
-                <MenuItem Command="{Binding Path=ToggleLineWrap}" IsChecked="{Binding Path=LineWrapMode,Mode=OneWay}" Header="Text Wrap Enabled"></MenuItem>
-                <MenuItem Command="{Binding Path=ToggleScratchPad}" IsChecked="{Binding Path=ScratchPadMode,Mode=OneWay}" Header="ScratchPad Enabled" />
-                <MenuItem Header="ScratchPad">
-                    <MenuItem Header="Reset" Command="{Binding Path=ScratchPadClearAll}" />
-                    <MenuItem Header="Reset Tree" Command="{Binding Path=ScratchPadClearTree}"/>
-                    <MenuItem Header="Reset Text" Command="{Binding Path=ScratchPadClearText}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Command="{Binding Path=ToggleLineWrap}" IsChecked="{Binding Path=LineWrapMode,Mode=OneWay}" Header="Text Wrap Enabled"></MenuItem>
+                <MenuItem Style="{StaticResource defaultMenuItem}" Command="{Binding Path=ToggleScratchPad}" IsChecked="{Binding Path=ScratchPadMode,Mode=OneWay}" Header="ScratchPad Enabled" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="ScratchPad">
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset" Command="{Binding Path=ScratchPadClearAll}" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset Tree" Command="{Binding Path=ScratchPadClearTree}"/>
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset Text" Command="{Binding Path=ScratchPadClearText}" />
                 </MenuItem>
 
                 <!--<MenuItem Command="{Binding Path=Reset}" Header="Reset" />-->
 
             </MenuItem>
 
-            <MenuItem Header="Help">
-                <MenuItem Command="{Binding About}"  Header="About"/>
+            <MenuItem Style="{StaticResource defaultMenuItem}" Header="Help">
+                <MenuItem Style="{StaticResource defaultMenuItem}" Command="{Binding About}"  Header="About"/>
             </MenuItem>
         </Menu>
 
-        <DockPanel DockPanel.Dock="Bottom" Margin="5 0 5 0" >
+        <DockPanel DockPanel.Dock="Bottom" Margin="5 0 5 0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="Row:"  />
