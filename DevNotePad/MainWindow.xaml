@@ -187,6 +187,12 @@
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset Tree" Command="{Binding Path=ScratchPadClearTree}"/>
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset Text" Command="{Binding Path=ScratchPadClearText}" />
                 </MenuItem>
+                
+                <!--<MenuItem Style="{StaticResource defaultMenuItem}" Header="Font Size">
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Small" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Medium" />
+                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Large" />
+                </MenuItem>-->
 
                 <!--<MenuItem Command="{Binding Path=Reset}" Header="Reset" />-->
 
@@ -197,7 +203,7 @@
             </MenuItem>
         </Menu>
 
-        <DockPanel DockPanel.Dock="Bottom" Margin="5 0 5 0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
+        <DockPanel DockPanel.Dock="Bottom" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="Row:"  />

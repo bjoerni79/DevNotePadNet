@@ -19,9 +19,12 @@ namespace DevNotePad.Shared
             settings.ScrollbarAlwaysOn = false;
             settings.LineWrap = false;
             settings.ScratchPadEnabled = false;
+            settings.FontSize = FontSizeMode.Medium;
 
             return settings;
         }
+
+        public FontSizeMode FontSize { get; set; }
 
         public bool ScrollbarAlwaysOn { get; set; }
 

@@ -40,6 +40,7 @@ namespace DevNotePad.ViewModel
         private CommandGroup fileGroup;
         private CommandGroup textOperationGroup;
         private CommandGroup scratchOperationGroup;
+        private CommandGroup toolGroup;
 
         public bool LineWrapMode { get; private set; }
 
@@ -836,8 +837,10 @@ namespace DevNotePad.ViewModel
             IsStateChanged = isChanged;
             RaisePropertyChange("State");
             RaisePropertyChange("IsStateChanged");
+
             fileGroup.Refresh();
             textOperationGroup.Refresh();
+            toolGroup.Refresh();
         }
 
         private Settings GetSettings()
@@ -911,7 +914,7 @@ namespace DevNotePad.ViewModel
 
         private bool IsTextOperationEnabled()
         {
-            return IsContentAvailable(textComponent);
+            return IsText() && IsContentAvailable(textComponent);
         }
 
         private bool IsScratchPadOperationEnabled()
@@ -1074,16 +1077,18 @@ namespace DevNotePad.ViewModel
             ToggleScratchPad = new DefaultCommand(OnToggleScratchPad);
 
             //...
-            SchemaValidatorTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.SchemaValidation));
-            XPathQueryTool = new DefaultCommand(() => OnXmlTool(XmlToolFeature.XPathQuery));
-            XSltTransformationTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.XSltTransformation));
+            SchemaValidatorTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.SchemaValidation), IsText);
+            XPathQueryTool = new DefaultCommand(() => OnXmlTool(XmlToolFeature.XPathQuery), IsText);
+            XSltTransformationTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.XSltTransformation), IsText);
 
             Base64Tool = new DefaultCommand(OnBase64Tool);
-            DecodeTlv = new DefaultCommand(OnDecodeTlv);
+            DecodeTlv = new DefaultCommand(OnDecodeTlv, IsText);
             AppletTool = new DefaultCommand(OnAppletTool);
 
             // About
             About = new DefaultCommand(OnAbout);
+
+            toolGroup = new CommandGroup(new IRefreshCommand[] {SchemaValidatorTool,XPathQueryTool,XSltTransformationTool,DecodeTlv});
         }
 
         #region Event Mechanism
