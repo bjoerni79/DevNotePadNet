@@ -29,10 +29,6 @@ namespace DevNotePad.Shared.Dialog
             Close();
         }
 
-        public void FocusDialog()
-        {
-
-        }
 
         public Window GetCurrentWindow()
         {

@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace DevNotePad.Shared.Dialog
 {
     /// <summary>
-    /// Interaction logic for ReplaceDialog.xaml
+    /// Interaction logic for RegularExpressionView.xaml
     /// </summary>
-    public partial class ReplaceDialog : Window, IDialog
+    public partial class RegularExpressionView : Window, IDialog
     {
-        public ReplaceDialog()
+        public RegularExpressionView()
         {
             InitializeComponent();
         }
@@ -28,7 +28,6 @@ namespace DevNotePad.Shared.Dialog
         {
             Close();
         }
-
 
         public Window GetCurrentWindow()
         {

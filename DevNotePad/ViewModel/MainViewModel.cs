@@ -181,6 +181,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? XSltTransformationTool { get; private set; }
 
+        public IRefreshCommand? RegularExpressionTool { get; private set; }
+
         public IRefreshCommand? Base64Tool { get; private set; }
 
         public IRefreshCommand? About { get; private set; }
@@ -529,6 +531,12 @@ namespace DevNotePad.ViewModel
         {
             var dialogService = ServiceHelper.GetToolDialogService();
             dialogService.OpenAppletToolDialog(Ui, textComponent);
+        }
+
+        private void OnRegularExpressionTool()
+        {
+            var toolService = ServiceHelper.GetToolDialogService();
+            toolService.OpenRegularExpressionDialog(Ui, textComponent);
         }
 
         private void OnBase64Tool()
@@ -1081,6 +1089,7 @@ namespace DevNotePad.ViewModel
             XPathQueryTool = new DefaultCommand(() => OnXmlTool(XmlToolFeature.XPathQuery), IsText);
             XSltTransformationTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.XSltTransformation), IsText);
 
+            RegularExpressionTool = new DefaultCommand(() => OnRegularExpressionTool(), IsText);
             Base64Tool = new DefaultCommand(OnBase64Tool);
             DecodeTlv = new DefaultCommand(OnDecodeTlv, IsText);
             AppletTool = new DefaultCommand(OnAppletTool);

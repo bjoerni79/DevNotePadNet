@@ -23,6 +23,8 @@ namespace DevNotePad.Service
 
         void OpenXSltTransfomerDialog(IMainViewUi ui, ITextComponent textComponent);
 
+        void OpenRegularExpressionDialog (IMainViewUi ui, ITextComponent textComponent);
+
         void OpenTreeView();
 
     }

@@ -9,8 +9,6 @@ namespace DevNotePad.Shared.Dialog
 {
     public interface IDialog
     {
-        void FocusDialog();
-
         Window GetCurrentWindow();
 
         void CloseDialog(bool confirmed);

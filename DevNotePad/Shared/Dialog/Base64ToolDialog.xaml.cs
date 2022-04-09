@@ -30,12 +30,6 @@ namespace DevNotePad.Shared.Dialog
             Close();
         }
 
-        public void FocusDialog()
-        {
-            // https://stackoverflow.com/questions/257587/bring-a-window-to-the-front-in-wpf
-
-            //this.Show();
-        }
 
         public Window GetCurrentWindow()
         {

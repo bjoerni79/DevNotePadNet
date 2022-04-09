@@ -16,5 +16,6 @@ namespace DevNotePad
         public const string ViewModelXmlXPath = "viewmodelxmlxpath";
         public const string ViewModelXmlXSlt = "viewmodelxmlxslt";
         public const string ViewModelTreeViewDialog = "viewmodeltreeviewdialog";
+        public const string ViewModelRegularExpressionDialog = "viewmodelregularexpressiondialog";
     }
 }

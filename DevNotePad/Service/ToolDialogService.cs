@@ -24,6 +24,7 @@ namespace DevNotePad.Service
         private XmlSchemaValidatorView? currentXmlSchemaValidatorView;
         private XmlXPathQueryView? currentXPathQueryView;
         private XsltTransformerView? currentXSltTransformerView;
+        private RegularExpressionView? currentRegularExpressionView;
         private TreeView? currentTreeView;
 
         internal ToolDialogService(Window owner)
@@ -211,6 +212,31 @@ namespace DevNotePad.Service
             OpenDialog(ui, textComponent, vm, currentXSltTransformerView, currentXSltTransformerView);
         }
 
+        public void OpenRegularExpressionDialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+            var facade = Init(ui);
+
+            RegularExpressionViewModel vm;
+            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelRegularExpressionDialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<RegularExpressionViewModel>(ViewModelInstances.ViewModelRegularExpressionDialog);
+            }
+            else
+            {
+                vm = new RegularExpressionViewModel();
+                facade.AddUnique(vm, ViewModelInstances.ViewModelRegularExpressionDialog);
+            }
+
+            if (currentRegularExpressionView != null)
+            {
+                currentRegularExpressionView.Close();
+            }
+
+            currentRegularExpressionView = new RegularExpressionView();
+            OpenDialog(ui, textComponent, vm, currentRegularExpressionView, currentRegularExpressionView);
+        }
+
         private ContainerFacade Init(IMainViewUi ui)
         {
             if (ui == null)
@@ -271,5 +297,7 @@ namespace DevNotePad.Service
             vm.Init(currentTreeView);
             currentTreeView.Show();
         }
+
+
     }
 }
