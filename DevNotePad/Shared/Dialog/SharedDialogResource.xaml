@@ -37,4 +37,9 @@
         <Setter Property="AcceptsTab" Value="True" />
     </Style>
 
+    <Style x:Key="defaultQueryTextBox" TargetType="TextBox">
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Height" Value="40" />
+    </Style>
+    
 </ResourceDictionary>
