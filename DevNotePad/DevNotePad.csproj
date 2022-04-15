@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Shared\Image\NotOK.png" />
+    <None Remove="Shared\Image\OK.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="Shared\Dialog\SharedDialogResource.xaml" />
     <Page Remove="Shared\SharedDialog.xaml" />
   </ItemGroup>
@@ -31,6 +36,8 @@
     <Resource Include="Shared\Dialog\SharedDialogResource.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Resource>
+    <Resource Include="Shared\Image\NotOK.png" />
+    <Resource Include="Shared\Image\OK.png" />
   </ItemGroup>
 
 </Project>
