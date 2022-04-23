@@ -15,6 +15,7 @@
         ShowInTaskbar="True"
         Topmost="True"
         
+        FocusManager.FocusedElement="{Binding ElementName=defaultFocusElement}"
         >
 
     <Window.Resources>
@@ -50,7 +51,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -71,9 +71,9 @@
         <Label Style="{StaticResource titleLabel}" Grid.Row="7" Grid.Column="0">Default Working Path</Label>
 
         <TextBox Style="{StaticResource textboxStyle}" Grid.Row="6" Grid.Column="1" Text="{Binding Path=EditorFontSize}"  IsReadOnly="True" ></TextBox>
-        <TextBox Style="{StaticResource textboxStyle}" Grid.Row="7" Grid.Column="1" Text="{Binding Path=DefaultWorkingPath,Mode=TwoWay}"></TextBox>
+        <TextBox x:Name="defaultFocusElement" Style="{StaticResource textboxStyle}" Grid.Row="7" Grid.Column="1" Text="{Binding Path=DefaultWorkingPath,Mode=TwoWay}"></TextBox>
 
-        <StackPanel Grid.Row="8" Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+        <StackPanel Grid.Row="8" Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 5 5" >
             <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Apply}">Apply</Button>
             <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Cancel}">Cancel</Button>
         </StackPanel>

@@ -1,5 +1,6 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Shared;
+using DevNotePad.Shared.Dialog;
 using Generic.MVVM;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,13 @@ namespace DevNotePad.ViewModel
 {
     public class SettingsDialogViewModel : AbstractViewModel
     {
+        private IDialog dialogInstance;
+
         public SettingsDialogViewModel()
         {
             Apply = new DefaultCommand(() => Close(true));
             Cancel = new DefaultCommand(() => Close(false));
+
         }
 
         #region UI Bindings
@@ -41,7 +45,25 @@ namespace DevNotePad.ViewModel
         /// <summary>
         /// Populates the properties used for binding with the current values in the settings instance
         /// </summary>
-        public void Init()
+        public void Init(IDialog dialog)
+        {
+            dialogInstance = dialog;
+
+            Populate();
+        }
+
+        private void Close(bool apply)
+        {
+            if (apply)
+            {
+                ApplyValues();
+
+            }
+
+            dialogInstance.CloseDialog(apply);
+        }
+
+        private void Populate()
         {
             var facade = ServiceHelper.GetFacade();
             var settings = facade.Get<Settings>(Bootstrap.SettingsId);
@@ -57,24 +79,18 @@ namespace DevNotePad.ViewModel
             // No Update required. Gets loaded before UI is active.
         }
 
-        private void Close(bool apply)
+        private void ApplyValues()
         {
-            if (apply)
-            {
-                // Write the value back to the settings 
-                var facade = ServiceHelper.GetFacade();
-                var settings = facade.Get<Settings>(Bootstrap.SettingsId);
+            // Write the value back to the settings 
+            var facade = ServiceHelper.GetFacade();
+            var settings = facade.Get<Settings>(Bootstrap.SettingsId);
 
-                settings.LineWrap = LineWrap;
-                settings.ScratchPadEnabled = EnableScratchPadView;
-                settings.IgnoreChanged = IgnoreChanges;
-                settings.IgnoreReload = IgnoreChangesOnReload;
-                settings.DefaultPath = DefaultWorkingPath;
-                // Font Size is TODO
-
-            }
-
-            //TODO: How to close this?  Can I reuse an Interface?
+            settings.LineWrap = LineWrap;
+            settings.ScratchPadEnabled = EnableScratchPadView;
+            settings.IgnoreChanged = IgnoreChanges;
+            settings.IgnoreReload = IgnoreChangesOnReload;
+            settings.DefaultPath = DefaultWorkingPath;
+            // Font Size is TODO
         }
     }
 }

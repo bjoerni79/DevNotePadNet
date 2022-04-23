@@ -129,9 +129,9 @@ namespace DevNotePad.Service
             }
 
             // Create a new view and associate the VM
-            vm.Init();
-
             currentSettingsDialogView = new SettingsDialog();
+
+            vm.Init(currentSettingsDialogView);
             currentSettingsDialogView.DataContext = vm;
             currentSettingsDialogView.Owner = defaultOwner;
 
