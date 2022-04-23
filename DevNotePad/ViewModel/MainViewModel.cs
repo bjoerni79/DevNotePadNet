@@ -42,11 +42,6 @@ namespace DevNotePad.ViewModel
         private CommandGroup scratchOperationGroup;
         private CommandGroup toolGroup;
 
-        public bool LineWrapMode { get; private set; }
-
-        public bool ScratchPadMode { get; private set; }
-
-
         public string State { get; private set; }
 
         public bool IsStateChanged { get; private set; }
@@ -101,9 +96,7 @@ namespace DevNotePad.ViewModel
 
         // Layout
 
-        public IRefreshCommand? ToggleLineWrap { get; private set; }
-
-        public IRefreshCommand? ToggleScratchPad { get; private set; }
+        public IRefreshCommand? Settings { get; private set; }
 
         public IRefreshCommand? JsonFormatter { get; private set; }
 
@@ -300,30 +293,6 @@ namespace DevNotePad.ViewModel
         private void OnClose()
         {
             Ui!.CloseByViewModel();
-        }
-
-        private void OnToggleTextWrap()
-        {
-            var settings = GetSettings();
-
-            var lineWrap = settings.LineWrap;
-            LineWrapMode = !lineWrap;
-
-            settings.LineWrap = LineWrapMode;
-            RaisePropertyChange("LineWrapMode");
-            ApplySettings();
-        }
-
-        private void OnToggleScratchPad()
-        {
-            var settings = GetSettings();
-
-            ScratchPadMode = !ScratchPadMode;
-            settings.ScratchPadEnabled = ScratchPadMode;
-
-            RaisePropertyChange("ScratchPadMode");
-            ApplySettings();
-
         }
 
         private void OnJson(JsonOperation operation)
@@ -719,6 +688,13 @@ namespace DevNotePad.ViewModel
             }
         }
 
+        private void OnSettings()
+        {
+            var dialogService = ServiceHelper.GetDialogService();
+            dialogService.ShowSettings();
+            ApplySettings();
+        }
+
         #endregion
 
         #region IMainViewModel
@@ -747,11 +723,8 @@ namespace DevNotePad.ViewModel
 
             if (Ui != null)
             {
-                //ScrollbarMode = settings.ScrollbarAlwaysOn;
-                LineWrapMode = settings.LineWrap;
-
                 //Ui.SetScrollbars(ScrollbarMode);
-                Ui.SetWordWrap(LineWrapMode);
+                Ui.SetWordWrap(settings.LineWrap);
 
                 //TODO: Update Ui in regard of ScratchPad
                 Ui.SetScratchPad(settings.ScratchPadEnabled);
@@ -927,7 +900,18 @@ namespace DevNotePad.ViewModel
 
         private bool IsScratchPadOperationEnabled()
         {
-            return ScratchPadMode && IsContentAvailable(scratchPadComponent);
+            return IsScratchPadMode() && IsContentAvailable(scratchPadComponent);
+        }
+
+        private bool IsScratchPadMode ()
+        {
+            var settings = GetSettings();
+            if (settings != null)
+            {
+                return settings.ScratchPadEnabled;
+            }
+
+            return false;
         }
 
         private bool IsContentAvailable(ITextComponent component)
@@ -1028,12 +1012,12 @@ namespace DevNotePad.ViewModel
         {
             // ScratchPad
             CopyToText = new DefaultCommand(OnCopyToText,IsScratchPadOperationEnabled);
-            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad, ()=>ScratchPadMode);
-            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad, ()=>ScratchPadMode);
+            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad, IsScratchPadMode);
+            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad, IsScratchPadMode);
             ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad, IsScratchPadOperationEnabled);
             ScratchPadCopy = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Copy), IsScratchPadOperationEnabled);
             ScratchPadCut = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Cut), IsScratchPadOperationEnabled);
-            ScratchPadPaste = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Paste),()=>ScratchPadMode);
+            ScratchPadPaste = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Paste),IsScratchPadMode);
             ScratchPadXmlFormat = new DefaultCommand(() => OnScratchPadXml(XmlOperation.Format), IsScratchPadOperationEnabled);
             ScratchPadXmlToTree = new DefaultCommand(() => OnScratchPadXml(XmlOperation.ToTree), IsScratchPadOperationEnabled);
             ScratchPadJsonFormat = new DefaultCommand(() => OnScratchPadJson(JsonOperation.Format), IsScratchPadOperationEnabled);
@@ -1081,8 +1065,7 @@ namespace DevNotePad.ViewModel
             InitScratchPadMenu();
 
             // Layout
-            ToggleLineWrap = new DefaultCommand(OnToggleTextWrap);
-            ToggleScratchPad = new DefaultCommand(OnToggleScratchPad);
+            Settings = new DefaultCommand(OnSettings);
 
             //...
             SchemaValidatorTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.SchemaValidation), IsText);

@@ -8,14 +8,15 @@ namespace DevNotePad
 {
     public static class ViewModelInstances
     {
-        public const string ViewModelFindDialog = "viewmodelfinddialog";
-        public const string ViewModelReplaceDialog = "viewmodelreplacedialog";
-        public const string ViewModelBase64Dialog = "viewModelbase64dialog";
-        public const string ViewModelAppletDialog = "viewmodelappletdialog";
-        public const string ViewModelXmlValidatorSchemaDialog = "viewmodelxmlvalidatorschemadialog";
-        public const string ViewModelXmlXPath = "viewmodelxmlxpath";
-        public const string ViewModelXmlXSlt = "viewmodelxmlxslt";
-        public const string ViewModelTreeViewDialog = "viewmodeltreeviewdialog";
-        public const string ViewModelRegularExpressionDialog = "viewmodelregularexpressiondialog";
+        public const string FindDialog = "viewmodelfinddialog";
+        public const string ReplaceDialog = "viewmodelreplacedialog";
+        public const string Base64Dialog = "viewModelbase64dialog";
+        public const string AppletDialog = "viewmodelappletdialog";
+        public const string XmlValidatorSchemaDialog = "viewmodelxmlvalidatorschemadialog";
+        public const string XmlXPath = "viewmodelxmlxpath";
+        public const string XmlXSlt = "viewmodelxmlxslt";
+        public const string TreeViewDialog = "viewmodeltreeviewdialog";
+        public const string RegularExpressionDialog = "viewmodelregularexpressiondialog";
+        public const string SettingsDialog = "viewmodelsettingsdialog";
     }
 }

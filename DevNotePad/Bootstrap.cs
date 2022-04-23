@@ -14,7 +14,7 @@ namespace DevNotePad
 {
     public class Bootstrap
     {
-        //TODO: Remove these values from the bootstrap class
+        // See ViewModelInstances and Events for other
         public const string BootstrapId = "bootstrap";
         public const string EventControllerId = "eventcontrollerid";
         public const string DialogServiceId = "dialogserviceid";

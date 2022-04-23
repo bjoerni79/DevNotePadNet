@@ -26,6 +26,8 @@
         <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding Path=Copy}"/>
         <KeyBinding Modifiers="Ctrl" Key="A" Command="{Binding Path=SelectAll}"/>
 
+        
+        
     </Window.InputBindings>
 
     <Window.Resources>
@@ -181,22 +183,19 @@
             </MenuItem>
 
             <MenuItem Header="Layout">
+
+                <MenuItem Style="{StaticResource defaultMenuItem}">Settings</MenuItem>
+                
                 <MenuItem Style="{StaticResource defaultMenuItem}" Command="{Binding Path=ToggleLineWrap}" IsChecked="{Binding Path=LineWrapMode,Mode=OneWay}" Header="Text Wrap Enabled"></MenuItem>
                 <MenuItem Style="{StaticResource defaultMenuItem}" Command="{Binding Path=ToggleScratchPad}" IsChecked="{Binding Path=ScratchPadMode,Mode=OneWay}" Header="ScratchPad Enabled" />
-                <MenuItem Style="{StaticResource defaultMenuItem}" Header="ScratchPad">
+ 
+                
+                <!--<MenuItem Style="{StaticResource defaultMenuItem}" Header="ScratchPad">
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset" Command="{Binding Path=ScratchPadClearAll}" />
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset Tree" Command="{Binding Path=ScratchPadClearTree}"/>
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset Text" Command="{Binding Path=ScratchPadClearText}" />
-                </MenuItem>
-                
-                <!--<MenuItem Style="{StaticResource defaultMenuItem}" Header="Font Size">
-                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Small" />
-                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Medium" />
-                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Large" />
                 </MenuItem>-->
-
-                <!--<MenuItem Command="{Binding Path=Reset}" Header="Reset" />-->
-
+             
             </MenuItem>
 
             <MenuItem Style="{StaticResource defaultMenuItem}" Header="Help">

@@ -1,0 +1,82 @@
+﻿<Window x:Class="DevNotePad.Shared.Dialog.SettingsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DevNotePad.Shared.Dialog"
+        mc:Ignorable="d"
+        Title="SettingsDialog" 
+        Height="250" 
+        Width="600"
+        
+        ResizeMode="NoResize" 
+        WindowStartupLocation="CenterOwner" 
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="True"
+        Topmost="True"
+        
+        >
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="SharedDialogResource.xaml" />
+                <ResourceDictionary>
+                    <!-- Style for the check boxes -->
+                    <Style x:Key="checkboxStyle" TargetType="CheckBox">
+                        <Setter Property="Margin" Value="5 0 5 5"/>
+                        <Setter Property="FontSize" Value="14"/>
+                    </Style>
+                    <!-- Style for the text boxes -->
+                    <Style x:Key="textboxStyle" TargetType="TextBox">
+                        <Setter Property="Margin" Value="2 0 2 2"/>
+                        <Setter Property="FontSize" Value="12"/>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+
+
+            
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Label Style="{StaticResource topLevelTitleLabel}" Grid.Column="0" Grid.ColumnSpan="2" >Environment</Label>
+
+        <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" >Line Wrap</CheckBox>
+        <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" >Enable ScratchPad View</CheckBox>
+        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" >Ignore Changes</CheckBox>
+        <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" >Ignore Changes on Reload</CheckBox>
+
+        <Label Style="{StaticResource topLevelTitleLabel}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">Custom</Label>
+        <Label Style="{StaticResource titleLabel}" Grid.Row="6" Grid.Column="0">Editor Font Size</Label>
+        <Label Style="{StaticResource titleLabel}" Grid.Row="7" Grid.Column="0">Default Working Path</Label>
+
+        <TextBox Style="{StaticResource textboxStyle}" Grid.Row="6" Grid.Column="1"></TextBox>
+        <TextBox Style="{StaticResource textboxStyle}" Grid.Row="7" Grid.Column="1"></TextBox>
+
+        <StackPanel Grid.Row="8" Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" >
+            <Button Style="{StaticResource dialogButton}">Apply</Button>
+            <Button Style="{StaticResource dialogButton}">Cancel</Button>
+        </StackPanel>
+        
+    </Grid>
+</Window>

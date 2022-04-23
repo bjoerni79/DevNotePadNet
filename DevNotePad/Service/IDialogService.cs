@@ -30,5 +30,6 @@ namespace DevNotePad.Service
 
         bool ShowConfirmationDialog(string question, string title,string okButtonText);
 
+        void ShowSettings();
     }
 }

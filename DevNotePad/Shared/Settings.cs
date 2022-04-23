@@ -16,17 +16,23 @@ namespace DevNotePad.Shared
         public static Settings GetDefault()
         {
             var settings = new Settings();
-            settings.ScrollbarAlwaysOn = false;
             settings.LineWrap = false;
             settings.ScratchPadEnabled = false;
-            settings.FontSize = FontSizeMode.Medium;
+            settings.EditorFontSize = 12;
+            settings.IgnoreChanged = true;
+            settings.IgnoreReload = true;
+            settings.DefaultPath = null;
 
             return settings;
         }
 
-        public FontSizeMode FontSize { get; set; }
+        public int EditorFontSize { get; set; }
 
-        public bool ScrollbarAlwaysOn { get; set; }
+        public bool IgnoreChanged { get; set; }
+
+        public bool IgnoreReload { get; set; }
+
+        public string? DefaultPath { get; set; }
 
         public bool LineWrap { get; set; }
 

@@ -37,15 +37,15 @@ namespace DevNotePad.Service
             var facade = Init(ui);
 
             AppletToolViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelAppletDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.AppletDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<AppletToolViewModel>(ViewModelInstances.ViewModelAppletDialog);
+                vm = facade.Get<AppletToolViewModel>(ViewModelInstances.AppletDialog);
             }
             else
             {
                 vm = new AppletToolViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelAppletDialog);
+                facade.AddUnique(vm, ViewModelInstances.AppletDialog);
             }
 
             if (currentAppletToolDialog != null)
@@ -63,15 +63,15 @@ namespace DevNotePad.Service
             var facade = Init(ui);
 
             Base64ToolViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelBase64Dialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.Base64Dialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<Base64ToolViewModel>(ViewModelInstances.ViewModelBase64Dialog);
+                vm = facade.Get<Base64ToolViewModel>(ViewModelInstances.Base64Dialog);
             }
             else
             {
                 vm = new Base64ToolViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelBase64Dialog);
+                facade.AddUnique(vm, ViewModelInstances.Base64Dialog);
             }
 
             if (currentBase64ToolDialog != null)
@@ -88,15 +88,15 @@ namespace DevNotePad.Service
             var facade = Init(ui);
 
             FindDialogViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelFindDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.FindDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<FindDialogViewModel>(ViewModelInstances.ViewModelFindDialog);
+                vm = facade.Get<FindDialogViewModel>(ViewModelInstances.FindDialog);
             }
             else
             {
                 vm = new FindDialogViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelFindDialog);
+                facade.AddUnique(vm, ViewModelInstances.FindDialog);
             }
 
             // Workaround:  We have to close the view and open a new one. All data is stored in the view model
@@ -115,15 +115,15 @@ namespace DevNotePad.Service
             var facade = Init(ui);
 
             ReplaceDialogViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelReplaceDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.ReplaceDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<ReplaceDialogViewModel>(ViewModelInstances.ViewModelReplaceDialog);
+                vm = facade.Get<ReplaceDialogViewModel>(ViewModelInstances.ReplaceDialog);
             }
             else
             {
                 vm = new ReplaceDialogViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelReplaceDialog);
+                facade.AddUnique(vm, ViewModelInstances.ReplaceDialog);
             }
 
             // Workaround:  We have to close the view and open a new one. All data is stored in the view model
@@ -141,15 +141,15 @@ namespace DevNotePad.Service
             var facade = Init(ui);
 
             XmlSchemaValidatorViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelXmlValidatorSchemaDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.XmlValidatorSchemaDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<XmlSchemaValidatorViewModel>(ViewModelInstances.ViewModelXmlValidatorSchemaDialog);
+                vm = facade.Get<XmlSchemaValidatorViewModel>(ViewModelInstances.XmlValidatorSchemaDialog);
             }
             else
             {
                 vm = new XmlSchemaValidatorViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelXmlValidatorSchemaDialog);
+                facade.AddUnique(vm, ViewModelInstances.XmlValidatorSchemaDialog);
             }
 
             // Workaround:  If the view is still visible this is the only way of re-opening it. 
@@ -167,15 +167,15 @@ namespace DevNotePad.Service
             var facade = Init(ui);
 
             XPathQueryViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelXmlXPath);
+            var isVmAvailable = facade.Exists(ViewModelInstances.XmlXPath);
             if (isVmAvailable)
             {
-                vm = facade.Get<XPathQueryViewModel>(ViewModelInstances.ViewModelXmlXPath);
+                vm = facade.Get<XPathQueryViewModel>(ViewModelInstances.XmlXPath);
             }
             else
             {
                 vm = new XPathQueryViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelXmlXPath);
+                facade.AddUnique(vm, ViewModelInstances.XmlXPath);
             }
 
             if (currentXPathQueryView != null)
@@ -192,15 +192,15 @@ namespace DevNotePad.Service
             var facade = Init(ui);
 
             XsltTransformerViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelXmlXSlt);
+            var isVmAvailable = facade.Exists(ViewModelInstances.XmlXSlt);
             if (isVmAvailable)
             {
-                vm = facade.Get<XsltTransformerViewModel>(ViewModelInstances.ViewModelXmlXSlt);
+                vm = facade.Get<XsltTransformerViewModel>(ViewModelInstances.XmlXSlt);
             }
             else
             {
                 vm = new XsltTransformerViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelXmlXSlt);
+                facade.AddUnique(vm, ViewModelInstances.XmlXSlt);
             }
 
             if (currentXSltTransformerView != null)
@@ -217,15 +217,15 @@ namespace DevNotePad.Service
             var facade = Init(ui);
 
             RegularExpressionViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelRegularExpressionDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.RegularExpressionDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<RegularExpressionViewModel>(ViewModelInstances.ViewModelRegularExpressionDialog);
+                vm = facade.Get<RegularExpressionViewModel>(ViewModelInstances.RegularExpressionDialog);
             }
             else
             {
                 vm = new RegularExpressionViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelRegularExpressionDialog);
+                facade.AddUnique(vm, ViewModelInstances.RegularExpressionDialog);
             }
 
             if (currentRegularExpressionView != null)
@@ -275,15 +275,15 @@ namespace DevNotePad.Service
             var facade = FacadeFactory.Create();
 
             TreeViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.ViewModelTreeViewDialog);
+            var isVmAvailable = facade.Exists(ViewModelInstances.TreeViewDialog);
             if (isVmAvailable)
             {
-                vm = facade.Get<TreeViewModel>(ViewModelInstances.ViewModelTreeViewDialog);
+                vm = facade.Get<TreeViewModel>(ViewModelInstances.TreeViewDialog);
             }
             else
             {
                 vm = new TreeViewModel();
-                facade.AddUnique(vm, ViewModelInstances.ViewModelTreeViewDialog);
+                facade.AddUnique(vm, ViewModelInstances.TreeViewDialog);
             }
 
             if (currentTreeView != null)

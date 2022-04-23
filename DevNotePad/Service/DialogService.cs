@@ -103,6 +103,17 @@ namespace DevNotePad.Service
             return new DialogReturnValue(false, String.Empty);
         }
 
+        public void ShowSettings()
+        {
+            //TODO: Get the ViewModel or create one
+
+            //TODO: Clean up the old settings UI if available
+
+            //TODO: Create a new view and associate the VM
+
+            //TODO: Start the dialog as Modal!
+        }
+
         public void ShowWarningDialog(string warning, string component)
         {
             ShowWarningDialog(warning, component, defaultOwner);
