@@ -66,7 +66,7 @@ namespace DevNotePad
         private void LoadSettings()
         {
             //TODO: Load the settings, if found..
-            var settings = new Settings();
+            var settings = Settings.GetDefault();
 
             // Store it in the container
             var facade = FacadeFactory.Create();

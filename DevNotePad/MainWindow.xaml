@@ -184,11 +184,7 @@
 
             <MenuItem Header="Layout">
 
-                <MenuItem Style="{StaticResource defaultMenuItem}">Settings</MenuItem>
-                
-                <MenuItem Style="{StaticResource defaultMenuItem}" Command="{Binding Path=ToggleLineWrap}" IsChecked="{Binding Path=LineWrapMode,Mode=OneWay}" Header="Text Wrap Enabled"></MenuItem>
-                <MenuItem Style="{StaticResource defaultMenuItem}" Command="{Binding Path=ToggleScratchPad}" IsChecked="{Binding Path=ScratchPadMode,Mode=OneWay}" Header="ScratchPad Enabled" />
- 
+                <MenuItem Style="{StaticResource defaultMenuItem}" Command="{Binding Path=Settings}" Header="Settings" />
                 
                 <!--<MenuItem Style="{StaticResource defaultMenuItem}" Header="ScratchPad">
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="Reset" Command="{Binding Path=ScratchPadClearAll}" />

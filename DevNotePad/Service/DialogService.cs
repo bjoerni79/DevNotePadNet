@@ -17,6 +17,8 @@ namespace DevNotePad.Service
     {
         private Window defaultOwner;
 
+        private SettingsDialog? currentSettingsDialogView;
+
         internal DialogService(Window owner)
         {
             this.defaultOwner = owner;
@@ -105,13 +107,36 @@ namespace DevNotePad.Service
 
         public void ShowSettings()
         {
-            //TODO: Get the ViewModel or create one
+            var facade = ServiceHelper.GetFacade();
+            SettingsDialogViewModel vm;
 
-            //TODO: Clean up the old settings UI if available
+            // Get the ViewModel or create one
+            var isVmAvailable = facade.Exists(ViewModelInstances.SettingsDialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<SettingsDialogViewModel>(ViewModelInstances.SettingsDialog);
+            }
+            else
+            {
+                vm = new SettingsDialogViewModel();
+                facade.AddUnique(vm, ViewModelInstances.SettingsDialog);
+            }
 
-            //TODO: Create a new view and associate the VM
+            // Clean up the old settings UI if available
+            if (currentSettingsDialogView != null)
+            {
+                currentSettingsDialogView.Close();
+            }
 
-            //TODO: Start the dialog as Modal!
+            // Create a new view and associate the VM
+            vm.Init();
+
+            currentSettingsDialogView = new SettingsDialog();
+            currentSettingsDialogView.DataContext = vm;
+            currentSettingsDialogView.Owner = defaultOwner;
+
+            // Start the dialog as Modal!
+            currentSettingsDialogView.Show();
         }
 
         public void ShowWarningDialog(string warning, string component)
