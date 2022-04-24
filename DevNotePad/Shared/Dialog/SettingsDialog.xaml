@@ -28,11 +28,21 @@
                         <Setter Property="Margin" Value="5 0 5 5"/>
                         <Setter Property="FontSize" Value="12"/>
                     </Style>
-                    <!-- Style for the text boxes -->
+
+                    <Style x:Key="separatedcheckboxStyle" TargetType="CheckBox">
+                        <Setter Property="Margin" Value="5 10 5 5"/>
+                        <Setter Property="FontSize" Value="12"/>
+                    </Style>
+
+
+                    <!-- Default Style for the text boxes -->
                     <Style x:Key="textboxStyle" TargetType="TextBox">
                         <Setter Property="Margin" Value="2 0 2 2"/>
                         <Setter Property="FontSize" Value="12"/>
                     </Style>
+
+
+
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
@@ -43,6 +53,7 @@
     
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -63,17 +74,18 @@
 
         <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=LineWrap,Mode=TwoWay}" >Line Wrap</CheckBox>
         <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=EnableScratchPadView,Mode=TwoWay}" >Enable ScratchPad View</CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=IgnoreChanges,Mode=TwoWay}" >Ignore Changes</CheckBox>
+        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource separatedcheckboxStyle}" IsChecked="{Binding Path=IgnoreChanges,Mode=TwoWay}" >Ignore Changes</CheckBox>
         <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=IgnoreChangesOnReload,Mode=TwoWay}" >Ignore Changes on Reload</CheckBox>
+        <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=IgnoreOverwriteChanges,Mode=TwoWay}" >Ignore Changes on open files by other</CheckBox>
+        
+        <Label Style="{StaticResource topLevelTitleLabel}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">Custom</Label>
+        <Label Style="{StaticResource titleLabel}" Grid.Row="7" Grid.Column="0">Editor Font Size</Label>
+        <Label Style="{StaticResource titleLabel}" Grid.Row="8" Grid.Column="0">Default Working Path</Label>
 
-        <Label Style="{StaticResource topLevelTitleLabel}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">Custom</Label>
-        <Label Style="{StaticResource titleLabel}" Grid.Row="6" Grid.Column="0">Editor Font Size</Label>
-        <Label Style="{StaticResource titleLabel}" Grid.Row="7" Grid.Column="0">Default Working Path</Label>
+        <TextBox Style="{StaticResource textboxStyle}" Grid.Row="7" Grid.Column="1" Text="{Binding Path=EditorFontSize}"  IsReadOnly="True" ></TextBox>
+        <TextBox x:Name="defaultFocusElement" Style="{StaticResource textboxStyle}" Grid.Row="8" Grid.Column="1" Text="{Binding Path=DefaultWorkingPath,Mode=TwoWay}"></TextBox>
 
-        <TextBox Style="{StaticResource textboxStyle}" Grid.Row="6" Grid.Column="1" Text="{Binding Path=EditorFontSize}"  IsReadOnly="True" ></TextBox>
-        <TextBox x:Name="defaultFocusElement" Style="{StaticResource textboxStyle}" Grid.Row="7" Grid.Column="1" Text="{Binding Path=DefaultWorkingPath,Mode=TwoWay}"></TextBox>
-
-        <StackPanel Grid.Row="8" Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 5 5" >
+        <StackPanel Grid.Row="9" Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 5 5" >
             <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Apply}">Apply</Button>
             <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Cancel}">Cancel</Button>
         </StackPanel>

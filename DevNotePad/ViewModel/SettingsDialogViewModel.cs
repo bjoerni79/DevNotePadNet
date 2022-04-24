@@ -32,6 +32,8 @@ namespace DevNotePad.ViewModel
 
         public bool IgnoreChangesOnReload { get; set; }
 
+        public bool IgnoreOverwriteChanges { get; set; }
+
         public string? EditorFontSize { get; set; }
 
         public string? DefaultWorkingPath { get; set; }
@@ -73,6 +75,7 @@ namespace DevNotePad.ViewModel
             EnableScratchPadView = settings.ScratchPadEnabled;
             IgnoreChanges = settings.IgnoreChanged;
             IgnoreChangesOnReload = settings.IgnoreReload;
+            IgnoreOverwriteChanges = settings.IgnoreOverwriteChanges;
             DefaultWorkingPath = settings.DefaultPath;
             EditorFontSize = settings.EditorFontSize.ToString();
 
@@ -89,6 +92,7 @@ namespace DevNotePad.ViewModel
             settings.ScratchPadEnabled = EnableScratchPadView;
             settings.IgnoreChanged = IgnoreChanges;
             settings.IgnoreReload = IgnoreChangesOnReload;
+            settings.IgnoreOverwriteChanges = IgnoreOverwriteChanges;
             settings.DefaultPath = DefaultWorkingPath;
             // Font Size is TODO
         }

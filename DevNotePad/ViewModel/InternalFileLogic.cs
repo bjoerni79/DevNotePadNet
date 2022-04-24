@@ -123,6 +123,9 @@ namespace DevNotePad.ViewModel
         /// <param name="filename">the filename</param>
         public void Save(string targetfilename)
         {
+            var settings = ServiceHelper.GetSettings();
+            var ignoreChanges = settings.IgnoreOverwriteChanges;
+
             if (!IsTextFormatAvailable)
             {
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Please save the content as binary", true));
@@ -145,7 +148,7 @@ namespace DevNotePad.ViewModel
                 }
 
                 bool doSave = true;
-                if (updateDetected)
+                if (!ignoreChanges && updateDetected)
                 {
                     var dialogService = ServiceHelper.GetDialogService();
                     var result = dialogService.ShowConfirmationDialog("The file in the file system is newer. Do you want to continue?", "Conflict dectected", "Save content");
@@ -457,9 +460,11 @@ namespace DevNotePad.ViewModel
         /// </summary>
         public void New()
         {
+            var settings = ServiceHelper.GetSettings();
+            bool ignoreChanges = settings.IgnoreChanged;
             bool proceed = true;
 
-            if (CurrentState == EditorState.ChangedNew || CurrentState == EditorState.Changed)
+            if (!ignoreChanges && (CurrentState == EditorState.ChangedNew || CurrentState == EditorState.Changed))
             {
                 var dialogService = ServiceHelper.GetDialogService();
                 proceed = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to continue?", "New", "Create New");
@@ -486,6 +491,9 @@ namespace DevNotePad.ViewModel
         /// </summary>
         public void Reload()
         {
+            var settings = ServiceHelper.GetSettings();
+            var ignoreReloadChanges = settings.IgnoreReload;
+
             if (!IsTextFormatAvailable)
             {
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Reload feature is not available for binary mode", true));
@@ -507,7 +515,7 @@ namespace DevNotePad.ViewModel
                     if (currentModifiedTimestamp > LatestTimeStamp)
                     {
                         bool doReload = true;
-                        if (CurrentState == EditorState.Changed || CurrentState == EditorState.ChangedNew)
+                        if (!ignoreReloadChanges && (CurrentState == EditorState.Changed || CurrentState == EditorState.ChangedNew))
                         {
                             var dialogService = ServiceHelper.GetDialogService();
                             doReload = dialogService.ShowConfirmationDialog("The text is not saved yet. Do you want to reload?", "Reload", "Reload Content");

@@ -719,7 +719,7 @@ namespace DevNotePad.ViewModel
 
         public void ApplySettings()
         {
-            var settings = GetSettings();
+            var settings = ServiceHelper.GetSettings();
 
             if (Ui != null)
             {
@@ -767,14 +767,16 @@ namespace DevNotePad.ViewModel
 
         public bool IsChanged()
         {
-            if (textLogic != null)
+            var isChanged = false;
+            var settings = ServiceHelper.GetSettings();
+            var ignoreChanges = settings.IgnoreChanged;
+
+            if (!ignoreChanges && textLogic != null)
             {
-                var isChangeRequired = textLogic.CurrentState == EditorState.Changed || textLogic.CurrentState == EditorState.ChangedNew;
-                return isChangeRequired;
+                isChanged = textLogic.CurrentState == EditorState.Changed || textLogic.CurrentState == EditorState.ChangedNew;
             }
 
-            return false;
-
+            return isChanged;
         }
 
         #endregion
@@ -822,24 +824,6 @@ namespace DevNotePad.ViewModel
             fileGroup.Refresh();
             textOperationGroup.Refresh();
             toolGroup.Refresh();
-        }
-
-        private Settings GetSettings()
-        {
-            Settings? settings = null;
-
-            var facade = FacadeFactory.Create();
-            if (facade != null)
-            {
-                settings = facade.Get<Settings>(Bootstrap.SettingsId);
-            }
-
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
-
-            return settings;
         }
 
         private void InitEvents()
@@ -905,7 +889,7 @@ namespace DevNotePad.ViewModel
 
         private bool IsScratchPadMode ()
         {
-            var settings = GetSettings();
+            var settings = ServiceHelper.GetSettings();
             if (settings != null)
             {
                 return settings.ScratchPadEnabled;

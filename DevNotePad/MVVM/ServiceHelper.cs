@@ -1,4 +1,5 @@
 ﻿using DevNotePad.Service;
+using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
 using Generic.MVVM.Event;
 using Generic.MVVM.IOC;
@@ -155,6 +156,24 @@ namespace DevNotePad.MVVM
             {
                 eventInstance.Trigger();
             }
+        }
+
+        internal static Settings GetSettings()
+        {
+            Settings? settings = null;
+
+            var facade = FacadeFactory.Create();
+            if (facade != null)
+            {
+                settings = facade.Get<Settings>(Bootstrap.SettingsId);
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            return settings;
         }
     }
 }
