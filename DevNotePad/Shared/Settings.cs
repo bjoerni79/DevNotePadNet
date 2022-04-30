@@ -64,30 +64,30 @@ namespace DevNotePad.Shared
 
         public static Settings GetDefault()
         {
-            var settings = new Settings();
-            settings.LineWrap = false;
-            settings.ScratchPadEnabled = false;
-            settings.EditorFontSize = 12;
-            settings.IgnoreChanged = true;
-            settings.IgnoreReload = true;
-            settings.IgnoreOverwriteChanges = false;
-            settings.DefaultPath = null;
+            Settings settings;
 
-            // TODO: Load the defaults if no file can be found
+            // Load the defaults if no file can be found
             var fileExists = IsConfigFileAvailable();
             if (fileExists)
             {
                 // Read from Home Dir
+                settings = Read();
             }
             else
             {
                 // Set defaults
+                settings = new Settings();
+                settings.LineWrap = false;
+                settings.ScratchPadEnabled = false;
+                settings.EditorFontSize = 12;
+                settings.IgnoreChanged = true;
+                settings.IgnoreReload = true;
+                settings.IgnoreOverwriteChanges = false;
+                settings.DefaultPath = null;
 
                 // Write to home Dir
-                
+                Write(settings);
             }
-
-            Write(settings);
 
             return settings;
         }
@@ -113,7 +113,7 @@ namespace DevNotePad.Shared
             return File.Exists(filePath);
         }
 
-        private static void Write(Settings settings)
+        public static void Write(Settings settings)
         {
             var filePath = GetFilePath();
 
@@ -164,7 +164,7 @@ namespace DevNotePad.Shared
             }
         }
 
-        private static Settings Read()
+        public static Settings Read()
         {
             /*
              * ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
@@ -181,14 +181,93 @@ namespace DevNotePad.Shared
              * 
              */
 
+            var settings = new Settings();
+
             var filePath = GetFilePath();
             var xmlReaderSettings = new XmlReaderSettings();
             using (var xmlReader = XmlReader.Create(filePath,xmlReaderSettings))
             {
-                //xmlReader.Re
+                string currentNode = String.Empty;
+                string currentValue = String.Empty;
+
+                while (xmlReader.Read())
+                {
+                    // Read the node and the value
+                    if (xmlReader.NodeType == XmlNodeType.Element)
+                    {
+                        currentNode = xmlReader.Name;
+                    }
+
+                    if (xmlReader.NodeType == XmlNodeType.Text)
+                    {
+                        currentValue = xmlReader.Value;
+                    }
+
+                    // Update the setting object
+                    bool isConfigItem = ((currentNode != ConfigNode) && (currentNode != VersionNode));
+                    if (isConfigItem)
+                    {
+                        // Apply LineWrap
+                        if (currentNode == LineWrapNode)
+                        {
+                            settings.LineWrap = ReadBoolean(currentValue);
+                        }
+
+                        // ScratchPad Enabled
+                        if (currentNode == ScratchPadEnabledNode)
+                        {
+                            settings.ScratchPadEnabled = ReadBoolean(currentValue);
+                        }
+
+                        // Ignore Changes
+                        if (currentNode == IgnoreChangesNode)
+                        {
+                            settings.IgnoreChanged = ReadBoolean(currentValue);
+                        }
+
+                        // Ignore Reload
+                        if (currentNode == IgnoreReloadNode)
+                        {
+                            settings.IgnoreReload = ReadBoolean(currentValue);
+                        }
+
+                        // Ignore Overwrite Changes
+                        if (currentNode == IgnoreOverwriteChangesNode)
+                        {
+                            settings.IgnoreOverwriteChanges = ReadBoolean(currentValue);
+                        }
+
+                        // Default Path
+                        if (currentNode == DefaultPathNode)
+                        {
+                            if (string.IsNullOrEmpty(currentValue))
+                            {
+                                settings.DefaultPath = null;
+                            }
+                            else
+                            {
+                                settings.DefaultPath = currentValue;
+                            }
+                        }
+
+                        //TODO:  FontSize. At the moment it is 12 b default (set in the settings constructor)
+                    }
+                }
             }
 
-            return new Settings();
+            return settings;
+        }
+
+        private static bool ReadBoolean(string value)
+        {
+            bool booleanValue;
+            var isSuccessful = Boolean.TryParse(value, out booleanValue);
+            if (isSuccessful)
+            {
+                return booleanValue;
+            }
+
+            return false;
         }
 
         #endregion

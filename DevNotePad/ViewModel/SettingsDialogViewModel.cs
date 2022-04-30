@@ -95,6 +95,9 @@ namespace DevNotePad.ViewModel
             settings.IgnoreOverwriteChanges = IgnoreOverwriteChanges;
             settings.DefaultPath = DefaultWorkingPath;
             // Font Size is TODO
+
+            // Write it to disk
+            Settings.Write(settings);
         }
     }
 }
