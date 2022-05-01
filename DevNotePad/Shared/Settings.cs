@@ -15,6 +15,13 @@ namespace DevNotePad.Shared
         {
             EditorFontSize = 12;
             DefaultPath = null;
+            LineWrap = false;
+            ScratchPadEnabled = false;
+            EditorFontSize = 12;
+            IgnoreChanged = true;
+            IgnoreReload = true;
+            IgnoreOverwriteChanges = false;
+            DefaultPath = null;
         }
 
         #region Properties
@@ -66,27 +73,28 @@ namespace DevNotePad.Shared
         {
             Settings settings;
 
-            // Load the defaults if no file can be found
-            var fileExists = IsConfigFileAvailable();
-            if (fileExists)
+            try
             {
-                // Read from Home Dir
-                settings = Read();
-            }
-            else
-            {
-                // Set defaults
-                settings = new Settings();
-                settings.LineWrap = false;
-                settings.ScratchPadEnabled = false;
-                settings.EditorFontSize = 12;
-                settings.IgnoreChanged = true;
-                settings.IgnoreReload = true;
-                settings.IgnoreOverwriteChanges = false;
-                settings.DefaultPath = null;
+                // Load the defaults if no file can be found
+                var fileExists = IsConfigFileAvailable();
+                if (fileExists)
+                {
+                    // Read from Home Dir
+                    settings = Read();
+                }
+                else
+                {
+                    // Set defaults
+                    settings = new Settings();
 
-                // Write to home Dir
-                Write(settings);
+                    // Write to home Dir
+                    Write(settings);
+                }
+            }
+            catch
+            {
+                // TODO: A excepion cannot be thrown and work with the default. This can can be improved
+                settings = new Settings();
             }
 
             return settings;
