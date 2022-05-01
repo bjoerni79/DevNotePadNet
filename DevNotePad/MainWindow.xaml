@@ -179,7 +179,7 @@
 
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="UICC">
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="Decode TLV"  Command="{Binding Path=DecodeTlv}" />
-                    <MenuItem Style="{StaticResource defaultMenuItem}" Header="Applet Tool" Command="{Binding Path=AppletTool}" />
+                    <!--<MenuItem Style="{StaticResource defaultMenuItem}" Header="Applet Tool" Command="{Binding Path=AppletTool}" />-->
                 </MenuItem>
             </MenuItem>
 
