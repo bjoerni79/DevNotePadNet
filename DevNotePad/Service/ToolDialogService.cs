@@ -26,6 +26,7 @@ namespace DevNotePad.Service
         private XsltTransformerView? currentXSltTransformerView;
         private RegularExpressionView? currentRegularExpressionView;
         private TreeView? currentTreeView;
+        private GuidCreatorView? currentGuidCreatorView;
 
         internal ToolDialogService(Window owner)
         {
@@ -241,7 +242,25 @@ namespace DevNotePad.Service
         {
             var facade = Init(ui);
 
-            //TODO
+            GuidCreatorViewModel vm;
+            var isVmAvailable = facade.Exists(ViewModelInstances.GuidCreatorDialog);
+            if (isVmAvailable)
+            {
+                vm = facade.Get<GuidCreatorViewModel>(ViewModelInstances.GuidCreatorDialog);
+            }
+            else
+            {
+                vm = new GuidCreatorViewModel();
+                facade.AddUnique(vm, ViewModelInstances.GuidCreatorDialog);
+            }
+
+            if (currentGuidCreatorView != null)
+            {
+                currentGuidCreatorView.Close();
+            }
+
+            currentGuidCreatorView = new GuidCreatorView();
+            OpenDialog(ui, textComponent, vm, currentGuidCreatorView, currentGuidCreatorView);
         }
 
         private ContainerFacade Init(IMainViewUi ui)

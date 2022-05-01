@@ -170,6 +170,7 @@
             <MenuItem Style="{StaticResource defaultMenuItem}" Header="Tools">
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="Regular Expression Tool" Command="{Binding Path=RegularExpressionTool}" />
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="Base64 Tool" Command="{Binding Path=Base64Tool}" />
+                <MenuItem Style="{StaticResource defaultMenuItem}" Header="GUID Creator" Command="{Binding Path=CreateGuid}" />
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="XML">
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="Schema Validator" Command="{Binding Path=SchemaValidatorTool}" />
                     <MenuItem Style="{StaticResource defaultMenuItem}" Header="XPath Query" Command="{Binding Path=XPathQueryTool}" />

@@ -186,6 +186,8 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? AppletTool { get; private set; }
 
+        public IRefreshCommand? CreateGuid { get; private set; }
+
         #endregion
 
         #region Command Delegates
@@ -695,6 +697,12 @@ namespace DevNotePad.ViewModel
             ApplySettings();
         }
 
+        private void OnCreateGuid()
+        {
+            var toolDialogService = ServiceHelper.GetToolDialogService();
+            toolDialogService.OpenGuidDialog(Ui, textComponent);
+        }
+
         #endregion
 
         #region IMainViewModel
@@ -1055,6 +1063,7 @@ namespace DevNotePad.ViewModel
             SchemaValidatorTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.SchemaValidation), IsText);
             XPathQueryTool = new DefaultCommand(() => OnXmlTool(XmlToolFeature.XPathQuery), IsText);
             XSltTransformationTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.XSltTransformation), IsText);
+            CreateGuid = new DefaultCommand(OnCreateGuid);
 
             RegularExpressionTool = new DefaultCommand(() => OnRegularExpressionTool(), IsText);
             Base64Tool = new DefaultCommand(OnBase64Tool);

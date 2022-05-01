@@ -5,8 +5,66 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DevNotePad.Shared.Dialog"
         mc:Ignorable="d"
-        Title="GuidCreatorView" Height="450" Width="800">
-    <Grid>
+        Title="Guid Creator" 
+        Height="250" 
+        Width="500"
         
+                ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen" 
+        SizeToContent="Manual"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="True"
+        Topmost="True"
+        
+        >
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="SharedDialogResource.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Titles-->
+        <Label Grid.Row="0" Style="{StaticResource topLevelTitleLabel}">GUIDs:</Label>
+        <Label Grid.Row="1" Style="{StaticResource titleLabel}">GUID 1</Label>
+        <Label Grid.Row="2" Style="{StaticResource titleLabel}">GUID 2</Label>
+        <Label Grid.Row="3" Style="{StaticResource titleLabel}">GUID 3</Label>
+
+        <!-- Values -->
+        <Label Grid.Row="1" Grid.Column="1"  Content="{Binding Path=Guid1,Mode=OneWay}" ></Label>
+        <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=Guid2,Mode=OneWay}"></Label>
+        <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=Guid3,Mode=OneWay}"></Label>
+
+        <Label Style="{StaticResource notificationDefault}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding Path=Feedback,Mode=OneWay}" ></Label>
+
+        <!-- Buttons -->
+        <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource actionButton}" Command="{Binding Path=CopyGuid1}" >Copy</Button>
+        <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource actionButton}" Command="{Binding Path=CopyGuid2}" >Copy</Button>
+        <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource actionButton}" Command="{Binding Path=CopyGuid3}" >Copy</Button>
+
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource actionButton}" Command="{Binding Path=Refresh}" >Refresh</Button>
+            <Button Style="{StaticResource actionButton}" Command="{Binding Path=Close}" >Close</Button>
+        </StackPanel>
+
     </Grid>
 </Window>

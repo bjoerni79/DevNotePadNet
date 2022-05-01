@@ -18,5 +18,6 @@ namespace DevNotePad
         public const string TreeViewDialog = "viewmodeltreeviewdialog";
         public const string RegularExpressionDialog = "viewmodelregularexpressiondialog";
         public const string SettingsDialog = "viewmodelsettingsdialog";
+        public const string GuidCreatorDialog = "viewmodelguidcreator";
     }
 }
