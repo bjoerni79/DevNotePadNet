@@ -25,6 +25,8 @@ namespace DevNotePad.Service
 
         void OpenRegularExpressionDialog (IMainViewUi ui, ITextComponent textComponent);
 
+        void OpenGuidDialog(IMainViewUi ui, ITextComponent textComponent);
+
         void OpenTreeView();
 
     }

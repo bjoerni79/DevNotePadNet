@@ -237,6 +237,13 @@ namespace DevNotePad.Service
             OpenDialog(ui, textComponent, vm, currentRegularExpressionView, currentRegularExpressionView);
         }
 
+        public void OpenGuidDialog(IMainViewUi ui, ITextComponent textComponent)
+        {
+            var facade = Init(ui);
+
+            //TODO
+        }
+
         private ContainerFacade Init(IMainViewUi ui)
         {
             if (ui == null)
