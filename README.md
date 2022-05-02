@@ -5,15 +5,32 @@ Notepad for developers with a clean and simple UI
 The language is C# and runs with .NET 6 using WPF. No other Nuget packages are in use
 
 # Features
-Beside the default features, the following features are planned:
+Beside the default features, the following features are available:
 - Parsing and Formatting JSON
 - Parsing and Formatting XML
+- Working with XPath, Schema and XSLT 
 - Encode/Decode Base64
+- Create GUIDs
+- Run regular expressions
 - Reading binary formats
 
 # Releases
 
-## Release 1.3 / 2.x
+## Todo
+- Installer Package
+- Experimenting with Syntax Highlightning
+- WPF Themes for dark mode etc.
+
+## Release 1.3.1
+Feature complete! All features I had in mind are implemented.
+- This release introduced a settings dialog that allows customizing the behaviour of the tool
+- The XML package is complete. XSLT, Schema and XPath are supported 
+- The tool formats Hex Bytes like (31 32 33 => 1 2 3) and is able to count and format them
+- First implementation of a regular expression tool
+- Simple GUID creator
+- Clean up in the background
+
+## Release 1.3
 - Depending on work load and motivation / feature set of WPF. I will not add a 3rd party control i.e.
 
 ## Release 1.2.x
