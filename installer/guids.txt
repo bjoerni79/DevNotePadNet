@@ -1,0 +1,5 @@
+guid1 : d75873d6-fc0e-4325-9ba9-50d866f09db7 -> Product ID
+guid2 : 6e40dbce-e5ea-4833-8f46-67637ba7d20d -> Upgrade ID
+guid3 : 8afa893d-e92c-462f-b345-ca478d58ad47
+
+https://www.firegiant.com/wix/tutorial/getting-started/the-files-inside/

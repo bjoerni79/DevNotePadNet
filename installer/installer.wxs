@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <Product Name='DevNotePad 1.3.2' Manufacturer='Bjoern Hillebrand'
+        Id='d75873d6-fc0e-4325-9ba9-50d866f09db7' 
+        UpgradeCode='6e40dbce-e5ea-4833-8f46-67637ba7d20d'
+        Language='1033' Codepage='1252' Version='1.3.2'>
+    <Package Id='*' Keywords='Installer' Description="Acme's Foobar 1.0 Installer"
+        Comments='Foobar is a registered trademark of Acme Ltd.' Manufacturer='Acme Ltd.'
+        InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+
+    <!-- 
+
+        DevNotePad.dll
+        DevNotePad.Features.dll
+        Generic.MVVM.dll
+
+        DevNotePad.exe
+
+        DevNotePad.deps.json
+        DevNodePad.runtimeconfig.json
+
+    -->
+
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+        <Directory Id='ProgramFilesFolder' Name='PFiles'>
+            <Directory Id='DevNotePad' Name='DevNotPad'>
+                <Directory Id='INSTALLDIR' Name='DevNotePad_R131'>
+                </Directory>
+            </Directory>
+    </Directory>
+
+</Wix>
