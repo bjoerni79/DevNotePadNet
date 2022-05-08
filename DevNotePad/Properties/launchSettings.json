@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DevNotePad": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\temp\\hello.txt",
+      "hotReloadEnabled": false
+    }
+  }
+}

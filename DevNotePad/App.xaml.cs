@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +21,19 @@ namespace DevNotePad
             if (bootstrap != null)
             {
                 bootstrap.Init();
+
+                // If there is a file in the first argument index then open it as text
+                var args = e.Args;
+                if (args != null && args.Length > 0)
+                {
+                    var fileName = args[0];
+
+                    var isValid = File.Exists(fileName);
+                    if (isValid)
+                    {
+                        StartUpCondition.FileName = fileName;
+                    }
+                }
             }
 
         }

@@ -16,6 +16,8 @@ namespace DevNotePad.ViewModel
 
         void ApplySettings();
 
+        void OpenExternalFile(string filePath);
+
         bool IsChanged();
     }
 }

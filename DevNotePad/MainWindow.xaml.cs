@@ -216,6 +216,11 @@ namespace DevNotePad
                 vm.Init(this, new TextComponent(editor), new TextComponent(scratchPad));
                 vm.ApplySettings();
             }
+
+            if (StartUpCondition.FileName != null)
+            {
+                //TODO: Open the file. How?
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -787,6 +787,13 @@ namespace DevNotePad.ViewModel
             return isChanged;
         }
 
+        public void OpenExternalFile(string filePath)
+        {
+            //TODO: Check if the file exists
+
+            //TODO: Open it 
+        }
+
         #endregion
 
         /// <summary>
@@ -1090,6 +1097,8 @@ namespace DevNotePad.ViewModel
         {
             // None..
         }
+
+
 
         #endregion
 
