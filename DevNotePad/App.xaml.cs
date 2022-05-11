@@ -16,24 +16,24 @@ namespace DevNotePad
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var bootstrap = Resources[Bootstrap.BootstrapId] as Bootstrap;
+            // If there is a file in the first argument index then open it as text
+            var args = e.Args;
+            if (args != null && args.Length > 0)
+            {
+                var fileName = args[0];
 
+                var isValid = File.Exists(fileName);
+                if (isValid)
+                {
+                    StartUpCondition.FileName = fileName;
+                }
+            }
+
+            // Init the bootstrapper
+            var bootstrap = Resources[Bootstrap.BootstrapId] as Bootstrap;
             if (bootstrap != null)
             {
                 bootstrap.Init();
-
-                // If there is a file in the first argument index then open it as text
-                var args = e.Args;
-                if (args != null && args.Length > 0)
-                {
-                    var fileName = args[0];
-
-                    var isValid = File.Exists(fileName);
-                    if (isValid)
-                    {
-                        StartUpCondition.FileName = fileName;
-                    }
-                }
             }
 
         }

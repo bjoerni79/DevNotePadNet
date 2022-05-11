@@ -12,6 +12,7 @@ using Generic.MVVM.IOC;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -789,9 +790,16 @@ namespace DevNotePad.ViewModel
 
         public void OpenExternalFile(string filePath)
         {
-            //TODO: Check if the file exists
-
-            //TODO: Open it 
+            // Check if the file exists
+            if (!String.IsNullOrEmpty(filePath))
+            {
+                var fileExists = File.Exists(filePath);
+                if (fileExists)
+                {
+                    // Open it
+                    textLogic.Load(filePath);
+                }
+            }
         }
 
         #endregion

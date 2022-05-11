@@ -219,7 +219,8 @@ namespace DevNotePad
 
             if (StartUpCondition.FileName != null)
             {
-                //TODO: Open the file. How?
+                // Open the file
+                vm.OpenExternalFile(StartUpCondition.FileName);
             }
         }
 
