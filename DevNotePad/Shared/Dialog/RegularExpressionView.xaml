@@ -17,14 +17,9 @@
         >
 
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="SharedDialogResource.xaml" />
-                <ResourceDictionary>
-                    <converter:RegularExpressionResultConverter x:Key="converter" />
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+
+        <converter:RegularExpressionResultConverter x:Key="converter" />
+
 
     </Window.Resources>
 

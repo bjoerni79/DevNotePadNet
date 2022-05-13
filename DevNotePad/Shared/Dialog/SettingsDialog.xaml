@@ -20,9 +20,7 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="SharedDialogResource.xaml" />
-                <ResourceDictionary>
+
                     <!-- Style for the check boxes -->
                     <Style x:Key="checkboxStyle" TargetType="CheckBox">
                         <Setter Property="Margin" Value="5 0 5 5"/>
@@ -43,12 +41,7 @@
 
 
 
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
 
-
-            
-        </ResourceDictionary>
     </Window.Resources>
     
     <Grid>
