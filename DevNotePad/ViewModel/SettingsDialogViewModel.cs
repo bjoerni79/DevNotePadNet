@@ -34,6 +34,8 @@ namespace DevNotePad.ViewModel
 
         public bool IgnoreOverwriteChanges { get; set; }
 
+        public bool DarkMode { get; set; }
+
         public string? EditorFontSize { get; set; }
 
         public string? DefaultWorkingPath { get; set; }
@@ -77,6 +79,7 @@ namespace DevNotePad.ViewModel
             IgnoreChangesOnReload = settings.IgnoreReload;
             IgnoreOverwriteChanges = settings.IgnoreOverwriteChanges;
             DefaultWorkingPath = settings.DefaultPath;
+            DarkMode = settings.DarkModeEnabled;
             EditorFontSize = settings.EditorFontSize.ToString();
 
             // No Update required. Gets loaded before UI is active.
@@ -93,6 +96,7 @@ namespace DevNotePad.ViewModel
             settings.IgnoreChanged = IgnoreChanges;
             settings.IgnoreReload = IgnoreChangesOnReload;
             settings.IgnoreOverwriteChanges = IgnoreOverwriteChanges;
+            settings.DarkModeEnabled = DarkMode;
             settings.DefaultPath = DefaultWorkingPath;
             // Font Size is TODO
 

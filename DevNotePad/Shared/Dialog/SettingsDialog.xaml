@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DevNotePad.Shared.Dialog"
         mc:Ignorable="d"
         Title="SettingsDialog" 
-        Height="300" 
+        Height="350" 
         Width="600"
         
         ResizeMode="NoResize" 
@@ -19,7 +19,7 @@
         >
 
     <Window.Resources>
-        <ResourceDictionary>
+
 
                     <!-- Style for the check boxes -->
                     <Style x:Key="checkboxStyle" TargetType="CheckBox">
@@ -55,6 +55,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -78,7 +80,10 @@
         <TextBox Style="{StaticResource textboxStyle}" Grid.Row="7" Grid.Column="1" Text="{Binding Path=EditorFontSize}"  IsReadOnly="True" ></TextBox>
         <TextBox x:Name="defaultFocusElement" Style="{StaticResource textboxStyle}" Grid.Row="8" Grid.Column="1" Text="{Binding Path=DefaultWorkingPath,Mode=TwoWay}"></TextBox>
 
-        <StackPanel Grid.Row="9" Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 5 5" >
+        <Label Style="{StaticResource topLevelTitleLabel}" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2">Theme</Label>
+        <CheckBox Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=DarkMode,Mode=TwoWay}" >Dark Mode</CheckBox>
+        
+        <StackPanel Grid.Row="11" Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 5 5" >
             <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Apply}">Apply</Button>
             <Button Style="{StaticResource dialogButton}" Command="{Binding Path=Cancel}">Cancel</Button>
         </StackPanel>

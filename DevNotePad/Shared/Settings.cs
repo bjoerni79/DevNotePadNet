@@ -10,7 +10,29 @@ namespace DevNotePad.Shared
 {
     public class Settings
     {
+        /*
+         * Version 1.0:
+         * ---
+         *   EditorFontSize = 12;
+         *   DefaultPath = null;
+         *   LineWrap = false;
+         *   ScratchPadEnabled = false;
+         *   EditorFontSize = 12;
+         *   IgnoreChanged = true;
+         *   IgnoreReload = true;
+         *   IgnoreOverwriteChanges = false;
+         *   DefaultPath = null;
+         * 
+         * Version 1.1
+         * ---
+         * 
+         *    DarkModeEnabled true/false
+         * 
+         */
 
+        /// <summary>
+        /// Inits a new settings object with the default values
+        /// </summary>
         public Settings()
         {
             EditorFontSize = 12;
@@ -22,6 +44,7 @@ namespace DevNotePad.Shared
             IgnoreReload = true;
             IgnoreOverwriteChanges = false;
             DefaultPath = null;
+            DarkModeEnabled = false;
         }
 
         #region Properties
@@ -29,7 +52,7 @@ namespace DevNotePad.Shared
         /// <summary>
         /// Internal release scheme for future updates
         /// </summary>
-        public string Version => "1.0";
+        public string Version => "1.1";
 
         public int EditorFontSize { get; set; }
 
@@ -54,6 +77,8 @@ namespace DevNotePad.Shared
 
         public bool ScratchPadEnabled { get; set; }
 
+        public bool DarkModeEnabled { get; set; }
+
         #endregion
 
         #region Static 
@@ -68,6 +93,7 @@ namespace DevNotePad.Shared
         private static string IgnoreReloadNode = "IgnoreReload";
         private static string IgnoreOverwriteChangesNode = "IgnoreOverwriteChanges";
         private static string DefaultPathNode = "DefaultPath";
+        private static string DarkModeNode = "DarkMode";
 
         public static Settings GetDefault()
         {
@@ -164,6 +190,8 @@ namespace DevNotePad.Shared
                     xmlWriter.WriteElementString(DefaultPathNode, settings.DefaultPath);
                 }
                 
+                // Darkmode
+                xmlWriter.WriteElementString(DarkModeNode, settings.DarkModeEnabled.ToString());
 
                 // End Group Node
 
@@ -189,14 +217,19 @@ namespace DevNotePad.Shared
              * 
              */
 
-            var settings = new Settings();
+            // If the user has an older file on the system, the tool needs to write an update later.
+            bool updateRequired = false;
 
+            var settings = new Settings();
             var filePath = GetFilePath();
             var xmlReaderSettings = new XmlReaderSettings();
+
             using (var xmlReader = XmlReader.Create(filePath,xmlReaderSettings))
             {
                 string currentNode = String.Empty;
                 string currentValue = String.Empty;
+
+
 
                 while (xmlReader.Read())
                 {
@@ -212,7 +245,18 @@ namespace DevNotePad.Shared
                     }
 
                     // Update the setting object
-                    bool isConfigItem = ((currentNode != ConfigNode) && (currentNode != VersionNode));
+                    bool isConfigItem = currentNode != ConfigNode;
+                    bool isVersionItem = currentNode.Equals(VersionNode);
+                    if (isVersionItem)
+                    {
+                        var fileVersion = currentValue;
+                        if (fileVersion.Equals("1.0"))
+                        {
+                            // Darkmode is missing. Update is required
+                            updateRequired = true;
+                        }
+                    }
+
                     if (isConfigItem)
                     {
                         // Apply LineWrap
@@ -258,9 +302,20 @@ namespace DevNotePad.Shared
                             }
                         }
 
+                        // Dark Mode
+                        if (currentNode == DarkModeNode)
+                        {
+                            settings.DarkModeEnabled = ReadBoolean(currentValue);
+                        }
+
                         //TODO:  FontSize. At the moment it is 12 b default (set in the settings constructor)
                     }
                 }
+            }
+
+            if (updateRequired)
+            {
+                Write(settings);
             }
 
             return settings;
