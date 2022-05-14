@@ -31,8 +31,8 @@
 
         <!-- Define the directory structure-->
         <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id='ProgramFilesFolder' >
-                <Directory Id='APPLICATIONROOTDIRECTORY' Name='DevNotPad'>
+            <Directory Id="ProgramFilesFolder" >
+                <Directory Id="APPLICATIONROOTDIRECTORY" Name="DevNotPad">
                 </Directory>
             </Directory>
         </Directory>
