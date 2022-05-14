@@ -10,7 +10,7 @@
         Comments='None' Manufacturer='Bjoern Hillebrand'
         InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
-    <Media Id="1" CompressionLevel="medium" Cabinet="setup.msi" />
+     <Media Id="1" CompressionLevel="medium" Cabinet="setup.msi" />
         <!-- 
 
             cbbfa7cb-3b59-4887-81d7-59a5fef804d5
