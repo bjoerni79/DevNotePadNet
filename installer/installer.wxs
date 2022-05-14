@@ -9,6 +9,8 @@
     <Package Id='*' Keywords='Installer' Description="DevNotePad Installer"
         Comments='None' Manufacturer='Bjoern Hillebrand'
         InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+
+    <Media Id="1" CompressionLevel="medium" Cabinet="setup.msi" />
         <!-- 
 
             cbbfa7cb-3b59-4887-81d7-59a5fef804d5
@@ -22,6 +24,8 @@
             DevNotePad.dll
             DevNotePad.deps.json
             DevNodePad.runtimeconfig.json
+
+            https://wixtoolset.org/documentation/manual/v3/
 
         -->
 
