@@ -46,6 +46,16 @@
             <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
         </Style>
 
+        <Style x:Key="editorTextboxRich" TargetType="RichTextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="IsInactiveSelectionHighlightEnabled" Value="True"/>
+            <Setter Property="SelectionTextBrush" Value="LightBlue"/>
+            <Setter Property="SelectionBrush" Value="LightBlue"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
         <Style x:Key="scratchPadTextbox" TargetType="TextBox" BasedOn="{StaticResource editorTextbox}">
         </Style>
 
@@ -243,9 +253,9 @@
 
         </Grid>
 
-        <ui:DevTextBox x:Name="editor"  
+        <ui:DevTextBox2 x:Name="editor"  
                      DockPanel.Dock="Left"
-                     Style="{StaticResource editorTextbox}"
+                     Style="{StaticResource editorTextboxRich}"
                      TextChanged="editor_TextChanged" 
                      ContextMenu="{StaticResource editorContextMenu}" 
                        Width="Auto"

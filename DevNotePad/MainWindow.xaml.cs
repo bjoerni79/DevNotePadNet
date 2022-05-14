@@ -61,7 +61,7 @@ namespace DevNotePad
                 wrapping = TextWrapping.Wrap;
             }
 
-            editor.TextWrapping = wrapping;
+            //editor.TextWrapping = wrapping;
         }
 
         public void SetScratchPad(bool enable)
@@ -213,7 +213,7 @@ namespace DevNotePad
             var vm = GetViewModel();
             if (vm != null)
             {
-                vm.Init(this, new TextComponent(editor), new TextComponent(scratchPad));
+                vm.Init(this, new TextComponent2(editor), new TextComponent(scratchPad));
                 vm.ApplySettings();
             }
 
