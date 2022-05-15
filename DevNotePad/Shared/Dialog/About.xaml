@@ -47,7 +47,7 @@
         <TextBlock Style="{StaticResource title}" >
             DevNotePad
         </TextBlock>
-        <TextBlock Grid.Row="1" Style="{StaticResource release}" Margin="10,5,10,0"><Run Text="Release : 1.3"/><Run Language="de-de" Text=".2 experimental"/></TextBlock>
+        <TextBlock Grid.Row="1" Style="{StaticResource release}" Margin="10,5,10,0"><Run Text="Release : 1.4"/><Run Language="de-de" Text=" experimental"/></TextBlock>
 
         <!--<TextBlock Grid.Row="2" Style="{StaticResource about}">
             
