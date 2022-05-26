@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace DevNotePad.ViewModel
 {
@@ -23,7 +24,7 @@ namespace DevNotePad.ViewModel
         /// Returns the current caret positon
         /// </summary>
         /// <returns>the current position</returns>
-        int GetCurrentPosition();
+        TextPointer GetCurrentPosition();
 
         /// <summary>
         /// Sets the text of the component
@@ -55,7 +56,7 @@ namespace DevNotePad.ViewModel
         /// </summary>
         /// <param name="startIndex">the start index</param>
         /// <param name="length">the length</param>
-        void SelectText(int startIndex, int length);
+        void SelectText(TextPointer startIndex, int length);
 
         /// <summary>
         /// Runs the clipboard action on the textbox

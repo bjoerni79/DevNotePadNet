@@ -51,37 +51,37 @@ namespace DevNotePad.ViewModel
 
         private void OnFind()
         {
-            if (StartFromCurrentPosition)
-            {
-                startIndex = textComponent.GetCurrentPosition();
-            }
-            else
-            {
-                startIndex = 0;
-            }
+            //if (StartFromCurrentPosition)
+            //{
+            //    startIndex = textComponent.GetCurrentPosition();
+            //}
+            //else
+            //{
+            //    startIndex = 0;
+            //}
 
-            searchEngine.SearchPattern = SearchPattern;
-            searchEngine.IgnoreLetterType = IgnoreLetterType;
-            searchEngine.StartIndex = startIndex;
+            //searchEngine.SearchPattern = SearchPattern;
+            //searchEngine.IgnoreLetterType = IgnoreLetterType;
+            //searchEngine.StartIndex = startIndex;
 
-            FindNext.Refresh();
-            OnFindNext();
+            //FindNext.Refresh();
+            //OnFindNext();
         }
 
         private void OnFindNext()
         {
-            var content = textComponent.GetText(false);
+            //var content = textComponent.GetText(false);
 
-            var result = searchEngine.RunSearch(content);
-            if (result.Successful)
-            {
-                textComponent.SelectText(result.StartIndex, result.Length);
-                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
-            }
-            else
-            {
-                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
-            }
+            //var result = searchEngine.RunSearch(content);
+            //if (result.Successful)
+            //{
+            //    textComponent.SelectText(result.StartIndex, result.Length);
+            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
+            //}
+            //else
+            //{
+            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
+            //}
         }
 
         private void OnCancel()

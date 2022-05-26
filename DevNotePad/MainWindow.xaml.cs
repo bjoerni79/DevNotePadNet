@@ -213,7 +213,8 @@ namespace DevNotePad
             var vm = GetViewModel();
             if (vm != null)
             {
-                vm.Init(this, new TextComponent2(editor), new TextComponent(scratchPad));
+                // vm.Init(this, new TextComponent2(editor), new TextComponent(scratchPad));
+                vm.Init(this, new TextComponent2(editor), null);
                 vm.ApplySettings();
             }
 

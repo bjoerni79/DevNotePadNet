@@ -48,41 +48,41 @@ namespace DevNotePad.ViewModel
 
         private void OnFind()
         {
-            if (StartFromCurrentPosition)
-            {
-                startIndex = textComponent.GetCurrentPosition();
-            }
-            else
-            {
-                startIndex = 0;
-            }
+            //if (StartFromCurrentPosition)
+            //{
+            //    startIndex = textComponent.GetCurrentPosition();
+            //}
+            //else
+            //{
+            //    startIndex = 0;
+            //}
 
-            searchEngine.SearchPattern = SearchFor;
-            searchEngine.IgnoreLetterType = IgnoreLetterType;
-            searchEngine.StartIndex = startIndex;
+            //searchEngine.SearchPattern = SearchFor;
+            //searchEngine.IgnoreLetterType = IgnoreLetterType;
+            //searchEngine.StartIndex = startIndex;
 
-            FindNext.Refresh();
-            OnFindNext();
+            //FindNext.Refresh();
+            //OnFindNext();
         }
 
         private void OnFindNext()
         {
-            var content = textComponent.GetText(false);
+            //var content = textComponent.GetText(false);
 
-            var result = searchEngine.RunSearch(content);
-            if (result.Successful)
-            {
-                textComponent.SelectText(result.StartIndex, result.Length);
-                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
-            }
-            else
-            {
-                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
-            }
+            //var result = searchEngine.RunSearch(content);
+            //if (result.Successful)
+            //{
+            //    textComponent.SelectText(result.StartIndex, result.Length);
+            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
+            //}
+            //else
+            //{
+            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
+            //}
 
-            // Enable the replace feature if possible
-            searchState = result.Successful;
-            Replace.Refresh();
+            //// Enable the replace feature if possible
+            //searchState = result.Successful;
+            //Replace.Refresh();
         }
 
         private void OnReplace()
@@ -107,53 +107,53 @@ namespace DevNotePad.ViewModel
 
         private void OnReplaceAll()
         {
-            if (string.IsNullOrEmpty(ReplaceWith))
-            {
-                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Replace string is empty", true));
-            }
-            else
-            {
-                int replaceCount = 0;
-                var content = textComponent.GetText(false);
-                startIndex = 0;
+            //if (string.IsNullOrEmpty(ReplaceWith))
+            //{
+            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Replace string is empty", true));
+            //}
+            //else
+            //{
+            //    int replaceCount = 0;
+            //    var content = textComponent.GetText(false);
+            //    startIndex = 0;
 
-                searchEngine.SearchPattern = SearchFor;
-                searchEngine.StartIndex = startIndex;
-                searchEngine.IgnoreLetterType = IgnoreLetterType;
+            //    searchEngine.SearchPattern = SearchFor;
+            //    searchEngine.StartIndex = startIndex;
+            //    searchEngine.IgnoreLetterType = IgnoreLetterType;
 
-                var result = searchEngine.RunSearch(content);
-                while (result.Successful)
-                {
-                    textComponent.SelectText(result.StartIndex, result.Length);
-                    textComponent.SetText(ReplaceWith, true);
+            //    var result = searchEngine.RunSearch(content);
+            //    while (result.Successful)
+            //    {
+            //        textComponent.SelectText(result.StartIndex, result.Length);
+            //        textComponent.SetText(ReplaceWith, true);
 
-                    // Increase the counter and update the search text
-                    content = textComponent.GetText(false);
-                    replaceCount++;
+            //        // Increase the counter and update the search text
+            //        content = textComponent.GetText(false);
+            //        replaceCount++;
 
-                    result = searchEngine.RunSearch(content);
-                }
+            //        result = searchEngine.RunSearch(content);
+            //    }
 
-                string notifier = "Unknown";
-                bool isWarning = true;
-                if (replaceCount == 0)
-                {
-                    notifier = "None replace action performed";
-                    isWarning = true;
-                }
-                if (replaceCount == 1)
-                {
-                    isWarning = false;
-                    notifier = "One replace action performed";
-                }
-                if (replaceCount > 1)
-                {
-                    isWarning = false;
-                    notifier = String.Format("Replaced action performed {0} times", replaceCount);
-                }
+            //    string notifier = "Unknown";
+            //    bool isWarning = true;
+            //    if (replaceCount == 0)
+            //    {
+            //        notifier = "None replace action performed";
+            //        isWarning = true;
+            //    }
+            //    if (replaceCount == 1)
+            //    {
+            //        isWarning = false;
+            //        notifier = "One replace action performed";
+            //    }
+            //    if (replaceCount > 1)
+            //    {
+            //        isWarning = false;
+            //        notifier = String.Format("Replaced action performed {0} times", replaceCount);
+            //    }
 
-                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, isWarning));
-            }
+            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, isWarning));
+            //}
         }
 
         private void OnCancel()
