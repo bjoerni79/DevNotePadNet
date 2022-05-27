@@ -45,24 +45,25 @@ namespace DevNotePad.UI
         {
             // https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.textrange?view=windowsdesktop-6.0
 
-            //App.Current.Dispatcher.Invoke(() =>
-            //{
-
-            //});
-
             string content;
             if (selected)
             {
                 // Return only the selected text
                 var selection = _editorControl.Selection;
-
-                content = selection.Text;
+                if (selection != null && !selection.IsEmpty)
+                {
+                    content = selection.Text;
+                }
+                else
+                {
+                    content = String.Empty;
+                }
             }
             else
             {
                 // Return the entire text
-                var helper = new FlowDocumentHelper();
-                content = helper.Extract(document);
+                var textRange = new TextRange(document.ContentStart, document.ContentEnd);
+                content = textRange.Text;
             }
 
             return content;
@@ -99,7 +100,7 @@ namespace DevNotePad.UI
 
         public void SelectText(TextPointer startIndex, int length)
         {
-            throw new NotImplementedException();
+            //TODO
         }
 
         public void SetText(string text)
@@ -109,9 +110,18 @@ namespace DevNotePad.UI
 
         public void SetText(string text, bool selected)
         {
-            // throw new NotImplementedException();
-
-            // App.Current.Dispatcher.Invoke(() => {  });
+            App.Current.Dispatcher.Invoke(() => { 
+                if (selected)
+                {
+                    if (_editorControl.Selection != null && !_editorControl.Selection.IsEmpty)
+                    _editorControl.Selection.Text = text;
+                }
+                else
+                {
+                    var textRange = new TextRange(document.ContentStart, document.ContentEnd);
+                    textRange.Text = text;
+                }
+            });
         }
     }
 }

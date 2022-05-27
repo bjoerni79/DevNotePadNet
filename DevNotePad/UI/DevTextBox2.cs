@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace DevNotePad.UI
@@ -44,36 +45,34 @@ namespace DevNotePad.UI
 
         private void UpdatePosition()
         {
-            //// Maybe sync with Begin/End...
+            var caretPosition = CaretPosition;
+            var paragraph = caretPosition.Paragraph;
 
-            //var caretIndex = CaretIndex;
-            //var lineCount = LineCount;
+            // Search for the paragraph in the blocks
+            bool lineFound = false;
+            int lineCount = 1;
+            if (paragraph != null)
+            {
+                var blocks = Document.Blocks;
+                foreach (var currentBlock in blocks)
+                {
+                    var curParagraph = currentBlock as Paragraph;
+                    if (curParagraph != null && curParagraph == paragraph)
+                    {
+                        lineFound = true;
+                        break;
+                    }
 
-            //if (caretIndex < 1)
-            //{
-            //    // No text
+                    lineCount++;
+                }
+            }
 
-            //    CurrentColumn = 1;
-            //    CurrentRow = 1;
-            //}
-            //else if (lineCount == -1)
-            //{
-            //    // Unkown state. Just set it to 0
+            if (lineFound)
+            {
+                CurrentRow = lineCount;
+            }
 
-            //    CurrentRow = 0;
-            //    CurrentColumn = 0;
-            //}
-            //else
-            //{
-            //    var caret = CaretIndex;
-            //    var rowIndex = GetLineIndexFromCharacterIndex(CaretIndex);
-            //    var startIndex = GetCharacterIndexFromLineIndex(rowIndex);
-            //    var colIndex = caret - startIndex;
-
-            //    // It is zero based.
-            //    CurrentRow = rowIndex + 1;
-            //    CurrentColumn = colIndex + 1;
-            //}
+            //TODO: Update column
         }
 
         #region Protected 
