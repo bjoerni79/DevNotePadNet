@@ -30,7 +30,15 @@ namespace DevNotePad.UI
             // editor.AppendText("\n" + text);
 
             var endPointer = document.ContentEnd;
-            endPointer.InsertTextInRun(text);
+            if (endPointer.IsAtInsertionPosition)
+            {
+                endPointer.InsertTextInRun(text);
+            }
+            else
+            {
+                var nextValid = endPointer.GetNextInsertionPosition(LogicalDirection.Forward);
+                nextValid.InsertTextInRun(text);
+            }
         }
 
         public TextPointer GetCurrentPosition()
@@ -81,25 +89,29 @@ namespace DevNotePad.UI
 
         public void PerformClipboardAction(ClipboardActionEnum action)
         {
-            //switch (action)
-            //{
-            //    case ClipboardActionEnum.Copy:
-            //        editor.Copy();
-            //        break;
-            //    case ClipboardActionEnum.Paste:
-            //        editor.Paste();
-            //        break;
-            //    case ClipboardActionEnum.Cut:
-            //        editor.Cut();
-            //        break;
-            //    case ClipboardActionEnum.SelectAll:
-            //        editor.SelectAll();
-            //        break;
-            //}
+            switch (action)
+            {
+                case ClipboardActionEnum.Copy:
+                    _editorControl.Copy();
+                    break;
+                case ClipboardActionEnum.Paste:
+                    _editorControl.Paste();
+                    break;
+                case ClipboardActionEnum.Cut:
+                    _editorControl.Cut();
+                    break;
+                case ClipboardActionEnum.SelectAll:
+                    _editorControl.SelectAll();
+                    break;
+            }
         }
 
         public void SelectText(TextPointer startIndex, int length)
         {
+            //startIndex.
+
+            //_editorControl.Selection.Select(startIndex,)
+
             //TODO
         }
 

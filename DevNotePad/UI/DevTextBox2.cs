@@ -70,6 +70,10 @@ namespace DevNotePad.UI
             if (lineFound)
             {
                 CurrentRow = lineCount;
+
+                var startPos = paragraph.ContentStart;
+                var diff = startPos.GetOffsetToPosition(CaretPosition);
+                CurrentColumn = diff;
             }
 
             //TODO: Update column
