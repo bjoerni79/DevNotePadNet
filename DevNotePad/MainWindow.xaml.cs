@@ -36,10 +36,6 @@ namespace DevNotePad
 
         #region IMainViewUI
 
-        public void CleanUpScratchPad()
-        {
-            scratchPad.Text = String.Empty;
-        }
 
         public void SetScrollbars(bool enable)
         {
@@ -64,19 +60,6 @@ namespace DevNotePad
             //editor.TextWrapping = wrapping;
         }
 
-        public void SetScratchPad(bool enable)
-        {
-            if (enable)
-            {
-                // Show it
-                scratchPadGrid.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                // Hide it
-                scratchPadGrid.Visibility = Visibility.Collapsed;
-            }
-        }
 
         public void ShowAbout()
         {
@@ -159,7 +142,6 @@ namespace DevNotePad
 
                         // Disable the textboxes while I/O operation is in progresss
                         editor.IsReadOnly = updateAsyncState.InProgress;
-                        scratchPad.IsReadOnly = updateAsyncState.InProgress;
                     }));
                 }
             }

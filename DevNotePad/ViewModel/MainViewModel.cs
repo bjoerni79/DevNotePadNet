@@ -550,23 +550,6 @@ namespace DevNotePad.ViewModel
             
         }
 
-        private void OnClearAllScratchPad()
-        {
-            OnClearTextScratchPad();
-
-            ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad and Tree are empty", false));
-        }
-
-        private void OnClearTextScratchPad()
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                Ui!.CleanUpScratchPad();
-
-                ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("ScratchPad is empty", false));
-            }
-        }
 
         private void OnCopyClipboardToScratchPad()
         {
@@ -735,9 +718,6 @@ namespace DevNotePad.ViewModel
                 //Ui.SetScrollbars(ScrollbarMode);
                 Ui.SetWordWrap(settings.LineWrap);
 
-                //TODO: Update Ui in regard of ScratchPad
-                Ui.SetScratchPad(settings.ScratchPadEnabled);
-                scratchOperationGroup.Refresh();
             }
 
             ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Ready", false));
@@ -1019,8 +999,6 @@ namespace DevNotePad.ViewModel
         {
             // ScratchPad
             CopyToText = new DefaultCommand(OnCopyToText,IsScratchPadOperationEnabled);
-            ScratchPadClearAll = new DefaultCommand(OnClearAllScratchPad, IsScratchPadMode);
-            ScratchPadClearText = new DefaultCommand(OnClearTextScratchPad, IsScratchPadMode);
             ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad, IsScratchPadOperationEnabled);
             ScratchPadCopy = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Copy), IsScratchPadOperationEnabled);
             ScratchPadCut = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Cut), IsScratchPadOperationEnabled);

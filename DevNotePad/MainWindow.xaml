@@ -101,27 +101,6 @@
 
         </ContextMenu>
 
-        <ContextMenu x:Key="scratchPadContextMenu">
-            <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=ScratchPadCut}" />
-            <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=ScratchPadCopy}"/>
-            <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=ScratchPadPaste}"/>
-            <MenuItem Header="Copy To Text" Command="{Binding Path=CopyToText}"/>
-
-            <MenuItem Header="Text">
-                <MenuItem Header="Split" Command="{Binding ScratchPadSplit}" />
-                <MenuItem Header="Group" Command="{Binding ScratchPadGroup}" />
-                <MenuItem Header="To Lower" Command="{Binding ScratchpadToLower}" />
-                <MenuItem Header="To Upper" Command="{Binding ScratchPadToUpper}" />
-                <MenuItem Header="Trim" Command="{Binding ScratchPadTrim}" />
-                <MenuItem Header="Count" Command="{Binding ScratchPadCountLength}" />
-                <MenuItem Header="Hex Bytes Count" Command="{Binding ScratchPadHexCountLength}"/>
-            </MenuItem>
-            <MenuItem Header="Format">
-                <MenuItem Header="JSON Format" Command="{Binding Path=ScratchPadJsonFormat}" />
-                <MenuItem Header="XML Format" Command="{Binding Path=ScratchPadXmlFormat}" />
-                <MenuItem Header="Hex Format" Command="{Binding Path=ScratchPadFormatHex}" />
-            </MenuItem>
-        </ContextMenu>
         
     </Window.Resources>
 
@@ -226,32 +205,6 @@
             <Label Name="notificationLabel">Basic Features</Label>
             
         </DockPanel>
-
-
-
-        <Grid DockPanel.Dock="Right" Name="scratchPadGrid">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" />
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-
-            <Label Grid.Row="0">ScratchPad</Label>
-
-            <TextBox Grid.Row="1" Margin="3,0,0,0"
-                        x:Name="scratchPad" 
-                        TextChanged="scratchPad_TextChanged"
-                        Style="{StaticResource scratchPadTextbox}" 
-                        ContextMenu="{StaticResource scratchPadContextMenu}"
-                        />
-
-
-        </Grid>
 
         <ui:DevTextBox2 x:Name="editor"  
                      DockPanel.Dock="Left"

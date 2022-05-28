@@ -12,13 +12,11 @@ namespace DevNotePad.ViewModel
         void SetScrollbars(bool enable);
         void SetWordWrap(bool enable);
 
-        void SetScratchPad(bool enable);
 
         void ShowAbout();
 
         void SetFilename(string filename);
 
-        void CleanUpScratchPad();
 
         void CloseByViewModel();
 

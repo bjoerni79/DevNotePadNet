@@ -166,7 +166,7 @@ namespace DevNotePad.Shared
                 xmlWriter.WriteElementString(LineWrapNode, settings.LineWrap.ToString());
 
                 // Node ScratchPadEnabled
-                xmlWriter.WriteElementString(ScratchPadEnabledNode, settings.ScratchPadEnabled.ToString());
+                xmlWriter.WriteElementString(ScratchPadEnabledNode, "false");
 
                 // Editor Font Size
                 xmlWriter.WriteElementString(EditorFontSizeNode, settings.EditorFontSize.ToString());
@@ -266,10 +266,10 @@ namespace DevNotePad.Shared
                         }
 
                         // ScratchPad Enabled
-                        if (currentNode == ScratchPadEnabledNode)
-                        {
-                            settings.ScratchPadEnabled = ReadBoolean(currentValue);
-                        }
+                        //if (currentNode == ScratchPadEnabledNode)
+                        //{
+                        //    settings.ScratchPadEnabled = ReadBoolean(currentValue);
+                        //}
 
                         // Ignore Changes
                         if (currentNode == IgnoreChangesNode)
