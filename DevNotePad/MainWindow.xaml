@@ -83,7 +83,6 @@
             <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=Cut}" />
             <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=Copy}"/>
             <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=Paste}"/>
-            <MenuItem Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
             <MenuItem Header="Text">
                 <MenuItem Header="Split" Command="{Binding Path=TextSplit}"/>
                 <MenuItem Header="Group" Command="{Binding Path=TextGroup}"/>
@@ -125,7 +124,6 @@
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="Cut" InputGestureText="Ctrl+X" Command="{Binding Path=Cut}" />
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="Copy" InputGestureText="Ctrl+C" Command="{Binding Path=Copy}"/>
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="Paste" InputGestureText="Ctrl+V" Command="{Binding Path=Paste}"/>
-                <MenuItem Style="{StaticResource defaultMenuItem}" Header="Copy To ScratchPad" Command="{Binding Path=CopyToScratchPad}"/>
                 <Separator/>
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="Find" Command="{Binding Path=Find}" />
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="Replace" Command="{Binding Path=Replace}" />

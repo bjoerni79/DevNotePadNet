@@ -26,7 +26,6 @@ namespace DevNotePad.ViewModel
 
         public bool LineWrap { get; set; }
 
-        public bool EnableScratchPadView { get; set; }
 
         public bool IgnoreChanges { get; set; }
 
@@ -74,8 +73,6 @@ namespace DevNotePad.ViewModel
 
             // Populate the properties for the UI bindings now
             LineWrap = settings.LineWrap;
-            EnableScratchPadView = settings.ScratchPadEnabled;
-            IgnoreChanges = settings.IgnoreChanged;
             IgnoreChangesOnReload = settings.IgnoreReload;
             IgnoreOverwriteChanges = settings.IgnoreOverwriteChanges;
             DefaultWorkingPath = settings.DefaultPath;
@@ -92,7 +89,6 @@ namespace DevNotePad.ViewModel
             var settings = facade.Get<Settings>(Bootstrap.SettingsId);
 
             settings.LineWrap = LineWrap;
-            settings.ScratchPadEnabled = EnableScratchPadView;
             settings.IgnoreChanged = IgnoreChanges;
             settings.IgnoreReload = IgnoreChangesOnReload;
             settings.IgnoreOverwriteChanges = IgnoreOverwriteChanges;

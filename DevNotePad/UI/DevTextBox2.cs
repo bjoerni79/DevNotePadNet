@@ -71,12 +71,13 @@ namespace DevNotePad.UI
             {
                 CurrentRow = lineCount;
 
+                // Update column
                 var startPos = paragraph.ContentStart;
                 var diff = startPos.GetOffsetToPosition(CaretPosition);
                 CurrentColumn = diff;
             }
 
-            //TODO: Update column
+
         }
 
         #region Protected 

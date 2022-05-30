@@ -32,11 +32,7 @@ namespace DevNotePad.ViewModel
 
         private ITextComponent? textComponent;
 
-        private ITextComponent? scratchPadComponent;
-
         private IFileLogic? textLogic;
-
-        private IFileLogic? scratchPadLogic;
 
         private CommandGroup fileGroup;
         private CommandGroup textOperationGroup;
@@ -344,96 +340,6 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        private void OnScratchPadXml(XmlOperation operation)
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                var isTextSelected = scratchPadComponent!.IsTextSelected();
-                var input = scratchPadComponent.GetText(isTextSelected);
-
-                try
-                {
-                    IXmlComponent component = FeatureFactory.CreateXml();
-
-                    if (operation == XmlOperation.Format)
-                    {
-                        var formatterTask = Task.Run(() => component.FormatterAsync(input));
-
-                        formatterTask.Wait();
-
-                        scratchPadComponent.SetText(formatterTask.Result, isTextSelected);
-                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML file formatted", false));
-                    }
-
-                    if (operation == XmlOperation.ToTree)
-                    {
-                        var parseToTreeTask = Task.Run(() => component.ParseToTreeAsync(input));
-                        parseToTreeTask.Wait();
-
-                        // Open the view and trigger the event
-                        var dialogFactory = ServiceHelper.GetToolDialogService();
-                        dialogFactory.OpenTreeView();
-
-                        var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
-                        updateTreeEvent.Trigger(new UpdateTree(parseToTreeTask.Result));
-                    }
-                }
-                catch (AggregateException aEx)
-                {
-                    foreach (var ex in aEx.InnerExceptions)
-                    {
-                        ServiceHelper.ShowError(ex, XmlComponent);
-                    }
-
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
-                }
-                catch (FeatureException featureException)
-                {
-                    ServiceHelper.ShowError(featureException, XmlComponent);
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("XML operation failed", true));
-                }
-            }
-        }
-        private void OnScratchPadJson(JsonOperation operation)
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                var isTextSelected = scratchPadComponent!.IsTextSelected();
-                var input = scratchPadComponent.GetText(isTextSelected);
-
-                try
-                {
-                    IJsonComponent jsonComponent = FeatureFactory.CreateJson();
-
-                    if (operation == JsonOperation.Format)
-                    {
-                        var result = jsonComponent.Formatter(input);
-
-                        scratchPadComponent.SetText(result, isTextSelected);
-                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON file is formatted", false));
-                    }
-
-                    if (operation == JsonOperation.ToTree)
-                    {
-                        var rootNode = jsonComponent.ParseToTree(input);
-
-                        var dialogService = ServiceHelper.GetToolDialogService();
-                        dialogService.OpenTreeView();
-
-                        var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
-                        updateTreeEvent.Trigger(new UpdateTree(new List<ItemNode>() { rootNode, }));
-
-                    }
-                }
-                catch (FeatureException featureException)
-                {
-                    ServiceHelper.ShowError(featureException, JsonComponent);
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON operation failed", true));
-                }
-            }
-        }
 
         private void OnXml(XmlOperation operation)
         {
@@ -551,20 +457,6 @@ namespace DevNotePad.ViewModel
         }
 
 
-        private void OnCopyClipboardToScratchPad()
-        {
-            bool isUiFound = CheckForUi();
-            if (isUiFound)
-            {
-                var containsText = Clipboard.ContainsText();
-                if (containsText)
-                {
-                    var content = Clipboard.GetText();
-                    scratchPadComponent.AddText(content);
-                }
-            }
-        }
-
         private void OnFind()
         {
             var dialogService = ServiceHelper.GetToolDialogService();
@@ -575,23 +467,6 @@ namespace DevNotePad.ViewModel
         {
             var dialogService = ServiceHelper.GetToolDialogService();
             dialogService.OpenReplaceDialog(Ui,textComponent);
-        }
-
-        private void OnCopyToScratchPad()
-        {
-            var isSelected = textComponent!.IsTextSelected();
-            var text = textComponent.GetText(isSelected);
-
-            scratchPadComponent.AddText(text);
-        }
-
-        private void OnCopyToText()
-        {
-            var isSelected = scratchPadComponent!.IsTextSelected();
-            var text = scratchPadComponent.GetText(isSelected);
-
-            textComponent.AddText(text);
-
         }
 
         private void OnText(IFileLogic logic,TextActionEnum textAction)
@@ -691,16 +566,10 @@ namespace DevNotePad.ViewModel
 
         #region IMainViewModel
 
-        public void Init(IMainViewUi ui, ITextComponent text, ITextComponent scratchPad)
+        public void Init(IMainViewUi ui, ITextComponent text)
         {
             Ui = ui;
             textComponent = text;
-            scratchPadComponent = scratchPad;
-
-            if (scratchPad != null)
-            {
-                scratchPadLogic = new InternalFileLogic(Ui, scratchPad);
-            }
 
             textLogic = new InternalFileLogic(Ui,textComponent);
             textLogic.New();
@@ -885,10 +754,6 @@ namespace DevNotePad.ViewModel
             return IsText() && IsContentAvailable(textComponent);
         }
 
-        private bool IsScratchPadOperationEnabled()
-        {
-            return IsScratchPadMode() && IsContentAvailable(scratchPadComponent);
-        }
 
         private bool IsScratchPadMode ()
         {
@@ -948,7 +813,6 @@ namespace DevNotePad.ViewModel
             // Edit
             Find = new DefaultCommand(OnFind,IsTextOperationEnabled);
             Replace = new DefaultCommand(OnReplace,IsTextOperationEnabled);
-            CopyToScratchPad = new DefaultCommand(OnCopyToScratchPad, IsTextOperationEnabled);
             Cut = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Cut),IsTextOperationEnabled);
             Copy = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Copy), IsTextOperationEnabled);
             Paste = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Paste));
@@ -995,59 +859,12 @@ namespace DevNotePad.ViewModel
             });
         }
 
-        private void InitScratchPadMenu()
-        {
-            // ScratchPad
-            CopyToText = new DefaultCommand(OnCopyToText,IsScratchPadOperationEnabled);
-            ScratchPadCopyClipboard = new DefaultCommand(OnCopyClipboardToScratchPad, IsScratchPadOperationEnabled);
-            ScratchPadCopy = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Copy), IsScratchPadOperationEnabled);
-            ScratchPadCut = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Cut), IsScratchPadOperationEnabled);
-            ScratchPadPaste = new DefaultCommand(() => OnTextClipboard(scratchPadLogic, ClipboardActionEnum.Paste),IsScratchPadMode);
-            ScratchPadXmlFormat = new DefaultCommand(() => OnScratchPadXml(XmlOperation.Format), IsScratchPadOperationEnabled);
-            ScratchPadXmlToTree = new DefaultCommand(() => OnScratchPadXml(XmlOperation.ToTree), IsScratchPadOperationEnabled);
-            ScratchPadJsonFormat = new DefaultCommand(() => OnScratchPadJson(JsonOperation.Format), IsScratchPadOperationEnabled);
-            ScratchPadJsonToTree = new DefaultCommand(() => OnScratchPadJson(JsonOperation.ToTree), IsScratchPadOperationEnabled);
 
-            //TODO: Text Actions
-            ScratchPadSplit = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Split), IsScratchPadOperationEnabled);
-            ScratchPadGroup = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Group), IsScratchPadOperationEnabled);
-            ScratchpadToLower = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToLower), IsScratchPadOperationEnabled);
-            ScratchPadToUpper = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.ToUpper), IsScratchPadOperationEnabled);
-            ScratchPadTrim = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.Trim), IsScratchPadOperationEnabled);
-            ScratchPadCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.LengthCount), IsScratchPadOperationEnabled);
-            ScratchPadHexCountLength = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexLengthCount), IsScratchPadOperationEnabled);
-            ScratchPadFormatHex = new DefaultCommand(() => OnText(scratchPadLogic, TextActionEnum.HexFormat), IsScratchPadOperationEnabled);
-
-            // Assign to the scratchPad operation group
-            scratchOperationGroup = new CommandGroup(new List<IRefreshCommand>() {
-                CopyToText,
-                ScratchPadCopyClipboard,
-                ScratchPadCopy,
-                ScratchPadCut,
-                ScratchPadXmlFormat,
-                ScratchPadXmlToTree,
-                ScratchPadJsonFormat,
-                ScratchPadJsonToTree,
-                ScratchPadSplit,
-                ScratchPadGroup,
-                ScratchpadToLower,
-                ScratchPadToUpper,
-                ScratchPadTrim,
-                ScratchPadCountLength,
-                ScratchPadHexCountLength,
-                ScratchPadFormatHex,
-                ScratchPadClearAll,
-                ScratchPadClearText,
-                ScratchPadClearTree,
-                ScratchPadPaste
-            });
-        }
 
         private void InitMenu()
         {
             InitFileMenu();
             InitEditMenu();
-            InitScratchPadMenu();
 
             // Layout
             Settings = new DefaultCommand(OnSettings);

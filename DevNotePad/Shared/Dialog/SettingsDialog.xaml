@@ -68,8 +68,7 @@
         <Label Style="{StaticResource topLevelTitleLabel}" Grid.Column="0" Grid.ColumnSpan="2" >Environment</Label>
 
         <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=LineWrap,Mode=TwoWay}" >Line Wrap</CheckBox>
-        <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=EnableScratchPadView,Mode=TwoWay}" >Enable ScratchPad View</CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource separatedcheckboxStyle}" IsChecked="{Binding Path=IgnoreChanges,Mode=TwoWay}" >Ignore Changes</CheckBox>
+         <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource separatedcheckboxStyle}" IsChecked="{Binding Path=IgnoreChanges,Mode=TwoWay}" >Ignore Changes</CheckBox>
         <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=IgnoreChangesOnReload,Mode=TwoWay}" >Ignore Changes on Reload</CheckBox>
         <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource checkboxStyle}" IsChecked="{Binding Path=IgnoreOverwriteChanges,Mode=TwoWay}" >Ignore Changes on open files by other</CheckBox>
         

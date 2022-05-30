@@ -38,7 +38,6 @@ namespace DevNotePad.Shared
             EditorFontSize = 12;
             DefaultPath = null;
             LineWrap = false;
-            ScratchPadEnabled = false;
             EditorFontSize = 12;
             IgnoreChanged = true;
             IgnoreReload = true;
@@ -87,7 +86,6 @@ namespace DevNotePad.Shared
         private static string ConfigNode = "Config";
         private static string VersionNode = "Version";
         private static string LineWrapNode = "LineWrap";
-        private static string ScratchPadEnabledNode = "ScratchPadEnabled";
         private static string EditorFontSizeNode = "EditorFontSize";
         private static string IgnoreChangesNode = "IgnoreChanges";
         private static string IgnoreReloadNode = "IgnoreReload";
@@ -164,9 +162,6 @@ namespace DevNotePad.Shared
 
                 // Node Line Wrap
                 xmlWriter.WriteElementString(LineWrapNode, settings.LineWrap.ToString());
-
-                // Node ScratchPadEnabled
-                xmlWriter.WriteElementString(ScratchPadEnabledNode, "false");
 
                 // Editor Font Size
                 xmlWriter.WriteElementString(EditorFontSizeNode, settings.EditorFontSize.ToString());
@@ -265,11 +260,6 @@ namespace DevNotePad.Shared
                             settings.LineWrap = ReadBoolean(currentValue);
                         }
 
-                        // ScratchPad Enabled
-                        //if (currentNode == ScratchPadEnabledNode)
-                        //{
-                        //    settings.ScratchPadEnabled = ReadBoolean(currentValue);
-                        //}
 
                         // Ignore Changes
                         if (currentNode == IgnoreChangesNode)

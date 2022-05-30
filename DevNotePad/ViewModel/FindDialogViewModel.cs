@@ -51,6 +51,8 @@ namespace DevNotePad.ViewModel
 
         private void OnFind()
         {
+            // https://docs.microsoft.com/en-us/dotnet/desktop/wpf/controls/change-selection-in-a-richtextbox-programmatically?view=netframeworkdesktop-4.8
+
             //if (StartFromCurrentPosition)
             //{
             //    startIndex = textComponent.GetCurrentPosition();
