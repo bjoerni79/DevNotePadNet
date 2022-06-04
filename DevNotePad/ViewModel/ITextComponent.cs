@@ -26,6 +26,10 @@ namespace DevNotePad.ViewModel
         /// <returns>the current position</returns>
         TextPointer GetCurrentPosition();
 
+        TextPointer GetStartPosition();
+
+        FlowDocument GetDocument();
+
         /// <summary>
         /// Sets the text of the component
         /// </summary>
@@ -50,6 +54,9 @@ namespace DevNotePad.ViewModel
         /// </summary>
         /// <returns>true if there is, otherwise false</returns>
         bool IsTextSelected();
+
+        void SelectText(TextRange range);
+
 
         /// <summary>
         /// Selects a text 

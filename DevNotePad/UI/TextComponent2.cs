@@ -49,6 +49,16 @@ namespace DevNotePad.UI
             return position;
         }
 
+        public FlowDocument GetDocument()
+        {
+            return document;
+        }
+
+        public TextPointer GetStartPosition()
+        {
+            return document.ContentStart;
+        }
+
         public string GetText(bool selected)
         {
             // https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.textrange?view=windowsdesktop-6.0
@@ -112,7 +122,15 @@ namespace DevNotePad.UI
 
             //_editorControl.Selection.Select(startIndex,)
 
-            //TODO
+            //TODO: Can be removed..
+        }
+
+        public void SelectText(TextRange range)
+        {
+            if (range != null)
+            {
+                _editorControl.Selection.Select(range.Start, range.End);
+            }
         }
 
         public void SetText(string text)

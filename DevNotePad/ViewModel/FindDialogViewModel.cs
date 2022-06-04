@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace DevNotePad.ViewModel
 {
     public class FindDialogViewModel : MainViewUiViewModel
     {
-        private int startIndex;
+        private TextPointer? startIndex;
         private string? searchPattern;
 
         private SearchEngine searchEngine;
@@ -20,10 +21,10 @@ namespace DevNotePad.ViewModel
         public FindDialogViewModel()
         {
             Find = new DefaultCommand(OnFind);
-            FindNext = new DefaultCommand(OnFindNext,() => startIndex >= 0);
+            FindNext = new DefaultCommand(OnFindNext,() => startIndex != null);
             Cancel = new DefaultCommand(OnCancel);
 
-            startIndex = -1;
+            startIndex = null;
             searchEngine = new SearchEngine();
         }
 
@@ -53,37 +54,36 @@ namespace DevNotePad.ViewModel
         {
             // https://docs.microsoft.com/en-us/dotnet/desktop/wpf/controls/change-selection-in-a-richtextbox-programmatically?view=netframeworkdesktop-4.8
 
-            //if (StartFromCurrentPosition)
-            //{
-            //    startIndex = textComponent.GetCurrentPosition();
-            //}
-            //else
-            //{
-            //    startIndex = 0;
-            //}
+            if (StartFromCurrentPosition)
+            {
+                startIndex = textComponent.GetCurrentPosition();
+            }
+            else
+            {
+                startIndex = textComponent.GetStartPosition();
+            }
 
-            //searchEngine.SearchPattern = SearchPattern;
-            //searchEngine.IgnoreLetterType = IgnoreLetterType;
-            //searchEngine.StartIndex = startIndex;
+            searchEngine.SearchPattern = SearchPattern;
+            searchEngine.IgnoreLetterType = IgnoreLetterType;
+            searchEngine.StartPosition = startIndex;
 
-            //FindNext.Refresh();
-            //OnFindNext();
+            FindNext.Refresh();
+            OnFindNext();
         }
 
         private void OnFindNext()
         {
-            //var content = textComponent.GetText(false);
-
-            //var result = searchEngine.RunSearch(content);
-            //if (result.Successful)
-            //{
-            //    textComponent.SelectText(result.StartIndex, result.Length);
-            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
-            //}
-            //else
-            //{
-            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
-            //}
+            var currentDocument = textComponent.GetDocument();
+            var result = searchEngine.RunSearch(currentDocument);
+            if (result.Successful)
+            {
+                textComponent.SelectText(result.Selection);
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
+            }
+            else
+            {
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
+            }
         }
 
         private void OnCancel()

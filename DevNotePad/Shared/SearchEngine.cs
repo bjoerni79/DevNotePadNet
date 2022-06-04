@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace DevNotePad.Shared
 {
@@ -12,13 +13,13 @@ namespace DevNotePad.Shared
 
         internal bool IgnoreLetterType { get; set; }
 
-        internal int StartIndex { get; set; }
+        internal TextPointer? StartPosition { get; set; }
 
         internal SearchEngine()
         {
         }
 
-        internal SearchResultValue RunSearch(string text)
+        internal SearchResultValue RunSearch(FlowDocument flowDocument)
         {
             // https://docs.microsoft.com/en-us/dotnet/csharp/how-to/search-strings
 
@@ -36,21 +37,34 @@ namespace DevNotePad.Shared
                 comparison = StringComparison.CurrentCulture;
             }
 
-            if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(SearchPattern))
+            if (flowDocument == null || string.IsNullOrEmpty(SearchPattern))
             {
-                return new SearchResultValue(false, 0, 0);
+                return new SearchResultValue(false, null);
             }
 
-            int length = SearchPattern.Length;
-            bool patternFound = false;
-            var result = text.IndexOf(SearchPattern, StartIndex, comparison);
+            var text = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).Text;
+            int startIndex = 0;
+            if (StartPosition != null)
+            {
+                //TODO
+            }
+
+            SearchResultValue searchResult;
+            var result = text.IndexOf(SearchPattern, startIndex, comparison);
             if (result > 0)
             {
-                patternFound = true;
-                StartIndex = result + length;
+                //TODO: How to transform the string coordinates to a TextPointer?
+                var selectionStart = flowDocument.ContentStart.GetPositionAtOffset(result);
+                var selectionEnd = flowDocument.ContentStart.GetPositionAtOffset(result).GetPositionAtOffset(SearchPattern.Length);
+
+                searchResult = new SearchResultValue(true, new TextRange(selectionStart,selectionEnd));
+            }
+            else
+            {
+                searchResult = new SearchResultValue(false, null);
             }
 
-            return new SearchResultValue(patternFound, result, length);
+            return searchResult;
         }
 
         /// <summary>
@@ -59,6 +73,6 @@ namespace DevNotePad.Shared
         /// <param name="Successful">true if any content has been found</param>
         /// <param name="start">the start index</param>
         /// <param name="length">the length</param>
-        internal record struct SearchResultValue(bool Successful, int StartIndex, int Length);
+        internal record struct SearchResultValue(bool Successful, TextRange? Selection);
     }
 }
