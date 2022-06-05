@@ -23,10 +23,6 @@ namespace DevNotePad.Shared
         {
             // https://docs.microsoft.com/en-us/dotnet/csharp/how-to/search-strings
 
-            //
-            //  Define the start position 
-            //
-
             StringComparison comparison;
             if (IgnoreLetterType)
             {
@@ -51,13 +47,15 @@ namespace DevNotePad.Shared
 
             SearchResultValue searchResult;
             var result = text.IndexOf(SearchPattern, startIndex, comparison);
-            if (result > 0)
+            if (result >= 0)
             {
-                //TODO: How to transform the string coordinates to a TextPointer?
                 var selectionStart = flowDocument.ContentStart.GetPositionAtOffset(result);
-                var selectionEnd = flowDocument.ContentStart.GetPositionAtOffset(result).GetPositionAtOffset(SearchPattern.Length);
+                var selectionEnd = selectionStart.GetPositionAtOffset(SearchPattern.Length,LogicalDirection.Forward); 
 
-                searchResult = new SearchResultValue(true, new TextRange(selectionStart,selectionEnd));
+                var selectedRange = new TextRange(selectionStart, selectionEnd);
+                var la = selectedRange.Text;
+
+                searchResult = new SearchResultValue(true, selectedRange);
             }
             else
             {

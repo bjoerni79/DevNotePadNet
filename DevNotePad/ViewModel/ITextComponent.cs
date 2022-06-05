@@ -59,13 +59,6 @@ namespace DevNotePad.ViewModel
 
 
         /// <summary>
-        /// Selects a text 
-        /// </summary>
-        /// <param name="startIndex">the start index</param>
-        /// <param name="length">the length</param>
-        void SelectText(TextPointer startIndex, int length);
-
-        /// <summary>
         /// Runs the clipboard action on the textbox
         /// </summary>
         /// <remarks>

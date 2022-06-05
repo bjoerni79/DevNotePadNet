@@ -208,7 +208,9 @@
                      DockPanel.Dock="Left"
                      Style="{StaticResource editorTextboxRich}"
                      TextChanged="editor_TextChanged" 
+                        SelectionBrush="Blue"
                      ContextMenu="{StaticResource editorContextMenu}" 
+                        IsInactiveSelectionHighlightEnabled="True"
                        Width="Auto"
             />
 

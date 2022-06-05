@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace DevNotePad.UI
 {
@@ -14,7 +16,6 @@ namespace DevNotePad.UI
     {
         private DevTextBox2 _editorControl;
         private FlowDocument document;
-
 
         // https://stackoverflow.com/questions/3934422/wpf-richtextbox-get-whole-word-at-current-caret-position
 
@@ -116,20 +117,14 @@ namespace DevNotePad.UI
             }
         }
 
-        public void SelectText(TextPointer startIndex, int length)
-        {
-            //startIndex.
-
-            //_editorControl.Selection.Select(startIndex,)
-
-            //TODO: Can be removed..
-        }
-
         public void SelectText(TextRange range)
         {
-            if (range != null)
+            if (range != null && !range.IsEmpty)
             {
-                _editorControl.Selection.Select(range.Start, range.End);
+                var textRange = _editorControl.Selection;
+
+                textRange.Select(range.Start, range.End);
+                _editorControl.Focus();
             }
         }
 
