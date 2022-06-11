@@ -60,7 +60,7 @@ namespace DevNotePad.ViewModel
             }
             else
             {
-                startIndex = textComponent.GetStartPosition();
+                startIndex = null;
             }
 
             searchEngine.SearchPattern = SearchPattern;

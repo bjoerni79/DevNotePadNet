@@ -38,27 +38,40 @@ namespace DevNotePad.Shared
                 return new SearchResultValue(false, null);
             }
 
-            var text = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).Text;
+            var textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+            var text = textRange.Text;
             int startIndex = 0;
+
+            // Set the start index to the offset 
             if (StartPosition != null)
             {
-                //TODO
+                // TODO
+                startIndex = textRange.Start.GetOffsetToPosition(StartPosition);
             }
 
             SearchResultValue searchResult;
             var result = text.IndexOf(SearchPattern, startIndex, comparison);
+
+            // Any result value of 0 or greater indicates a hit
             if (result >= 0)
             {
-                var selectionStart = flowDocument.ContentStart.GetPositionAtOffset(result);
-                var selectionEnd = selectionStart.GetPositionAtOffset(SearchPattern.Length,LogicalDirection.Forward); 
+                // Hit
+                var selectionStart = textRange.Start.GetPositionAtOffset(result);
+                
+                var currentSelection = textRange.Start.GetPositionAtOffset(result);
+                for (int run=0; run <SearchPattern.Length; run++)
+                {
+                    currentSelection = currentSelection.GetNextInsertionPosition(LogicalDirection.Forward);
+                }
 
-                var selectedRange = new TextRange(selectionStart, selectionEnd);
-                var la = selectedRange.Text;
+                var selectedRange = new TextRange(selectionStart, currentSelection);
+                //var la = selectedRange.Text;
 
                 searchResult = new SearchResultValue(true, selectedRange);
             }
             else
             {
+                // No hit
                 searchResult = new SearchResultValue(false, null);
             }
 
