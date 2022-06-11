@@ -45,7 +45,6 @@ namespace DevNotePad.Shared
             // Set the start index to the offset 
             if (StartPosition != null)
             {
-                // TODO
                 startIndex = textRange.Start.GetOffsetToPosition(StartPosition);
             }
 
@@ -58,6 +57,7 @@ namespace DevNotePad.Shared
                 // Hit
                 var selectionStart = textRange.Start.GetPositionAtOffset(result);
                 
+                // Iterate over the index positions until the end of the search pattern. Is there a better way of doing it?
                 var currentSelection = textRange.Start.GetPositionAtOffset(result);
                 for (int run=0; run <SearchPattern.Length; run++)
                 {
@@ -65,7 +65,6 @@ namespace DevNotePad.Shared
                 }
 
                 var selectedRange = new TextRange(selectionStart, currentSelection);
-                //var la = selectedRange.Text;
 
                 searchResult = new SearchResultValue(true, selectedRange);
             }
