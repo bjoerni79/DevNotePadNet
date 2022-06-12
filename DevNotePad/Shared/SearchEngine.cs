@@ -38,6 +38,36 @@ namespace DevNotePad.Shared
                 return new SearchResultValue(false, null);
             }
 
+            // Set the start index to the offset 
+            if (StartPosition != null)
+            {
+
+            }
+
+            SearchResultValue searchResult = new SearchResultValue(false, null); ;
+
+            return searchResult;
+        }
+
+        internal SearchResultValue RunSearchOld(FlowDocument flowDocument)
+        {
+            // https://docs.microsoft.com/en-us/dotnet/csharp/how-to/search-strings
+
+            StringComparison comparison;
+            if (IgnoreLetterType)
+            {
+                comparison = StringComparison.CurrentCultureIgnoreCase;
+            }
+            else
+            {
+                comparison = StringComparison.CurrentCulture;
+            }
+
+            if (flowDocument == null || string.IsNullOrEmpty(SearchPattern))
+            {
+                return new SearchResultValue(false, null);
+            }
+
             var textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
             var text = textRange.Text;
             int startIndex = 0;
@@ -55,14 +85,8 @@ namespace DevNotePad.Shared
             if (result >= 0)
             {
                 // Hit
-                var selectionStart = textRange.Start.GetPositionAtOffset(result);
-                
-                // Iterate over the index positions until the end of the search pattern. Is there a better way of doing it?
-                var currentSelection = textRange.Start.GetPositionAtOffset(result);
-                for (int run=0; run <SearchPattern.Length; run++)
-                {
-                    currentSelection = currentSelection.GetNextInsertionPosition(LogicalDirection.Forward);
-                }
+                var selectionStart = DetermineTextPointer(flowDocument.ContentStart, result);
+                var currentSelection = DetermineTextPointer(selectionStart, SearchPattern.Length);
 
                 var selectedRange = new TextRange(selectionStart, currentSelection);
 
@@ -75,6 +99,18 @@ namespace DevNotePad.Shared
             }
 
             return searchResult;
+        }
+
+        private TextPointer DetermineTextPointer(TextPointer start, int count)
+        {
+            // Iterate over the index positions until the end of the search pattern. Is there a better way of doing it?
+            var currentSelection = start.GetPositionAtOffset(count);
+            for (int run = 0; run < count; run++)
+            {
+                currentSelection = currentSelection.GetNextInsertionPosition(LogicalDirection.Forward);
+            }
+
+            return currentSelection;
         }
 
         /// <summary>
