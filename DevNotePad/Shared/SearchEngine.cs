@@ -43,14 +43,25 @@ namespace DevNotePad.Shared
 
         private SearchResultValue FindPattern(string searchPattern, StringComparison comparison, FlowDocument document, TextPointer? startPosition)
         {
-            SearchResultValue searchResult = new SearchResultValue(false, null); ;
+            SearchResultValue searchResult = new SearchResultValue(false, null);
 
-            //TODO:  How to set the start position?
+            // If the start position is defined, start with current selected paragraph
+            Block currentBlock;
+            if (startPosition != null)
+            {
+                var currentParagraph = startPosition.Paragraph;
+                currentBlock = currentParagraph;
+            }
+            else
+            {
+                // Use the first paragraph
+                currentBlock = document.Blocks.FirstBlock;
+            }
 
-            foreach (var block in document.Blocks)
+            while (currentBlock != null)
             {
                 //TODO: Section
-                var paragraph = block as Paragraph;
+                var paragraph = currentBlock as Paragraph;
                 if (paragraph != null)
                 {
                     //
@@ -67,9 +78,14 @@ namespace DevNotePad.Shared
                         var startSelection = paragraph.ContentStart.GetPositionAtOffset(result+1);
                         var endSelection = startSelection.GetPositionAtOffset(searchPattern.Length);
                         searchResult = new SearchResultValue(true, new TextRange(startSelection,endSelection));
+
+                        //TODO: Update the StartPosition for Find Next
+
                         break;
                     }
                 }
+
+                currentBlock = currentBlock.NextBlock;
             }
 
             return searchResult;
