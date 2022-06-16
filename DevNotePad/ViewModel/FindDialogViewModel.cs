@@ -87,8 +87,6 @@ namespace DevNotePad.ViewModel
             var result = searchEngine.RunSearch(currentDocument, findNext);
             if (result.Successful)
             {
-                //TODO: How to set index?
-
                 textComponent.SelectText(result.Selection);
                 ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
             }

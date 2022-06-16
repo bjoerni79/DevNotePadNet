@@ -6,23 +6,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace DevNotePad.ViewModel
 {
     public class ReplaceDialogViewModel : MainViewUiViewModel
     {
-        private int startIndex;
+        private TextPointer? startIndex;
         private bool searchState;
 
         private SearchEngine searchEngine;
 
         public ReplaceDialogViewModel()
         {
-            startIndex = -1;
+            startIndex = null;
             searchEngine = new SearchEngine();
 
             Find = new DefaultCommand(OnFind);
-            FindNext = new DefaultCommand(OnFindNext, () => startIndex >= 0);
+            FindNext = new DefaultCommand(OnFindNext, () => startIndex != null);
             Replace = new DefaultCommand(OnReplace, () => searchState);
             ReplaceAll = new DefaultCommand(OnReplaceAll);
             Cancel = new DefaultCommand(OnCancel);
@@ -48,41 +49,26 @@ namespace DevNotePad.ViewModel
 
         private void OnFind()
         {
-            //if (StartFromCurrentPosition)
-            //{
-            //    startIndex = textComponent.GetCurrentPosition();
-            //}
-            //else
-            //{
-            //    startIndex = 0;
-            //}
+            if (StartFromCurrentPosition)
+            {
+                startIndex = textComponent.GetCurrentPosition();
+            }
+            else
+            {
+                startIndex = null;
+            }
 
-            //searchEngine.SearchPattern = SearchFor;
-            //searchEngine.IgnoreLetterType = IgnoreLetterType;
-            //searchEngine.StartIndex = startIndex;
+            searchEngine.SearchPattern = SearchFor;
+            searchEngine.IgnoreLetterType = IgnoreLetterType;
+            searchEngine.StartPosition = startIndex;
 
-            //FindNext.Refresh();
-            //OnFindNext();
+            FindNext.Refresh();
+            InternalFind(false);
         }
 
         private void OnFindNext()
         {
-            //var content = textComponent.GetText(false);
-
-            //var result = searchEngine.RunSearch(content);
-            //if (result.Successful)
-            //{
-            //    textComponent.SelectText(result.StartIndex, result.Length);
-            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
-            //}
-            //else
-            //{
-            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
-            //}
-
-            //// Enable the replace feature if possible
-            //searchState = result.Successful;
-            //Replace.Refresh();
+            InternalFind(true);
         }
 
         private void OnReplace()
@@ -102,63 +88,84 @@ namespace DevNotePad.ViewModel
                 string notifier = "Search Pattern is replaced";
                 ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, false));
             }
-
         }
 
         private void OnReplaceAll()
         {
-            //if (string.IsNullOrEmpty(ReplaceWith))
-            //{
-            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Replace string is empty", true));
-            //}
-            //else
-            //{
-            //    int replaceCount = 0;
-            //    var content = textComponent.GetText(false);
-            //    startIndex = 0;
+            if (string.IsNullOrEmpty(ReplaceWith))
+            {
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Replace string is empty", true));
+            }
+            else
+            {
+                int replaceCount = 0;
+                startIndex = null;
 
-            //    searchEngine.SearchPattern = SearchFor;
-            //    searchEngine.StartIndex = startIndex;
-            //    searchEngine.IgnoreLetterType = IgnoreLetterType;
+                searchEngine.SearchPattern = SearchFor;
+                searchEngine.StartPosition = startIndex;
+                searchEngine.IgnoreLetterType = IgnoreLetterType;
 
-            //    var result = searchEngine.RunSearch(content);
-            //    while (result.Successful)
-            //    {
-            //        textComponent.SelectText(result.StartIndex, result.Length);
-            //        textComponent.SetText(ReplaceWith, true);
+                //var result = searchEngine.RunSearch(content,true);
+                var document = textComponent.GetDocument();
+                var result = searchEngine.RunSearch(document,true);
+                while (result.Successful)
+                {
+                    textComponent.SelectText(result.Selection);
+                    textComponent.SetText(ReplaceWith, true);
 
-            //        // Increase the counter and update the search text
-            //        content = textComponent.GetText(false);
-            //        replaceCount++;
+                    // Increase the counter and update the search text
+                    document = textComponent.GetDocument();
+                    replaceCount++;
 
-            //        result = searchEngine.RunSearch(content);
-            //    }
+                    result = searchEngine.RunSearch(document,true);
+                }
 
-            //    string notifier = "Unknown";
-            //    bool isWarning = true;
-            //    if (replaceCount == 0)
-            //    {
-            //        notifier = "None replace action performed";
-            //        isWarning = true;
-            //    }
-            //    if (replaceCount == 1)
-            //    {
-            //        isWarning = false;
-            //        notifier = "One replace action performed";
-            //    }
-            //    if (replaceCount > 1)
-            //    {
-            //        isWarning = false;
-            //        notifier = String.Format("Replaced action performed {0} times", replaceCount);
-            //    }
+                string notifier = "Unknown";
+                bool isWarning = true;
+                if (replaceCount == 0)
+                {
+                    notifier = "None replace action performed";
+                    isWarning = true;
+                }
+                if (replaceCount == 1)
+                {
+                    isWarning = false;
+                    notifier = "One replace action performed";
+                }
+                if (replaceCount > 1)
+                {
+                    isWarning = false;
+                    notifier = String.Format("Replaced action performed {0} times", replaceCount);
+                }
 
-            //    ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, isWarning));
-            //}
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter(notifier, isWarning));
+            }
         }
 
         private void OnCancel()
         {
             dialog.CloseDialog(true);
+        }
+
+        private void InternalFind(bool findNext)
+        {
+            var currentDocument = textComponent.GetDocument();
+            var result = searchEngine.RunSearch(currentDocument, findNext);
+            if (result.Successful)
+            {
+                textComponent.SelectText(result.Selection);
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
+            }
+            else
+            {
+                startIndex = null;
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
+            }
+
+            searchState = result.Successful;
+
+            Replace.Refresh();
+            FindNext.Refresh();
         }
     }
 }
