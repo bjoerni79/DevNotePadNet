@@ -1,5 +1,4 @@
-﻿using DevNotePad.Features.JavaCardApplet;
-using DevNotePad.Features.Json;
+﻿using DevNotePad.Features.Json;
 using DevNotePad.Features.Text;
 using DevNotePad.Features.TlvDecoder;
 using DevNotePad.Features.Xml;
@@ -47,14 +46,5 @@ namespace DevNotePad.Features
             return new TlvDecoder.TlvDecoder();
         }
 
-        public static IAppletIO CreateAppletIo()
-        {
-            return new AppletIo();
-        }
-
-        public static IAppletInterpreter CreateAppletInterpeter()
-        {
-            return new AppletInterpreter();
-        }
     }
 }

@@ -181,8 +181,6 @@ namespace DevNotePad.ViewModel
 
         public IRefreshCommand? DecodeTlv { get; private set; }
 
-        public IRefreshCommand? AppletTool { get; private set; }
-
         public IRefreshCommand? CreateGuid { get; private set; }
 
         #endregion
@@ -403,12 +401,6 @@ namespace DevNotePad.ViewModel
             {
                 Ui.ShowAbout();
             }
-        }
-
-        private void OnAppletTool()
-        {
-            var dialogService = ServiceHelper.GetToolDialogService();
-            dialogService.OpenAppletToolDialog(Ui, textComponent);
         }
 
         private void OnRegularExpressionTool()
@@ -878,7 +870,6 @@ namespace DevNotePad.ViewModel
             RegularExpressionTool = new DefaultCommand(() => OnRegularExpressionTool(), IsText);
             Base64Tool = new DefaultCommand(OnBase64Tool);
             DecodeTlv = new DefaultCommand(OnDecodeTlv, IsText);
-            AppletTool = new DefaultCommand(OnAppletTool);
 
             // About
             About = new DefaultCommand(OnAbout);

@@ -20,7 +20,6 @@ namespace DevNotePad.Service
         private FindDialog? currentFindDialog;
         private ReplaceDialog? currentReplaceDialog;
         private Base64ToolDialog? currentBase64ToolDialog;
-        private AppletToolDialog? currentAppletToolDialog;
         private XmlSchemaValidatorView? currentXmlSchemaValidatorView;
         private XmlXPathQueryView? currentXPathQueryView;
         private XsltTransformerView? currentXSltTransformerView;
@@ -31,32 +30,6 @@ namespace DevNotePad.Service
         internal ToolDialogService(Window owner)
         {
             this.defaultOwner = owner;
-        }
-
-        public void OpenAppletToolDialog(IMainViewUi ui, ITextComponent textComponent)
-        {
-            var facade = Init(ui);
-
-            AppletToolViewModel vm;
-            var isVmAvailable = facade.Exists(ViewModelInstances.AppletDialog);
-            if (isVmAvailable)
-            {
-                vm = facade.Get<AppletToolViewModel>(ViewModelInstances.AppletDialog);
-            }
-            else
-            {
-                vm = new AppletToolViewModel();
-                facade.AddUnique(vm, ViewModelInstances.AppletDialog);
-            }
-
-            if (currentAppletToolDialog != null)
-            {
-                currentAppletToolDialog.Close();
-            }
-
-            currentAppletToolDialog = new AppletToolDialog();
-
-            OpenDialog(ui, textComponent, vm, currentAppletToolDialog, currentAppletToolDialog);
         }
 
         public void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent)
