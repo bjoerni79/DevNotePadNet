@@ -68,22 +68,12 @@ namespace DevNotePad.ViewModel
             searchEngine.StartPosition = startIndex;
 
             FindNext.Refresh();
-            OnFindNext();
+            InternalFind(false);
         }
 
         private void OnFindNext()
         {
-            var currentDocument = textComponent.GetDocument();
-            var result = searchEngine.RunSearch(currentDocument);
-            if (result.Successful)
-            {
-                textComponent.SelectText(result.Selection);
-                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
-            }
-            else
-            {
-                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
-            }
+            InternalFind(true);
         }
 
         private void OnCancel()
@@ -91,6 +81,24 @@ namespace DevNotePad.ViewModel
             dialog.CloseDialog(true);
         }
 
+        private void InternalFind(bool findNext)
+        {
+            var currentDocument = textComponent.GetDocument();
+            var result = searchEngine.RunSearch(currentDocument, findNext);
+            if (result.Successful)
+            {
+                //TODO: How to set index?
 
+                textComponent.SelectText(result.Selection);
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
+            }
+            else
+            {
+                startIndex = null;
+                ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
+            }
+
+            FindNext.Refresh();
+        }
     }
 }

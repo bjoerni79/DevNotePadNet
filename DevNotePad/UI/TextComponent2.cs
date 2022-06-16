@@ -44,10 +44,14 @@ namespace DevNotePad.UI
 
         public TextPointer GetCurrentPosition()
         {
-            //return editor.CaretIndex;
-            var position = _editorControl.CaretPosition;
+            var currentPos = _editorControl.CaretPosition;
+            var isAtInsertPos = currentPos.IsAtInsertionPosition;
+            if (isAtInsertPos)
+            {
+                return currentPos;
+            }
 
-            return position;
+            return currentPos.GetNextInsertionPosition(LogicalDirection.Forward);
         }
 
         public FlowDocument GetDocument()
