@@ -147,8 +147,24 @@ namespace DevNotePad.UI
                 }
                 else
                 {
-                    var textRange = new TextRange(document.ContentStart, document.ContentEnd);
-                    textRange.Text = text;
+                    // Create new flow document in this case?  All content gets overwritten
+                    var newDocument = new FlowDocument();
+                    newDocument.LineHeight = Double.NaN;
+
+                    // Populate the new document and remove the first empty one
+                    if (text.Any())
+                    {
+                        var lines = text.Split(Environment.NewLine);
+                        foreach (var line in lines)
+                        {
+                            var p = new Paragraph(new Run(line));
+                            newDocument.Blocks.Add(p);
+                        }
+
+                        newDocument.Blocks.Remove(newDocument.Blocks.FirstBlock);
+                    }
+
+                    _editorControl.Document = newDocument;
                 }
             });
         }
