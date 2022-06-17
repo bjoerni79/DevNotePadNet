@@ -50,7 +50,7 @@ namespace DevNotePad.ViewModel
                     Nodes = null;
                 }
 
-                RaisePropertyChange("Nodes");
+                OnPropertyChanged("Nodes");
             }
         }
     }

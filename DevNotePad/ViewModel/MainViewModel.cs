@@ -1,4 +1,5 @@
-﻿using DevNotePad.Features;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DevNotePad.Features;
 using DevNotePad.Features.Json;
 using DevNotePad.Features.Shared;
 using DevNotePad.Features.Xml;
@@ -20,7 +21,7 @@ using System.Windows;
 
 namespace DevNotePad.ViewModel
 {
-    public class MainViewModel : AbstractViewModel, IMainViewModel, IEventListener
+    public class MainViewModel : ObservableObject, IMainViewModel, IEventListener
     {
         private readonly string ApplicationComponent = "Application";
         private readonly string JsonComponent = "JSON";
@@ -682,8 +683,8 @@ namespace DevNotePad.ViewModel
             // Notify the UI
             State = currentUiState;
             IsStateChanged = isChanged;
-            RaisePropertyChange("State");
-            RaisePropertyChange("IsStateChanged");
+            OnPropertyChanged("State");
+            OnPropertyChanged("IsStateChanged");
 
             fileGroup.Refresh();
             textOperationGroup.Refresh();

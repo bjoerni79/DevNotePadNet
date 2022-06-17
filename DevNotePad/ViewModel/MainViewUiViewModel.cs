@@ -1,4 +1,5 @@
-﻿using DevNotePad.Shared;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DevNotePad.ViewModel
 {
-    public class MainViewUiViewModel : AbstractViewModel
+    public class MainViewUiViewModel : ObservableObject
     {
         protected IMainViewUi? ui;
         protected IDialog? dialog;

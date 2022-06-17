@@ -49,9 +49,9 @@ namespace DevNotePad.ViewModel
             XmlContent = null;
             Result = null;
 
-            RaisePropertyChange("TransformationFile");
-            RaisePropertyChange("XmlContent");
-            RaisePropertyChange("Result");
+            OnPropertyChanged("TransformationFile");
+            OnPropertyChanged("XmlContent");
+            OnPropertyChanged("Result");
         }
 
         private void OnLoadXml()
@@ -62,13 +62,13 @@ namespace DevNotePad.ViewModel
                 if (fileContent != null)
                 {
                     XmlContent = fileContent;
-                    RaisePropertyChange("XmlContent");
+                    OnPropertyChanged("XmlContent");
                 }
             }
             catch (Exception ex)
             {
                 Result = ex.Message;
-                RaisePropertyChange("Result");
+                OnPropertyChanged("Result");
             }
         }
 
@@ -76,7 +76,7 @@ namespace DevNotePad.ViewModel
         {
             var contentFromText = textComponent.GetText(false);
             XmlContent = contentFromText;
-            RaisePropertyChange("XmlContent");
+            OnPropertyChanged("XmlContent");
         }
 
         private void OnAddTransformationFile()
@@ -88,7 +88,7 @@ namespace DevNotePad.ViewModel
             {
                 var file = result.File;
                 TransformationFile = file;
-                RaisePropertyChange("TransformationFile");
+                OnPropertyChanged("TransformationFile");
             }
         }
 
@@ -143,7 +143,7 @@ namespace DevNotePad.ViewModel
                 }
             }
 
-            RaisePropertyChange("Result");
+            OnPropertyChanged("Result");
         }
     }
 }

@@ -47,9 +47,9 @@ namespace DevNotePad.ViewModel
             XmlContent = null;
             Result = null;
 
-            RaisePropertyChange("SchemaFile");
-            RaisePropertyChange("XmlContent");
-            RaisePropertyChange("Result");
+            OnPropertyChanged("SchemaFile");
+            OnPropertyChanged("XmlContent");
+            OnPropertyChanged("Result");
         }
 
         private void OnAddSchemaFile()
@@ -61,7 +61,7 @@ namespace DevNotePad.ViewModel
             {
                 var file = result.File;
                 SchemaFile = file;
-                RaisePropertyChange("SchemaFile");
+                OnPropertyChanged("SchemaFile");
             }
         }
 
@@ -73,13 +73,13 @@ namespace DevNotePad.ViewModel
                 if (fileContent != null)
                 {
                     XmlContent = fileContent;
-                    RaisePropertyChange("XmlContent");
+                    OnPropertyChanged("XmlContent");
                 }
             }
             catch (Exception ex)
             {
                 Result = ex.Message;
-                RaisePropertyChange("Result");
+                OnPropertyChanged("Result");
             }
         }
 
@@ -87,7 +87,7 @@ namespace DevNotePad.ViewModel
         {
             var contentFromText = textComponent.GetText(false);
             XmlContent = contentFromText;
-            RaisePropertyChange("XmlContent");
+            OnPropertyChanged("XmlContent");
         }
 
         private void OnValidate()
@@ -98,21 +98,21 @@ namespace DevNotePad.ViewModel
             if (string.IsNullOrEmpty(SchemaFile))
             {
                 Result = "Invalid Schema File detected";
-                RaisePropertyChange("Result");
+                OnPropertyChanged("Result");
                 runValidation = false;
             }
 
             if (string.IsNullOrEmpty(XmlContent))
             {
                 Result = "No Xml Content available to validate";
-                RaisePropertyChange("Result");
+                OnPropertyChanged("Result");
                 runValidation= false;
             }
 
             if (runValidation && !File.Exists(SchemaFile))
             {
                 Result = "Schema File cannot be found";
-                RaisePropertyChange("Result");
+                OnPropertyChanged("Result");
                 runValidation = false;
             }
 
@@ -142,7 +142,7 @@ namespace DevNotePad.ViewModel
                         }
 
                         Result = stringBuilder.ToString();
-                        RaisePropertyChange("Result");
+                        OnPropertyChanged("Result");
                     }
                 }
                 catch (AggregateException aEx)
@@ -159,7 +159,7 @@ namespace DevNotePad.ViewModel
                             Result = inner.Message;
                         }
 
-                        RaisePropertyChange("Result");
+                        OnPropertyChanged("Result");
                     }
                 }
             }

@@ -1,4 +1,5 @@
-﻿using DevNotePad.Shared;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
 using Generic.MVVM;
 using System;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 
 namespace DevNotePad.ViewModel
 {
-    public class ConfimDialogViewModel : AbstractViewModel
+    public class ConfimDialogViewModel : ObservableObject
     {
         public ConfimDialogViewModel()
         {
@@ -51,20 +52,20 @@ namespace DevNotePad.ViewModel
             if (!string.IsNullOrEmpty(question))
             {
                 Question = question;
-                RaisePropertyChange("Question");
+                OnPropertyChanged("Question");
             }
 
             if (!string.IsNullOrEmpty(okButtonText))
             {
                 ConfirmButtonText = okButtonText;
-                RaisePropertyChange("ConfirmButtonText");
+                OnPropertyChanged("ConfirmButtonText");
             }
 
 
             if (!string.IsNullOrEmpty(title))
             {
                 DialogTitle = title;
-                RaisePropertyChange("DialogTitle");
+                OnPropertyChanged("DialogTitle");
             }
         }
     }

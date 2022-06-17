@@ -46,7 +46,7 @@ namespace DevNotePad.ViewModel
             var selectedGuid = guids[id - 1];
 
             Feedback = String.Format("GUID {0} copied to clipboard", id);
-            RaisePropertyChange("Feedback");
+            OnPropertyChanged("Feedback");
 
             Clipboard.SetText(selectedGuid);
         }
@@ -62,10 +62,10 @@ namespace DevNotePad.ViewModel
             Guid3 = guid3.ToString();
 
             Feedback = "New GUIDs ready";
-            RaisePropertyChange("Guid1");
-            RaisePropertyChange("Guid2");
-            RaisePropertyChange("Guid3");
-            RaisePropertyChange("Feedback");
+            OnPropertyChanged("Guid1");
+            OnPropertyChanged("Guid2");
+            OnPropertyChanged("Guid3");
+            OnPropertyChanged("Feedback");
         }
     }
 }

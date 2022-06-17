@@ -60,7 +60,7 @@ namespace DevNotePad.ViewModel
                     var hexCoding = Convert.ToHexString(byteCoding);
 
                     HexStringCoding = hexCoding;
-                    RaisePropertyChange("HexStringCoding");
+                    OnPropertyChanged("HexStringCoding");
                 }
                 catch (FormatException formatException)
                 {
@@ -87,7 +87,7 @@ namespace DevNotePad.ViewModel
 
                     var base64Coding = Convert.ToBase64String(byteCoding);
                     Base64StringCoding = base64Coding;
-                    RaisePropertyChange("Base64StringCoding");
+                    OnPropertyChanged("Base64StringCoding");
                 }
                 catch (FormatException formatException)
                 {
@@ -122,7 +122,7 @@ namespace DevNotePad.ViewModel
                     var hexContent = Convert.ToHexString(content);
 
                     HexStringCoding = hexContent;
-                    RaisePropertyChange("HexStringCoding");
+                    OnPropertyChanged("HexStringCoding");
                 }
                 catch (Exception ex)
                 {
@@ -177,8 +177,8 @@ namespace DevNotePad.ViewModel
             HexStringCoding = String.Empty;
             Base64StringCoding = String.Empty;
 
-            RaisePropertyChange("HexStringCoding");
-            RaisePropertyChange("Base64StringCoding");
+            OnPropertyChanged("HexStringCoding");
+            OnPropertyChanged("Base64StringCoding");
         }
 
         private void OnClose()

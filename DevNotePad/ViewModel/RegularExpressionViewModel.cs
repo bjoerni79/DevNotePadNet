@@ -84,12 +84,12 @@ namespace DevNotePad.ViewModel
             Result2 = RegularExpressionResult.None;
             Result3 = RegularExpressionResult.None;
 
-            RaisePropertyChange("Expression1");
-            RaisePropertyChange("Expression2");
-            RaisePropertyChange("Expression3");
-            RaisePropertyChange("Result1");
-            RaisePropertyChange("Result2");
-            RaisePropertyChange("Result3");
+            OnPropertyChanged("Expression1");
+            OnPropertyChanged("Expression2");
+            OnPropertyChanged("Expression3");
+            OnPropertyChanged("Result1");
+            OnPropertyChanged("Result2");
+            OnPropertyChanged("Result3");
             Run.Refresh();
         }
 
@@ -99,9 +99,9 @@ namespace DevNotePad.ViewModel
             Result2 = Perform(Expression2, SearchPattern);
             Result3 = Perform(Expression3, SearchPattern);
 
-            RaisePropertyChange("Result1");
-            RaisePropertyChange("Result2");
-            RaisePropertyChange("Result3");
+            OnPropertyChanged("Result1");
+            OnPropertyChanged("Result2");
+            OnPropertyChanged("Result3");
         }
 
         private RegexOptions BuildOptions()

@@ -1,4 +1,5 @@
-﻿using DevNotePad.MVVM;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DevNotePad.MVVM;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
 using Generic.MVVM;
@@ -11,7 +12,7 @@ using System.Windows.Input;
 
 namespace DevNotePad.ViewModel
 {
-    public class SettingsDialogViewModel : AbstractViewModel
+    public class SettingsDialogViewModel : ObservableObject
     {
         private IDialog dialogInstance;
 
