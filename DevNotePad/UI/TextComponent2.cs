@@ -56,7 +56,7 @@ namespace DevNotePad.UI
 
         public FlowDocument GetDocument()
         {
-            return document;
+            return _editorControl.Document;
         }
 
         public TextPointer GetStartPosition()

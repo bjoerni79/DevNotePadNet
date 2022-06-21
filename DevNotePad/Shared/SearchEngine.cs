@@ -55,7 +55,7 @@ namespace DevNotePad.Shared
             {
                 currentBlock = internalSearchPosition.Paragraph;
             }
-            else if(startPosition != null)
+            else if (startPosition != null)
             {
                 //
                 //  Start is defined. This overrides all previous settings
@@ -67,15 +67,16 @@ namespace DevNotePad.Shared
             else
             {
                 // Use the first paragraph
-                currentBlock = document.Blocks.FirstBlock;
-                internalSearchPosition = document.Blocks.FirstBlock.ContentStart.GetNextInsertionPosition(LogicalDirection.Forward);
-            }
+                var blocks = document.Blocks;
+                currentBlock = blocks.FirstBlock;
 
+                // TODO: Returns null in some cases!
+                internalSearchPosition = currentBlock.ContentStart;
+            }
 
             while (currentBlock != null)
             {
-                //TODO: Section filter required? For later..
-
+                // Search in paragraphs
                 var paragraph = currentBlock as Paragraph;
                 if (paragraph != null)
                 {
@@ -90,8 +91,8 @@ namespace DevNotePad.Shared
                         //
                         // Hit. Build the search result and leave the for each loop
                         //
-                        var startSelection = paragraph.ContentStart.GetPositionAtOffset(result);
-                        var endSelection = startSelection.GetPositionAtOffset(searchPattern.Length+1);
+                        var startSelection = paragraph.ContentStart.GetPositionAtOffset(result+1);
+                        var endSelection = startSelection.GetPositionAtOffset(searchPattern.Length);
                         searchResult = new SearchResultValue(true, new TextRange(startSelection,endSelection));
 
                         // Save the current position
