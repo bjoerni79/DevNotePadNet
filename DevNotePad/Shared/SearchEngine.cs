@@ -92,7 +92,7 @@ namespace DevNotePad.Shared
                         // Hit. Build the search result and leave the for each loop
                         //
                         var startSelection = paragraph.ContentStart.GetPositionAtOffset(result+1);
-                        var endSelection = startSelection.GetPositionAtOffset(searchPattern.Length+1);
+                        var endSelection = startSelection.GetPositionAtOffset(searchPattern.Length);
                         searchResult = new SearchResultValue(true, new TextRange(startSelection,endSelection));
 
                         // Save the current position
