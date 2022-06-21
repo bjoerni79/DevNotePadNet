@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DevNotePad.Features;
 using DevNotePad.Features.Json;
 using DevNotePad.Features.Shared;
@@ -35,10 +36,10 @@ namespace DevNotePad.ViewModel
 
         private IFileLogic? textLogic;
 
-        private CommandGroup fileGroup;
-        private CommandGroup textOperationGroup;
-        private CommandGroup scratchOperationGroup;
-        private CommandGroup toolGroup;
+        private RelayCommandGroup fileGroup;
+        private RelayCommandGroup textOperationGroup;
+        private RelayCommandGroup scratchOperationGroup;
+        private RelayCommandGroup toolGroup;
 
         public string State { get; private set; }
 
@@ -56,133 +57,93 @@ namespace DevNotePad.ViewModel
 
         // File
 
-        public IRefreshCommand? New { get; private set; }
+        public RelayCommand? New { get; private set; }
 
-        public IRefreshCommand? Open { get; private set; }
+        public RelayCommand? Open { get; private set; }
 
-        public IRefreshCommand? OpenBinary { get; private set; }
+        public RelayCommand? OpenBinary { get; private set; }
 
-        public IRefreshCommand? Save { get; private set; }
+        public RelayCommand? Save { get; private set; }
 
-        public IRefreshCommand? SaveBinary { get; private set; }
+        public RelayCommand? SaveBinary { get; private set; }
 
-        public IRefreshCommand? SaveAs { get; private set; }
+        public RelayCommand? SaveAs { get; private set; }
 
-        public IRefreshCommand? SaveAsBinary { get; private set; }
+        public RelayCommand? SaveAsBinary { get; private set; }
 
-        public IRefreshCommand? Reload { get; private set; }
+        public RelayCommand? Reload { get; private set; }
 
-        public IRefreshCommand? Close { get; private set; }
+        public RelayCommand? Close { get; private set; }
 
         // Edit
 
-        public IRefreshCommand? Find { get; private set; }
+        public RelayCommand? Find { get; private set; }
 
-        public IRefreshCommand? Replace { get; private set; }
-
-
-        public IRefreshCommand? CopyToText { get; private set; }
-
-        public IRefreshCommand? Cut { get; private set; }
-
-        public IRefreshCommand? Copy { get; private set; }
-
-        public IRefreshCommand? Paste { get; private set; }
+        public RelayCommand? Replace { get; private set; }
 
 
-        public IRefreshCommand? SelectAll { get; private set; }
+        public RelayCommand? CopyToText { get; private set; }
+
+        public RelayCommand? Cut { get; private set; }
+
+        public RelayCommand? Copy { get; private set; }
+
+        public RelayCommand? Paste { get; private set; }
+
+
+        public RelayCommand? SelectAll { get; private set; }
 
         // Layout
 
-        public IRefreshCommand? Settings { get; private set; }
+        public RelayCommand? Settings { get; private set; }
 
-        public IRefreshCommand? JsonFormatter { get; private set; }
+        public RelayCommand? JsonFormatter { get; private set; }
 
-        public IRefreshCommand? JsonToStringParser { get; private set; }
+        public RelayCommand? JsonToStringParser { get; private set; }
 
-        public IRefreshCommand? JsonToTreeParser { get; private set; }
+        public RelayCommand? JsonToTreeParser { get; private set; }
 
-        public IRefreshCommand? XmlFormatter { get; private set; }
+        public RelayCommand? XmlFormatter { get; private set; }
 
-        public IRefreshCommand? XmlToStringParser { get; private set; }
+        public RelayCommand? XmlToStringParser { get; private set; }
 
-        public IRefreshCommand? XmlToTreeParser { get; private set; }
+        public RelayCommand? XmlToTreeParser { get; private set; }
 
-        public IRefreshCommand? TextSplit { get; private set; }
+        public RelayCommand? TextSplit { get; private set; }
 
-        public IRefreshCommand? TextGroup { get; private set; }
+        public RelayCommand? TextGroup { get; private set; }
 
-        public IRefreshCommand? TextToLower { get; private set; }
+        public RelayCommand? TextToLower { get; private set; }
 
-        public IRefreshCommand? TextToUpper { get; private set; }
+        public RelayCommand? TextToUpper { get; private set; }
 
-        public IRefreshCommand? TextTrim { get; private set; }
+        public RelayCommand? TextTrim { get; private set; }
 
-        public IRefreshCommand? TextCountLength { get; private set; }
+        public RelayCommand? TextCountLength { get; private set; }
 
-        public IRefreshCommand? TextHexCountLength { get; private set; }
+        public RelayCommand? TextHexCountLength { get; private set; }
 
-        public IRefreshCommand? TextFormatHex { get; private set; }
+        public RelayCommand? TextFormatHex { get; private set; }
 
-        // ScratchPad
 
-        public IRefreshCommand? ScratchPadClearAll { get; private set; }
 
-        public IRefreshCommand? ScratchPadClearText { get; private set; }
-
-        public IRefreshCommand? ScratchPadClearTree { get; private set; }
-
-        public IRefreshCommand? ScratchPadCopyClipboard { get; private set; }
-
-        public IRefreshCommand? CopyToScratchPad { get; private set; }
-
-        public IRefreshCommand? ScratchPadCut { get; private set; }
-
-        public IRefreshCommand? ScratchPadPaste { get; private set; }
-
-        public IRefreshCommand? ScratchPadCopy { get; private set; }
-
-        public IRefreshCommand? ScratchPadJsonFormat { get; private set; }
-
-        public IRefreshCommand? ScratchPadJsonToTree { get; private set; }
-
-        public IRefreshCommand? ScratchPadXmlFormat { get; private set; }
-
-        public IRefreshCommand? ScratchPadXmlToTree { get; private set; }
-
-        public IRefreshCommand? ScratchPadSplit { get; private set; }
-
-        public IRefreshCommand? ScratchPadGroup { get; private set; }
-
-        public IRefreshCommand? ScratchpadToLower { get; private set; }
-
-        public IRefreshCommand? ScratchPadToUpper { get; private set; } 
-
-        public IRefreshCommand? ScratchPadTrim { get; private set; }
-
-        public IRefreshCommand? ScratchPadCountLength { get; private set; }
-
-        public IRefreshCommand? ScratchPadHexCountLength { get; private set; }
-
-        public IRefreshCommand? ScratchPadFormatHex { get; private set; }
-
-        public IRefreshCommand? SchemaValidatorTool { get; private set; }
+        public RelayCommand? SchemaValidatorTool { get; private set; }
          
-        public IRefreshCommand? XPathQueryTool { get; private set; }
+        public RelayCommand? XPathQueryTool { get; private set; }
 
-        public IRefreshCommand? XSltTransformationTool { get; private set; }
+        public RelayCommand? XSltTransformationTool { get; private set; }
 
-        public IRefreshCommand? RegularExpressionTool { get; private set; }
+        public RelayCommand? RegularExpressionTool { get; private set; }
 
-        public IRefreshCommand? Base64Tool { get; private set; }
+        public RelayCommand? Base64Tool { get; private set; }
 
-        public IRefreshCommand? About { get; private set; }
+        public RelayCommand? About { get; private set; }
 
-        public IRefreshCommand? Refresh { get; private set; }
+        public RelayCommand? Refresh { get; private set; }
 
-        public IRefreshCommand? DecodeTlv { get; private set; }
+        public RelayCommand? DecodeTlv { get; private set; }
 
-        public IRefreshCommand? CreateGuid { get; private set; }
+        public RelayCommand? CreateGuid { get; private set; }
 
         #endregion
 
@@ -779,19 +740,19 @@ namespace DevNotePad.ViewModel
         private void InitFileMenu()
         {
             // File
-            New = new DefaultCommand(() => OnFileOperation(FileOperation.New));
-            Open = new DefaultCommand(() => OnFileOperation(FileOperation.Open));
-            OpenBinary = new DefaultCommand(() => OnFileOperation(FileOperation.OpenBinary));
+            New = new RelayCommand(() => OnFileOperation(FileOperation.New));
+            Open = new RelayCommand(() => OnFileOperation(FileOperation.Open));
+            OpenBinary = new RelayCommand(() => OnFileOperation(FileOperation.OpenBinary));
 
-            Save = new DefaultCommand(() => OnFileOperation(FileOperation.Save), IsText);
-            SaveBinary = new DefaultCommand(() => OnFileOperation(FileOperation.SaveBinary), IsBinary);
-            SaveAs = new DefaultCommand(() => OnFileOperation(FileOperation.SaveAs), IsText);
-            SaveAsBinary = new DefaultCommand(() => OnFileOperation(FileOperation.SaveAsBinary), IsBinary);
-            Reload = new DefaultCommand(() => OnFileOperation(FileOperation.Reload), IsReloadFeatureAvailable);
-            Close = new DefaultCommand(OnClose);
+            Save = new RelayCommand(() => OnFileOperation(FileOperation.Save), IsText);
+            SaveBinary = new RelayCommand(() => OnFileOperation(FileOperation.SaveBinary), IsBinary);
+            SaveAs = new RelayCommand(() => OnFileOperation(FileOperation.SaveAs), IsText);
+            SaveAsBinary = new RelayCommand(() => OnFileOperation(FileOperation.SaveAsBinary), IsBinary);
+            Reload = new RelayCommand(() => OnFileOperation(FileOperation.Reload), IsReloadFeatureAvailable);
+            Close = new RelayCommand(OnClose);
 
             // Assign the commands to a group for later refresh actions
-            fileGroup = new CommandGroup(new List<IRefreshCommand>()
+            fileGroup = new RelayCommandGroup(new List<RelayCommand>()
             {
                 Save,
                 SaveAs,
@@ -804,34 +765,33 @@ namespace DevNotePad.ViewModel
         private void InitEditMenu()
         {
             // Edit
-            Find = new DefaultCommand(OnFind,IsTextOperationEnabled);
-            Replace = new DefaultCommand(OnReplace,IsTextOperationEnabled);
-            Cut = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Cut),IsTextOperationEnabled);
-            Copy = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Copy), IsTextOperationEnabled);
-            Paste = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Paste));
-            SelectAll = new DefaultCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.SelectAll), IsTextOperationEnabled);
+            Find = new RelayCommand(OnFind,IsTextOperationEnabled);
+            Replace = new RelayCommand(OnReplace,IsTextOperationEnabled);
+            Cut = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Cut),IsTextOperationEnabled);
+            Copy = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Copy), IsTextOperationEnabled);
+            Paste = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Paste));
+            SelectAll = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.SelectAll), IsTextOperationEnabled);
 
             //Tools
-            JsonFormatter = new DefaultCommand(() => OnJson(JsonOperation.Format), IsTextOperationEnabled);
-            JsonToStringParser = new DefaultCommand(() => OnJson(JsonOperation.ToText), IsTextOperationEnabled);
-            JsonToTreeParser = new DefaultCommand(() => OnJson(JsonOperation.ToTree), IsTextOperationEnabled);
-            XmlFormatter = new DefaultCommand(() => OnXml(XmlOperation.Format), IsTextOperationEnabled);
-            XmlToStringParser = new DefaultCommand(() => OnXml(XmlOperation.ToText), IsTextOperationEnabled);
-            XmlToTreeParser = new DefaultCommand(() => OnXml(XmlOperation.ToTree), IsTextOperationEnabled);
-            TextSplit = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Split), IsTextOperationEnabled);
-            TextGroup = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Group), IsTextOperationEnabled);
-            TextToLower = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToLower), IsTextOperationEnabled);
-            TextToUpper = new DefaultCommand(() => OnText(textLogic, TextActionEnum.ToUpper), IsTextOperationEnabled);
-            TextTrim = new DefaultCommand(() => OnText(textLogic, TextActionEnum.Trim), IsTextOperationEnabled);
-            TextCountLength = new DefaultCommand(() => OnText(textLogic, TextActionEnum.LengthCount), IsTextOperationEnabled);
-            TextHexCountLength = new DefaultCommand(() => OnText(textLogic, TextActionEnum.HexLengthCount), IsTextOperationEnabled);
-            TextFormatHex = new DefaultCommand(() => OnText(textLogic, TextActionEnum.HexFormat), IsTextOperationEnabled);
+            JsonFormatter = new RelayCommand(() => OnJson(JsonOperation.Format), IsTextOperationEnabled);
+            JsonToStringParser = new RelayCommand(() => OnJson(JsonOperation.ToText), IsTextOperationEnabled);
+            JsonToTreeParser = new RelayCommand(() => OnJson(JsonOperation.ToTree), IsTextOperationEnabled);
+            XmlFormatter = new RelayCommand(() => OnXml(XmlOperation.Format), IsTextOperationEnabled);
+            XmlToStringParser = new RelayCommand(() => OnXml(XmlOperation.ToText), IsTextOperationEnabled);
+            XmlToTreeParser = new RelayCommand(() => OnXml(XmlOperation.ToTree), IsTextOperationEnabled);
+            TextSplit = new RelayCommand(() => OnText(textLogic, TextActionEnum.Split), IsTextOperationEnabled);
+            TextGroup = new RelayCommand(() => OnText(textLogic, TextActionEnum.Group), IsTextOperationEnabled);
+            TextToLower = new RelayCommand(() => OnText(textLogic, TextActionEnum.ToLower), IsTextOperationEnabled);
+            TextToUpper = new RelayCommand(() => OnText(textLogic, TextActionEnum.ToUpper), IsTextOperationEnabled);
+            TextTrim = new RelayCommand(() => OnText(textLogic, TextActionEnum.Trim), IsTextOperationEnabled);
+            TextCountLength = new RelayCommand(() => OnText(textLogic, TextActionEnum.LengthCount), IsTextOperationEnabled);
+            TextHexCountLength = new RelayCommand(() => OnText(textLogic, TextActionEnum.HexLengthCount), IsTextOperationEnabled);
+            TextFormatHex = new RelayCommand(() => OnText(textLogic, TextActionEnum.HexFormat), IsTextOperationEnabled);
 
             // Assign the commands to a group
-            textOperationGroup = new CommandGroup(new List<IRefreshCommand> () {
+            textOperationGroup = new RelayCommandGroup(new List<RelayCommand> () {
                 Find,
                 Replace,
-                CopyToScratchPad,
                 Cut,
                 Copy,
                 SelectAll,
@@ -860,22 +820,22 @@ namespace DevNotePad.ViewModel
             InitEditMenu();
 
             // Layout
-            Settings = new DefaultCommand(OnSettings);
+            Settings = new RelayCommand(OnSettings);
 
             //...
-            SchemaValidatorTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.SchemaValidation), IsText);
-            XPathQueryTool = new DefaultCommand(() => OnXmlTool(XmlToolFeature.XPathQuery), IsText);
-            XSltTransformationTool = new DefaultCommand(()=>OnXmlTool(XmlToolFeature.XSltTransformation), IsText);
-            CreateGuid = new DefaultCommand(OnCreateGuid);
+            SchemaValidatorTool = new RelayCommand(()=>OnXmlTool(XmlToolFeature.SchemaValidation), IsText);
+            XPathQueryTool = new RelayCommand(() => OnXmlTool(XmlToolFeature.XPathQuery), IsText);
+            XSltTransformationTool = new RelayCommand(()=>OnXmlTool(XmlToolFeature.XSltTransformation), IsText);
+            CreateGuid = new RelayCommand(OnCreateGuid);
 
-            RegularExpressionTool = new DefaultCommand(() => OnRegularExpressionTool(), IsText);
-            Base64Tool = new DefaultCommand(OnBase64Tool);
-            DecodeTlv = new DefaultCommand(OnDecodeTlv, IsText);
+            RegularExpressionTool = new RelayCommand(() => OnRegularExpressionTool(), IsText);
+            Base64Tool = new RelayCommand(OnBase64Tool);
+            DecodeTlv = new RelayCommand(OnDecodeTlv, IsText);
 
             // About
-            About = new DefaultCommand(OnAbout);
+            About = new RelayCommand(OnAbout);
 
-            toolGroup = new CommandGroup(new IRefreshCommand[] {SchemaValidatorTool,XPathQueryTool,XSltTransformationTool,DecodeTlv});
+            toolGroup = new RelayCommandGroup(new RelayCommand[] {SchemaValidatorTool,XPathQueryTool,XSltTransformationTool,DecodeTlv});
         }
 
         #region Event Mechanism

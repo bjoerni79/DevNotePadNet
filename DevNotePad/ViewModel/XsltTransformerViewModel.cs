@@ -1,4 +1,5 @@
-﻿using DevNotePad.Features;
+﻿using CommunityToolkit.Mvvm.Input;
+using DevNotePad.Features;
 using DevNotePad.Features.Xml;
 using DevNotePad.MVVM;
 using Generic.MVVM;
@@ -16,11 +17,11 @@ namespace DevNotePad.ViewModel
     {
         public XsltTransformerViewModel()
         {
-            LoadXml = new DefaultCommand(OnLoadXml);
-            ImportFromText = new DefaultCommand(OnImportFromText);
-            Clear = new DefaultCommand(OnClear);
-            AddTransformationFile = new DefaultCommand(OnAddTransformationFile);
-            Transform = new DefaultCommand(OnTransform);
+            LoadXml = new RelayCommand(OnLoadXml);
+            ImportFromText = new RelayCommand(OnImportFromText);
+            Clear = new RelayCommand(OnClear);
+            AddTransformationFile = new RelayCommand(OnAddTransformationFile);
+            Transform = new RelayCommand(OnTransform);
         }
 
         public string? TransformationFile { get; set; }
@@ -33,15 +34,15 @@ namespace DevNotePad.ViewModel
 
         public bool EnableDocumentFunction { get; set; }
 
-        public IRefreshCommand? ImportFromText { get; private set; }
+        public RelayCommand? ImportFromText { get; private set; }
 
-        public IRefreshCommand? LoadXml { get; private set; }
+        public RelayCommand? LoadXml { get; private set; }
 
-        public IRefreshCommand? AddTransformationFile { get; private set; }
+        public RelayCommand? AddTransformationFile { get; private set; }
 
-        public IRefreshCommand? Transform { get; private set; }
+        public RelayCommand? Transform { get; private set; }
 
-        public IRefreshCommand? Clear { get; private set; }
+        public RelayCommand? Clear { get; private set; }
 
         private void OnClear()
         {

@@ -1,4 +1,5 @@
-﻿using DevNotePad.Features;
+﻿using CommunityToolkit.Mvvm.Input;
+using DevNotePad.Features;
 using DevNotePad.Features.Xml;
 using Generic.MVVM;
 using System;
@@ -14,10 +15,10 @@ namespace DevNotePad.ViewModel
     {
         public XPathQueryViewModel()
         {
-            Clear = new DefaultCommand(OnClear);
-            LoadXml = new DefaultCommand(OnLoadXml);
-            ImportFromText = new DefaultCommand(OnImportFromText);
-            Run = new DefaultCommand(OnRun);
+            Clear = new RelayCommand(OnClear);
+            LoadXml = new RelayCommand(OnLoadXml);
+            ImportFromText = new RelayCommand(OnImportFromText);
+            Run = new RelayCommand(OnRun);
         }
 
         public string? Query { get; set; }
@@ -26,13 +27,13 @@ namespace DevNotePad.ViewModel
 
         public string? Result { get; set; }
 
-        public IRefreshCommand? Run { get; private set; }
+        public RelayCommand? Run { get; private set; }
 
-        public IRefreshCommand? ImportFromText { get; private set; }
+        public RelayCommand? ImportFromText { get; private set; }
 
-        public IRefreshCommand? LoadXml { get; private set; }
+        public RelayCommand? LoadXml { get; private set; }
 
-        public IRefreshCommand? Clear { get; private set; }
+        public RelayCommand? Clear { get; private set; }
 
         private void OnClear()
         {

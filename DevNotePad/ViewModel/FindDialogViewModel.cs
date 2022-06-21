@@ -1,13 +1,8 @@
-﻿using DevNotePad.MVVM;
+﻿using CommunityToolkit.Mvvm.Input;
+using DevNotePad.MVVM;
 using DevNotePad.Shared;
-using Generic.MVVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Documents;
-using System.Windows.Input;
+
 
 namespace DevNotePad.ViewModel
 {
@@ -20,9 +15,9 @@ namespace DevNotePad.ViewModel
 
         public FindDialogViewModel()
         {
-            Find = new DefaultCommand(OnFind);
-            FindNext = new DefaultCommand(OnFindNext,() => startIndex != null);
-            Cancel = new DefaultCommand(OnCancel);
+            Find = new RelayCommand(OnFind);
+            FindNext = new RelayCommand(OnFindNext, () => startIndex != null);
+            Cancel  = new RelayCommand(OnCancel);
 
             startIndex = null;
             searchEngine = new SearchEngine();
@@ -44,11 +39,11 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        public IRefreshCommand Find { get; set; }
+        public RelayCommand Find { get; set; }
 
-        public IRefreshCommand FindNext { get; set; }
+        public RelayCommand FindNext { get; set; }
 
-        public IRefreshCommand Cancel { get; set; }
+        public RelayCommand Cancel { get; set; }
 
         private void OnFind()
         {
@@ -67,7 +62,7 @@ namespace DevNotePad.ViewModel
             searchEngine.IgnoreLetterType = IgnoreLetterType;
             searchEngine.StartPosition = startIndex;
 
-            FindNext.Refresh();
+            FindNext.NotifyCanExecuteChanged();
             InternalFind(false);
         }
 
@@ -88,6 +83,8 @@ namespace DevNotePad.ViewModel
             if (result.Successful)
             {
                 textComponent.SelectText(result.Selection);
+                startIndex = result.Selection.End;
+
                 ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Found", false));
             }
             else
@@ -96,7 +93,7 @@ namespace DevNotePad.ViewModel
                 ServiceHelper.TriggerToolbarNotification(new Shared.Event.UpdateStatusBarParameter("Not found", true));
             }
 
-            FindNext.Refresh();
+            FindNext.NotifyCanExecuteChanged();
         }
     }
 }

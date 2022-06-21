@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
 using Generic.MVVM;
@@ -15,8 +16,8 @@ namespace DevNotePad.ViewModel
     {
         public ConfimDialogViewModel()
         {
-            Confirm = new DefaultCommand(OnConfirm);
-            Cancel = new DefaultCommand(OnCancel);
+            Confirm = new RelayCommand(OnConfirm);
+            Cancel = new RelayCommand(OnCancel);
 
             Question = "Question";
             DialogTitle = "Confirm Dialog";
@@ -31,9 +32,9 @@ namespace DevNotePad.ViewModel
 
         public string ConfirmButtonText { get; set; }
 
-        public ICommand Confirm { get; set; }
+        public RelayCommand Confirm { get; set; }
 
-        public ICommand Cancel { get; set; }
+        public RelayCommand Cancel { get; set; }
 
         private void OnConfirm()
         {

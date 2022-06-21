@@ -1,4 +1,5 @@
-﻿using DevNotePad.MVVM;
+﻿using CommunityToolkit.Mvvm.Input;
+using DevNotePad.MVVM;
 using DevNotePad.Shared;
 using Generic.MVVM;
 using System;
@@ -22,11 +23,11 @@ namespace DevNotePad.ViewModel
             startIndex = null;
             searchEngine = new SearchEngine();
 
-            Find = new DefaultCommand(OnFind);
-            FindNext = new DefaultCommand(OnFindNext, () => startIndex != null);
-            Replace = new DefaultCommand(OnReplace, () => searchState);
-            ReplaceAll = new DefaultCommand(OnReplaceAll);
-            Cancel = new DefaultCommand(OnCancel);
+            Find = new RelayCommand(OnFind);
+            FindNext = new RelayCommand(OnFindNext, () => startIndex != null);
+            Replace = new RelayCommand(OnReplace, () => searchState);
+            ReplaceAll = new RelayCommand(OnReplaceAll);
+            Cancel = new RelayCommand(OnCancel);
         }
 
         public string? SearchFor { get; set; }
@@ -37,15 +38,15 @@ namespace DevNotePad.ViewModel
 
         public bool StartFromCurrentPosition { get; set; }
 
-        public IRefreshCommand Find { get; set; }
+        public RelayCommand Find { get; set; }
 
-        public IRefreshCommand FindNext { get; set; }
+        public RelayCommand FindNext { get; set; }
 
-        public IRefreshCommand Replace { get; set; }
+        public RelayCommand Replace { get; set; }
 
-        public IRefreshCommand ReplaceAll { get; set; }
+        public RelayCommand ReplaceAll { get; set; }
 
-        public IRefreshCommand Cancel { get; set; }
+        public RelayCommand Cancel { get; set; }
 
         private void OnFind()
         {
@@ -62,7 +63,7 @@ namespace DevNotePad.ViewModel
             searchEngine.IgnoreLetterType = IgnoreLetterType;
             searchEngine.StartPosition = startIndex;
 
-            FindNext.Refresh();
+            FindNext.NotifyCanExecuteChanged();
             InternalFind(false);
         }
 
@@ -164,8 +165,8 @@ namespace DevNotePad.ViewModel
 
             searchState = result.Successful;
 
-            Replace.Refresh();
-            FindNext.Refresh();
+            Replace.NotifyCanExecuteChanged();
+            FindNext.NotifyCanExecuteChanged();
         }
     }
 }

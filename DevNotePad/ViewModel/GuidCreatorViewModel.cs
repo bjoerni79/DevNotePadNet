@@ -1,4 +1,5 @@
-﻿using Generic.MVVM;
+﻿using CommunityToolkit.Mvvm.Input;
+using Generic.MVVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,11 @@ namespace DevNotePad.ViewModel
         {
             CreateGuid();
 
-            Refresh = new DefaultCommand(CreateGuid);
-            Close = new DefaultCommand(() => dialog.CloseDialog(true));
-            CopyGuid1 = new DefaultCommand(() => CopyGuid(1));
-            CopyGuid2 = new DefaultCommand(() => CopyGuid(2));
-            CopyGuid3 = new DefaultCommand(() => CopyGuid(3));
+            Refresh = new RelayCommand(CreateGuid);
+            Close = new RelayCommand(() => dialog.CloseDialog(true));
+            CopyGuid1 = new RelayCommand(() => CopyGuid(1));
+            CopyGuid2 = new RelayCommand(() => CopyGuid(2));
+            CopyGuid3 = new RelayCommand(() => CopyGuid(3));
         }
 
         public string? Guid1 { get; set; }
@@ -30,15 +31,15 @@ namespace DevNotePad.ViewModel
 
         public string? Feedback { get; set; }
 
-        public IRefreshCommand? Refresh { get; set; }
+        public RelayCommand? Refresh { get; set; }
 
-        public IRefreshCommand? Close { get; set; }
+        public RelayCommand? Close { get; set; }
 
-        public IRefreshCommand? CopyGuid1 { get; set; }
+        public RelayCommand? CopyGuid1 { get; set; }
 
-        public IRefreshCommand? CopyGuid2 { get; set; }
+        public RelayCommand? CopyGuid2 { get; set; }
 
-        public IRefreshCommand? CopyGuid3 { get; set; }
+        public RelayCommand? CopyGuid3 { get; set; }
 
         private void CopyGuid(int id)
         {

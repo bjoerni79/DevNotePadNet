@@ -1,4 +1,5 @@
-﻿using DevNotePad.Features.Shared;
+﻿using CommunityToolkit.Mvvm.Input;
+using DevNotePad.Features.Shared;
 using DevNotePad.MVVM;
 using DevNotePad.Shared.Event;
 using Generic.MVVM;
@@ -24,10 +25,10 @@ namespace DevNotePad.ViewModel
             var updateTreeEvent = eventController.GetEvent(Events.UpdateTreeEvent);
             updateTreeEvent.AddListener(this);
 
-            Close = new DefaultCommand(() => dialog.CloseDialog(true));
+            Close = new RelayCommand(() => dialog.CloseDialog(true));
         }
 
-        public IRefreshCommand? Close { get; set; }
+        public RelayCommand? Close { get; set; }
 
         public ObservableCollection<ItemNode>? Nodes { get; set; }
 

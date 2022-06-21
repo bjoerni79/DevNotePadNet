@@ -1,13 +1,8 @@
-﻿using DevNotePad.Features;
+﻿using CommunityToolkit.Mvvm.Input;
+using DevNotePad.Features;
 using DevNotePad.Features.Text;
 using DevNotePad.MVVM;
-using Generic.MVVM;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace DevNotePad.ViewModel
 {
@@ -20,27 +15,27 @@ namespace DevNotePad.ViewModel
 
         public Base64ToolViewModel()
         {
-            ToHex = new DefaultCommand(OnToHex);
-            ToBase64 = new DefaultCommand(OnToBase64);
-            LoadBinary = new DefaultCommand(OnLoadBinary);
-            SaveBinary = new DefaultCommand(OnSaveBinary);
-            Close = new DefaultCommand(OnClose);
-            Reset = new DefaultCommand(OnReset);
+            ToHex = new RelayCommand(OnToHex);
+            ToBase64 = new RelayCommand(OnToBase64);
+            LoadBinary = new RelayCommand(OnLoadBinary);
+            SaveBinary = new RelayCommand(OnSaveBinary);
+            Close = new RelayCommand(OnClose);
+            Reset = new RelayCommand(OnReset);
 
             formatComponent = FeatureFactory.CreateTextFormat();
         }
 
-        public IRefreshCommand ToHex { get; private set; }
+        public RelayCommand ToHex { get; private set; }
 
-        public IRefreshCommand ToBase64 { get; private set; }
+        public RelayCommand ToBase64 { get; private set; }
 
-        public IRefreshCommand LoadBinary { get; private set; }
+        public RelayCommand LoadBinary { get; private set; }
 
-        public IRefreshCommand SaveBinary { get; set; }
+        public RelayCommand SaveBinary { get; set; }
 
-        public ICommand Close { get; private set; }
+        public RelayCommand Close { get; private set; }
 
-        public ICommand Reset { get; private set; }
+        public RelayCommand Reset { get; private set; }
 
         public string? HexStringCoding { get; set; }
 

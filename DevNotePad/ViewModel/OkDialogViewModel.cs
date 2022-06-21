@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
 using Generic.MVVM;
@@ -20,8 +21,8 @@ namespace DevNotePad.ViewModel
             Component = "Unknown";
             Message = "Test Message";
 
-            Confirm = new DefaultCommand(OnConfirm);
-            Copy = new DefaultCommand(OnCopy);
+            Confirm = new RelayCommand(OnConfirm);
+            Copy = new RelayCommand(OnCopy);
         }
 
         private IDialog? dialog;
@@ -45,9 +46,9 @@ namespace DevNotePad.ViewModel
         public string? Details { get; set; }
 
         // OK Button
-        public ICommand Confirm { get; set; }
+        public RelayCommand Confirm { get; set; }
 
-        public ICommand Copy { get; set; }
+        public RelayCommand Copy { get; set; }
 
         private void OnConfirm()
         {

@@ -1,4 +1,5 @@
-﻿using DevNotePad.Shared;
+﻿using CommunityToolkit.Mvvm.Input;
+using DevNotePad.Shared;
 using Generic.MVVM;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace DevNotePad.ViewModel
 
         public RegularExpressionViewModel()
         {
-            Run = new DefaultCommand(OnRun, AreValuesAvailable);
-            Close = new DefaultCommand(OnClose);
-            Clear = new DefaultCommand(OnClear);
+            Run = new RelayCommand(OnRun, AreValuesAvailable);
+            Close = new RelayCommand(OnClose);
+            Clear = new RelayCommand(OnClear);
         }
 
         // Binding Properties
@@ -29,19 +30,19 @@ namespace DevNotePad.ViewModel
         public string? Expression1
         {
             get { return expression1; }
-            set { expression1 = value; Run.Refresh(); }
+            set { expression1 = value; Run.NotifyCanExecuteChanged(); }
         }
 
         public string? Expression2
         {
             get { return expression2; }
-            set { expression2 = value; Run.Refresh(); }
+            set { expression2 = value; Run.NotifyCanExecuteChanged(); }
         }
 
         public string? Expression3
         {
             get { return expression3; }
-            set { expression3 = value; Run.Refresh(); }
+            set { expression3 = value; Run.NotifyCanExecuteChanged(); }
         }
 
         public RegularExpressionResult Result1 { get; set; }
@@ -50,11 +51,11 @@ namespace DevNotePad.ViewModel
 
         public RegularExpressionResult Result3 { get; set; }
 
-        public IRefreshCommand Run { get; set; }
+        public RelayCommand Run { get; set; }
 
-        public IRefreshCommand Close { get; set; }
+        public RelayCommand Close { get; set; }
 
-        public IRefreshCommand Clear { get; set; }
+        public RelayCommand Clear { get; set; }
 
         public bool IgnoreCaseOption { get; set; }
 
@@ -90,7 +91,7 @@ namespace DevNotePad.ViewModel
             OnPropertyChanged("Result1");
             OnPropertyChanged("Result2");
             OnPropertyChanged("Result3");
-            Run.Refresh();
+            Run.NotifyCanExecuteChanged();
         }
 
         private void OnRun()

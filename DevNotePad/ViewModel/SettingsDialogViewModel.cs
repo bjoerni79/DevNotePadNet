@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DevNotePad.MVVM;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
@@ -18,8 +19,8 @@ namespace DevNotePad.ViewModel
 
         public SettingsDialogViewModel()
         {
-            Apply = new DefaultCommand(() => Close(true));
-            Cancel = new DefaultCommand(() => Close(false));
+            Apply = new RelayCommand(() => Close(true));
+            Cancel = new RelayCommand(() => Close(false));
 
         }
 
@@ -40,9 +41,9 @@ namespace DevNotePad.ViewModel
 
         public string? DefaultWorkingPath { get; set; }
 
-        public ICommand? Apply { get; set; }
+        public RelayCommand? Apply { get; set; }
 
-        public ICommand? Cancel { get; set; }
+        public RelayCommand? Cancel { get; set; }
 
         #endregion
 
