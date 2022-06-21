@@ -1,14 +1,8 @@
 ﻿using DevNotePad.Shared;
 using DevNotePad.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace DevNotePad.UI
 {
@@ -139,11 +133,12 @@ namespace DevNotePad.UI
 
         public void SetText(string text, bool selected)
         {
-            App.Current.Dispatcher.Invoke(() => { 
+            App.Current.Dispatcher.Invoke(() =>
+            {
                 if (selected)
                 {
                     if (_editorControl.Selection != null && !_editorControl.Selection.IsEmpty)
-                    _editorControl.Selection.Text = text;
+                        _editorControl.Selection.Text = text;
                 }
                 else
                 {

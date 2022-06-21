@@ -1,13 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using DevNotePad.Features;
 using DevNotePad.Features.Xml;
-using Generic.MVVM;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevNotePad.ViewModel
 {
@@ -86,7 +81,7 @@ namespace DevNotePad.ViewModel
             if (runValidation && String.IsNullOrEmpty(XmlContent))
             {
                 Result = "Error: Please provide XML";
-                runValidation= false;
+                runValidation = false;
             }
 
             if (runValidation)

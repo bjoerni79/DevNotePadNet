@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Generic.MVVM;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DevNotePad.ViewModel
@@ -43,7 +38,7 @@ namespace DevNotePad.ViewModel
 
         private void CopyGuid(int id)
         {
-            var guids = new [] { Guid1, Guid2, Guid3 };
+            var guids = new[] { Guid1, Guid2, Guid3 };
             var selectedGuid = guids[id - 1];
 
             Feedback = String.Format("GUID {0} copied to clipboard", id);

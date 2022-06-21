@@ -5,20 +5,15 @@ using DevNotePad.Features.Json;
 using DevNotePad.Features.Shared;
 using DevNotePad.Features.Xml;
 using DevNotePad.MVVM;
-using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
-using Generic.MVVM;
 using Generic.MVVM.Event;
-using Generic.MVVM.IOC;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace DevNotePad.ViewModel
 {
@@ -128,7 +123,7 @@ namespace DevNotePad.ViewModel
 
 
         public RelayCommand? SchemaValidatorTool { get; private set; }
-         
+
         public RelayCommand? XPathQueryTool { get; private set; }
 
         public RelayCommand? XSltTransformationTool { get; private set; }
@@ -316,7 +311,7 @@ namespace DevNotePad.ViewModel
                     // Format Action
                     if (operation == XmlOperation.Format)
                     {
-                        var formatterTask = Task.Run(()=>component.FormatterAsync(input));
+                        var formatterTask = Task.Run(() => component.FormatterAsync(input));
                         formatterTask.Wait();
 
                         //var formatted = component.Formatter(input);
@@ -328,7 +323,7 @@ namespace DevNotePad.ViewModel
                     // To Tree Action
                     if (operation == XmlOperation.ToTree)
                     {
-                        var treeNodeTask = Task.Run(()=>component.ParseToTreeAsync(input));
+                        var treeNodeTask = Task.Run(() => component.ParseToTreeAsync(input));
                         treeNodeTask.Wait();
 
                         // Open the view and trigger the event
@@ -395,7 +390,7 @@ namespace DevNotePad.ViewModel
                 default:
                     break;
             }
-            
+
         }
 
         private bool CheckForUi()
@@ -407,23 +402,23 @@ namespace DevNotePad.ViewModel
             }
 
             return true;
-            
+
         }
 
 
         private void OnFind()
         {
             var dialogService = ServiceHelper.GetToolDialogService();
-            dialogService.OpenFindDialog(Ui,textComponent);
+            dialogService.OpenFindDialog(Ui, textComponent);
         }
 
         private void OnReplace()
         {
             var dialogService = ServiceHelper.GetToolDialogService();
-            dialogService.OpenReplaceDialog(Ui,textComponent);
+            dialogService.OpenReplaceDialog(Ui, textComponent);
         }
 
-        private void OnText(IFileLogic logic,TextActionEnum textAction)
+        private void OnText(IFileLogic logic, TextActionEnum textAction)
         {
             if (logic != null)
             {
@@ -454,18 +449,18 @@ namespace DevNotePad.ViewModel
 
                         var tag = Convert.ToHexString(tlv.TagBytes);
                         var length = Convert.ToHexString(tlv.LengthBytes);
-                        
-                        
+
+
                         // Format the byte
                         var formattedTlvBuilder = new StringBuilder();
-                        formattedTlvBuilder.AppendFormat("{0}  {1}\n",tag,length);
+                        formattedTlvBuilder.AppendFormat("{0}  {1}\n", tag, length);
 
                         if (tlv.ByteValue.Any())
                         {
                             var value = Convert.ToHexString(tlv.ByteValue);
                             formattedTlvBuilder.AppendFormat("  {0}\n", value);
                         }
-                        
+
                         if (tlv.RemainingBytes != null && tlv.RemainingBytes.Any())
                         {
                             var remaining = Convert.ToHexString(tlv.RemainingBytes);
@@ -495,7 +490,7 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        private void OnTextClipboard(IFileLogic logic,ClipboardActionEnum action)
+        private void OnTextClipboard(IFileLogic logic, ClipboardActionEnum action)
         {
             if (logic != null)
             {
@@ -525,7 +520,7 @@ namespace DevNotePad.ViewModel
             Ui = ui;
             textComponent = text;
 
-            textLogic = new InternalFileLogic(Ui,textComponent);
+            textLogic = new InternalFileLogic(Ui, textComponent);
             textLogic.New();
 
             InitEvents();
@@ -709,7 +704,7 @@ namespace DevNotePad.ViewModel
         }
 
 
-        private bool IsScratchPadMode ()
+        private bool IsScratchPadMode()
         {
             var settings = ServiceHelper.GetSettings();
             if (settings != null)
@@ -765,9 +760,9 @@ namespace DevNotePad.ViewModel
         private void InitEditMenu()
         {
             // Edit
-            Find = new RelayCommand(OnFind,IsTextOperationEnabled);
-            Replace = new RelayCommand(OnReplace,IsTextOperationEnabled);
-            Cut = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Cut),IsTextOperationEnabled);
+            Find = new RelayCommand(OnFind, IsTextOperationEnabled);
+            Replace = new RelayCommand(OnReplace, IsTextOperationEnabled);
+            Cut = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Cut), IsTextOperationEnabled);
             Copy = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Copy), IsTextOperationEnabled);
             Paste = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.Paste));
             SelectAll = new RelayCommand(() => OnTextClipboard(textLogic, ClipboardActionEnum.SelectAll), IsTextOperationEnabled);
@@ -789,7 +784,7 @@ namespace DevNotePad.ViewModel
             TextFormatHex = new RelayCommand(() => OnText(textLogic, TextActionEnum.HexFormat), IsTextOperationEnabled);
 
             // Assign the commands to a group
-            textOperationGroup = new RelayCommandGroup(new List<RelayCommand> () {
+            textOperationGroup = new RelayCommandGroup(new List<RelayCommand>() {
                 Find,
                 Replace,
                 Cut,
@@ -823,9 +818,9 @@ namespace DevNotePad.ViewModel
             Settings = new RelayCommand(OnSettings);
 
             //...
-            SchemaValidatorTool = new RelayCommand(()=>OnXmlTool(XmlToolFeature.SchemaValidation), IsText);
+            SchemaValidatorTool = new RelayCommand(() => OnXmlTool(XmlToolFeature.SchemaValidation), IsText);
             XPathQueryTool = new RelayCommand(() => OnXmlTool(XmlToolFeature.XPathQuery), IsText);
-            XSltTransformationTool = new RelayCommand(()=>OnXmlTool(XmlToolFeature.XSltTransformation), IsText);
+            XSltTransformationTool = new RelayCommand(() => OnXmlTool(XmlToolFeature.XSltTransformation), IsText);
             CreateGuid = new RelayCommand(OnCreateGuid);
 
             RegularExpressionTool = new RelayCommand(() => OnRegularExpressionTool(), IsText);
@@ -835,7 +830,7 @@ namespace DevNotePad.ViewModel
             // About
             About = new RelayCommand(OnAbout);
 
-            toolGroup = new RelayCommandGroup(new RelayCommand[] {SchemaValidatorTool,XPathQueryTool,XSltTransformationTool,DecodeTlv});
+            toolGroup = new RelayCommandGroup(new RelayCommand[] { SchemaValidatorTool, XPathQueryTool, XSltTransformationTool, DecodeTlv });
         }
 
         #region Event Mechanism

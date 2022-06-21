@@ -3,13 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using DevNotePad.MVVM;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
-using Generic.MVVM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace DevNotePad.ViewModel
 {

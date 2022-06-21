@@ -2,13 +2,8 @@
 using DevNotePad.Features;
 using DevNotePad.Features.Xml;
 using DevNotePad.MVVM;
-using Generic.MVVM;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace DevNotePad.ViewModel
@@ -122,7 +117,7 @@ namespace DevNotePad.ViewModel
                     using (var fileStream = File.OpenText(TransformationFile))
                     using (var xmlReader = XmlReader.Create(fileStream))
                     {
-                        var request = new XSltTransformationRequest(textReader, xmlReader,parameter);
+                        var request = new XSltTransformationRequest(textReader, xmlReader, parameter);
                         response = xsltService.Transform(request);
                     }
                 }

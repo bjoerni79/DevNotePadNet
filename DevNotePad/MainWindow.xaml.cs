@@ -1,25 +1,14 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Service;
-using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
 using DevNotePad.Shared.Event;
 using DevNotePad.UI;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DevNotePad
 {
@@ -133,7 +122,7 @@ namespace DevNotePad
                         if (updateAsyncState.InProgress)
                         {
                             isRunningProgressBar.Visibility = Visibility.Visible;
-                            
+
                         }
                         else
                         {
@@ -186,10 +175,10 @@ namespace DevNotePad
                 asyncOperationEvent.AddListener(this);
 
                 IDialogService dialogService = new DialogService(this);
-                facade.AddUnique(dialogService,Bootstrap.DialogServiceId);
+                facade.AddUnique(dialogService, Bootstrap.DialogServiceId);
 
                 IToolDialogService toolDialogService = new ToolDialogService(this);
-                facade.AddUnique(toolDialogService,Bootstrap.ToolDialogServiceId);
+                facade.AddUnique(toolDialogService, Bootstrap.ToolDialogServiceId);
             }
 
             var vm = GetViewModel();
@@ -222,7 +211,7 @@ namespace DevNotePad
                         if (dialogService != null)
                         {
                             //TODO: Ask if the user wants to save first
-                            var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close","Close Application");
+                            var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close", "Close Application");
                             e.Cancel = !doClose;
                         }
                     }

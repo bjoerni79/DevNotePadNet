@@ -17,7 +17,7 @@ namespace DevNotePad.ViewModel
         {
             Find = new RelayCommand(OnFind);
             FindNext = new RelayCommand(OnFindNext, () => startIndex != null);
-            Cancel  = new RelayCommand(OnCancel);
+            Cancel = new RelayCommand(OnCancel);
 
             startIndex = null;
             searchEngine = new SearchEngine();

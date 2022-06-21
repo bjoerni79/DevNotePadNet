@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -57,7 +53,7 @@ namespace DevNotePad.Features.Xml
                         var iteraterBuffer = new StringBuilder("Detected Node(s) :\n");
                         while (nodeIterator.MoveNext())
                         {
-                            iteraterBuffer.AppendFormat("- {0} at Position {1}\n",nodeIterator.Current.LocalName, nodeIterator.CurrentPosition);
+                            iteraterBuffer.AppendFormat("- {0} at Position {1}\n", nodeIterator.Current.LocalName, nodeIterator.CurrentPosition);
                         }
 
                         queryResult = iteraterBuffer.ToString();
@@ -73,7 +69,7 @@ namespace DevNotePad.Features.Xml
             {
                 throw new FeatureException("XML issue", xmlEx);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new FeatureException("Unknown issue", ex);
             }

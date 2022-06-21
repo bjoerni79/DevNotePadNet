@@ -1,9 +1,5 @@
 ﻿using DevNotePad.Features.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace DevNotePad.Features.Xml
@@ -61,7 +57,7 @@ namespace DevNotePad.Features.Xml
 
         public IEnumerable<ItemNode> ParseToTree(string xmlText)
         {
-            var parseTask = Task.Run(()=>ParseToTreeAsync(xmlText));
+            var parseTask = Task.Run(() => ParseToTreeAsync(xmlText));
             parseTask.Wait();
 
             return parseTask.Result;
@@ -89,7 +85,7 @@ namespace DevNotePad.Features.Xml
                     var isComment = currentType == XmlNodeType.Comment;
                     var isText = currentType == XmlNodeType.Text;
                     var isCDATA = currentType == XmlNodeType.CDATA;
- 
+
                     // Ignore some elements...
                     if (isEntity || isDocument || isCDATA)
                     {
@@ -112,11 +108,11 @@ namespace DevNotePad.Features.Xml
 
                     if (isText)
                     {
-                        
+
                         if (hasValue)
                         {
                             var textValue = await xmlreader.GetValueAsync();
-                            var textNode = new ItemNode() { Style = ItemNodeStyle.Value, Name = "Content", Description=textValue };
+                            var textNode = new ItemNode() { Style = ItemNodeStyle.Value, Name = "Content", Description = textValue };
 
                             AddItemNode(textNode, isEmpty);
                         }
@@ -141,7 +137,7 @@ namespace DevNotePad.Features.Xml
                             elementNode.Style = ItemNodeStyle.Element;
 
                             // Read the attributes, if available
-                            var hasAttributes = xmlreader.AttributeCount > 0; 
+                            var hasAttributes = xmlreader.AttributeCount > 0;
                             if (hasAttributes)
                             {
                                 for (int curAttribute = 0; curAttribute < xmlreader.AttributeCount; curAttribute++)
@@ -157,7 +153,7 @@ namespace DevNotePad.Features.Xml
                                 }
                             }
 
-                            AddItemNode(elementNode,isEmpty);
+                            AddItemNode(elementNode, isEmpty);
                         }
                         else if (currentType == XmlNodeType.EndElement)
                         {
@@ -228,7 +224,7 @@ namespace DevNotePad.Features.Xml
             settings.Async = true;
             settings.ConformanceLevel = ConformanceLevel.Fragment;
             settings.DtdProcessing = DtdProcessing.Ignore;
-            
+
 
             //TODO...
 

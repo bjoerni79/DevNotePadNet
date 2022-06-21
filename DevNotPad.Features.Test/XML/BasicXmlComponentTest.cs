@@ -1,13 +1,6 @@
 ﻿using DevNotePad.Features;
-using DevNotePad.Features.Shared;
 using DevNotePad.Features.Xml;
-using DevNotPad.Features.Test.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevNotPad.Features.Test.XML
 {
@@ -19,7 +12,7 @@ namespace DevNotPad.Features.Test.XML
         [TestInitialize]
         public void Init()
         {
-            xmlComponentUt = FeatureFactory.CreateXml(); 
+            xmlComponentUt = FeatureFactory.CreateXml();
 
         }
 
@@ -56,7 +49,7 @@ namespace DevNotPad.Features.Test.XML
         //public void PlaygroundTest()
         //{
         //    var xmlcontent = Resources.simpleXml1;
-            
+
         //    var itemNodes = xmlComponentUt!.ParseToTree(xmlcontent);
 
         //    // Check the tree now

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using DevNotePad.Features.Shared;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using System.IO;
-using DevNotePad.Features.Shared;
 
 namespace DevNotePad.Features.Json
 {
@@ -63,7 +58,7 @@ namespace DevNotePad.Features.Json
             return rootNode;
         }
 
-        private void DomParser (JsonElement element, ItemNode node)
+        private void DomParser(JsonElement element, ItemNode node)
         {
             var kind = element.ValueKind;
             if (kind == JsonValueKind.Array)
@@ -188,7 +183,7 @@ namespace DevNotePad.Features.Json
 
                 var options = new JsonDocumentOptions() { AllowTrailingCommas = true };
                 options.CommentHandling = JsonCommentHandling.Skip;
-               
+
                 document = JsonDocument.Parse(jsonCoding, options);
             }
             catch (JsonException jsonException)

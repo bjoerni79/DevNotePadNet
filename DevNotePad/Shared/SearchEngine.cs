@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Documents;
 
 namespace DevNotePad.Shared
@@ -91,9 +87,9 @@ namespace DevNotePad.Shared
                         //
                         // Hit. Build the search result and leave the for each loop
                         //
-                        var startSelection = paragraph.ContentStart.GetPositionAtOffset(result+1);
+                        var startSelection = paragraph.ContentStart.GetPositionAtOffset(result + 1);
                         var endSelection = startSelection.GetPositionAtOffset(searchPattern.Length);
-                        searchResult = new SearchResultValue(true, new TextRange(startSelection,endSelection));
+                        searchResult = new SearchResultValue(true, new TextRange(startSelection, endSelection));
 
                         // Save the current position
                         internalSearchPosition = endSelection;

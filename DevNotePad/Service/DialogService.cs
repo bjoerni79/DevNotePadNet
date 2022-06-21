@@ -1,14 +1,9 @@
 ﻿using DevNotePad.Features;
 using DevNotePad.MVVM;
-using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
 using DevNotePad.ViewModel;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DevNotePad.Service
@@ -31,8 +26,8 @@ namespace DevNotePad.Service
 
         public bool ShowConfirmationDialog(string question, string title, string okButtonText)
         {
-            var confirmDialog = new ConfirmDialog() { Owner = defaultOwner,Topmost= true };
-            confirmDialog.Init(question, title,okButtonText);
+            var confirmDialog = new ConfirmDialog() { Owner = defaultOwner, Topmost = true };
+            confirmDialog.Init(question, title, okButtonText);
 
             var result = confirmDialog.ShowDialog();
             if (result.HasValue)
@@ -94,7 +89,7 @@ namespace DevNotePad.Service
         public DialogReturnValue ShowSaveFileDialog(string defaultExtension, Window owner)
         {
             //var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension, DefaultExt = "*.txt" };
-            var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension};
+            var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension };
             var result = saveFileDialog.ShowDialog(owner);
 
             if (result.HasValue && result.Value)

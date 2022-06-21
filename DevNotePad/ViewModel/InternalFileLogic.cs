@@ -3,8 +3,6 @@ using DevNotePad.MVVM;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +15,7 @@ namespace DevNotePad.ViewModel
 
         public bool IsTextFormatAvailable { get; private set; }
 
-        internal InternalFileLogic(IMainViewUi ui,ITextComponent textComponent)
+        internal InternalFileLogic(IMainViewUi ui, ITextComponent textComponent)
         {
             this.textComponent = textComponent;
             this.mainUi = ui;
@@ -81,7 +79,7 @@ namespace DevNotePad.ViewModel
                             formattedText = text;
                             break;
                         case TextActionEnum.HexLengthCount:
-                            notifier = formatter.CountLength(text,true);
+                            notifier = formatter.CountLength(text, true);
                             doUpdate = false;
                             formattedText = text;
                             break;
@@ -162,10 +160,11 @@ namespace DevNotePad.ViewModel
                     {
                         var textToSave = textComponent.GetText(false);
 
-                        var saveTask = Task.Run(async () => {
+                        var saveTask = Task.Run(async () =>
+                        {
                             ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
-                            
+
                             await ioService.WriteTextFileAsync(targetfilename, textToSave);
 
 
@@ -254,7 +253,7 @@ namespace DevNotePad.ViewModel
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
                     }
 
-                    
+
                 });
 
                 saveTask.Wait();
@@ -355,7 +354,7 @@ namespace DevNotePad.ViewModel
             {
                 var ioService = ServiceHelper.GetIoService();
                 FileName = sourceFilename;
-                CurrentState= EditorState.Loaded;
+                CurrentState = EditorState.Loaded;
 
                 LatestTimeStamp = ioService.GetModificationTimeStamp(FileName);
 

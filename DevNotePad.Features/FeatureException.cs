@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace DevNotePad.Features
 {
@@ -13,7 +9,7 @@ namespace DevNotePad.Features
 
         }
 
-        public FeatureException(string message, Exception inner) : base(message,inner)
+        public FeatureException(string message, Exception inner) : base(message, inner)
         {
             Details = inner.Message;
         }

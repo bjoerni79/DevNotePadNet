@@ -2,15 +2,10 @@
 using DevNotePad.Features;
 using DevNotePad.Features.Xml;
 using DevNotePad.MVVM;
-using Generic.MVVM;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Schema;
 
 namespace DevNotePad.ViewModel
 {
@@ -107,7 +102,7 @@ namespace DevNotePad.ViewModel
             {
                 Result = "No Xml Content available to validate";
                 OnPropertyChanged("Result");
-                runValidation= false;
+                runValidation = false;
             }
 
             if (runValidation && !File.Exists(SchemaFile))

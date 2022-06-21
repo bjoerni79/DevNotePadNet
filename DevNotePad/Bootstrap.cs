@@ -1,14 +1,8 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
-using DevNotePad.Shared.Event;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevNotePad
 {

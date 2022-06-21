@@ -1,9 +1,4 @@
 ﻿using DevNotePad.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevNotePad.Service
 {
@@ -21,7 +16,7 @@ namespace DevNotePad.Service
 
         void OpenXSltTransfomerDialog(IMainViewUi ui, ITextComponent textComponent);
 
-        void OpenRegularExpressionDialog (IMainViewUi ui, ITextComponent textComponent);
+        void OpenRegularExpressionDialog(IMainViewUi ui, ITextComponent textComponent);
 
         void OpenGuidDialog(IMainViewUi ui, ITextComponent textComponent);
 

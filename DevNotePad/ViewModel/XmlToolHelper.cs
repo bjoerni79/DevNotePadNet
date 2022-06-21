@@ -1,11 +1,6 @@
 ﻿using DevNotePad.MVVM;
 using DevNotePad.Shared.Dialog;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevNotePad.ViewModel
 {

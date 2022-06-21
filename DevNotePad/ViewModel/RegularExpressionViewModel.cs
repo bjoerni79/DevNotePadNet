@@ -1,12 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using DevNotePad.Shared;
-using Generic.MVVM;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace DevNotePad.ViewModel
 {
@@ -149,7 +144,7 @@ namespace DevNotePad.ViewModel
                     {
                         returnValue = RegularExpressionResult.NoMatch;
                     }
-                    
+
                 }
                 else
                 {

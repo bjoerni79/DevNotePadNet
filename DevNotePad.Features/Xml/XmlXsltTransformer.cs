@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -43,7 +39,7 @@ namespace DevNotePad.Features.Xml
 
             var xsltSettings = new XsltSettings() { EnableScript = parameter.EnableScript, EnableDocumentFunction = parameter.EnableDocumentFunction };
 
-            var xmlWriterSettings = new XmlWriterSettings() { Indent = true, OmitXmlDeclaration=true };
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true, OmitXmlDeclaration = true };
             var buffer = new StringBuilder();
             var isPassed = false;
             var result = String.Empty;
@@ -56,7 +52,7 @@ namespace DevNotePad.Features.Xml
 
                 // And now now parse the source using the XPathDocument and store it in a buffer via XmlWriter
                 var document = new XPathDocument(xmlContentReader);
-                using (var writer = XmlWriter.Create(buffer,xmlWriterSettings))
+                using (var writer = XmlWriter.Create(buffer, xmlWriterSettings))
                 {
                     xslTransform.Transform(document, writer);
                     isPassed = true;
@@ -75,7 +71,7 @@ namespace DevNotePad.Features.Xml
                 }
             }
 
-            return new XSltTransformationResponse(isPassed,result);
+            return new XSltTransformationResponse(isPassed, result);
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using DevNotePad.Features.Shared;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace DevNotePad.Shared.Converter
@@ -22,7 +18,7 @@ namespace DevNotePad.Shared.Converter
         {
             string selectUiStyle = Default;
             if (value.GetType() == typeof(ItemNodeStyle))
-            { 
+            {
                 var style = (ItemNodeStyle)value;
                 switch (style)
                 {

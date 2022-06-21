@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DevNotePad.Features.Text
+﻿namespace DevNotePad.Features.Text
 {
     public interface ITextFormatComponent
     {
         string CountLength(string text);
 
-        string CountLength(string text,bool inHexRepresentation);
+        string CountLength(string text, bool inHexRepresentation);
 
         string GroupString(string text);
 

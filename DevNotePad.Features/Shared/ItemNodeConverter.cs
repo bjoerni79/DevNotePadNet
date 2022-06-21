@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace DevNotePad.Features.Shared
 {
@@ -21,13 +17,13 @@ namespace DevNotePad.Features.Shared
             return reportBuilder.ToString();
         }
 
-        private void Read(ItemNode node,StringBuilder reportBuilder, int level)
+        private void Read(ItemNode node, StringBuilder reportBuilder, int level)
         {
             // Add a tab character for each level
             string levelIntend = String.Empty;
             for (int curLevel = 0; curLevel < level; curLevel++)
             {
-                levelIntend = String.Format("{0}\t",levelIntend);
+                levelIntend = String.Format("{0}\t", levelIntend);
             }
 
             reportBuilder.AppendFormat("{0} {1} {2}\n", levelIntend, node.Name, node.Description);

@@ -1,9 +1,4 @@
-﻿using DevNotePad.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 
 namespace DevNotePad.Service
@@ -28,7 +23,7 @@ namespace DevNotePad.Service
 
         bool ShowConfirmationDialog(string question, string title);
 
-        bool ShowConfirmationDialog(string question, string title,string okButtonText);
+        bool ShowConfirmationDialog(string question, string title, string okButtonText);
 
         void ShowSettings();
     }

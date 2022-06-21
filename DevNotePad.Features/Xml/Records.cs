@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Xml;
 
 namespace DevNotePad.Features.Xml
 {
-    public record SchemaValidationItem (string Category, string Description);
+    public record SchemaValidationItem(string Category, string Description);
 
-    public record SchemaCompareResult (bool IsPassed,IEnumerable<SchemaValidationItem>? ValidationItems);
+    public record SchemaCompareResult(bool IsPassed, IEnumerable<SchemaValidationItem>? ValidationItems);
 
     public record SchemaCompareRequest(TextReader XmlContent, StreamReader Schema);
 
-    public record XPathQueryRequest (TextReader XmlContent, string XPathQuery);
+    public record XPathQueryRequest(TextReader XmlContent, string XPathQuery);
 
-    public record XPathQueryResponse (bool IsMatching, string Result);
+    public record XPathQueryResponse(bool IsMatching, string Result);
 
-    public record XsltParameter (bool EnableScript, bool EnableDocumentFunction);
+    public record XsltParameter(bool EnableScript, bool EnableDocumentFunction);
 
     public record XSltTransformationRequest(TextReader XmlContent, XmlReader Transformation, XsltParameter Parameter);
 
-    public record XSltTransformationResponse (bool IsPassed, string Result);
+    public record XSltTransformationResponse(bool IsPassed, string Result);
 }

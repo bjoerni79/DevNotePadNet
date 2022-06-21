@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace DevNotePad.Shared.Converter
@@ -32,7 +28,7 @@ namespace DevNotePad.Shared.Converter
             }
             catch
             {
-                resource=NotChangedStyle;
+                resource = NotChangedStyle;
             }
 
             // Get the style based on the translation above.

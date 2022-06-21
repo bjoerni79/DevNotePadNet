@@ -1,9 +1,5 @@
 ﻿using Generic.MVVM;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevNotePad.MVVM
 {
@@ -29,7 +25,7 @@ namespace DevNotePad.MVVM
                 {
                     command.Refresh();
                 }
-                
+
             }
         }
     }

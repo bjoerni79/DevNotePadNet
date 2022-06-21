@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace DevNotePad.Shared
@@ -149,8 +145,8 @@ namespace DevNotePad.Shared
         {
             var filePath = GetFilePath();
 
-            var xmlSettings = new XmlWriterSettings() {  Indent=true};
-            using (var xmlWriter = XmlWriter.Create(filePath,xmlSettings))
+            var xmlSettings = new XmlWriterSettings() { Indent = true };
+            using (var xmlWriter = XmlWriter.Create(filePath, xmlSettings))
             {
                 xmlWriter.WriteStartDocument(true);
 
@@ -184,7 +180,7 @@ namespace DevNotePad.Shared
                 {
                     xmlWriter.WriteElementString(DefaultPathNode, settings.DefaultPath);
                 }
-                
+
                 // Darkmode
                 xmlWriter.WriteElementString(DarkModeNode, settings.DarkModeEnabled.ToString());
 
@@ -219,7 +215,7 @@ namespace DevNotePad.Shared
             var filePath = GetFilePath();
             var xmlReaderSettings = new XmlReaderSettings();
 
-            using (var xmlReader = XmlReader.Create(filePath,xmlReaderSettings))
+            using (var xmlReader = XmlReader.Create(filePath, xmlReaderSettings))
             {
                 string currentNode = String.Empty;
                 string currentValue = String.Empty;

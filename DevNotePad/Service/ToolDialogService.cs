@@ -3,10 +3,6 @@ using DevNotePad.Shared.Dialog;
 using DevNotePad.ViewModel;
 using Generic.MVVM.IOC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DevNotePad.Service
@@ -54,7 +50,7 @@ namespace DevNotePad.Service
             }
 
             currentBase64ToolDialog = new Base64ToolDialog();
-            OpenDialog(ui, textComponent,vm, currentBase64ToolDialog, currentBase64ToolDialog);
+            OpenDialog(ui, textComponent, vm, currentBase64ToolDialog, currentBase64ToolDialog);
         }
 
         public void OpenFindDialog(IMainViewUi ui, ITextComponent textComponent)
@@ -256,7 +252,7 @@ namespace DevNotePad.Service
         /// <param name="viewModel">the view model to connect</param>
         /// <param name="view">the view as Window type</param>
         /// <param name="dialogInstance">the view as IDialog type</param>
-        private void OpenDialog(IMainViewUi ui, ITextComponent textComponent, MainViewUiViewModel viewModel, Window view,IDialog dialogInstance)
+        private void OpenDialog(IMainViewUi ui, ITextComponent textComponent, MainViewUiViewModel viewModel, Window view, IDialog dialogInstance)
         {
             // Init the view model. The IDialog interface is the channel between the view model and the view.
             viewModel.Init(ui, dialogInstance, textComponent);

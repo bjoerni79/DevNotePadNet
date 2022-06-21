@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DevNotePad.Features.TlvDecoder
+﻿namespace DevNotePad.Features.TlvDecoder
 {
     internal class TlvDecoder : ITlvDecoder
     {
@@ -164,7 +158,7 @@ namespace DevNotePad.Features.TlvDecoder
                     }
 
                     var bytes = tlvBytes.Skip(1).Take(lengthCount).ToArray();
-                    tlv.LengthBytes = tlvBytes.Take(lengthCount+1).ToArray();
+                    tlv.LengthBytes = tlvBytes.Take(lengthCount + 1).ToArray();
 
                     int lengthBuffer = 0;
                     if (lengthCount == 1)

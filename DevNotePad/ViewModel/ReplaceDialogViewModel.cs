@@ -1,12 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using DevNotePad.MVVM;
 using DevNotePad.Shared;
-using Generic.MVVM;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Documents;
 
 namespace DevNotePad.ViewModel
@@ -108,7 +103,7 @@ namespace DevNotePad.ViewModel
 
                 //var result = searchEngine.RunSearch(content,true);
                 var document = textComponent.GetDocument();
-                var result = searchEngine.RunSearch(document,true);
+                var result = searchEngine.RunSearch(document, true);
                 while (result.Successful)
                 {
                     textComponent.SelectText(result.Selection);
@@ -118,7 +113,7 @@ namespace DevNotePad.ViewModel
                     document = textComponent.GetDocument();
                     replaceCount++;
 
-                    result = searchEngine.RunSearch(document,true);
+                    result = searchEngine.RunSearch(document, true);
                 }
 
                 string notifier = "Unknown";
