@@ -155,7 +155,7 @@ namespace DevNotePad.UI
                             newDocument.Blocks.Add(p);
                         }
 
-                        newDocument.Blocks.Remove(newDocument.Blocks.FirstBlock);
+                        //newDocument.Blocks.Remove(newDocument.Blocks.FirstBlock);
                     }
 
                     _editorControl.Document = newDocument;
