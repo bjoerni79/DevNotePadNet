@@ -9,14 +9,12 @@ namespace DevNotePad.UI
     public class TextComponent2 : ITextComponent
     {
         private DevTextBox2 _editorControl;
-        private FlowDocument document;
 
         // https://stackoverflow.com/questions/3934422/wpf-richtextbox-get-whole-word-at-current-caret-position
 
         public TextComponent2(DevTextBox2 editorControl)
         {
             _editorControl = editorControl;
-            document = editorControl.Document;
         }
 
         public void AddText(string text)
@@ -24,7 +22,7 @@ namespace DevNotePad.UI
             // Add the text at current position.. 
             // editor.AppendText("\n" + text);
 
-            var endPointer = document.ContentEnd;
+            var endPointer = _editorControl.Document.ContentEnd;
             if (endPointer.IsAtInsertionPosition)
             {
                 endPointer.InsertTextInRun(text);
@@ -55,7 +53,7 @@ namespace DevNotePad.UI
 
         public TextPointer GetStartPosition()
         {
-            return document.ContentStart;
+            return _editorControl.Document.ContentStart;
         }
 
         public string GetText(bool selected)
@@ -79,6 +77,7 @@ namespace DevNotePad.UI
             else
             {
                 // Return the entire text
+                var document = _editorControl.Document;
                 var textRange = new TextRange(document.ContentStart, document.ContentEnd);
                 content = textRange.Text;
             }
