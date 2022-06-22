@@ -111,36 +111,6 @@ namespace DevNotePad
             }));
         }
 
-        public void UpdateToolBar(UpdateStatusBarParameter parameter)
-        {
-            if (parameter != null)
-            {
-                Dispatcher.BeginInvoke(new Action(() => ApplyNotification(parameter)));
-            }
-        }
-
-        private void ApplyNotification(UpdateStatusBarParameter e)
-        {
-            var styleDefault = "notificationDefault";
-            var styleWarning = "notificationWarning";
-
-            var message = e.Message;
-            var isWarning = e.IsWarning;
-
-            Style style;
-            if (isWarning)
-            {
-                style = App.Current.FindResource(styleWarning) as Style;
-            }
-            else
-            {
-                style = App.Current.FindResource(styleDefault) as Style;
-            }
-
-            notificationLabel.Content = message;
-            notificationLabel.Style = style;
-        }
-
         #region Event Delegates
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

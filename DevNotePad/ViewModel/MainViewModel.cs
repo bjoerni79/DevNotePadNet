@@ -48,21 +48,22 @@ namespace DevNotePad.ViewModel
             IsStateChanged = false;
             InitMenu();
 
+            IsActive = true;
         }
 
         protected override void OnActivated()
         {
-            base.OnActivated();
+            //base.OnActivated();
 
             // https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/observablerecipient
             //
             // Register the two events. The interface method can only deal with one.
             Messenger.Register<MainViewModel, UpdateAsyncProcessStateMessage>(this, (r, m) => InternalUpdateAsync(m.Value));
 
-            Messenger.Register<MainViewModel, UpdateStatusBarParameterMessage>(this, (r, m) => InternalUpdateStatus(m.Value));
-
             // TODO: Update File Status..
             Messenger.Register<MainViewModel, UpdateFileStatusMessage>(this, (r, m) => UpdateFileStatus(m.Value));
+
+            //TODO: Register the UpdateStatusBarParameterMessage again and implement a more fancy way of showing it
         }
 
         #region Commands
@@ -830,9 +831,6 @@ namespace DevNotePad.ViewModel
             Ui.UpdateAsyncState(isInAsync);
         }
 
-        private void InternalUpdateStatus(UpdateStatusBarParameter parameter)
-        {
-            Ui.UpdateToolBar(parameter);
-        }
+
     }
 }

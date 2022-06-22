@@ -14,8 +14,6 @@ namespace DevNotePad.ViewModel
 
         void UpdateAsyncState(bool isInAsyncState);
 
-        void UpdateToolBar(UpdateStatusBarParameter parameter);
-
         void CloseByViewModel();
 
         void ResetLayout();
