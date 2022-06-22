@@ -53,12 +53,10 @@ namespace DevNotePad
             var updateStatusEvent = new Generic.MVVM.Event.Event(Events.UpdateToolBarEvent);
             var asyncOperationEvent = new Generic.MVVM.Event.Event(Events.UpdateAsyncStateEvent);
             var updateFileStateEvent = new Generic.MVVM.Event.Event(Events.UpdateFileStateEvent);
-            //var updateTreeEvent = new Generic.MVVM.Event.Event(Events.UpdateTreeEvent);
 
             eventController.Add(updateStatusEvent);
             eventController.Add(asyncOperationEvent);
             eventController.Add(updateFileStateEvent);
-            //eventController.Add(updateTreeEvent);
         }
 
         private void LoadSettings()

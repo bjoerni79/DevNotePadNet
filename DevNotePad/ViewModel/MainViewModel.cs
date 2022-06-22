@@ -271,8 +271,6 @@ namespace DevNotePad.ViewModel
                         var dialogService = ServiceHelper.GetToolDialogService();
                         dialogService.OpenTreeView();
 
-                        //var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
-                        //updateTreeEvent.Trigger(new UpdateTree(new List<ItemNode>() { rootNode, }));
                         WeakReferenceMessenger.Default.Send(new UpdateTreeMessage(new List<ItemNode>() { rootNode }));
 
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
@@ -332,9 +330,6 @@ namespace DevNotePad.ViewModel
                         // Open the view and trigger the event
                         var dialogFactory = ServiceHelper.GetToolDialogService();
                         dialogFactory.OpenTreeView();
-
-                        //var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
-                        //updateTreeEvent.Trigger(new UpdateTree(treeNodeTask.Result));
 
                         WeakReferenceMessenger.Default.Send(new UpdateTreeMessage(treeNodeTask.Result));
                     }
