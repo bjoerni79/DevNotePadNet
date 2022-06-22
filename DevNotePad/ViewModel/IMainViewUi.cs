@@ -1,4 +1,6 @@
-﻿namespace DevNotePad.ViewModel
+﻿using DevNotePad.Shared.Event;
+
+namespace DevNotePad.ViewModel
 {
     public interface IMainViewUi
     {
@@ -10,6 +12,9 @@
 
         void SetFilename(string filename);
 
+        void UpdateAsyncState(bool isInAsyncState);
+
+        void UpdateToolBar(UpdateStatusBarParameter parameter);
 
         void CloseByViewModel();
 

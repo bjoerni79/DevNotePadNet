@@ -32,31 +32,11 @@ namespace DevNotePad
 
         private void InitComponents()
         {
-            //Init the eventController and services
-            var eventController = new EventController();
             IIoService ioService = new IoService();
-
-            // Register Events
-            RegisterEvents(eventController);
 
             // Add it to the IoC container 
             var facade = FacadeFactory.Create();
-            facade.AddUnique(eventController, EventControllerId);
             facade.AddUnique(ioService, IoServiceId);
-        }
-
-        private void RegisterEvents(EventController eventController)
-        {
-            //
-            //  Old
-            //
-            var updateStatusEvent = new Generic.MVVM.Event.Event(Events.UpdateToolBarEvent);
-            var asyncOperationEvent = new Generic.MVVM.Event.Event(Events.UpdateAsyncStateEvent);
-            var updateFileStateEvent = new Generic.MVVM.Event.Event(Events.UpdateFileStateEvent);
-
-            eventController.Add(updateStatusEvent);
-            eventController.Add(asyncOperationEvent);
-            eventController.Add(updateFileStateEvent);
         }
 
         private void LoadSettings()

@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace DevNotePad.ViewModel
 {
-    public class MainViewModel : ObservableObject, IMainViewModel, IEventListener
+    public class MainViewModel : ObservableRecipient, IMainViewModel
     {
         private readonly string ApplicationComponent = "Application";
         private readonly string JsonComponent = "JSON";
@@ -48,6 +48,21 @@ namespace DevNotePad.ViewModel
             IsStateChanged = false;
             InitMenu();
 
+        }
+
+        protected override void OnActivated()
+        {
+            base.OnActivated();
+
+            // https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/observablerecipient
+            //
+            // Register the two events. The interface method can only deal with one.
+            Messenger.Register<MainViewModel, UpdateAsyncProcessStateMessage>(this, (r, m) => InternalUpdateAsync(m.Value));
+
+            Messenger.Register<MainViewModel, UpdateStatusBarParameterMessage>(this, (r, m) => InternalUpdateStatus(m.Value));
+
+            // TODO: Update File Status..
+            //Messenger.Register<MainViewModel, >
         }
 
         #region Commands
@@ -523,7 +538,6 @@ namespace DevNotePad.ViewModel
             textLogic = new InternalFileLogic(Ui, textComponent);
             textLogic.New();
 
-            InitEvents();
             UpdateFileStatus();
         }
 
@@ -647,20 +661,6 @@ namespace DevNotePad.ViewModel
             toolGroup.Refresh();
         }
 
-        private void InitEvents()
-        {
-            var facade = FacadeFactory.Create();
-            var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
-            if (eventController != null)
-            {
-                var fileStatsUpdateEvent = eventController.GetEvent(Events.UpdateFileStateEvent);
-                if (fileStatsUpdateEvent != null)
-                {
-                    fileStatsUpdateEvent.AddListener(this);
-                }
-            }
-        }
-
         private bool IsText()
         {
             bool isEnabled = false;
@@ -701,18 +701,6 @@ namespace DevNotePad.ViewModel
         private bool IsTextOperationEnabled()
         {
             return IsText() && IsContentAvailable(textComponent);
-        }
-
-
-        private bool IsScratchPadMode()
-        {
-            var settings = ServiceHelper.GetSettings();
-            if (settings != null)
-            {
-                return settings.ScratchPadEnabled;
-            }
-
-            return false;
         }
 
         private bool IsContentAvailable(ITextComponent component)
@@ -807,8 +795,6 @@ namespace DevNotePad.ViewModel
             });
         }
 
-
-
         private void InitMenu()
         {
             InitFileMenu();
@@ -833,25 +819,14 @@ namespace DevNotePad.ViewModel
             toolGroup = new RelayCommandGroup(new RelayCommand[] { SchemaValidatorTool, XPathQueryTool, XSltTransformationTool, DecodeTlv });
         }
 
-        #region Event Mechanism
-
-        public void OnTrigger(string eventId)
+        private void InternalUpdateAsync(bool isInAsync)
         {
-            if (eventId == Events.UpdateFileStateEvent)
-            {
-                UpdateFileStatus();
-            }
+            Ui.UpdateAsyncState(isInAsync);
         }
 
-        public void OnTrigger(string eventId, object parameter)
+        private void InternalUpdateStatus(UpdateStatusBarParameter parameter)
         {
-            // None..
+            Ui.UpdateToolBar(parameter);
         }
-
-
-
-        #endregion
-
-
     }
 }

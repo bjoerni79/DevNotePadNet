@@ -15,7 +15,7 @@ namespace DevNotePad
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IMainViewUi, IEventListener
+    public partial class MainWindow : Window, IMainViewUi
     {
 
         public MainWindow()
@@ -90,49 +90,32 @@ namespace DevNotePad
 
         #endregion
 
-        #region IEventListener
-
-        public void OnTrigger(string eventId)
+        public void UpdateAsyncState(bool isInAsyncState)
         {
-            //None
+            // Schedule it thread save via the Dispatcher
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                // Render the progress bar depending on the state.
+                if (isInAsyncState)
+                {
+                    isRunningProgressBar.Visibility = Visibility.Visible;
+
+                }
+                else
+                {
+                    isRunningProgressBar.Visibility = Visibility.Hidden;
+                }
+
+                // Disable the textboxes while I/O operation is in progresss
+                editor.IsReadOnly = isInAsyncState;
+            }));
         }
 
-        public void OnTrigger(string eventId, object parameter)
+        public void UpdateToolBar(UpdateStatusBarParameter parameter)
         {
-            // All actions in this method are thread sensitive! Use the dispatcher for UI changes only.
-
-            if (eventId == Events.UpdateToolBarEvent)
+            if (parameter != null)
             {
-                var updateStatusBarParameter = parameter as UpdateStatusBarParameter;
-                if (updateStatusBarParameter != null)
-                {
-                    Dispatcher.BeginInvoke(new Action(() => ApplyNotification(updateStatusBarParameter)));
-                }
-            }
-
-            if (eventId == Events.UpdateAsyncStateEvent)
-            {
-                var updateAsyncState = parameter as UpdateAsyncProcessState;
-                if (updateAsyncState != null)
-                {
-                    // Schedule it thread save via the Dispatcher
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        // Render the progress bar depending on the state.
-                        if (updateAsyncState.InProgress)
-                        {
-                            isRunningProgressBar.Visibility = Visibility.Visible;
-
-                        }
-                        else
-                        {
-                            isRunningProgressBar.Visibility = Visibility.Hidden;
-                        }
-
-                        // Disable the textboxes while I/O operation is in progresss
-                        editor.IsReadOnly = updateAsyncState.InProgress;
-                    }));
-                }
+                Dispatcher.BeginInvoke(new Action(() => ApplyNotification(parameter)));
             }
         }
 
@@ -158,8 +141,6 @@ namespace DevNotePad
             notificationLabel.Style = style;
         }
 
-        #endregion
-
         #region Event Delegates
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -167,13 +148,6 @@ namespace DevNotePad
             var facade = FacadeFactory.Create();
             if (facade != null)
             {
-                var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
-                var updateToolbarEvent = eventController.GetEvent(Events.UpdateToolBarEvent);
-                var asyncOperationEvent = eventController.GetEvent(Events.UpdateAsyncStateEvent);
-
-                updateToolbarEvent.AddListener(this);
-                asyncOperationEvent.AddListener(this);
-
                 IDialogService dialogService = new DialogService(this);
                 facade.AddUnique(dialogService, Bootstrap.DialogServiceId);
 
@@ -246,15 +220,6 @@ namespace DevNotePad
             return vm;
         }
 
-        private void scratchPad_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Update the view model
-            var vm = GetViewModel();
-            if (vm != null)
-            {
-                var textChange = e.Changes.First();
-                vm.NotifyScratchPadContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
-            }
-        }
+
     }
 }

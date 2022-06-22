@@ -113,47 +113,6 @@ namespace DevNotePad.MVVM
             dialogService.ShowWarningDialog(warning, component, owner);
         }
 
-        /// <summary>
-        /// Triggers the UpdateToolbar event. 
-        /// </summary>
-        /// <param name="parameter">the parameter for the event</param>
-        /// <exception cref="Exception">An exception is thrown if the facade  is not available</exception>
-        internal static void TriggerToolbarNotification(UpdateStatusBarParameter parameter)
-        {
-            var facade = GetFacade();
-            var eventController = facade.Get<EventController>();
-
-            var eventInstance = eventController.GetEvent(Events.UpdateToolBarEvent);
-            if (eventInstance != null)
-            {
-                eventInstance.Trigger(parameter);
-            }
-        }
-
-        internal static void TriggerStartStopAsnyOperation(UpdateAsyncProcessState parameter)
-        {
-            var facade = GetFacade();
-            var eventController = facade.Get<EventController>();
-
-            var eventInstance = eventController.GetEvent(Events.UpdateAsyncStateEvent);
-            if (eventInstance != null)
-            {
-                eventInstance.Trigger(parameter);
-            }
-        }
-
-        internal static void TriggerFileUpdate()
-        {
-            var facade = GetFacade();
-            var eventController = facade.Get<EventController>();
-
-            var eventInstance = eventController.GetEvent(Events.UpdateFileStateEvent);
-            if (eventInstance != null)
-            {
-                eventInstance.Trigger();
-            }
-        }
-
         internal static Settings GetSettings()
         {
             Settings? settings = null;
