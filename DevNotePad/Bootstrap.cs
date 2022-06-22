@@ -1,4 +1,5 @@
-﻿using DevNotePad.MVVM;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.ViewModel;
@@ -46,15 +47,18 @@ namespace DevNotePad
 
         private void RegisterEvents(EventController eventController)
         {
+            //
+            //  Old
+            //
             var updateStatusEvent = new Generic.MVVM.Event.Event(Events.UpdateToolBarEvent);
             var asyncOperationEvent = new Generic.MVVM.Event.Event(Events.UpdateAsyncStateEvent);
             var updateFileStateEvent = new Generic.MVVM.Event.Event(Events.UpdateFileStateEvent);
-            var updateTreeEvent = new Generic.MVVM.Event.Event(Events.UpdateTreeEvent);
+            //var updateTreeEvent = new Generic.MVVM.Event.Event(Events.UpdateTreeEvent);
 
             eventController.Add(updateStatusEvent);
             eventController.Add(asyncOperationEvent);
             eventController.Add(updateFileStateEvent);
-            eventController.Add(updateTreeEvent);
+            //eventController.Add(updateTreeEvent);
         }
 
         private void LoadSettings()

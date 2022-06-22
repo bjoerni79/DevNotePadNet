@@ -3,7 +3,7 @@ using DevNotePad.Shared.Dialog;
 
 namespace DevNotePad.ViewModel
 {
-    public class MainViewUiViewModel : ObservableObject
+    public class MainViewUiViewModel : ObservableRecipient
     {
         protected IMainViewUi? ui;
         protected IDialog? dialog;

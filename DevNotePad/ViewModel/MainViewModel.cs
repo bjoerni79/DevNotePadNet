@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using DevNotePad.Features;
 using DevNotePad.Features.Json;
 using DevNotePad.Features.Shared;
@@ -7,6 +8,7 @@ using DevNotePad.Features.Xml;
 using DevNotePad.MVVM;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
+using DevNotePad.Shared.Message;
 using Generic.MVVM.Event;
 using System;
 using System.Collections.Generic;
@@ -269,8 +271,9 @@ namespace DevNotePad.ViewModel
                         var dialogService = ServiceHelper.GetToolDialogService();
                         dialogService.OpenTreeView();
 
-                        var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
-                        updateTreeEvent.Trigger(new UpdateTree(new List<ItemNode>() { rootNode, }));
+                        //var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
+                        //updateTreeEvent.Trigger(new UpdateTree(new List<ItemNode>() { rootNode, }));
+                        WeakReferenceMessenger.Default.Send(new UpdateTreeMessage(new List<ItemNode>() { rootNode }));
 
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("JSON content rendered to tree", false));
                     }
@@ -330,8 +333,10 @@ namespace DevNotePad.ViewModel
                         var dialogFactory = ServiceHelper.GetToolDialogService();
                         dialogFactory.OpenTreeView();
 
-                        var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
-                        updateTreeEvent.Trigger(new UpdateTree(treeNodeTask.Result));
+                        //var updateTreeEvent = ServiceHelper.GetEvent(Events.UpdateTreeEvent);
+                        //updateTreeEvent.Trigger(new UpdateTree(treeNodeTask.Result));
+
+                        WeakReferenceMessenger.Default.Send(new UpdateTreeMessage(treeNodeTask.Result));
                     }
 
                 }
