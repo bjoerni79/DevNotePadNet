@@ -1,6 +1,8 @@
-﻿using DevNotePad.Service;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
+using DevNotePad.Shared.Message;
 using Generic.MVVM.Event;
 using Generic.MVVM.IOC;
 using System;
@@ -129,6 +131,21 @@ namespace DevNotePad.MVVM
             }
 
             return settings;
+        }
+
+        internal static void TriggerToolbarNotification (UpdateStatusBarParameter parameter)
+        {
+            WeakReferenceMessenger.Default.Send(new UpdateStatusBarParameterMessage(parameter));
+        }
+
+        internal static void TriggerStartStopAsnyOperation(UpdateAsyncProcessState state)
+        {
+            WeakReferenceMessenger.Default.Send(new UpdateAsyncProcessStateMessage(state.InProgress));
+        }
+
+        internal static void TriggerFileUpdate(EditorState state)
+        {
+            WeakReferenceMessenger.Default.Send(new UpdateFileStatusMessage(state));
         }
     }
 }

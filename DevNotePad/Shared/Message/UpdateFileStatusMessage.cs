@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Messaging.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace DevNotePad.Shared.Message
 {
-    public class UpdateFileStatusMessage : Message
+    public class UpdateFileStatusMessage : ValueChangedMessage<EditorState>
     {
-        //TODO: No parameter.. just an empty request..
+        public UpdateFileStatusMessage(EditorState state) : base(state)
+        {
+
+        }
     }
 }

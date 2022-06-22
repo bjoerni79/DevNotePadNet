@@ -62,7 +62,7 @@ namespace DevNotePad.ViewModel
             Messenger.Register<MainViewModel, UpdateStatusBarParameterMessage>(this, (r, m) => InternalUpdateStatus(m.Value));
 
             // TODO: Update File Status..
-            //Messenger.Register<MainViewModel, >
+            Messenger.Register<MainViewModel, UpdateFileStatusMessage>(this, (r, m) => UpdateFileStatus(m.Value));
         }
 
         #region Commands
@@ -616,38 +616,30 @@ namespace DevNotePad.ViewModel
 
         #endregion
 
-        /// <summary>
-        /// Updates the UI with the current state in the file logic
-        /// </summary>
-        private void UpdateFileStatus()
+        private void UpdateFileStatus(EditorState state)
         {
-            // No UI Thread involved. Can be run in a worker thread.
-
             var currentUiState = "Unknown";
             bool isChanged = false;
-            if (textLogic != null)
+
+            if (state == EditorState.Changed || state == EditorState.ChangedNew)
             {
-                var currentState = textLogic.CurrentState;
-                if (currentState == EditorState.Changed || currentState == EditorState.ChangedNew)
-                {
-                    currentUiState = "Changed";
-                    isChanged = true;
-                }
+                currentUiState = "Changed";
+                isChanged = true;
+            }
 
-                if (currentState == EditorState.New)
-                {
-                    currentUiState = "New";
-                }
+            if (state == EditorState.New)
+            {
+                currentUiState = "New";
+            }
 
-                if (currentState == EditorState.Saved)
-                {
-                    currentUiState = "Saved";
-                }
+            if (state == EditorState.Saved)
+            {
+                currentUiState = "Saved";
+            }
 
-                if (currentState == EditorState.Loaded)
-                {
-                    currentUiState = "Loaded";
-                }
+            if (state == EditorState.Loaded)
+            {
+                currentUiState = "Loaded";
             }
 
             // Notify the UI
@@ -659,6 +651,20 @@ namespace DevNotePad.ViewModel
             fileGroup.Refresh();
             textOperationGroup.Refresh();
             toolGroup.Refresh();
+        }
+
+        /// <summary>
+        /// Updates the UI with the current state in the file logic
+        /// </summary>
+        private void UpdateFileStatus()
+        {
+            // No UI Thread involved. Can be run in a worker thread.
+
+            if (textLogic != null)
+            {
+                var currentState = textLogic.CurrentState;
+                UpdateFileStatus(currentState);
+            }
         }
 
         private bool IsText()

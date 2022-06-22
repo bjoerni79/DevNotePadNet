@@ -178,7 +178,7 @@ namespace DevNotePad.ViewModel
                         mainUi.SetFilename(FileName);
                         IsTextFormatAvailable = true;
 
-                        ServiceHelper.TriggerFileUpdate();
+                        ServiceHelper.TriggerFileUpdate(CurrentState);
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is saved", false));
 
                         ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
@@ -249,7 +249,7 @@ namespace DevNotePad.ViewModel
                         IsTextFormatAvailable = false;
                         CurrentState = EditorState.Saved;
 
-                        ServiceHelper.TriggerFileUpdate();
+                        ServiceHelper.TriggerFileUpdate(CurrentState);
                         ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
                     }
 
@@ -264,7 +264,7 @@ namespace DevNotePad.ViewModel
                 IsTextFormatAvailable = false;
                 CurrentState = EditorState.Saved;
 
-                ServiceHelper.TriggerFileUpdate();
+                ServiceHelper.TriggerFileUpdate(CurrentState);
                 ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
             }
             catch (AggregateException aEx)
@@ -327,7 +327,7 @@ namespace DevNotePad.ViewModel
                     IsTextFormatAvailable = true;
 
                     ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
-                    ServiceHelper.TriggerFileUpdate();
+                    ServiceHelper.TriggerFileUpdate(CurrentState);
                     ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                 }
 
@@ -378,7 +378,7 @@ namespace DevNotePad.ViewModel
 
                     IsTextFormatAvailable = false;
 
-                    ServiceHelper.TriggerFileUpdate();
+                    ServiceHelper.TriggerFileUpdate(CurrentState);
                     ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
                     ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                 }
