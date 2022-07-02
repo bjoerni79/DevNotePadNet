@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace DevNotePad.Service
 {
-    internal class ToolDialogService : IToolDialogService
+    public class ToolDialogService : IToolDialogService
     {
 
         // ShowDialog does not work for the Find and Replace dialog due to a selection/focus issue. 
@@ -22,7 +22,7 @@ namespace DevNotePad.Service
         private TreeView? currentTreeView;
         private GuidCreatorView? currentGuidCreatorView;
 
-        internal ToolDialogService()
+        public ToolDialogService()
         {
         }
 

@@ -8,6 +8,13 @@ namespace DevNotePad
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Gets the current <see cref="App"/> instance in use
+        /// </summary>
+        public new static App Current => (App)Application.Current;
+
+        public Bootstrap BootStrap => Resources[Bootstrap.BootstrapId] as Bootstrap;
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             // If there is a file in the first argument index then open it as text

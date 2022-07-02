@@ -63,36 +63,36 @@ namespace DevNotePad.ViewModel
 
         private void Populate()
         {
-            var facade = ServiceHelper.GetFacade();
-            var settings = facade.Get<Settings>(Bootstrap.SettingsId);
+            //var facade = ServiceHelper.GetFacade();
+            //var settings = facade.Get<Settings>(Bootstrap.SettingsId);
 
-            // Populate the properties for the UI bindings now
-            LineWrap = settings.LineWrap;
-            IgnoreChangesOnReload = settings.IgnoreReload;
-            IgnoreOverwriteChanges = settings.IgnoreOverwriteChanges;
-            DefaultWorkingPath = settings.DefaultPath;
-            DarkMode = settings.DarkModeEnabled;
-            EditorFontSize = settings.EditorFontSize.ToString();
+            //// Populate the properties for the UI bindings now
+            //LineWrap = settings.LineWrap;
+            //IgnoreChangesOnReload = settings.IgnoreReload;
+            //IgnoreOverwriteChanges = settings.IgnoreOverwriteChanges;
+            //DefaultWorkingPath = settings.DefaultPath;
+            //DarkMode = settings.DarkModeEnabled;
+            //EditorFontSize = settings.EditorFontSize.ToString();
 
             // No Update required. Gets loaded before UI is active.
         }
 
         private void ApplyValues()
         {
-            // Write the value back to the settings 
-            var facade = ServiceHelper.GetFacade();
-            var settings = facade.Get<Settings>(Bootstrap.SettingsId);
+            //// Write the value back to the settings 
+            //var facade = ServiceHelper.GetFacade();
+            //var settings = facade.Get<Settings>(Bootstrap.SettingsId);
 
-            settings.LineWrap = LineWrap;
-            settings.IgnoreChanged = IgnoreChanges;
-            settings.IgnoreReload = IgnoreChangesOnReload;
-            settings.IgnoreOverwriteChanges = IgnoreOverwriteChanges;
-            settings.DarkModeEnabled = DarkMode;
-            settings.DefaultPath = DefaultWorkingPath;
-            // Font Size is TODO
+            //settings.LineWrap = LineWrap;
+            //settings.IgnoreChanged = IgnoreChanges;
+            //settings.IgnoreReload = IgnoreChangesOnReload;
+            //settings.IgnoreOverwriteChanges = IgnoreOverwriteChanges;
+            //settings.DarkModeEnabled = DarkMode;
+            //settings.DefaultPath = DefaultWorkingPath;
+            //// Font Size is TODO
 
-            // Write it to disk
-            Settings.Write(settings);
+            //// Write it to disk
+            //Settings.Write(settings);
         }
     }
 }

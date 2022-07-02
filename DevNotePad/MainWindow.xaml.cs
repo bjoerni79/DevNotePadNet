@@ -5,6 +5,7 @@ using DevNotePad.Shared.Event;
 using DevNotePad.UI;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Windows;
@@ -127,16 +128,6 @@ namespace DevNotePad
 
         private void RegisterUiServices()
         {
-            var facade = FacadeFactory.Create();
-            if (facade != null)
-            {
-                IDialogService dialogService = new DialogService();
-                facade.AddUnique(dialogService, Bootstrap.DialogServiceId);
-
-                IToolDialogService toolDialogService = new ToolDialogService();
-                facade.AddUnique(toolDialogService, Bootstrap.ToolDialogServiceId);
-            }
-
             var vm = GetViewModel();
             if (vm != null)
             {
@@ -144,10 +135,6 @@ namespace DevNotePad
                 vm.Init(this, new TextComponent2(editor));
                 vm.ApplySettings();
             }
-
-            // Init the Ui Services
-            //var bootstrap = Resources[Bootstrap.BootstrapId] as Bootstrap;
-            //bootstrap.Services.A
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -158,16 +145,23 @@ namespace DevNotePad
                 var needsSaving = vm.IsChanged();
                 if (needsSaving)
                 {
-                    var facade = FacadeFactory.Create();
-                    if (facade != null)
+                    //var facade = FacadeFactory.Create();
+                    //if (facade != null)
+                    //{
+                    //    var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
+                    //    if (dialogService != null)
+                    //    {
+                    //        //TODO: Ask if the user wants to save first
+                    //        var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close", "Close Application");
+                    //        e.Cancel = !doClose;
+                    //    }
+                    //}
+
+                    var dialogService = App.Current.BootStrap.Services.GetService<IDialogService>();
+                    if (dialogService != null)
                     {
-                        var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
-                        if (dialogService != null)
-                        {
-                            //TODO: Ask if the user wants to save first
-                            var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close", "Close Application");
-                            e.Cancel = !doClose;
-                        }
+                        var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close", "Close Application");
+                        e.Cancel = !doClose;
                     }
                 }
             }

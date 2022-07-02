@@ -5,6 +5,7 @@ using DevNotePad.Shared.Event;
 using DevNotePad.Shared.Message;
 using Generic.MVVM.Event;
 using Generic.MVVM.IOC;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 
@@ -22,35 +23,40 @@ namespace DevNotePad.MVVM
         /// <exception cref="Exception">An exception is thrown if the service is not available</exception>
         internal static IDialogService GetDialogService()
         {
-            var facade = GetFacade();
-            var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
+            //var facade = GetFacade();
+            //var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
+            //if (dialogService == null)
+            //{
+            //    throw new Exception("Cannot access DialogService");
+            //}
+
+            //return dialogService;
+            var dialogService = App.Current.BootStrap.Services.GetService<IDialogService>();
+
             if (dialogService == null)
             {
                 throw new Exception("Cannot access DialogService");
             }
 
             return dialogService;
+
         }
 
         internal static IToolDialogService GetToolDialogService()
         {
-            var facade = GetFacade();
-            var dialogService = facade.Get<IToolDialogService>(Bootstrap.ToolDialogServiceId);
-            if (dialogService == null)
+            //var facade = GetFacade();
+            //var dialogService = facade.Get<IToolDialogService>(Bootstrap.ToolDialogServiceId);
+
+            var toolDialogService = App.Current.BootStrap.Services.GetService<IToolDialogService>();
+            if (toolDialogService == null)
             {
                 throw new Exception("Cannot access DialogService");
             }
 
-            return dialogService;
+            return toolDialogService;
         }
 
-        internal static IEvent GetEvent(string eventId)
-        {
-            var facade = GetFacade();
-            var eventController = facade.Get<EventController>(Bootstrap.EventControllerId);
 
-            return eventController.GetEvent(eventId);
-        }
 
         /// <summary>
         /// Gets the I/O service
@@ -59,30 +65,16 @@ namespace DevNotePad.MVVM
         /// <exception cref="Exception">An exception is thrown if the service is not available</exception>
         internal static IIoService GetIoService()
         {
-            var facade = GetFacade();
-            var ioService = facade.Get<IIoService>(Bootstrap.IoServiceId);
+            //var facade = GetFacade();
+            //var ioService = facade.Get<IIoService>(Bootstrap.IoServiceId);
+
+            var ioService = App.Current.BootStrap.Services.GetService<IIoService>();
             if (ioService == null)
             {
                 throw new Exception("Cannot access I/O Service");
             }
 
             return ioService;
-        }
-
-        /// <summary>
-        /// Gets the facade of the MVVM IoC. It provides a generic access to the container
-        /// </summary>
-        /// <returns>the container facade</returns>
-        /// <exception cref="Exception">An exception is thrown if the facade is not available</exception>
-        internal static ContainerFacade GetFacade()
-        {
-            var facade = FacadeFactory.Create();
-            if (facade == null)
-            {
-                throw new Exception("Cannot access MVVM facade");
-            }
-
-            return FacadeFactory.Create();
         }
 
         /// <summary>

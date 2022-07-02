@@ -31,7 +31,7 @@ namespace DevNotePad
             InitComponents();
             LoadSettings();
 
-            BuildServices();
+            Services = BuildServices();
         }
 
         private void InitComponents()
@@ -47,6 +47,12 @@ namespace DevNotePad
         {
             var services = new ServiceCollection();
             services.AddSingleton<IIoService, IoService>();
+            services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IToolDialogService, ToolDialogService>();
+
+            //TODO: Settings
+
+            //TODO: ViewModels
 
             return services.BuildServiceProvider();
         }
@@ -61,7 +67,7 @@ namespace DevNotePad
             facade.AddUnique(settings, SettingsId);
         }
 
-        public IServiceProvider Services { get; }
+        public IServiceProvider Services { get; internal set; }
 
         public MainViewModel Main { get; set; }
 

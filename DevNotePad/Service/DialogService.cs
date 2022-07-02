@@ -8,12 +8,12 @@ using System.Windows;
 
 namespace DevNotePad.Service
 {
-    internal class DialogService : IDialogService
+    public class DialogService : IDialogService
     {
 
         private SettingsDialog? currentSettingsDialogView;
 
-        internal DialogService()
+        public DialogService()
         {
         }
 
@@ -84,35 +84,35 @@ namespace DevNotePad.Service
 
         public void ShowSettings()
         {
-            var facade = ServiceHelper.GetFacade();
-            SettingsDialogViewModel vm;
+            //var facade = ServiceHelper.GetFacade();
+            //SettingsDialogViewModel vm;
 
-            // Get the ViewModel or create one
-            var isVmAvailable = facade.Exists(ViewModelInstances.SettingsDialog);
-            if (isVmAvailable)
-            {
-                vm = facade.Get<SettingsDialogViewModel>(ViewModelInstances.SettingsDialog);
-            }
-            else
-            {
-                vm = new SettingsDialogViewModel();
-                facade.AddUnique(vm, ViewModelInstances.SettingsDialog);
-            }
+            //// Get the ViewModel or create one
+            //var isVmAvailable = facade.Exists(ViewModelInstances.SettingsDialog);
+            //if (isVmAvailable)
+            //{
+            //    vm = facade.Get<SettingsDialogViewModel>(ViewModelInstances.SettingsDialog);
+            //}
+            //else
+            //{
+            //    vm = new SettingsDialogViewModel();
+            //    facade.AddUnique(vm, ViewModelInstances.SettingsDialog);
+            //}
 
-            // Clean up the old settings UI if available
-            if (currentSettingsDialogView != null)
-            {
-                currentSettingsDialogView.Close();
-            }
+            //// Clean up the old settings UI if available
+            //if (currentSettingsDialogView != null)
+            //{
+            //    currentSettingsDialogView.Close();
+            //}
 
-            // Create a new view and associate the VM
-            currentSettingsDialogView = new SettingsDialog();
+            //// Create a new view and associate the VM
+            //currentSettingsDialogView = new SettingsDialog();
 
-            vm.Init(currentSettingsDialogView);
-            currentSettingsDialogView.DataContext = vm;
+            //vm.Init(currentSettingsDialogView);
+            //currentSettingsDialogView.DataContext = vm;
 
-            // Start the dialog as Modal!
-            currentSettingsDialogView.Show();
+            //// Start the dialog as Modal!
+            //currentSettingsDialogView.Show();
         }
 
         public void ShowWarningDialog(string warning, string component)
