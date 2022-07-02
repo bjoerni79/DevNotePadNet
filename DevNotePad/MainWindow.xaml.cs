@@ -115,6 +115,18 @@ namespace DevNotePad
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            RegisterUiServices();
+
+            var vm = GetViewModel();
+            if (StartUpCondition.FileName != null)
+            {
+                // Open the file
+                vm.OpenExternalFile(StartUpCondition.FileName);
+            }
+        }
+
+        private void RegisterUiServices()
+        {
             var facade = FacadeFactory.Create();
             if (facade != null)
             {
@@ -133,11 +145,9 @@ namespace DevNotePad
                 vm.ApplySettings();
             }
 
-            if (StartUpCondition.FileName != null)
-            {
-                // Open the file
-                vm.OpenExternalFile(StartUpCondition.FileName);
-            }
+            // Init the Ui Services
+            //var bootstrap = Resources[Bootstrap.BootstrapId] as Bootstrap;
+            //bootstrap.Services.A
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

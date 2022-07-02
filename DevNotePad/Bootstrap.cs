@@ -4,6 +4,8 @@ using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.ViewModel;
 using Generic.MVVM.Event;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace DevNotePad
 {
@@ -28,6 +30,8 @@ namespace DevNotePad
         {
             InitComponents();
             LoadSettings();
+
+            BuildServices();
         }
 
         private void InitComponents()
@@ -37,6 +41,14 @@ namespace DevNotePad
             // Add it to the IoC container 
             var facade = FacadeFactory.Create();
             facade.AddUnique(ioService, IoServiceId);
+        }
+
+        private IServiceProvider BuildServices()
+        {
+            var services = new ServiceCollection();
+            services.AddSingleton<IIoService, IoService>();
+
+            return services.BuildServiceProvider();
         }
 
         private void LoadSettings()
@@ -49,6 +61,10 @@ namespace DevNotePad
             facade.AddUnique(settings, SettingsId);
         }
 
+        public IServiceProvider Services { get; }
+
         public MainViewModel Main { get; set; }
+
+
     }
 }
