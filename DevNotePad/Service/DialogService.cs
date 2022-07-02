@@ -10,13 +10,11 @@ namespace DevNotePad.Service
 {
     internal class DialogService : IDialogService
     {
-        private Window defaultOwner;
 
         private SettingsDialog? currentSettingsDialogView;
 
-        internal DialogService(Window owner)
+        internal DialogService()
         {
-            this.defaultOwner = owner;
         }
 
         public bool ShowConfirmationDialog(string question, string title)
@@ -26,7 +24,7 @@ namespace DevNotePad.Service
 
         public bool ShowConfirmationDialog(string question, string title, string okButtonText)
         {
-            var confirmDialog = new ConfirmDialog() { Owner = defaultOwner, Topmost = true };
+            var confirmDialog = new ConfirmDialog() { Topmost = true };
             confirmDialog.Init(question, title, okButtonText);
 
             var result = confirmDialog.ShowDialog();
@@ -38,12 +36,11 @@ namespace DevNotePad.Service
             return false;
         }
 
-        public void ShowErrorDialog(Exception ex, string component, Window owner)
+        public void ShowErrorDialog(Exception ex, string component)
         {
             var message = ex.Message;
             var dialogTitle = "Error";
             var errorDialog = new OkDialog();
-            errorDialog.Owner = owner;
 
             var featureException = ex as FeatureException;
             if (featureException != null)
@@ -58,20 +55,10 @@ namespace DevNotePad.Service
             errorDialog.ShowDialog();
         }
 
-        public void ShowErrorDialog(Exception ex, string component)
-        {
-            ShowErrorDialog(ex, component, defaultOwner);
-        }
-
-        public DialogReturnValue ShowOpenFileNameDialog(string defaultExtension)
-        {
-            return ShowOpenFileNameDialog(defaultExtension, defaultOwner);
-        }
-
-        public DialogReturnValue ShowOpenFileNameDialog(string defaultExtension, Window owner)
+        public DialogReturnValue ShowOpenFileNameDialog(string defaultExtension )
         {
             var openFileDialog = new OpenFileDialog() { Filter = defaultExtension, DefaultExt = "*.txt" };
-            var result = openFileDialog.ShowDialog(owner);
+            var result = openFileDialog.ShowDialog();
 
             if (result.HasValue && result.Value)
             {
@@ -83,14 +70,9 @@ namespace DevNotePad.Service
 
         public DialogReturnValue ShowSaveFileDialog(string defaultExtension)
         {
-            return ShowSaveFileDialog(defaultExtension, defaultOwner);
-        }
-
-        public DialogReturnValue ShowSaveFileDialog(string defaultExtension, Window owner)
-        {
             //var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension, DefaultExt = "*.txt" };
             var saveFileDialog = new SaveFileDialog() { Filter = defaultExtension };
-            var result = saveFileDialog.ShowDialog(owner);
+            var result = saveFileDialog.ShowDialog();
 
             if (result.HasValue && result.Value)
             {
@@ -128,7 +110,6 @@ namespace DevNotePad.Service
 
             vm.Init(currentSettingsDialogView);
             currentSettingsDialogView.DataContext = vm;
-            currentSettingsDialogView.Owner = defaultOwner;
 
             // Start the dialog as Modal!
             currentSettingsDialogView.Show();
@@ -136,13 +117,7 @@ namespace DevNotePad.Service
 
         public void ShowWarningDialog(string warning, string component)
         {
-            ShowWarningDialog(warning, component, defaultOwner);
-        }
-
-        public void ShowWarningDialog(string warning, string component, Window owner)
-        {
             var errorDialog = new OkDialog();
-            errorDialog.Owner = owner;
 
             errorDialog.Init(warning, component, "Warning");
             errorDialog.ShowDialog();

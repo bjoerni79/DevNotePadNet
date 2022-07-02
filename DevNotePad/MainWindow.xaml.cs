@@ -130,10 +130,10 @@ namespace DevNotePad
             var facade = FacadeFactory.Create();
             if (facade != null)
             {
-                IDialogService dialogService = new DialogService(this);
+                IDialogService dialogService = new DialogService();
                 facade.AddUnique(dialogService, Bootstrap.DialogServiceId);
 
-                IToolDialogService toolDialogService = new ToolDialogService(this);
+                IToolDialogService toolDialogService = new ToolDialogService();
                 facade.AddUnique(toolDialogService, Bootstrap.ToolDialogServiceId);
             }
 

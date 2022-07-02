@@ -43,7 +43,7 @@ namespace DevNotePad.ViewModel
             var dialogService = ServiceHelper.GetDialogService();
             string? xmlContent = null;
 
-            var result = dialogService.ShowOpenFileNameDialog(extensionFilter, dialogInstance.GetCurrentWindow());
+            var result = dialogService.ShowOpenFileNameDialog(extensionFilter);
             if (result.IsConfirmed)
             {
                 var file = result.File;

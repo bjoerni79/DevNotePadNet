@@ -79,7 +79,7 @@ namespace DevNotePad.ViewModel
         {
             var dialogService = ServiceHelper.GetDialogService();
 
-            var result = dialogService.ShowOpenFileNameDialog(XmlToolHelper.FilterDialogXmlXslt, dialog.GetCurrentWindow());
+            var result = dialogService.ShowOpenFileNameDialog(XmlToolHelper.FilterDialogXmlXslt);
             if (result.IsConfirmed)
             {
                 var file = result.File;

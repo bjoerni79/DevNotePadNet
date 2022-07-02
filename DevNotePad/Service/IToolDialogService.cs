@@ -1,4 +1,5 @@
 ﻿using DevNotePad.ViewModel;
+using System.Windows;
 
 namespace DevNotePad.Service
 {

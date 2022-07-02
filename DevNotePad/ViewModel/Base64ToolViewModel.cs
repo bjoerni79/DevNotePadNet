@@ -59,12 +59,12 @@ namespace DevNotePad.ViewModel
                 }
                 catch (FormatException formatException)
                 {
-                    dialogService.ShowWarningDialog(formatException.Message, ComponentName, currentWindow);
+                    dialogService.ShowWarningDialog(formatException.Message, ComponentName);
                 }
             }
             else
             {
-                dialogService.ShowWarningDialog("No Content available", ComponentName, currentWindow);
+                dialogService.ShowWarningDialog("No Content available", ComponentName);
             }
         }
 
@@ -89,12 +89,12 @@ namespace DevNotePad.ViewModel
                     currentWindow = dialog.GetCurrentWindow();
                     dialogService = ServiceHelper.GetDialogService();
 
-                    dialogService.ShowWarningDialog(formatException.Message, ComponentName, currentWindow);
+                    dialogService.ShowWarningDialog(formatException.Message, ComponentName);
                 }
             }
             else
             {
-                dialogService.ShowWarningDialog("No Content available", ComponentName, currentWindow);
+                dialogService.ShowWarningDialog("No Content available", ComponentName);
             }
         }
 
@@ -103,7 +103,7 @@ namespace DevNotePad.ViewModel
             var dialogService = ServiceHelper.GetDialogService();
 
             var currentWindow = dialog.GetCurrentWindow();
-            var returnValue = dialogService.ShowOpenFileNameDialog(DefaultExtension, currentWindow);
+            var returnValue = dialogService.ShowOpenFileNameDialog(DefaultExtension);
             if (returnValue.IsConfirmed)
             {
                 var ioService = ServiceHelper.GetIoService();
@@ -121,7 +121,7 @@ namespace DevNotePad.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    dialogService.ShowErrorDialog(ex, ComponentName, currentWindow);
+                    dialogService.ShowErrorDialog(ex, ComponentName);
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace DevNotePad.ViewModel
             var dialogService = ServiceHelper.GetDialogService();
 
             var currentWindow = dialog.GetCurrentWindow();
-            var returnValue = dialogService.ShowSaveFileDialog(DefaultExtension, currentWindow);
+            var returnValue = dialogService.ShowSaveFileDialog(DefaultExtension);
 
             if (!string.IsNullOrEmpty(HexStringCoding))
             {
@@ -152,17 +152,17 @@ namespace DevNotePad.ViewModel
                     }
                     catch (FormatException formatException)
                     {
-                        dialogService.ShowWarningDialog(formatException.Message, ComponentName, currentWindow);
+                        dialogService.ShowWarningDialog(formatException.Message, ComponentName);
                     }
                     catch (Exception ex)
                     {
-                        dialogService.ShowErrorDialog(ex, "Base64", currentWindow);
+                        dialogService.ShowErrorDialog(ex, "Base64");
                     }
                 }
             }
             else
             {
-                dialogService.ShowWarningDialog("No Content available", ComponentName, currentWindow);
+                dialogService.ShowWarningDialog("No Content available", ComponentName);
             }
 
         }

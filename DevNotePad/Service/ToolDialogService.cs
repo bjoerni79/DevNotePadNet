@@ -9,7 +9,6 @@ namespace DevNotePad.Service
 {
     internal class ToolDialogService : IToolDialogService
     {
-        private Window defaultOwner;
 
         // ShowDialog does not work for the Find and Replace dialog due to a selection/focus issue. 
         // This is a work around, which simulates the ShowDialog method call
@@ -23,9 +22,8 @@ namespace DevNotePad.Service
         private TreeView? currentTreeView;
         private GuidCreatorView? currentGuidCreatorView;
 
-        internal ToolDialogService(Window owner)
+        internal ToolDialogService()
         {
-            this.defaultOwner = owner;
         }
 
         public void OpenBase64Dialog(IMainViewUi ui, ITextComponent textComponent)
@@ -75,7 +73,7 @@ namespace DevNotePad.Service
                 currentFindDialog.Close();
             }
 
-            currentFindDialog = new FindDialog() { Owner = defaultOwner };
+            currentFindDialog = new FindDialog();
 
             OpenDialog(ui, textComponent, vm, currentFindDialog, currentFindDialog);
         }
@@ -102,7 +100,7 @@ namespace DevNotePad.Service
                 currentReplaceDialog.Close();
             }
 
-            currentReplaceDialog = new ReplaceDialog() { Owner = defaultOwner };
+            currentReplaceDialog = new ReplaceDialog();
             OpenDialog(ui, textComponent, vm, currentReplaceDialog, currentReplaceDialog);
         }
 
