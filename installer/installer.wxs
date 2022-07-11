@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <Product Name="DevNotePad 1.3.2" Manufacturer="Bjoern Hillebrand" Id="d75873d6-fc0e-4325-9ba9-50d866f09db7" UpgradeCode="6e40dbce-e5ea-4833-8f46-67637ba7d20d" Language="1033" Codepage="1252" Version="1.3.2">
+    <Product Name="DevNotePad 1.3.2" Manufacturer="Bjoern Hillebrand" Id="d75873d6-fc0e-4325-9ba9-50d866f09db7" UpgradeCode="6e40dbce-e5ea-4833-8f46-67637ba7d20d" Language="1033" Codepage="1252" Version="1.4">
 
         <Package Id="*" Keywords="Installer" Description="DevNotePad Installer" Comments="None" Manufacturer="Bjoern Hillebrand" InstallerVersion="100" Languages="1033" Compressed="yes" SummaryCodepage="1252" />
 
@@ -49,8 +49,10 @@
             <Component Id="devnotpad.features.dll" Guid="cbbfa7cb-3b59-4887-81d7-59a5fef804d5">
                 <File Id="devnotepad.features.dll" Source="release\DevNotePad.Features.dll" KeyPath="yes" />
             </Component>
-            <Component Id="generic.mvvm.dll" Guid="fbf47b10-0eaf-45a5-8e38-5f940f6e5f42">
-                <File Id="generic.mvvm.dll" Source="release\Generic.MVVM.dll" KeyPath="yes" />
+            <Component Id="CommunityToolkit.Mvvm.dll" Guid="fbf47b10-0eaf-45a5-8e38-5f940f6e5f42">
+                <File Id="CommunityToolkit.Mvvm.dll" Source="release\CommunityToolkit.Mvvm.dll" KeyPath="yes" />
+                <File Id="Microsoft.Extensions.DependencyInjection.dll" Source="release\Microsoft.Extensions.DependencyInjection.dll" />
+                <File Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Source="release\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
             </Component>
         </DirectoryRef>
 
@@ -67,7 +69,7 @@
         <Feature Id="Complete">
             <ComponentRef Id="devnotepad.exe" />
             <ComponentRef Id="devnotpad.features.dll" />
-            <ComponentRef Id="generic.mvvm.dll" />
+            <ComponentRef Id="CommunityToolkit.Mvvm.dll" />
             <ComponentRef Id="ApplicationShortcut" />
         </Feature>
 
