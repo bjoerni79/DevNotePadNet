@@ -98,18 +98,23 @@ namespace DevNotePad.MVVM
 
         internal static Settings GetSettings()
         {
-            Settings? settings = null;
+            //Settings? settings = null;
 
-            var facade = FacadeFactory.Create();
-            if (facade != null)
-            {
-                settings = facade.Get<Settings>(Bootstrap.SettingsId);
-            }
+            //var facade = FacadeFactory.Create();
+            //if (facade != null)
+            //{
+            //    settings = facade.Get<Settings>(Bootstrap.SettingsId);
+            //}
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            //if (settings == null)
+            //{
+            //    throw new ArgumentNullException("settings");
+            //}
+
+            //return settings;
+
+            var settingsService = App.Current.BootStrap.Services.GetService<ISettingsService>();
+            var settings = settingsService.GetSettings();
 
             return settings;
         }

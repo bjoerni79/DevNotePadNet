@@ -17,30 +17,17 @@ namespace DevNotePad
         public const string DialogServiceId = "dialogserviceid";
         public const string ToolDialogServiceId = "tooldialogserviceid";
         public const string IoServiceId = "ioserviceid";
-        public const string SettingsId = "settingsid";
+        //public const string SettingsId = "settingsid";
 
         public Bootstrap()
         {
-            FacadeFactory.InitFactory();
-
             Main = new MainViewModel();
         }
 
         public void Init()
         {
-            InitComponents();
-            LoadSettings();
-
             Services = BuildServices();
-        }
 
-        private void InitComponents()
-        {
-            IIoService ioService = new IoService();
-
-            // Add it to the IoC container 
-            var facade = FacadeFactory.Create();
-            facade.AddUnique(ioService, IoServiceId);
         }
 
         private IServiceProvider BuildServices()
@@ -49,22 +36,11 @@ namespace DevNotePad
             services.AddSingleton<IIoService, IoService>();
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IToolDialogService, ToolDialogService>();
-
-            //TODO: Settings
+            services.AddSingleton<ISettingsService, SettingsService>();
 
             //TODO: ViewModels
 
             return services.BuildServiceProvider();
-        }
-
-        private void LoadSettings()
-        {
-            //TODO: Load the settings, if found..
-            var settings = Settings.GetDefault();
-
-            // Store it in the container
-            var facade = FacadeFactory.Create();
-            facade.AddUnique(settings, SettingsId);
         }
 
         public IServiceProvider Services { get; internal set; }
