@@ -3,8 +3,6 @@ using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Event;
 using DevNotePad.Shared.Message;
-using Generic.MVVM.Event;
-using Generic.MVVM.IOC;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;

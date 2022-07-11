@@ -1,4 +1,5 @@
 ﻿using DevNotePad.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
 namespace DevNotePad.Shared.Dialog
@@ -15,7 +16,7 @@ namespace DevNotePad.Shared.Dialog
 
         public void Init(string question, string dialogTitle, string okButtonText)
         {
-            var viewModel = new ConfimDialogViewModel();
+            var viewModel = App.Current.BootStrap.Services.GetService<ConfimDialogViewModel>();
             DataContext = viewModel;
 
             viewModel.Init(question, dialogTitle, okButtonText, this);

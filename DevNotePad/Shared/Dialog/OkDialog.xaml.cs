@@ -1,4 +1,5 @@
 ﻿using DevNotePad.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
 namespace DevNotePad.Shared.Dialog
@@ -22,7 +23,7 @@ namespace DevNotePad.Shared.Dialog
 
         public void Init(string message, string component, string title, string? details)
         {
-            var vm = new OkDialogViewModel();
+            var vm = App.Current.BootStrap.Services.GetService<OkDialogViewModel>();
             vm.Init(message, component, title, this);
             vm.Details = details;
 

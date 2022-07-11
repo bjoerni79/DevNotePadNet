@@ -11,8 +11,6 @@ namespace DevNotePad.Service
     public class DialogService : IDialogService
     {
 
-        private SettingsDialog? currentSettingsDialogView;
-
         public DialogService()
         {
         }
@@ -84,35 +82,8 @@ namespace DevNotePad.Service
 
         public void ShowSettings()
         {
-            //var facade = ServiceHelper.GetFacade();
-            //SettingsDialogViewModel vm;
-
-            //// Get the ViewModel or create one
-            //var isVmAvailable = facade.Exists(ViewModelInstances.SettingsDialog);
-            //if (isVmAvailable)
-            //{
-            //    vm = facade.Get<SettingsDialogViewModel>(ViewModelInstances.SettingsDialog);
-            //}
-            //else
-            //{
-            //    vm = new SettingsDialogViewModel();
-            //    facade.AddUnique(vm, ViewModelInstances.SettingsDialog);
-            //}
-
-            //// Clean up the old settings UI if available
-            //if (currentSettingsDialogView != null)
-            //{
-            //    currentSettingsDialogView.Close();
-            //}
-
-            //// Create a new view and associate the VM
-            //currentSettingsDialogView = new SettingsDialog();
-
-            //vm.Init(currentSettingsDialogView);
-            //currentSettingsDialogView.DataContext = vm;
-
-            //// Start the dialog as Modal!
-            //currentSettingsDialogView.Show();
+            var view = new SettingsDialog();
+            view.Show();
         }
 
         public void ShowWarningDialog(string warning, string component)

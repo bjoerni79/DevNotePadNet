@@ -4,7 +4,6 @@ using DevNotePad.Shared.Dialog;
 using DevNotePad.Shared.Event;
 using DevNotePad.UI;
 using DevNotePad.ViewModel;
-using Generic.MVVM.Event;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -22,6 +21,8 @@ namespace DevNotePad
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = App.Current.BootStrap.Services.GetService<MainViewModel>();
         }
 
         #region IMainViewUI

@@ -30,13 +30,6 @@ namespace DevNotePad
                 }
             }
 
-            // Init the bootstrapper
-            var bootstrap = Resources[Bootstrap.BootstrapId] as Bootstrap;
-            if (bootstrap != null)
-            {
-                bootstrap.Init();
-            }
-
         }
 
         //TODO: https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0

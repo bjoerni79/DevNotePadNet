@@ -4,7 +4,6 @@ using DevNotePad.Features.Shared;
 using DevNotePad.MVVM;
 using DevNotePad.Shared.Event;
 using DevNotePad.Shared.Message;
-using Generic.MVVM.Event;
 using System.Collections.ObjectModel;
 
 namespace DevNotePad.ViewModel

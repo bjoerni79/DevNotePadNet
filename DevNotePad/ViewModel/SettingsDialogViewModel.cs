@@ -1,20 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevNotePad.MVVM;
+using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.Shared.Dialog;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DevNotePad.ViewModel
 {
     public class SettingsDialogViewModel : ObservableObject
     {
-        private IDialog dialogInstance;
+        private IDialog? dialogInstance;
 
         public SettingsDialogViewModel()
         {
             Apply = new RelayCommand(() => Close(true));
             Cancel = new RelayCommand(() => Close(false));
-
         }
 
         #region UI Bindings
@@ -58,41 +59,48 @@ namespace DevNotePad.ViewModel
 
             }
 
-            dialogInstance.CloseDialog(apply);
+            if (dialogInstance != null)
+            {
+                dialogInstance.CloseDialog(apply);
+            }
         }
 
         private void Populate()
         {
-            //var facade = ServiceHelper.GetFacade();
-            //var settings = facade.Get<Settings>(Bootstrap.SettingsId);
+            var settingsService = App.Current.BootStrap.Services.GetService<ISettingsService>();
+            if (settingsService != null)
+            {
+                var settings = settingsService.GetSettings();
 
-            //// Populate the properties for the UI bindings now
-            //LineWrap = settings.LineWrap;
-            //IgnoreChangesOnReload = settings.IgnoreReload;
-            //IgnoreOverwriteChanges = settings.IgnoreOverwriteChanges;
-            //DefaultWorkingPath = settings.DefaultPath;
-            //DarkMode = settings.DarkModeEnabled;
-            //EditorFontSize = settings.EditorFontSize.ToString();
+                // Populate the properties for the UI bindings now
+                LineWrap = settings.LineWrap;
+                IgnoreChangesOnReload = settings.IgnoreReload;
+                IgnoreOverwriteChanges = settings.IgnoreOverwriteChanges;
+                DefaultWorkingPath = settings.DefaultPath;
+                DarkMode = settings.DarkModeEnabled;
+                EditorFontSize = settings.EditorFontSize.ToString();
 
-            // No Update required. Gets loaded before UI is active.
+                // No Update required.Gets loaded before UI is active.
+            }
         }
 
         private void ApplyValues()
         {
-            //// Write the value back to the settings 
-            //var facade = ServiceHelper.GetFacade();
-            //var settings = facade.Get<Settings>(Bootstrap.SettingsId);
+            var settingsService = App.Current.BootStrap.Services.GetService<ISettingsService>();
+            if (settingsService != null)
+            {
+                var settings = settingsService.GetSettings();
+                settings.LineWrap = LineWrap;
+                settings.IgnoreChanged = IgnoreChanges;
+                settings.IgnoreReload = IgnoreChangesOnReload;
+                settings.IgnoreOverwriteChanges = IgnoreOverwriteChanges;
+                settings.DarkModeEnabled = DarkMode;
+                settings.DefaultPath = DefaultWorkingPath;
+                // Font Size is TODO
 
-            //settings.LineWrap = LineWrap;
-            //settings.IgnoreChanged = IgnoreChanges;
-            //settings.IgnoreReload = IgnoreChangesOnReload;
-            //settings.IgnoreOverwriteChanges = IgnoreOverwriteChanges;
-            //settings.DarkModeEnabled = DarkMode;
-            //settings.DefaultPath = DefaultWorkingPath;
-            //// Font Size is TODO
-
-            //// Write it to disk
-            //Settings.Write(settings);
+                // Write it to disk
+                settingsService.SetSettings(settings);
+            }
         }
     }
 }

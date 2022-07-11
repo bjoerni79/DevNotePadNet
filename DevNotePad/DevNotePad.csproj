@@ -32,12 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Generic.MVVM">
-      <HintPath>..\lib\netstandard2.0\Generic.MVVM.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Shared\Image\NotOK.png" />
     <Resource Include="Shared\Image\OK.png" />
   </ItemGroup>

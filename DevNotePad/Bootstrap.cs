@@ -3,7 +3,6 @@ using DevNotePad.MVVM;
 using DevNotePad.Service;
 using DevNotePad.Shared;
 using DevNotePad.ViewModel;
-using Generic.MVVM.Event;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -13,21 +12,10 @@ namespace DevNotePad
     {
         // See ViewModelInstances and Events for other
         public const string BootstrapId = "bootstrap";
-        public const string EventControllerId = "eventcontrollerid";
-        public const string DialogServiceId = "dialogserviceid";
-        public const string ToolDialogServiceId = "tooldialogserviceid";
-        public const string IoServiceId = "ioserviceid";
-        //public const string SettingsId = "settingsid";
 
         public Bootstrap()
         {
-            Main = new MainViewModel();
-        }
-
-        public void Init()
-        {
             Services = BuildServices();
-
         }
 
         private IServiceProvider BuildServices()
@@ -39,13 +27,30 @@ namespace DevNotePad
             services.AddSingleton<ISettingsService, SettingsService>();
 
             //TODO: ViewModels
+            // MainView Model
+            services.AddTransient<MainViewModel>();
+            // Settings View Model
+            services.AddTransient<SettingsDialogViewModel>();
+            // Tool Dialog View Model
+            services.AddTransient<Base64ToolViewModel>();
+            services.AddTransient<FindDialogViewModel>();
+            services.AddTransient<ReplaceDialogViewModel>();
+            services.AddTransient<XPathQueryViewModel>();
+            services.AddTransient<XsltTransformerViewModel>();
+            services.AddTransient<XmlSchemaValidatorViewModel>();
+            services.AddTransient<RegularExpressionViewModel>();
+            services.AddTransient<GuidCreatorViewModel>();
+            services.AddTransient<TreeViewModel>();
+
+            // Other VM
+            services.AddTransient<ConfimDialogViewModel>();
+            services.AddTransient<OkDialogViewModel>();
 
             return services.BuildServiceProvider();
         }
 
         public IServiceProvider Services { get; internal set; }
 
-        public MainViewModel Main { get; set; }
 
 
     }

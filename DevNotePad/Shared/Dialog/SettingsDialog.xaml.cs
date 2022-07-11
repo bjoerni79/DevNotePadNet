@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using DevNotePad.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 
 namespace DevNotePad.Shared.Dialog
 {
@@ -10,6 +12,11 @@ namespace DevNotePad.Shared.Dialog
         public SettingsDialog()
         {
             InitializeComponent();
+
+            var vm = App.Current.BootStrap.Services.GetService<SettingsDialogViewModel>();
+            vm.Init(this);
+
+            DataContext = vm;
         }
 
         public void CloseDialog(bool confirmed)
