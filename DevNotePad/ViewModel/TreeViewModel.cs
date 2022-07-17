@@ -8,15 +8,22 @@ using System.Collections.ObjectModel;
 
 namespace DevNotePad.ViewModel
 {
-    public class TreeViewModel : MainViewUiViewModel, IRecipient<UpdateTreeMessage>
+    public class TreeViewModel : MainViewUiViewModel
     {
         // https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/messenger
 
         public TreeViewModel()
         {
-            WeakReferenceMessenger.Default.Register<UpdateTreeMessage>(this);
+            //WeakReferenceMessenger.Default.Register<UpdateTreeMessage>(this);
 
             Close = new RelayCommand(() => dialog.CloseDialog(true));
+
+            IsActive = true;
+        }
+
+        protected override void OnActivated()
+        {
+            Messenger.Register<TreeViewModel, UpdateTreeMessage>(this, (vm, m) => Receive(m));
         }
 
         public RelayCommand? Close { get; set; }
