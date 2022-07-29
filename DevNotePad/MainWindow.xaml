@@ -188,6 +188,7 @@
 
         <DockPanel DockPanel.Dock="Bottom" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
 
+            <!-- Right part of the toolbar. Rows, Column and State. Rows and Columns comes directly from editor control. -->
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="Row:"  />
                 <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding ElementName=editor, Path=CurrentRow}" />
@@ -196,8 +197,11 @@
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="State:"  />
                 <Label Style="{Binding Path=IsStateChanged,Converter={StaticResource isStatusChangedStyleConverter},Mode=OneWay}" Width="70"  Content="{Binding Path=State}"/>
             </StackPanel>
+            
+            <!-- Is this in use? -->
             <ProgressBar x:Name="isRunningProgressBar" DockPanel.Dock="Right" IsIndeterminate="True" Visibility="Hidden" Width="100" />
             
+            <!-- Left side: What to do? -->
             <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
             <Label Name="notificationLabel">Basic Features</Label>
             

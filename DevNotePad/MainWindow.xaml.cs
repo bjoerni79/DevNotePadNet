@@ -40,18 +40,6 @@ namespace DevNotePad
             editor.VerticalScrollBarVisibility = scrollbarMode;
         }
 
-        public void SetWordWrap(bool enable)
-        {
-            var wrapping = TextWrapping.NoWrap;
-            if (enable)
-            {
-                wrapping = TextWrapping.Wrap;
-            }
-
-            //editor.TextWrapping = wrapping;
-        }
-
-
         public void ShowAbout()
         {
             //TODO: Move this to the dialog service
@@ -146,23 +134,17 @@ namespace DevNotePad
                 var needsSaving = vm.IsChanged();
                 if (needsSaving)
                 {
-                    //var facade = FacadeFactory.Create();
-                    //if (facade != null)
-                    //{
-                    //    var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
-                    //    if (dialogService != null)
-                    //    {
-                    //        //TODO: Ask if the user wants to save first
-                    //        var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close", "Close Application");
-                    //        e.Cancel = !doClose;
-                    //    }
-                    //}
+                    // Ask the user if there are pending changes only if it is enabled.
 
-                    var dialogService = App.Current.BootStrap.Services.GetService<IDialogService>();
-                    if (dialogService != null)
+                    var settings = ServiceHelper.GetSettings();
+                    if (settings.IgnoreChanged)
                     {
-                        var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close", "Close Application");
-                        e.Cancel = !doClose;
+                        var dialogService = App.Current.BootStrap.Services.GetService<IDialogService>();
+                        if (dialogService != null)
+                        {
+                            var doClose = dialogService.ShowConfirmationDialog("There are pending changes. Do you want to close?", "Close", "Close Application");
+                            e.Cancel = !doClose;
+                        }
                     }
                 }
             }
