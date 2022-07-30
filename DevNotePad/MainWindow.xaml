@@ -198,12 +198,17 @@
                 <Label Style="{Binding Path=IsStateChanged,Converter={StaticResource isStatusChangedStyleConverter},Mode=OneWay}" Width="70"  Content="{Binding Path=State}"/>
             </StackPanel>
             
-            <!-- Is this in use? -->
-            <ProgressBar x:Name="isRunningProgressBar" DockPanel.Dock="Right" IsIndeterminate="True" Visibility="Hidden" Width="100" />
-            
             <!-- Left side: What to do? -->
-            <Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
-            <Label Name="notificationLabel">Basic Features</Label>
+            <!--<Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
+            <Label Name="notificationLabel">Basic Features</Label>-->
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                
+                <Label Style="{StaticResource toolbarTitleLabel}" Content="Filename :"/>
+                <Label Content="{Binding Path=FileName}" />
+                <Label Style="{StaticResource toolbarTitleLabel}" Content="Latest Change:"/>
+                <Label Content="{Binding Path=LatestChange}" />
+            </StackPanel>
             
         </DockPanel>
 

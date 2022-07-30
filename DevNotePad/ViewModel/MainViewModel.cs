@@ -41,6 +41,10 @@ namespace DevNotePad.ViewModel
 
         public bool IsStateChanged { get; private set; }
 
+        public string? FileName { get; private set; }
+
+        public string? LatestChange { get; private set; }
+
         public MainViewModel()
         {
             State = "Ready";
@@ -545,12 +549,6 @@ namespace DevNotePad.ViewModel
         {
             var settings = ServiceHelper.GetSettings();
 
-            if (Ui != null)
-            {
-                //Ui.SetScrollbars(ScrollbarMode);
-                Ui.SetWordWrap(settings.LineWrap);
-
-            }
 
             ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Ready", false));
         }
@@ -642,11 +640,20 @@ namespace DevNotePad.ViewModel
                 currentUiState = "Loaded";
             }
 
+            //TODO: Filename
+            FileName = textLogic.FileName;
+            OnPropertyChanged("FileName");
+
+            //TODO: Latest Change
+            LatestChange = textLogic.LatestTimeStamp.ToString();
+            OnPropertyChanged("LatestChange");
+
             // Notify the UI
             State = currentUiState;
             IsStateChanged = isChanged;
             OnPropertyChanged("State");
             OnPropertyChanged("IsStateChanged");
+
 
             fileGroup.Refresh();
             textOperationGroup.Refresh();

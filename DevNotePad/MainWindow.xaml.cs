@@ -82,23 +82,23 @@ namespace DevNotePad
 
         public void UpdateAsyncState(bool isInAsyncState)
         {
-            // Schedule it thread save via the Dispatcher
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                // Render the progress bar depending on the state.
-                if (isInAsyncState)
-                {
-                    isRunningProgressBar.Visibility = Visibility.Visible;
+            //// Schedule it thread save via the Dispatcher
+            //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            //{
+            //    // Render the progress bar depending on the state.
+            //    if (isInAsyncState)
+            //    {
+            //        isRunningProgressBar.Visibility = Visibility.Visible;
 
-                }
-                else
-                {
-                    isRunningProgressBar.Visibility = Visibility.Hidden;
-                }
+            //    }
+            //    else
+            //    {
+            //        isRunningProgressBar.Visibility = Visibility.Hidden;
+            //    }
 
-                // Disable the textboxes while I/O operation is in progresss
-                editor.IsReadOnly = isInAsyncState;
-            }));
+            //    // Disable the textboxes while I/O operation is in progresss
+            //    editor.IsReadOnly = isInAsyncState;
+            //}));
         }
 
         #region Event Delegates
@@ -162,9 +162,6 @@ namespace DevNotePad
                     vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
                 }
 
-                //// Old
-                //var textChange = e.Changes.First();
-                //vm.NotifyContentChanged(textChange.AddedLength, textChange.Offset, textChange.RemovedLength);
             }
 
         }
