@@ -45,6 +45,7 @@ namespace DevNotePad
             // Other VM
             services.AddTransient<ConfimDialogViewModel>();
             services.AddTransient<OkDialogViewModel>();
+            services.AddTransient<NotifierViewModel>();
 
             return services.BuildServiceProvider();
         }

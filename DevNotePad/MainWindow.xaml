@@ -222,9 +222,7 @@
 
         <!-- Info label. Play with Fade In / Fade Out in Storyboards -->
         <StackPanel Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-            <Border BorderBrush="Black" BorderThickness="2">
-                <Label>Test</Label>
-            </Border>
+            <ui:Notifier/>
         </StackPanel>
 
         <!-- WPF Richtext control for editor content -->
