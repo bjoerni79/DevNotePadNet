@@ -102,8 +102,16 @@
         
     </Window.Resources>
 
-    <DockPanel LastChildFill="True" >
-        <Menu DockPanel.Dock="Top" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" >
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+         
+        <Menu Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" >
             <MenuItem Style="{StaticResource defaultMenuItem}" Header="File">
                 <MenuItem Style="{StaticResource defaultMenuItem}" Header="New" InputGestureText="Ctrl+N" Command="{Binding Path=New}"/>
                 <Separator/>
@@ -186,7 +194,7 @@
             </MenuItem>
         </Menu>
 
-        <DockPanel DockPanel.Dock="Bottom" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
+        <DockPanel Grid.Row="2" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
 
             <!-- Right part of the toolbar. Rows, Column and State. Rows and Columns comes directly from editor control. -->
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
@@ -212,7 +220,15 @@
             
         </DockPanel>
 
-        <ui:DevTextBox2 x:Name="editor"  
+        <!-- Info label. Play with Fade In / Fade Out in Storyboards -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <Border BorderBrush="Black" BorderThickness="2">
+                <Label>Test</Label>
+            </Border>
+        </StackPanel>
+
+        <!-- WPF Richtext control for editor content -->
+        <ui:DevTextBox2 Grid.Row="1" x:Name="editor" Opacity="0.5" 
                      DockPanel.Dock="Left"
                      Style="{StaticResource editorTextboxRich}"
                      TextChanged="editor_TextChanged" 
@@ -222,5 +238,5 @@
                        Width="Auto"
             />
 
-    </DockPanel>
+    </Grid>
 </Window>
