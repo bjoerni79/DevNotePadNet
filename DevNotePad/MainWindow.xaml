@@ -108,6 +108,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
          
@@ -194,7 +195,7 @@
             </MenuItem>
         </Menu>
 
-        <DockPanel Grid.Row="2" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
+        <DockPanel Grid.Row="3" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
 
             <!-- Right part of the toolbar. Rows, Column and State. Rows and Columns comes directly from editor control. -->
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
@@ -221,12 +222,12 @@
         </DockPanel>
 
         <!-- Info label. Play with Fade In / Fade Out in Storyboards -->
-        <StackPanel Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-            <ui:Notifier/>
+        <StackPanel Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
+            <ui:Notifier  />
         </StackPanel>
 
         <!-- WPF Richtext control for editor content -->
-        <ui:DevTextBox2 Grid.Row="1" x:Name="editor" Opacity="0.5" 
+        <ui:DevTextBox2 Grid.Row="1" x:Name="editor"  
                      DockPanel.Dock="Left"
                      Style="{StaticResource editorTextboxRich}"
                      TextChanged="editor_TextChanged" 
