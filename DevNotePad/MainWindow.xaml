@@ -214,9 +214,9 @@
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                 
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="Filename :"/>
-                <Label Content="{Binding Path=FileName}" />
+                <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding Path=FileName}" />
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="Latest Change:"/>
-                <Label Content="{Binding Path=LatestChange}" />
+                <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding Path=LatestChange}" />
             </StackPanel>
             
         </DockPanel>
