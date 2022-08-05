@@ -4,12 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DevNotePad.UI"
+             xmlns:converter="clr-namespace:DevNotePad.Shared.Converter"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="800">
+             d:DesignHeight="75" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <converter:IsWarningNotifierConverter x:Key="IsWarningConverter" />
+    </UserControl.Resources>
+    
     <Grid>
         <Border BorderBrush="Black" BorderThickness="2">
-            <StackPanel Orientation="Horizontal">
-                <Label>Test</Label>
+            <StackPanel Orientation="Horizontal" >
+                <Label Style="{Binding Path=IsWarning, Converter={StaticResource IsWarningConverter}}" Content="{Binding Path=Message}" />
                 <Button>Close</Button>
             </StackPanel>
         </Border>
