@@ -21,14 +21,6 @@ namespace DevNotePad.MVVM
         /// <exception cref="Exception">An exception is thrown if the service is not available</exception>
         internal static IDialogService GetDialogService()
         {
-            //var facade = GetFacade();
-            //var dialogService = facade.Get<IDialogService>(Bootstrap.DialogServiceId);
-            //if (dialogService == null)
-            //{
-            //    throw new Exception("Cannot access DialogService");
-            //}
-
-            //return dialogService;
             var dialogService = App.Current.BootStrap.Services.GetService<IDialogService>();
 
             if (dialogService == null)
@@ -42,9 +34,6 @@ namespace DevNotePad.MVVM
 
         internal static IToolDialogService GetToolDialogService()
         {
-            //var facade = GetFacade();
-            //var dialogService = facade.Get<IToolDialogService>(Bootstrap.ToolDialogServiceId);
-
             var toolDialogService = App.Current.BootStrap.Services.GetService<IToolDialogService>();
             if (toolDialogService == null)
             {
@@ -63,9 +52,6 @@ namespace DevNotePad.MVVM
         /// <exception cref="Exception">An exception is thrown if the service is not available</exception>
         internal static IIoService GetIoService()
         {
-            //var facade = GetFacade();
-            //var ioService = facade.Get<IIoService>(Bootstrap.IoServiceId);
-
             var ioService = App.Current.BootStrap.Services.GetService<IIoService>();
             if (ioService == null)
             {
@@ -96,21 +82,6 @@ namespace DevNotePad.MVVM
 
         internal static Settings GetSettings()
         {
-            //Settings? settings = null;
-
-            //var facade = FacadeFactory.Create();
-            //if (facade != null)
-            //{
-            //    settings = facade.Get<Settings>(Bootstrap.SettingsId);
-            //}
-
-            //if (settings == null)
-            //{
-            //    throw new ArgumentNullException("settings");
-            //}
-
-            //return settings;
-
             var settingsService = App.Current.BootStrap.Services.GetService<ISettingsService>();
             var settings = settingsService.GetSettings();
 
@@ -130,6 +101,11 @@ namespace DevNotePad.MVVM
         internal static void TriggerFileUpdate(EditorState state)
         {
             WeakReferenceMessenger.Default.Send(new UpdateFileStatusMessage(state));
+        }
+
+        internal static void TriggerNotiferViewVisible(bool isVisible)
+        {
+            WeakReferenceMessenger.Default.Send(new NotfierVisibleMessage(isVisible));
         }
     }
 }

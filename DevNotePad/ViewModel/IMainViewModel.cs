@@ -6,7 +6,6 @@
 
         void NotifyContentChanged(int added, int offset, int removed);
 
-        void NotifyScratchPadContentChanged(int added, int offset, int removed);
 
         void ApplySettings();
 

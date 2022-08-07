@@ -16,7 +16,7 @@
         <Border BorderBrush="Black" BorderThickness="2">
             <StackPanel Orientation="Horizontal" >
                 <Label Style="{Binding Path=IsWarning, Converter={StaticResource IsWarningConverter}}" Content="{Binding Path=Message}" />
-                <Button>Close</Button>
+                <Button Command="{Binding Path=Close}">Close</Button>
             </StackPanel>
         </Border>
     </Grid>

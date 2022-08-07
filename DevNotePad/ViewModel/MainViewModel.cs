@@ -34,7 +34,6 @@ namespace DevNotePad.ViewModel
 
         private RelayCommandGroup fileGroup;
         private RelayCommandGroup textOperationGroup;
-        private RelayCommandGroup scratchOperationGroup;
         private RelayCommandGroup toolGroup;
 
         public string State { get; private set; }
@@ -66,7 +65,8 @@ namespace DevNotePad.ViewModel
             // TODO: Update File Status..
             Messenger.Register<MainViewModel, UpdateFileStatusMessage>(this, (r, m) => UpdateFileStatus(m.Value));
 
-            //TODO: Register the UpdateStatusBarParameterMessage again and implement a more fancy way of showing it
+            // Register the Notifier View Visible State changes
+            Messenger.Register<MainViewModel,NotfierVisibleMessage>(this, (r,m) => SetNotifierViewVisibleState(m.Value));
         }
 
         #region Commands
@@ -577,13 +577,6 @@ namespace DevNotePad.ViewModel
             }
         }
 
-        public void NotifyScratchPadContentChanged(int added, int offset, int removed)
-        {
-            // Simply refresh the UI for now
-
-            scratchOperationGroup.Refresh();
-        }
-
         public bool IsChanged()
         {
             var isChanged = false;
@@ -613,6 +606,11 @@ namespace DevNotePad.ViewModel
         }
 
         #endregion
+
+        private void SetNotifierViewVisibleState(bool isVisible)
+        {
+            //TODO: Trigger the Storyboards for Visible On/Off
+        }
 
         private void UpdateFileStatus(EditorState state)
         {
