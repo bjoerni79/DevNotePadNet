@@ -138,6 +138,9 @@ namespace DevNotePad.Service
             // Set the context and show it.
             if (view != null)
             {
+                var mainWindow = App.Current.MainWindow;
+                view.Owner = mainWindow;
+
                 view.DataContext = viewModel;
                 view.Show();
             }
@@ -151,8 +154,10 @@ namespace DevNotePad.Service
             }
 
             var vm = App.Current.BootStrap.Services.GetService<TreeViewModel>();
+            var mainWindow = App.Current.MainWindow;
 
             currentTreeView = new TreeView();
+            currentTreeView.Owner = mainWindow;
             currentTreeView.DataContext = vm;
 
             vm.Init(currentTreeView);
