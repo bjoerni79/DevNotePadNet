@@ -29,26 +29,32 @@ namespace DevNotePad
 
         public void SetNotifier(bool enabled)
         {
-            var visibleState = Visibility.Collapsed;
-
-            if (enabled)
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                visibleState = Visibility.Visible;
-            }
+                var visibleState = Visibility.Collapsed;
 
-            notifierPanel.Visibility = visibleState;
+                if (enabled)
+                {
+                    visibleState = Visibility.Visible;
+                }
+
+                notifierPanel.Visibility = visibleState;
+            }));
         }
 
         public void SetScrollbars(bool enable)
         {
-            var scrollbarMode = ScrollBarVisibility.Auto;
-            if (enable)
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                scrollbarMode = ScrollBarVisibility.Visible;
-            }
+                var scrollbarMode = ScrollBarVisibility.Auto;
+                if (enable)
+                {
+                    scrollbarMode = ScrollBarVisibility.Visible;
+                }
 
-            editor.HorizontalScrollBarVisibility = scrollbarMode;
-            editor.VerticalScrollBarVisibility = scrollbarMode;
+                editor.HorizontalScrollBarVisibility = scrollbarMode;
+                editor.VerticalScrollBarVisibility = scrollbarMode;
+            }));
         }
 
         public void ShowAbout()
