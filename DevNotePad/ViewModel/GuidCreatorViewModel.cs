@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Text;
 using System.Windows;
 
 namespace DevNotePad.ViewModel
@@ -16,6 +17,7 @@ namespace DevNotePad.ViewModel
             CopyGuid1 = new RelayCommand(() => CopyGuid(1));
             CopyGuid2 = new RelayCommand(() => CopyGuid(2));
             CopyGuid3 = new RelayCommand(() => CopyGuid(3));
+            CopyGuidAll = new RelayCommand(OnCopyGuidAll);
         }
 
         public string? Guid1 { get; set; }
@@ -36,6 +38,8 @@ namespace DevNotePad.ViewModel
 
         public RelayCommand? CopyGuid3 { get; set; }
 
+        public RelayCommand? CopyGuidAll { get; set; }
+
         private void CopyGuid(int id)
         {
             var guids = new[] { Guid1, Guid2, Guid3 };
@@ -45,6 +49,24 @@ namespace DevNotePad.ViewModel
             OnPropertyChanged("Feedback");
 
             Clipboard.SetText(selectedGuid);
+        }
+
+        private void OnCopyGuidAll()
+        {
+            var guids = new[] { Guid1, Guid2, Guid3 };
+
+            var allGuids = new StringBuilder();
+            int curId = 1;
+            foreach (var curGuid in guids)
+            {
+                allGuids.AppendFormat("GUID {0} : {1}\n", curId, curGuid);
+                curId++;
+            }
+
+            Feedback = String.Format("All GUIDs copied to clipboard");
+            OnPropertyChanged("Feedback");
+
+            Clipboard.SetText(allGuids.ToString());
         }
 
         private void CreateGuid()
