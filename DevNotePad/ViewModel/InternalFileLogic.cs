@@ -164,24 +164,21 @@ namespace DevNotePad.ViewModel
                         {
                             ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(true));
 
-
                             await ioService.WriteTextFileAsync(targetfilename, textToSave);
 
+                        }).ContinueWith((t) => {
+                            InitialText = textToSave;
+                            CurrentState = EditorState.Saved;
+                            LatestTimeStamp = DateTime.Now;
+                            FileName = targetfilename;
+                            mainUi.SetFilename(FileName);
+                            IsTextFormatAvailable = true;
 
+                            ServiceHelper.TriggerFileUpdate(CurrentState);
+                            ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is saved", false));
+
+                            ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                         });
-
-                        saveTask.Wait();
-                        InitialText = textToSave;
-                        CurrentState = EditorState.Saved;
-                        LatestTimeStamp = DateTime.Now;
-                        FileName = targetfilename;
-                        mainUi.SetFilename(FileName);
-                        IsTextFormatAvailable = true;
-
-                        ServiceHelper.TriggerFileUpdate(CurrentState);
-                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Content is saved", false));
-
-                        ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
                     }
                     catch (AggregateException aEx)
                     {
@@ -226,8 +223,6 @@ namespace DevNotePad.ViewModel
 
                 var saveTask = Task.Run(async () =>
                 {
-
-
                     byte[]? byteCoding = null;
                     try
                     {
@@ -254,18 +249,17 @@ namespace DevNotePad.ViewModel
                     }
 
 
+                }).ContinueWith((t)=>
+                {
+                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                    // Write operation done. Update the states now
+
+                    IsTextFormatAvailable = false;
+                    CurrentState = EditorState.Saved;
+
+                    ServiceHelper.TriggerFileUpdate(CurrentState);
+                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
                 });
-
-                saveTask.Wait();
-
-                ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
-                // Write operation done. Update the states now
-
-                IsTextFormatAvailable = false;
-                CurrentState = EditorState.Saved;
-
-                ServiceHelper.TriggerFileUpdate(CurrentState);
-                ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("Binary content is saved", false));
             }
             catch (AggregateException aEx)
             {
@@ -315,22 +309,19 @@ namespace DevNotePad.ViewModel
 
                     content = await ioService.ReadTextFileAsync(FileName);
 
+                }).ContinueWith((t) => {
+                    if (content != null)
+                    {
+                        InitialText = content;
+                        textComponent.SetText(InitialText);
+                        mainUi.SetFilename(FileName);
+                        IsTextFormatAvailable = true;
+
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
+                        ServiceHelper.TriggerFileUpdate(CurrentState);
+                        ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                    }
                 });
-
-                // Wait for the load operation to finish.
-                loaderTask.Wait();
-                if (content != null)
-                {
-                    InitialText = content;
-                    textComponent.SetText(InitialText);
-                    mainUi.SetFilename(FileName);
-                    IsTextFormatAvailable = true;
-
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded", false));
-                    ServiceHelper.TriggerFileUpdate(CurrentState);
-                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
-                }
-
             }
             catch (AggregateException aEx)
             {
@@ -367,23 +358,20 @@ namespace DevNotePad.ViewModel
                     hexContent = ToHexStringRow(byteContent);
 
 
+                }).ContinueWith((t)=> {
+                    if (hexContent != null)
+                    {
+                        InitialText = hexContent;
+                        textComponent.SetText(InitialText);
+                        mainUi.SetFilename(FileName);
+
+                        IsTextFormatAvailable = false;
+
+                        ServiceHelper.TriggerFileUpdate(CurrentState);
+                        ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
+                        ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
+                    }
                 });
-
-                loaderTask.Wait();
-                if (hexContent != null)
-                {
-                    InitialText = hexContent;
-                    textComponent.SetText(InitialText);
-                    mainUi.SetFilename(FileName);
-
-                    IsTextFormatAvailable = false;
-
-                    ServiceHelper.TriggerFileUpdate(CurrentState);
-                    ServiceHelper.TriggerToolbarNotification(new UpdateStatusBarParameter("File is loaded as Binary", false));
-                    ServiceHelper.TriggerStartStopAsnyOperation(new UpdateAsyncProcessState(false));
-                }
-
-
             }
             catch (AggregateException aEx)
             {
