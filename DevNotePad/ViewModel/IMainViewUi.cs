@@ -11,8 +11,6 @@ namespace DevNotePad.ViewModel
 
         void SetFilename(string filename);
 
-        void UpdateAsyncState(bool isInAsyncState);
-
         void CloseByViewModel();
 
         void ResetLayout();

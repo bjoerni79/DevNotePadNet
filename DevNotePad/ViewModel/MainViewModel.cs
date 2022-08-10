@@ -59,8 +59,6 @@ namespace DevNotePad.ViewModel
 
             // https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/observablerecipient
             //
-            // Register the two events. The interface method can only deal with one.
-            Messenger.Register<MainViewModel, UpdateAsyncProcessStateMessage>(this, (r, m) => InternalUpdateAsync(m.Value));
 
             // TODO: Update File Status..
             Messenger.Register<MainViewModel, UpdateFileStatusMessage>(this, (r, m) => UpdateFileStatus(m.Value));
@@ -829,12 +827,6 @@ namespace DevNotePad.ViewModel
 
             toolGroup = new RelayCommandGroup(new RelayCommand[] { SchemaValidatorTool, XPathQueryTool, XSltTransformationTool, DecodeTlv });
         }
-
-        private void InternalUpdateAsync(bool isInAsync)
-        {
-            Ui.UpdateAsyncState(isInAsync);
-        }
-
 
     }
 }

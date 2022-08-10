@@ -20,13 +20,30 @@ namespace DevNotePad.UI
     /// <summary>
     /// Interaction logic for Notifier.xaml
     /// </summary>
-    public partial class Notifier : UserControl
+    public partial class Notifier : UserControl, INotifierView
     {
         public Notifier()
         {
             InitializeComponent();
 
-            DataContext = App.Current.BootStrap.Services.GetService<NotifierViewModel>();
+            // Get a view model from the IoC container and establish the link between the view and vm
+            var vm = App.Current.BootStrap.Services.GetService<NotifierViewModel>();
+            if (vm != null)
+            {
+                vm.RegisterView(this);
+                DataContext = vm;
+            }
         }
+
+        public void SetAsyncMode(bool enabled)
+        {
+            // Schedule it thread save via the Dispatcher
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                isRunningProgressBar.IsIndeterminate = enabled;
+            }));
+        }
+
+ 
     }
 }

@@ -13,11 +13,18 @@
     </UserControl.Resources>
     
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="2">
-            <StackPanel Orientation="Horizontal" >
-                <Label Style="{Binding Path=IsWarning, Converter={StaticResource IsWarningConverter}}" Content="{Binding Path=Message}" />
-                <Button Command="{Binding Path=Close}">Close</Button>
-            </StackPanel>
-        </Border>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+
+        <Label Grid.Column="0" MinWidth="50" Style="{Binding Path=IsWarning, Converter={StaticResource IsWarningConverter}}" Content="{Binding Path=Message}" />
+        <ProgressBar x:Name="isRunningProgressBar" Grid.Column="1" Width="100" Height="20"/>
+        <Button Grid.Column="2" Width="100" Height="20" Command="{Binding Path=Close}">Close</Button>
+
+
     </Grid>
 </UserControl>

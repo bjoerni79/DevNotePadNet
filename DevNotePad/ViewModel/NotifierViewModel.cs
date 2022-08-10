@@ -13,6 +13,8 @@ namespace DevNotePad.ViewModel
 {
     public class NotifierViewModel : ObservableRecipient
     {
+        private INotifierView? view;
+
         public NotifierViewModel()
         {
             // Required for custom message handling. See OnActivated.
@@ -21,8 +23,16 @@ namespace DevNotePad.ViewModel
             Close = new RelayCommand(OnClose);
         }
 
+        public void RegisterView(INotifierView view)
+        {
+            this.view = view;
+        }
+
         protected override void OnActivated()
         {
+            // Register the two events. The interface method can only deal with one.
+            Messenger.Register<NotifierViewModel, UpdateAsyncProcessStateMessage>(this, (r, m) => SetAsyncMode(m.Value));
+
             // Register the UpdateStatusBarParameterMessage
             Messenger.Register<NotifierViewModel, UpdateStatusBarParameterMessage>(this, (r, m) => UpdateMessage(m));
         }
@@ -35,6 +45,14 @@ namespace DevNotePad.ViewModel
 
             OnPropertyChanged("Message");
             OnPropertyChanged("IsWarning");
+        }
+
+        private void SetAsyncMode (bool isAsync)
+        {
+            if (view != null)
+            {
+                view.SetAsyncMode(isAsync);
+            }
         }
 
         private void OnClose()
