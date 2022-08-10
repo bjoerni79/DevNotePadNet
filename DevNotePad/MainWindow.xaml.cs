@@ -27,6 +27,17 @@ namespace DevNotePad
 
         #region IMainViewUI
 
+        public void SetNotifier(bool enabled)
+        {
+            var visibleState = Visibility.Collapsed;
+
+            if (enabled)
+            {
+                visibleState = Visibility.Visible;
+            }
+
+            notifierPanel.Visibility = visibleState;
+        }
 
         public void SetScrollbars(bool enable)
         {

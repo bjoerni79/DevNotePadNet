@@ -108,7 +108,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
          
@@ -195,10 +194,16 @@
             </MenuItem>
         </Menu>
 
-        <DockPanel Grid.Row="3" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
+        <DockPanel Grid.Row="2" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"  >
+        
 
-            <!-- Right part of the toolbar. Rows, Column and State. Rows and Columns comes directly from editor control. -->
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                
+                <Label Style="{StaticResource toolbarTitleLabel}" Content="Filename :"/>
+                <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding Path=FileName}" />
+                <Label Style="{StaticResource toolbarTitleLabel}" Content="Latest Change:"/>
+                <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding Path=LatestChange}" />
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="Row:"  />
                 <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding ElementName=editor, Path=CurrentRow}" />
                 <Label Style="{StaticResource toolbarTitleLabel}" Content=" Column:"  />
@@ -206,25 +211,15 @@
                 <Label Style="{StaticResource toolbarTitleLabel}" Content="State:"  />
                 <Label Style="{Binding Path=IsStateChanged,Converter={StaticResource isStatusChangedStyleConverter},Mode=OneWay}" Width="70"  Content="{Binding Path=State}"/>
             </StackPanel>
-            
-            <!-- Left side: What to do? -->
-            <!--<Label FontSize="12" FontWeight="DemiBold" Content="Latest:"></Label>
-            <Label Name="notificationLabel">Basic Features</Label>-->
 
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                
-                <Label Style="{StaticResource toolbarTitleLabel}" Content="Filename :"/>
-                <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding Path=FileName}" />
-                <Label Style="{StaticResource toolbarTitleLabel}" Content="Latest Change:"/>
-                <Label Style="{StaticResource toolbarContentNumberLabel}" Content="{Binding Path=LatestChange}" />
+            <!-- Info label. Play with Fade In / Fade Out in Storyboards -->
+            <StackPanel x:Name="notifierPanel" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
+                <ui:Notifier  />
             </StackPanel>
-            
+
         </DockPanel>
 
-        <!-- Info label. Play with Fade In / Fade Out in Storyboards -->
-        <StackPanel Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
-            <ui:Notifier  />
-        </StackPanel>
+
 
         <!-- WPF Richtext control for editor content -->
         <ui:DevTextBox2 Grid.Row="1" x:Name="editor"  

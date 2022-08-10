@@ -90,16 +90,19 @@ namespace DevNotePad.MVVM
 
         internal static void TriggerToolbarNotification (UpdateStatusBarParameter parameter)
         {
+            TriggerNotiferViewVisible(true);
             WeakReferenceMessenger.Default.Send(new UpdateStatusBarParameterMessage(parameter));
         }
 
         internal static void TriggerStartStopAsnyOperation(UpdateAsyncProcessState state)
         {
+            TriggerNotiferViewVisible(true);
             WeakReferenceMessenger.Default.Send(new UpdateAsyncProcessStateMessage(state.InProgress));
         }
 
         internal static void TriggerFileUpdate(EditorState state)
         {
+            TriggerNotiferViewVisible(true);
             WeakReferenceMessenger.Default.Send(new UpdateFileStatusMessage(state));
         }
 

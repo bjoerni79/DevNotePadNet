@@ -6,7 +6,7 @@ namespace DevNotePad.ViewModel
     {
         void SetScrollbars(bool enable);
 
-
+        void SetNotifier(bool enabled);
         void ShowAbout();
 
         void SetFilename(string filename);

@@ -608,6 +608,7 @@ namespace DevNotePad.ViewModel
         private void SetNotifierViewVisibleState(bool isVisible)
         {
             //TODO: Trigger the Storyboards for Visible On/Off
+            Ui.SetNotifier(isVisible);
         }
 
         private void UpdateFileStatus(EditorState state)
