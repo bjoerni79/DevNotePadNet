@@ -25,6 +25,7 @@ namespace DevNotePad
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IToolDialogService, ToolDialogService>();
             services.AddSingleton<ISettingsService, SettingsService>();
+            services.AddSingleton<ISyntaxHighlightningService, SyntaxHighlightningService>();
 
             //TODO: ViewModels
             // MainView Model
