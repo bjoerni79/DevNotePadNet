@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using DevNotePad.Service;
+using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -72,7 +74,10 @@ namespace DevNotePad.UI
                 CurrentColumn = diff;
             }
 
+            // Trigger the syntax check
 
+            var syntaxHighligherService = App.Current.BootStrap.Services.GetService<ISyntaxHighlightningService>();
+            syntaxHighligherService.Refresh(paragraph);
         }
 
         #region Protected 

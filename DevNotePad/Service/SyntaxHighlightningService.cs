@@ -5,6 +5,7 @@ using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace DevNotePad.Service
 {
@@ -22,8 +23,7 @@ namespace DevNotePad.Service
         {
             if (isActive)
             {
-                //TODO:...
-
+                //TODO: Iterate over all paragraphs...
 
             }
         }
@@ -35,7 +35,22 @@ namespace DevNotePad.Service
                 var inlines = paragraph.Inlines;
                 foreach (var inline in inlines)
                 {
-                    
+                    bool actionRequired = false;
+
+                    var run = inline as Run;
+                    if (run != null)
+                    {
+                        actionRequired = run.Text.Contains("public");
+                    }
+
+                    if (actionRequired)
+                    {
+                        inline.Foreground = Brushes.Blue;
+                    }
+                    else
+                    {
+                        inline.Foreground = Brushes.Black;
+                    }
                 }
             }
         }
