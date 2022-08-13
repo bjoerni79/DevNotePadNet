@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace DevNotePad.Service
 {
@@ -26,6 +27,6 @@ namespace DevNotePad.Service
         /// </summary>
         void Refresh();
 
-
+        void Refresh(Paragraph paragraph);
     }
 }
