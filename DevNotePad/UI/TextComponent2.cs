@@ -142,6 +142,9 @@ namespace DevNotePad.UI
                 else
                 {
                     // Create new flow document in this case?  All content gets overwritten
+
+                    // TODO: Syntax Highlightning? How?
+
                     var newDocument = new FlowDocument();
                     newDocument.LineHeight = Double.NaN;
 
