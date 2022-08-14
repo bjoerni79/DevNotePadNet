@@ -32,27 +32,62 @@ namespace DevNotePad.Service
         {
             if (isActive && paragraph != null)
             {
-                var inlines = paragraph.Inlines;
-                foreach (var inline in inlines)
+                var rules = new List<SyntaxRule>()
                 {
-                    bool actionRequired = false;
+                    new SyntaxRule("public",Brushes.Blue),
+                    new SyntaxRule("class", Brushes.Black)
+                };
 
-                    var run = inline as Run;
-                    if (run != null)
-                    {
-                        actionRequired = run.Text.Contains("public");
-                    }
+                // Parse them
+                var text = ReadText(paragraph);
+                SyntaxRule currentRule = null;
+                var formattedInlineList = new List<Inline>();
 
-                    if (actionRequired)
+                bool doProcess = true;
+                int positionInKeyword = 0;
+                while (doProcess)
+                {
+                    var curChar = text.First();
+
+                    // Rule checking
+                    if (currentRule != null)
                     {
-                        inline.Foreground = Brushes.Blue;
+                        // There is one rule currently in process. Check this one first
                     }
                     else
                     {
-                        inline.Foreground = Brushes.Black;
+                        // ...
+                    }
+
+                    // Go to the next character
+                    text = text.Skip(1).ToString();
+                    if (String.IsNullOrEmpty(text))
+                    {
+                        doProcess = false;
                     }
                 }
             }
+        }
+
+        private string ReadText(Paragraph paragraph)
+        {
+            // Add all text to one buffer. 
+            var inlines = paragraph.Inlines;
+            var contentBuilder = new StringBuilder();
+
+            foreach (var inline in inlines)
+            {
+                var run = inline as Run;
+                if (run != null)
+                {
+                    contentBuilder.Append(run.Text);
+                }
+
+                //TODO: Spans?
+
+            }
+
+            return contentBuilder.ToString();
         }
 
         public void Start()
