@@ -40,33 +40,81 @@ namespace DevNotePad.Service
 
                 // Parse them
                 var text = ReadText(paragraph);
-                SyntaxRule currentRule = null;
+
+                SyntaxRule? currentRule = null;
                 var formattedInlineList = new List<Inline>();
 
-                bool doProcess = true;
                 int positionInKeyword = 0;
+                bool doProcess = true;
+                if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
+                {
+                    doProcess = false;
+                }
+                
                 while (doProcess)
                 {
                     var curChar = text.First();
 
                     // Rule checking
+                    if (currentRule == null)
+                    {
+                        currentRule = FindRule(rules, curChar);
+                        positionInKeyword = 0;
+                    }
+
+                    bool match = false;
                     if (currentRule != null)
                     {
-                        // There is one rule currently in process. Check this one first
+                        match = currentRule.Test(curChar);
+
+                        if (!currentRule.Hit)
+                        {
+                            // Merge somehow...
+                            //
+                            // Example: abcde
+                            // 
+                            // aa
+                            // ab
+
+                            currentRule.Reset();
+                            currentRule = null;
+                        }
+
+                        positionInKeyword++;
                     }
-                    else
+
+                    if (match)
                     {
-                        // ...
+                        
                     }
 
                     // Go to the next character
-                    text = text.Skip(1).ToString();
+                    // TODO: .NET 6 might offer a more effective ways of doing this. It works for now..
+                    text = text.Remove(0, 1);
                     if (String.IsNullOrEmpty(text))
                     {
                         doProcess = false;
                     }
                 }
             }
+        }
+
+        private SyntaxRule? FindRule (List<SyntaxRule> rules, char curChar)
+        {
+            SyntaxRule? ruleResult = null;
+
+            // There is currently no rule in process.
+            foreach (var rule in rules)
+            {
+                rule.Test(curChar);
+                if (rule.Hit)
+                {
+                    ruleResult = rule;
+                    break;
+                }
+            }
+
+            return ruleResult;
         }
 
         private string ReadText(Paragraph paragraph)
