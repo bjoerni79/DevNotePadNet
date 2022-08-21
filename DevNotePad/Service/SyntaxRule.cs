@@ -51,6 +51,8 @@ namespace DevNotePad.Service
         /// </summary>
         public bool Hit { get; private set; }
 
+        public bool Match { get; private set; }
+
         public int CurrentPosition { get; private set; }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace DevNotePad.Service
         /// </summary>
         public Brush Brush { get; private set; }
 
-        public bool Test(char curChar)
+        public void Test(char curChar)
         {
             bool result;
             var position = CurrentPosition;
@@ -87,7 +89,7 @@ namespace DevNotePad.Service
             }
 
             CurrentPosition++;
-            return result;
+            Match =  result;
         }
 
         private bool CheckForSymbol(char curChar)
@@ -107,6 +109,7 @@ namespace DevNotePad.Service
         public void Reset()
         {
             Hit = false;
+            Match = false;
             CurrentPosition = 0;
         }
 

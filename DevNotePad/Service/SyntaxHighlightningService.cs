@@ -55,38 +55,42 @@ namespace DevNotePad.Service
                 {
                     var curChar = text.First();
 
-                    // Rule checking
-                    if (currentRule == null)
+                    foreach (var curRule in rules)
                     {
-                        currentRule = FindRule(rules, curChar);
-                        positionInKeyword = 0;
+                        curRule.Test(curChar);
                     }
 
-                    bool match = false;
-                    if (currentRule != null)
+                    var matchedRule = rules.FirstOrDefault(r => r.Match);
+                    if (matchedRule != null)
                     {
-                        match = currentRule.Test(curChar);
+                        //TODO: Apply...
+                        var run = new Run(matchedRule.KeyWord);
+                        run.Foreground = matchedRule.Brush;
 
-                        if (!currentRule.Hit)
+                        formattedInlineList.Add(run);
+
+                        foreach (var curRule in rules)
                         {
-                            // Merge somehow...
-                            //
-                            // Example: abcde
-                            // 
-                            // aa
-                            // ab
-
-                            currentRule.Reset();
-                            currentRule = null;
+                            curRule.Reset();
                         }
-
-                        positionInKeyword++;
                     }
 
-                    if (match)
+                    var hitCheck = rules.Any(r => r.Hit);
+                    if (hitCheck)
                     {
-                        
+                        // Some hits. Continue.
                     }
+                    else
+                    {
+                        // No hits.
+
+                        foreach (var curRule in rules)
+                        {
+                            curRule.Reset();
+                        }
+                    }
+                    
+
 
                     // Go to the next character
                     // TODO: .NET 6 might offer a more effective ways of doing this. It works for now..
@@ -95,6 +99,11 @@ namespace DevNotePad.Service
                     {
                         doProcess = false;
                     }
+                }
+
+                if (formattedInlineList.Any())
+                {
+                    //paragraph.Inlines.AddRange(formattedInlineList);
                 }
             }
         }
